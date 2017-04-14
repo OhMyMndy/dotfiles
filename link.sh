@@ -35,3 +35,6 @@ ln -sf ~/dotfiles/.config/rofi ~/.config/rofi
 
 rm -f ~/.config/terminator
 ln -sf ~/dotfiles/.config/terminator ~/.config/terminator
+
+rm -f ~/.byobu
+ln -sf ~/dotfiles/.byobu ~/.byobu
