@@ -1,0 +1,16 @@
+###    lovelybacon.deviantart.com   ####
+
+background no
+out_to_x no
+out_to_console yes
+update_interval 1
+total_run_times 0
+use_spacer none
+
+
+TEXT
+${if_mpd_playing}${mpd_artist}   ${mpd_title}${endif} \
+   ${downspeedf enp1s0} down | ${upspeedf etp1s0} up  \
+   ${hwmon 1 temp 1} C | ${hwmon 1 temp 3} C   \
+  ${exec amixer get Master -c 0 -M | grep -oE "[[:digit:]]*%"}  \
+  ${time %a %b %d} ${time %H:%M} 

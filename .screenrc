@@ -1,0 +1,8 @@
+bindkey -k k2 next
+bindkey -k k1 prev
+
+
+bindkey ^[[1;3C prev
+bindkey ^[[1;3D next
+
+mousetrack on
