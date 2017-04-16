@@ -27,14 +27,17 @@ ln -sf ~/dotfiles/.conkyrc ~/.conkyrc
 rm -f ~/.screenrc
 ln -sf ~/dotfiles/.screenrc ~/
 
-rm -f ~/.config/dunst
+rm -rf  ~/.config/dunst
 ln -sf ~/dotfiles/.config/dunst ~/.config/dunst
 
-rm -f ~/.config/rofi
+rm -rf ~/.config/rofi
 ln -sf ~/dotfiles/.config/rofi ~/.config/rofi
 
-rm -f ~/.config/terminator
+rm -rf ~/.config/terminator
 ln -sf ~/dotfiles/.config/terminator ~/.config/terminator
 
-rm -f ~/.byobu
+rm -rf ~/.config/polybar
+ln -sf ~/dotfiles/.config/polybar ~/.config/polybar
+
+rm -rf ~/.byobu
 ln -sf ~/dotfiles/.byobu ~/.byobu
