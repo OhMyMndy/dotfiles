@@ -4,8 +4,13 @@ export ZSH=/$HOME/.oh-my-zsh
 ZSH_THEME="cypher"
 plugins=(git, docker, phpunit, zsh-completions)
 
-source $HOME/.oh-my-zsh/oh-my-zsh.sh
-source $HOME/.bash_aliases
+if [ -f $HOME/.bash_aliases ]; then
+	source $HOME/.bash_aliases
+fi
+
+if [ -f $HOME/.oh-my-zsh/oh-my-zsh.sh ]; then
+	source $HOME/.oh-my-zsh/oh-my-zsh.sh
+fi
 export PATH=/usr/share/doc/git/contrib/diff-highlight/:$PATH
 
 # Allow autocompletion for dot files/folders

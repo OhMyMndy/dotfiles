@@ -19,5 +19,9 @@ cd ~/.local/share/fonts && curl -fLo "Droid Sans Mono for Powerline Nerd Font Co
 
 yaourt -S i3-gaps
 yaourt -S polybar
+yaourt -S rofi
+yaourt -S zsh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+
 yaourt -S ttf-chromeos-fonts
 yaourt -S nerd-fonts-source-code-pro
