@@ -41,3 +41,6 @@ ln -sf ~/dotfiles/.config/polybar ~/.config/polybar
 
 rm -rf ~/.byobu
 ln -sf ~/dotfiles/.byobu ~/.byobu
+
+rm -rf ~/.config/fontconfig
+ln -sf ~/dotfiles/.config/fontconfig ~/.config/fontconfig
