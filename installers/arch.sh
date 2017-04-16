@@ -25,7 +25,8 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/mas
 
 yaourt -S ttf-chromeos-fonts
 yaourt -S nerd-fonts-source-code-pro
-
-
-sudo pacman -Syu chromium
-sudo pacman -Syu lightdm
+yaourt -S parcellite
+yaourt -S redshift
+yaourt -S chromium
+yaourt -S lightdm
+yaourt -S autokey-py3
