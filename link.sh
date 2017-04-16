@@ -44,3 +44,6 @@ ln -sf ~/dotfiles/.byobu ~/.byobu
 
 rm -rf ~/.config/fontconfig
 ln -sf ~/dotfiles/.config/fontconfig ~/.config/fontconfig
+
+rm -f ~/.yaourtrc
+ln -sf ~/dotfiles/.yaourtrc ~/
