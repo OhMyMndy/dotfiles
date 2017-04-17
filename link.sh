@@ -4,6 +4,9 @@ set -e
 
 ln -sf ~/dotfiles/.vimrc ~/.vimrc
 
+rm -rf ~/.vim
+ln -sf ~/dotfiles/.vim ~/.vim
+
 ln -sf ~/dotfiles/.zshrc ~/.zshrc
 
 ln -sf ~/dotfiles/.config/redshift.conf ~/.config/redshift.conf
@@ -47,3 +50,6 @@ ln -sf ~/dotfiles/.config/fontconfig ~/.config/fontconfig
 
 rm -f ~/.yaourtrc
 ln -sf ~/dotfiles/.yaourtrc ~/
+
+rm -rf ~/.config/mopidy
+ln -sf ~/dotfiles/.config/mopidy ~/.config/mopidy

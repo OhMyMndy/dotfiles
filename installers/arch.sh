@@ -30,3 +30,11 @@ yaourt -S redshift
 yaourt -S chromium
 yaourt -S lightdm
 yaourt -S autokey-py3
+yaours -S openssh
+cat /dev/zero | ssh-keygen -b 2048 -t rsa
+
+yaourt -S mopidy
+yaourt -S mpd
+yaourt -S ncmpcpp
+
+yaourt -S dunst

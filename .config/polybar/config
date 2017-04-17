@@ -8,22 +8,29 @@
 ;=====================================================
 
 [colors]
-background = #222
-background-alt = #444
-foreground = #dfdfdf
-foreground-alt = #55
-primary = #ffb52a
-secondary = #e60053
-alert = #bd2c40
+background = #002b36
+background-alt = #586e75
+foreground = #eee8d5
+foreground-alt = #dc322f
+primary = #268bd2
+secondary = #d33682
+alert = #cb4b16
+
+accent-dark1 = #073642
+accent-dark2 = #586e75
+accent-dark3 = #6c71c4
+accent-light1 = #2aa198
+accent-light2 = #d33682
+
 
 [global/wm]
-margin-top = 5
-margin-bottom = 5
+#margin-top = 10
+#margin-bottom = 10
 
 [bar/example]
 ;monitor = ${env:MONITOR:HDMI-1}
 width = 100%
-height = 27
+height = 26
 offset-x = 0
 offset-y = 0
 
@@ -32,29 +39,31 @@ background = ${colors.background}
 foreground = ${colors.foreground}
 
 overline-size = 2
-overline-color = #f00
+overline-color = ${colors.foreground-alt}
 underline-size = 2
-underline-color = #00f
+underline-color = ${colors.primary}
 
 border-bottom-size = 2
-border-bottom-color = #333
+border-bottom-color = ${colors.accent-dark1}
 
 padding-left = 0
 padding-right = 2
+
 module-margin-left = 1
 module-margin-right = 2
 
-font-0 = DroidSansMonoForPowerline Nerd Font:pixelsize=10
-#font-0 = fixed:pixelsize=10
-font-1 = unifont:fontformat=truetype:size=6:heavy;-2
-font-2 = FontAwesome:size=10
+font-0 = DroidSansMonoForPowerline Nerd Font:pixelsize=9;4
+# font-1 = fixed:pixelsize=10
+# font-2 = unifont:fontformat=truetype:size=6:heavy;-2
+# font-3 = FontAwesome:size=10
 
 modules-left = i3 xwindow
 modules-center = mpd 
 modules-right = volume xkeyboard memory cpu eth temperature date powermenu
 
 tray-position = right
-tray-padding = 2
+tray-padding = 0
+tray-maxsize = 18
 ;tray-transparent = true
 ;tray-background = #0063ff
 
@@ -123,25 +132,37 @@ index-sort = true
 wrapping-scroll = false
 
 label-mode-padding = 2
-label-mode-foreground = #000
+label-mode-foreground = ${colors.foreground}
 label-mode-background = ${colors.primary}
 
-label-focused = %index%
+label-focused = %index% %icon%
 label-focused-background = ${module/bspwm.label-focused-background}
 label-focused-underline = ${module/bspwm.label-focused-underline}
 label-focused-padding = ${module/bspwm.label-focused-padding}
 
-label-unfocused = %index%
+label-unfocused = %index% %icon%
 label-unfocused-padding = ${module/bspwm.label-occupied-padding}
 
-label-urgent = %index%!
+label-urgent = %index%! %icon%
 label-urgent-background = ${module/bspwm.label-urgent-background}
 label-urgent-padding = ${module/bspwm.label-urgent-padding}
 
-label-visible = %index%
+label-visible = %index% %icon%
 label-visible-background = ${self.label-focused-background}
 label-visible-underline = ${self.label-focused-underline}
 label-visible-padding = ${self.label-focused-padding}
+
+ws-icon-0 = 1;
+ws-icon-1 = 2;
+ws-icon-2 = 3;
+ws-icon-3 = 4;
+ws-icon-4 = 5;
+ws-icon-5 = 6;
+ws-icon-6 = 7;
+ws-icon-7 = 8;
+ws-icon-8 = 9;
+ws-icon-9 = 10;
+
 
 [module/mpd]
 type = internal/mpd
@@ -151,13 +172,13 @@ format-online = <label-song>  <icon-prev> <icon-seekb> <icon-stop> <toggle> <ico
 label-song-maxlen = 25
 label-song-ellipsis = true
 
-icon-prev = 
-icon-seekb = 
-icon-stop = 
-icon-play = 
-icon-pause = 
-icon-next = 
-icon-seekf = 
+icon-prev = 
+icon-seekb = 
+icon-stop = 
+icon-play = 
+icon-pause = 
+icon-next = 
+icon-seekf = 
 
 icon-random = 
 icon-repeat = 
@@ -177,7 +198,7 @@ bar-indicator-foreground = #ff
 bar-indicator-font = 2
 bar-fill = ─
 bar-fill-font = 2
-bar-fill-foreground = #9f78e1
+bar-fill-foreground = ${colors.accent-dark3}
 bar-empty = ─
 bar-empty-font = 2
 bar-empty-foreground = ${colors.foreground-alt}
@@ -191,16 +212,16 @@ card = intel_backlight
 type = internal/cpu
 interval = 2
 format-prefix = "CPU "
-format-prefix-foreground = ${colors.foreground-alt}
-format-underline = #f90000
+format-prefix-foreground = ${colors.foreground}
+format-underline = ${colors.foreground-alt}
 label = %percentage%%
 
 [module/memory]
 type = internal/memory
 interval = 2
 format-prefix = " "
-format-prefix-foreground = ${colors.foreground-alt}
-format-underline = #4bffdc
+format-prefix-foreground = ${colors.foreground}
+format-underline = ${colors.accent-light1}
 label = %percentage_used%%
 
 [module/wlan]
@@ -209,7 +230,7 @@ interface = net1
 interval = 3.0
 
 format-connected = <ramp-signal> <label-connected>
-format-connected-underline = #9f78e1
+format-connected-underline = ${colors.accent-dark3}
 format-disconnected-underline = ${self.format-connected-underline}
 
 label-connected = %essid%
@@ -225,15 +246,17 @@ ramp-signal-foreground = ${colors.foreground-alt}
 
 [module/eth]
 type = internal/network
-interface = enp1s0
+interface = enp0s3
 interval = 3.0
 ;   up - down icons
-format-connected-underline = #55aa55
-format-connected-prefix = " "
+format-connected-underline = ${colors.accent-light2}
+format-connected-prefix = " "
 format-connected-foreground-foreground = ${colors.foreground-alt}
-label-connected = %local_ip%
+label-connected =  %downspeed%  %upspeed%
+label-connected-alt = %local_ip%  %downspeed%  %upspeed%
 
 format-disconnected-underline = ${self.format-connected-underline}
+format-disconnected-prefix = " "
 label-disconnected = %ifname% disconnected
 label-disconnected-foreground = ${colors.foreground-alt}
 
@@ -248,8 +271,8 @@ time = %H:%M
 time-alt = %H:%M:%S
 
 format-prefix = 
-format-prefix-foreground = ${colors.foreground-alt}
-format-underline = #0a6cf5
+format-prefix-foreground = ${colors.foreground}
+format-underline = ${colors.primary}
 
 label = %date% %time%
 
@@ -257,7 +280,7 @@ label = %date% %time%
 type = internal/volume
 
 format-volume = <label-volume> <bar-volume>
-label-volume = VOL
+label-volume = 
 label-volume-foreground = ${root.foreground}
 
 format-muted-prefix = " "
@@ -273,12 +296,12 @@ bar-volume-foreground-4 = #55aa55
 bar-volume-foreground-5 = #f5a70a
 bar-volume-foreground-6 = #ff5555
 bar-volume-gradient = false
-bar-volume-indicator = │
+bar-volume-indicator = 
 bar-volume-indicator-font = 2
 bar-volume-indicator-foreground = #ff
-bar-volume-fill = ─
+bar-volume-fill = -
 bar-volume-fill-font = 2
-bar-volume-empty = ─
+bar-volume-empty = -
 bar-volume-empty-font = 2
 bar-volume-empty-foreground = ${colors.foreground-alt}
 
@@ -289,7 +312,7 @@ adapter = ADP1
 full-at = 98
 
 format-charging = <animation-charging> <label-charging>
-format-charging-underline = #ffb52a
+format-charging-underline = ${colors.foreground-alt}
 
 format-discharging = <ramp-capacity> <label-discharging>
 format-discharging-underline = ${self.format-charging-underline}
@@ -320,7 +343,7 @@ thermal-zone = 0
 warn-temperature = 60
 
 format = <ramp> <label>
-format-underline = #f50a4d
+format-underline = ${colors.accent-light3}
 format-warn = <ramp> <label-warn>
 format-warn-underline = ${self.format-underline}
 
@@ -342,11 +365,11 @@ type = custom/menu
 format-spacing = 1
 
 label-open =  power
-label-open-foreground = ${colors.secondary}
+label-open-foreground = ${colors.foreground}
 label-close =  cancel
-label-close-foreground = ${colors.secondary}
+label-close-foreground = ${colors.alert}
 label-separator = |
-label-separator-foreground = ${colors.foreground-alt}
+label-separator-foreground = ${colors.primary}
 
 menu-0-0 = reboot
 menu-0-0-exec = menu-open-1

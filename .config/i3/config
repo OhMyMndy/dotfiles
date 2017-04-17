@@ -96,16 +96,16 @@ bindsym $mod+a focus parent
 # focus the child container
 #bindsym $mod+d focus child
 
-set $workspace1 "1 "
-set $workspace2 "2 "
-set $workspace3 "3 "
-set $workspace4 "4 "
-set $workspace5 "5 "
-set $workspace6 "6 "
-set $workspace7 "7 "
-set $workspace8 "8 "
-set $workspace9 "9 "
-set $workspace10 "10 "
+set $workspace1 "1"
+set $workspace2 "2"
+set $workspace3 "3"
+set $workspace4 "4"
+set $workspace5 "5"
+set $workspace6 "6"
+set $workspace7 "7"
+set $workspace8 "8"
+set $workspace9 "9"
+set $workspace10 "10"
 
 # move focused container to workspace
 bindsym $mod+Shift+1 move container to workspace $workspace1
@@ -189,12 +189,12 @@ bindsym $mod+r mode "resize"
 #
 # inactive-bg-color was 2c2e2f
 #
-set $bg-color 	         #41a843
-set $inactive-bg-color   #0a0b0c
-set $text-color          #f3f4f5
-set $inactive-text-color #585d68
-set $urgent-bg-color     #E53935
-set $bright-green        #309bff
+set $bg-color 	         #2aa198
+set $inactive-bg-color   #002b36
+set $text-color          #eee8d5
+set $inactive-text-color #586e75
+set $urgent-bg-color     #d33682
+set $bright-green        #268bd2
 # window colors
 #                       border              background         text                 indicator
 client.focused          $bg-color           $bg-color          $text-color          $bright-green
@@ -210,20 +210,20 @@ client.urgent           $urgent-bg-color    $urgent-bg-color   $text-color      
 
 
 # bar
-bar {
+# bar {
 	#position top
   	#status_command i3blocks -c /home/mandy/.config/i3/i3blocks.conf
   	#status_command conky -c $HOME/.conkyrc
   	#status_command polybar example
-	colors {
-		background $inactive-bg-color
-	    	separator #51c4d4
+#	colors {
+#		background $inactive-bg-color
+#	    	separator #2aa198
 		#                  border             background         text
-		focused_workspace  $inactive-bg-color          $inactive-bg-color          #d32a0c
-		inactive_workspace $inactive-bg-color $inactive-bg-color $inactive-text-color
-		urgent_workspace   $urgent-bg-color   $urgent-bg-color   $text-color
-	}
-}
+#		focused_workspace  $inactive-bg-color          $inactive-bg-color          #268bd2
+#		inactive_workspace $inactive-bg-color $inactive-bg-color $inactive-text-color
+#		urgent_workspace   $urgent-bg-color   $urgent-bg-color   $text-color
+#	}
+#}
 
 # Default workspaces
 assign [class=".*Slack$"] $workspace6
@@ -279,9 +279,10 @@ exec --no-startup-id volumeicon
 exec --no-startup-id teamviewer
 #exec --no-startup-id wine "/home/mandy/.wine/drive_c/Program Files (x86)/1Password 4/Agile1pAgent.exe"
 #exec --no-startup-id pstorm
-exec --no-startup-id scudcloud
 exec --no-startup-id keepass2
 exec --no-startup-id dunst
+exec --no-startup-id mopidy
+exec --no-startup-id polybar example
 # Custom bindsym
 
 bindsym $mod+Shift+greater move workspace to output right
