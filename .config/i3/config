@@ -229,6 +229,7 @@ client.urgent           $urgent-bg-color    $urgent-bg-color   $text-color      
 assign [class=".*Slack$"] $workspace6
 assign [class="Thunderbird"] $workspace6
 assign [class="Google-chrome"] $workspace1
+assign [class="Chromium"] $workspace1
 assign [class="Gnome-terminal"] $workspace2
 assign [class="jetbrains-phpstorm"] $workspace4
 assign [class="Google-chrome" instance="crx_ojcflmmmcfpacggndoaaflkmcoblhnbh"] $workspace7
@@ -237,7 +238,7 @@ assign [class="TeamViewer"] $workspace8
 assign [title=".*Wunderlist$"] $workspace7
 assign [class="Thunar"] $workspace3
 assign [class="KeePass2"] $workspace5
-
+assign [class="Terminator"] $workspace2
 
 for_window [class="TeamViewer"] floating enable, move container to $workspace8
 for_window [title="TeamViewer Panel (minimized)"] floating enable, move absolute position 900 px 10 px
