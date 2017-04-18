@@ -46,3 +46,4 @@ set nu
 syntax on
 filetype plugin indent on 
 set backspace=indent,eol,start
+set t_Co=256
