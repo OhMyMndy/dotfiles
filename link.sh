@@ -2,13 +2,19 @@
 
 set -e
 
+rm -f ~/.vimrc
 ln -sf ~/dotfiles/.vimrc ~/.vimrc
 
 rm -rf ~/.vim
 ln -sf ~/dotfiles/.vim ~/.vim
 
+rm -f ~/.zshrc
 ln -sf ~/dotfiles/.zshrc ~/.zshrc
 
+rm -f ~/.oh-my-zsh/custom
+ln -sf ~/dotfiles/.oh-my-zsh/custon ~/.oh-my-zsh
+
+rm -f ~/.config/redshift.conf
 ln -sf ~/dotfiles/.config/redshift.conf ~/.config/redshift.conf
 
 ln -sfn ~/dotfiles/.config/i3 ~/.config/

@@ -1,7 +1,7 @@
 
 export ZSH=/$HOME/.oh-my-zsh
-#ZSH_THEME="mandy"
-ZSH_THEME="cypher"
+ZSH_THEME="mandy"
+#ZSH_THEME="cypher"
 plugins=(git, docker, phpunit, zsh-completions)
 
 if [ -f $HOME/.bash_aliases ]; then
