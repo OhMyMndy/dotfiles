@@ -1,7 +1,6 @@
 [submodule ".vim/bundle/Vundle.vim"]
-    path = .vim/bundle/Vundle.vim
-    url = git@github.com:VundleVim/Vundle.vim.git
-
+	path = .vim/bundle/Vundle.vim
+	url = git@github.com:VundleVim/Vundle.vim.git
 [submodule ".vim/bundle/Colorizer"]
-    path = .vim/bundle/Colorizer
-    url = git@github.com:chrisbra/Colorizer.git
+	path = .vim/bundle/Colorizer
+	url = git@github.com:chrisbra/Colorizer.git

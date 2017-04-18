@@ -17,8 +17,8 @@
     sticky_history = yes
     line_height = 0
     separator_height = 2
-    padding = 8
-    horizontal_padding = 8
+    padding = 12
+    horizontal_padding = 12
     separator_color = "#586e75"
     startup_notification = false
     # https://github.com/knopwob/dunst/issues/26#issuecomment-36159395
@@ -37,15 +37,15 @@
 
 [urgency_low]
     background = "#002b36"
-    foreground = "#268bd2"
+    foreground = "#eee8d5"
     timeout = 5
 
 [urgency_normal]
     background = "#002b36"
-    foreground = "#2aa198"
+    foreground = "#eee8d5"
     timeout = 20
 
 [urgency_critical]
     background = "#002b36"
-    foreground = "#d33682"
+    foreground = "#eee8d5"
     timeout = 0
