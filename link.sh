@@ -60,8 +60,16 @@ ln -sf ~/dotfiles/.yaourtrc ~/
 rm -rf ~/.config/mopidy
 ln -sf ~/dotfiles/.config/mopidy ~/.config/mopidy
 
-m -rf ~/.config/htop
+rm -rf ~/.config/htop
 ln -sf ~/dotfiles/.config/htop ~/.config/htop
 
 rm -rf ~/.screenlayout/
 ln -sf ~/dotfiles/.screenlayout ~/.screenlayout
+
+rm -rf ~/.config/sublime-text-2
+ln -sf ~/dotfiles/.config/sublime-text-2 ~/.config/
+
+rm -f ~/z.sh
+ln -sf ~/dotfiles/z.sh ~/z.sh
+
+touch ~/.z

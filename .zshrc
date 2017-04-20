@@ -1,8 +1,8 @@
-
+source $HOME/z.sh
 export ZSH=/$HOME/.oh-my-zsh
 ZSH_THEME="mandy"
 #ZSH_THEME="cypher"
-plugins=(git, docker, phpunit, zsh-completions)
+plugins=(git, docker, phpunit, zsh-completions, z)
 
 if [ -f $HOME/.bash_aliases ]; then
 	source $HOME/.bash_aliases
@@ -21,6 +21,11 @@ _comp_options+=(globdots)
 # perl: warning: Setting locale failed.
 # perl: warning: Please check that your locale settings:
 alias git='LC_ALL=C git' 
+
+
+precmd () { print -Pn "\e]0;$TITLE\a" }
+title() { export TITLE="$*" }
+DISABLE_AUTO_TITLE="true"
 
 export IP_ADDRESS=$(curl --connect-timeout 1 -s http://whatismyip.akamai.com/)
 export GID
