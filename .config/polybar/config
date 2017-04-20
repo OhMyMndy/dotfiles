@@ -7,6 +7,9 @@
 ;
 ;=====================================================
 
+[settings]
+screenchange-reload = true
+
 [colors]
 background = #002b36
 background-alt = #586e75
@@ -62,7 +65,7 @@ modules-center = mpd
 modules-right = volume xkeyboard memory cpu eth temperature date powermenu
 
 tray-position = right
-tray-padding = 0
+;tray-padding = 0
 tray-maxsize = 18
 ;tray-transparent = true
 ;tray-background = #0063ff

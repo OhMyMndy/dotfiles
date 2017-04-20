@@ -235,9 +235,8 @@ assign [class="KeePass2"] $workspace5
 assign [class="Terminator"] $workspace2
 
 for_window [class="TeamViewer"] floating enable, move container to $workspace8
-for_window [title="TeamViewer Panel (minimized)"] floating enable, move absolute position 900 px 10 px
-for_window [title="TeamViewer Panel"] floating enable, move absolute position 900 px 10 px
-for_window [title="TeamViewer"] floating enable, move absolute position 10 px 10 px
+for_window [title="TeamViewer Panel (minimized)"] move absolute position 900 px 10 px
+for_window [title="TeamViewer Panel"] move absolute position 900 px 10 px
 
 for_window [title=".*Wunderlist$"] move container to workspace $workspace7
 for_window [title=".*Slack$"] move container to workspace $workspace6
@@ -258,7 +257,7 @@ for_window [window_type="menu"] floating enable
 # Execs
 exec_always --no-startup-id killall notify-osd
 exec --no-startup-id redshift
-exec_always --no-startup-id feh --bg-scale /home/mandy/.wallpaper.jpg
+exec_always --no-startup-id feh --bg-scale $HOME/.wallpaper.jpg
 #exec --no-startup-id thunderbird
 #exec --no-startup-id google-chrome
 #exec --no-startup-id gnome-terminal
@@ -271,13 +270,13 @@ exec --no-startup-id autokey-gtk
 exec --no-startup-id nm-applet
 exec --no-startup-id volumeicon
 #exec --no-startup-id conky
-exec --no-startup-id teamviewer
+ exec --no-startup-id teamviewer
 #exec --no-startup-id wine "/home/mandy/.wine/drive_c/Program Files (x86)/1Password 4/Agile1pAgent.exe"
 #exec --no-startup-id pstorm
 exec --no-startup-id keepass2
 exec --no-startup-id dunst
 exec --no-startup-id mopidy
-exec --no-startup-id polybar example
+exec_always --no-startup-id killall polybar; polybar example
 # Custom bindsym
 
 bindsym $mod+Shift+greater move workspace to output right
