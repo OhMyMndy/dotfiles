@@ -60,5 +60,8 @@ ln -sf ~/dotfiles/.yaourtrc ~/
 rm -rf ~/.config/mopidy
 ln -sf ~/dotfiles/.config/mopidy ~/.config/mopidy
 
-rm -rf ~/.config/htop
+m -rf ~/.config/htop
 ln -sf ~/dotfiles/.config/htop ~/.config/htop
+
+rm -rf ~/.screenlayout/
+ln -sf ~/dotfiles/.screenlayout ~/.screenlayout
