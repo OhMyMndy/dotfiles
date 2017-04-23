@@ -72,3 +72,21 @@ sudo systemctl start udisks2
 
 yaourt -S udiskie
 yaourt -S exfat-utils
+
+yaourt -S nmap
+yaourt -S accountsservice
+yaourt -S xorg-xauth
+
+
+
+## Install zfs
+
+## I had to manually change the kernel version in zfs-linux and it's dependencies
+# yaourt -S zfs-linux
+
+# sudo systemctl enable zfs-import-cache.service
+# sudo systemctl enable zfs-mount.service
+# sudo systemctl enable zfs.target
+
+## Make sure to always override if necessary
+# sudo sed -i -E 's|ExecStart.*$|ExecStart=/usr/bin/zfs mount -O -a|g' /usr/lib/systemd/system/zfs-mount.service
