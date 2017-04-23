@@ -17,7 +17,6 @@
 [profiles]
   [[default]]
     background_color = "#002b36"
-    background_image = None
     cursor_color = "#eee8d5"
     custom_command = TERM=xterm-256color zsh
     foreground_color = "#eee8d5"
@@ -26,21 +25,18 @@
     use_custom_command = True
   [[gruvbox-dark]]
     background_color = "#282828"
-    background_image = None
     cursor_color = "#7c6f64"
     foreground_color = "#ebdbb2"
     palette = "#181818:#cc241d:#98971a:#d79921:#458588:#b16286:#689d6a:#ebdbb2:#928374:#fb4934:#b8bb26:#fabd2f:#83a598:#d3869b:#8ec07c:#ebdbb2"
     scrollback_infinite = True
   [[gruvbox-light]]
     background_color = "#eee8d5"
-    background_image = None
     cursor_color = "#002b36"
     foreground_color = "#002b36"
     palette = "#073642:#dc322f:#859900:#b58900:#268bd2:#d33682:#2aa198:#eee8d5:#002b36:#cb4b16:#586e75:#657b83:#839496:#6c71c4:#93a1a1:#fdf6e3"
     scrollback_infinite = True
   [[solarized-dark]]
     background_color = "#002b36"
-    background_image = None
     cursor_color = "#eee8d5"
     custom_command = TERM=xterm-256color zsh
     foreground_color = "#eee8d5"
@@ -49,7 +45,6 @@
     use_custom_command = True
   [[solarized-light]]
     background_color = "#eee8d5"
-    background_image = None
     cursor_color = "#002b36"
     foreground_color = "#002b36"
     palette = "#073642:#dc322f:#859900:#b58900:#268bd2:#d33682:#2aa198:#eee8d5:#002b36:#cb4b16:#586e75:#657b83:#839496:#6c71c4:#93a1a1:#fdf6e3"

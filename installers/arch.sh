@@ -32,12 +32,43 @@ yaourt -S parcellite
 yaourt -S redshift
 yaourt -S chromium
 yaourt -S lightdm
+yaourt -S gtk-engine-murrine
 yaourt -S autokey-py3
-yaours -S openssh
+yaourt -S openssh
 cat /dev/zero | ssh-keygen -b 2048 -t rsa
+sudo systemctl enable sshd
+sudo systemctl start sshd
+
 
 yaourt -S mopidy
 yaourt -S mpd
 yaourt -S ncmpcpp
 
 yaourt -S dunst
+yaourt -Sy xorg
+yaourt -S lightdm-gtk-greeter
+yaourt -S terminator
+yaourt -S byobu
+yaourt -S network-manager-applet
+yaourt -S thunar
+yaourt -S ranger
+yaourt -S super-flat-remix-icon-theme 
+yaourt -S lxappearance
+
+sudo systemctl enable lightdm
+
+yaourt -S docker
+sudo systemctl enable docker
+sudo systemctl start docker
+sudo usermod -a -g docker $(whoami)
+
+yaourt -S ntpd
+sudo systemctl enable ntp
+sudo timedatectl set-ntp yes
+
+yaourt -S udisks2
+sudo systemctl enable udisks2
+sudo systemctl start udisks2
+
+yaourt -S udiskie
+yaourt -S exfat-utils

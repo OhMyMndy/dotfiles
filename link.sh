@@ -2,6 +2,8 @@
 
 set -e
 
+mkdir -p ~/.config
+
 rm -f ~/.vimrc
 ln -sf ~/dotfiles/.vimrc ~/.vimrc
 
@@ -11,8 +13,8 @@ ln -sf ~/dotfiles/.vim ~/.vim
 rm -f ~/.zshrc
 ln -sf ~/dotfiles/.zshrc ~/.zshrc
 
-rm -f ~/.oh-my-zsh/custom
-ln -sf ~/dotfiles/.oh-my-zsh/custon ~/.oh-my-zsh
+rm -rf ~/.oh-my-zsh/custom
+ln -sf ~/dotfiles/.oh-my-zsh/custom ~/.oh-my-zsh/custom
 
 rm -f ~/.config/redshift.conf
 ln -sf ~/dotfiles/.config/redshift.conf ~/.config/redshift.conf
@@ -72,4 +74,14 @@ ln -sf ~/dotfiles/.config/sublime-text-2 ~/.config/
 rm -f ~/z.sh
 ln -sf ~/dotfiles/z.sh ~/z.sh
 
+rm -f ~/.xinitrc
+ln -sf ~/dotfiles/.xinitrc ~/
+
 touch ~/.z
+
+rm -rf ~/.themes
+ln -sf ~/dotfiles/.themes ~/.themes
+
+sudo mkdir -p /etc/lightdm
+sudo rm -f /etc/lightdm/lightm.conf
+sudo cp ~/dotfiles/etc/lightdm/lightdm.conf /etc/lightdm/lightdm.conf

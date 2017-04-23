@@ -3,3 +3,5 @@
 *.pyc
 *.cache
 .z
+.vim/.netrwhist
+*.sublime_session
