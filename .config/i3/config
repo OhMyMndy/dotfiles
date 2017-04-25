@@ -266,7 +266,6 @@ exec --no-startup-id xrandr --output HDMI2 --mode 1920x1080 --pos 1920x0 --rotat
 #exec google-chrome --profile-directory=Default --app-id=ojcflmmmcfpacggndoaaflkmcoblhnbh
 #exec --no-startup-id thunar 
 exec --no-startup-id parcellite
-exec --no-startup-id autokey-gtk
 exec --no-startup-id nm-applet
 exec --no-startup-id volumeicon
 #exec --no-startup-id conky
@@ -277,6 +276,7 @@ exec --no-startup-id keepass2
 exec --no-startup-id dunst
 exec --no-startup-id mopidy
 exec_always --no-startup-id killall polybar; polybar example
+exec_always --no-startup-id autokey-gtk
 # Custom bindsym
 
 bindsym $mod+Shift+greater move workspace to output right
