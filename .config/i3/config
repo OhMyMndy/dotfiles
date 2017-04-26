@@ -90,6 +90,9 @@ bindsym $mod+Shift+space floating toggle
 # change focus between tiling / floating windows
 bindsym $mod+space focus mode_toggle
 
+# toggle sticky
+bindsym $mod+Shift+s sticky toggle
+
 # focus the parent container
 bindsym $mod+a focus parent
 
@@ -277,7 +280,8 @@ exec --no-startup-id dunst
 exec --no-startup-id mopidy
 exec --no-startup-id udiskie
 exec_always --no-startup-id killall polybar; polybar example
-exec_always --no-startup-id autokey-gtk
+exec --no-startup-id autokey-gtk
+exec_always --no-startup-id compton
 # Custom bindsym
 
 bindsym $mod+Shift+greater move workspace to output right

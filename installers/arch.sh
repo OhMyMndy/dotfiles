@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 
 
+if ! grep 'QT_STYLE_OVERRIDE=gtk' /etc/environment ; then
+    cat <<'EOL' | sudo tee -a /etc/environment
+export QT_STYLE_OVERRIDE=gtk
+EOL
+fi
+
 if ! grep  'archlinuxfr' /etc/pacman.conf ; then
    cat <<'EOL' | sudo tee -a /etc/pacman.conf
 
