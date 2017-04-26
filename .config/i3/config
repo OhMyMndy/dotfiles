@@ -13,7 +13,8 @@ set $mod Mod4
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
-font pango:open sans 8
+#font pango:open sans 8
+font pango:DroidSansMonoForPowerline Nerd Font 8
 #font pango:System San Francisco Display 9
 
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
@@ -235,7 +236,7 @@ assign [class="TeamViewer"] $workspace8
 assign [title=".*Wunderlist$"] $workspace7
 assign [class="Thunar"] $workspace3
 assign [class="KeePass2"] $workspace5
-assign [class="Terminator"] $workspace2
+#assign [class="Terminator"] $workspace2
 
 for_window [class="TeamViewer"] floating enable, move container to $workspace8
 for_window [title="TeamViewer Panel (minimized)"] move absolute position 900 px 10 px

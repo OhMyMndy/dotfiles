@@ -5,4 +5,4 @@
 .z
 .vim/.netrwhist
 *.sublime_session
-.ssh-agent
+*.ssh-agent

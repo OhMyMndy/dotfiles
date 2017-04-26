@@ -82,9 +82,9 @@ touch ~/.z
 rm -rf ~/.themes
 ln -sf ~/dotfiles/.themes ~/.themes
 
-sudo mkdir -p /etc/lightdm
-sudo rm -f /etc/lightdm/lightm.conf
-sudo cp ~/dotfiles/etc/lightdm/lightdm.conf /etc/lightdm/lightdm.conf
+#sudo mkdir -p /etc/lightdm
+#sudo rm -f /etc/lightdm/lightm.conf
+#sudo cp ~/dotfiles/etc/lightdm/lightdm.conf /etc/lightdm/lightdm.conf
 
 
 rm -f ~/.config/compton.conf
