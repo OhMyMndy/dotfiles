@@ -27,10 +27,13 @@ precmd () { print -Pn "\e]0;$TITLE\a" }
 title() { export TITLE="$*" }
 DISABLE_AUTO_TITLE="true"
 
-export IP_ADDRESS=$(curl --connect-timeout 1 -s http://whatismyip.akamai.com/)
+
+export VISUAL="vim"
+
+export IP_ADDRESS=$(ip -4 route get 1 | head -1 | cut -d' ' -f7)
 export GID
 export UID
-
+export TZ='Europe/Brussels'
 export LOCAL_PROJECT_DIR='/var/www/html/'
 export DISABLE_AUTO_TITLE="true"
 

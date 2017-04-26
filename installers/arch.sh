@@ -32,12 +32,61 @@ yaourt -S parcellite
 yaourt -S redshift
 yaourt -S chromium
 yaourt -S lightdm
+yaourt -S gtk-engine-murrine
 yaourt -S autokey-py3
-yaours -S openssh
+yaourt -S openssh
 cat /dev/zero | ssh-keygen -b 2048 -t rsa
+sudo systemctl enable sshd
+sudo systemctl start sshd
+
 
 yaourt -S mopidy
 yaourt -S mpd
 yaourt -S ncmpcpp
 
 yaourt -S dunst
+yaourt -Sy xorg
+yaourt -S lightdm-gtk-greeter
+yaourt -S terminator
+yaourt -S byobu
+yaourt -S network-manager-applet
+yaourt -S thunar
+yaourt -S ranger
+yaourt -S super-flat-remix-icon-theme 
+yaourt -S lxappearance
+
+sudo systemctl enable lightdm
+
+yaourt -S docker
+sudo systemctl enable docker
+sudo systemctl start docker
+sudo usermod -a -g docker $(whoami)
+
+yaourt -S ntpd
+sudo systemctl enable ntp
+sudo timedatectl set-ntp yes
+
+yaourt -S udisks2
+sudo systemctl enable udisks2
+sudo systemctl start udisks2
+
+yaourt -S udiskie
+yaourt -S exfat-utils
+
+yaourt -S nmap
+yaourt -S accountsservice
+yaourt -S xorg-xauth
+
+
+
+## Install zfs
+
+## I had to manually change the kernel version in zfs-linux and it's dependencies
+# yaourt -S zfs-linux
+
+# sudo systemctl enable zfs-import-cache.service
+# sudo systemctl enable zfs-mount.service
+# sudo systemctl enable zfs.target
+
+## Make sure to always override if necessary
+# sudo sed -i -E 's|ExecStart.*$|ExecStart=/usr/bin/zfs mount -O -a|g' /usr/lib/systemd/system/zfs-mount.service

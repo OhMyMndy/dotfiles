@@ -275,6 +275,7 @@ exec --no-startup-id volumeicon
 exec --no-startup-id keepass2
 exec --no-startup-id dunst
 exec --no-startup-id mopidy
+exec --no-startup-id udiskie
 exec_always --no-startup-id killall polybar; polybar example
 exec_always --no-startup-id autokey-gtk
 # Custom bindsym
