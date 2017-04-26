@@ -283,6 +283,7 @@ exec --no-startup-id udiskie
 exec_always --no-startup-id killall polybar; polybar example
 exec --no-startup-id autokey-gtk
 exec_always --no-startup-id compton
+exec --no-startup-id slack
 # Custom bindsym
 
 bindsym $mod+Shift+greater move workspace to output right
