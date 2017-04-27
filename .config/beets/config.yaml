@@ -1,0 +1,17 @@
+directory: ~/Music/beets                   # Where does the music live?
+library: ~/Dropbox/beets/musiclibrary.blb  # Where does the beets database live?
+import:
+    move: yes                              # Move your files to ~/Music/beets after import
+plugins: lastgenre fetchart ftintitle mpdupdate smartplaylist random embedart
+embedart:
+    auto: yes 
+
+mpdupdate:
+    host: localhost
+    port: 6600 
+
+smartplaylist:
+    playlist_dir: ~/.mpd/playlists
+    playlists:
+        - name: all.m3u
+          query: ''                  # Matches all music in your library
