@@ -30,6 +30,7 @@ accent-light2 = #d33682
 #margin-top = 10
 #margin-bottom = 10
 
+
 [bar/example]
 ;monitor = ${env:MONITOR:HDMI-1}
 width = 100%
@@ -50,10 +51,10 @@ border-bottom-size = 2
 border-bottom-color = ${colors.accent-dark1}
 
 padding-left = 0
-padding-right = 2
+padding-right = 1
 
 module-margin-left = 1
-module-margin-right = 2
+module-margin-right = 1
 
 font-0 = DroidSansMonoForPowerline Nerd Font:pixelsize=11;0
 # font-1 = fixed:pixelsize=10
@@ -62,7 +63,7 @@ font-0 = DroidSansMonoForPowerline Nerd Font:pixelsize=11;0
 
 modules-left = i3 xwindow
 modules-center = mpd 
-modules-right = volume xkeyboard memory cpu eth temperature date powermenu
+modules-right = volume xkill terminal display vpn xkeyboard memory cpu eth temperature date powermenu
 
 tray-position = right
 ;tray-padding = 0
@@ -91,10 +92,41 @@ type = internal/xkeyboard
 blacklist-0 = num lock
 label-layout = %{F#55}%{F-} %layout%
 label-layout-underline = ${colors.secondary}
-label-indicator-padding = 2
-label-indicator-margin = 1
+#label-indicator-padding = 2
+#label-indicator-margin = 1
 label-indicator-background = ${colors.secondary}
 label-indicator-underline = ${colors.secondary}
+
+
+[module/vpn]
+type = custom/script
+exec = echo vpn
+exec-if = pgrep -x openvpn
+interval = 5
+format-underline = ${colors.accent-dark2}
+format-prefix = "🖧 "
+format-prefix-foreground = #5b
+
+[module/display]
+type = custom/script
+click-left = bash ~/.config/polybar/scripts/display-resolution.sh
+exec = echo disp
+interval = 9000
+format-underline = ${colors.accent-light1}
+
+[module/terminal]
+type=custom/script
+click-left = terminator
+exec = echo term
+interval = 9000
+format-underline = ${colors.accent-dark3}
+
+[module/xkill]
+type=custom/script
+click-left = xkill
+exec = echo xkill
+interval = 9000
+format-underline = ${colors.foreground-alt}
 
 [module/filesystem]
 type = internal/fs

@@ -241,13 +241,13 @@ assign [class="KeePass2"] $workspace5
 for_window [class="TeamViewer"] floating enable, move container to $workspace8
 for_window [title="TeamViewer Panel (minimized)"] move absolute position 900 px 10 px
 for_window [title="TeamViewer Panel"] move absolute position 900 px 10 px
-
+for_window [class="Yad"] floating enable
 for_window [title=".*Wunderlist$"] move container to workspace $workspace7
 for_window [title=".*Slack$"] move container to workspace $workspace6
 
 # source: https://github.com/Airblader/dotfiles-manjaro/blob/master/.i3/config
-for_window [class="(?i)VirtualBox" title="(?i)Manager"] floating enable
-for_window [class="(?i)VirtualBox"] floating enable
+#for_window [class="(?i)VirtualBox" title="(?i)Manager"] floating enable
+#for_window [class="(?i)VirtualBox"] floating enable
 
 
 for_window [window_role="pop-up"] floating enable
