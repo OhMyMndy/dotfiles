@@ -1,17 +1,17 @@
 [global]
     font = "DroidSansMonoForPowerline Nerd Font 9"
     allow_markup = yes
-    format = "<b>%s</b>\n%b"
+    format = "<b>%a</b>\n<b><i>%s</i></b>\n%b"
     sort = yes
     indicate_hidden = yes
     alignment = left
     bounce_freq = 0
-    show_age_threshold = 60
+    show_age_threshold = 90
     word_wrap = yes
     ignore_newline = no
-    geometry = "300x6-6+32"
+    geometry = "360x6-6+32"
     transparency = 0
-    idle_threshold = 60
+    idle_threshold = 90
     monitor = 0
     follow = mouse
     sticky_history = yes
@@ -26,8 +26,8 @@
     #icon_folders = /usr/share/icons/elementary/actions/16/
 
 [frame]
-    width = 1
-    color = "#073642"
+    width = 2
+    color = "#2aa198"
 
 [shortcuts]
     close = ctrl+space
@@ -36,16 +36,16 @@
     context = ctrl+shift+period
 
 [urgency_low]
-    background = "#002b36"
+    background = "#073642"
     foreground = "#eee8d5"
     timeout = 5
 
 [urgency_normal]
-    background = "#002b36"
+    background = "#073642"
     foreground = "#eee8d5"
     timeout = 20
 
 [urgency_critical]
-    background = "#002b36"
+    background = "#073642"
     foreground = "#eee8d5"
     timeout = 0

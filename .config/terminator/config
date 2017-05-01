@@ -1,9 +1,15 @@
 [global_config]
   enabled_plugins = LaunchpadCodeURLHandler, APTURLHandler, LaunchpadBugURLHandler
   inactive_color_offset = 0.74
+  title_font = DroidSansMonoForPowerline Nerd Font 10
   title_hide_sizetext = True
   title_transmit_bg_color = "#2aa198"
+  title_use_system_font = False
 [keybindings]
+  go_down = <Alt><Super>Down
+  go_left = <Alt><Super>Left
+  go_right = <Alt><Super>Right
+  go_up = <Alt><Super>Up
 [layouts]
   [[default]]
     [[[child1]]]
@@ -20,7 +26,7 @@
     cursor_color = "#eee8d5"
     custom_command = TERM=xterm-256color zsh
     foreground_color = "#eee8d5"
-    palette = "#073642:#dc322f:#859900:#b58900:#268bd2:#d33682:#2aa198:#eee8d5:#586e75:#cb4b16:#586e75:#657b83:#839496:#6c71c4:#93a1a1:#fdf6e3"
+    palette = "#073642:#dc322f:#859900:#b58900:#268bd2:#d33682:#2aa198:#eee8d5:#0c6075:#cb4b16:#b1cc00:#e3aa00:#2da9ff:#6c71c4:#37d7ca:#fff8e5"
     scrollback_infinite = True
     use_custom_command = True
   [[gruvbox-dark]]
@@ -40,7 +46,7 @@
     cursor_color = "#eee8d5"
     custom_command = TERM=xterm-256color zsh
     foreground_color = "#eee8d5"
-    palette = "#073642:#dc322f:#859900:#b58900:#268bd2:#d33682:#2aa198:#eee8d5:#586e75:#cb4b16:#586e75:#657b83:#839496:#6c71c4:#93a1a1:#fdf6e3"
+    palette = "#073642:#dc322f:#859900:#b58900:#268bd2:#d33682:#2aa198:#eee8d5:#0c6075:#cb4b16:#b1cc00:#e3aa00:#2da9ff:#6c71c4:#37d7ca:#fff8e5"
     scrollback_infinite = True
     use_custom_command = True
   [[solarized-light]]
