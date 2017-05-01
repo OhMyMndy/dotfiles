@@ -90,3 +90,26 @@ yaourt -S xorg-xauth
 
 ## Make sure to always override if necessary
 # sudo sed -i -E 's|ExecStart.*$|ExecStart=/usr/bin/zfs mount -O -a|g' /usr/lib/systemd/system/zfs-mount.service
+
+
+
+export MAKEPKG="makepkg --skipinteg"
+yaourt -S vlc qt4
+yaourt -S pulseaudio
+
+
+cat <<'EOL' | sudo tee /etc/systemd/system/pulseaudio.service
+[Unit]
+Description=PulseAudio Daemon
+ 
+[Install]
+WantedBy=multi-user.target
+ 
+[Service]
+Type=simple
+PrivateTmp=true
+ExecStart=/usr/bin/pulseaudio --system --realtime --disallow-exit --no-cpu-limit 
+EOL
+
+sudo systemctl enable pulseaudio
+sudo systemctl start pulseaudio
