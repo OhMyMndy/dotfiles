@@ -7,77 +7,64 @@ Xft.autohint: false
 Xft.hintstyle: hintfull
 Xft.lcdfilter: lcddefault
 
-! rofi
-! rofi.modi: run
-! rofi.font: Hack 15
-! rofi.width: 100
-!rofi.lines: 5
-!rofi.columns: 1
-!rofi.opacity: 80
-!                    bg       fg      altbg    hlbg     hlfg
-!rofi.color-normal: #282828, #ebdbb2, #282828, #ebdbb2, #282828
-!rofi.color-urgent: #282828, #ebdbb2, #282828, #ebdbb2, #282828
-!rofi.color-active: #282828, #ebdbb2, #282828, #ebdbb2, #282828
-!rofi.color-window: #282828, #282828
-!rofi.bw: 0
-!rofi.location: 2
-!rofi.padding: 100
-!rofi.fuzzy: false
+! Enable the extended coloring options
+rofi.color-enabled: true
+!                  bg       border   separator
+rofi.color-window: #273238, #273238, #1e2529
+!                  bg       fg       bg-alt   hl-bg    hl-fg
+rofi.color-normal: #273238, #c1c1c1, #273238, #394249, #ffffff
+rofi.color-active: #273238, #80cbc4, #273238, #394249, #80cbc4
+rofi.color-urgent: #273238, #ff1844, #273238, #394249, #ff1844
+rofi.separator-style: solid
+rofi.sidebar-mode: true
+rofi.bw: 1
+rofi.columns: 1
+rofi.padding: 16
 
+rofi.yoffset: 0
+rofi.fake-transparency: false
+rofi.location: 0
+rofi.width: 50
+rofi.font: Hasklig 12
+rofi.lines: 15
+rofi.fixed-num-lines: true
 
-#define S_base03        #002b36
-#define S_base02        #073642
-#define S_base01        #586e75
-#define S_base00        #657b83
-#define S_base0         #839496
-#define S_base1         #93a1a1
-#define S_base2         #eee8d5
-#define S_base3         #fdf6e3
+! ##### COLORS #####
+! special
+*.foreground:   #c7ccd1
+*.background:   #1c2023
+*.cursorColor:  #c7ccd1
 
-*background:            S_base03
-*foreground:            S_base0
-*fadeColor:             S_base03
-*cursorColor:           S_base1
-*pointerColorBackground:S_base01
-*pointerColorForeground:S_base1
+! black
+*.color0:       #1c2023
+*.color8:       #747c84
 
-#define S_yellow        #b58900
-#define S_orange        #cb4b16
-#define S_red           #dc322f
-#define S_magenta       #d33682
-#define S_violet        #6c71c4
-#define S_blue          #268bd2
-#define S_cyan          #2aa198
-#define S_green         #859900
+! red
+*.color1:       #c7ae95
+*.color9:       #c7ae95
 
-!! black dark/light
-*color0:                S_base02
-*color8:                S_base03
+! green
+*.color2:       #95c7ae
+*.color10:      #95c7ae
 
-!! red dark/light
-*color1:                S_red
-*color9:                S_orange
+! yellow
+*.color3:       #aec795
+*.color11:      #aec795
 
-!! green dark/light
-*color2:                S_green
-*color10:               S_base01
+! blue
+*.color4:       #ae95c7
+*.color12:      #ae95c7
 
-!! yellow dark/light
-*color3:                S_yellow
-*color11:               S_base00
+! magenta
+*.color5:       #c795ae
+*.color13:      #c795ae
 
-!! blue dark/light
-*color4:                S_blue
-*color12:               S_base0
+! cyan
+*.color6:       #95aec7
+*.color14:      #95aec7
 
-!! magenta dark/light
-*color5:                S_magenta
-*color13:               S_violet
+! white
+*.color7:       #c7ccd1
+*.color15:      #f3f4f5
 
-!! cyan dark/light
-*color6:                S_cyan
-*color14:               S_base1
-
-!! white dark/light
-*color7:                S_base2
-*color15:               S_base3
+! ##### END COLORS #####

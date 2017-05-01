@@ -1,6 +1,7 @@
 set nocompatible              " be iMproved, required
 filetype off                  " required
-
+colorscheme desert
+" colorscheme wal
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
@@ -26,7 +27,7 @@ Plugin 'VundleVim/Vundle.vim'
 " Install L9 and avoid a Naming conflict if you've already installed a
 " different version somewhere else.
 " Plugin 'ascenator/L9', {'name': 'newL9'}
-Plugin 'Colorizer'
+Plugin 'chrisbra/Colorizer'
 Plugin 'davidhalter/jedi-vim'
 Plugin 'scrooloose/nerdtree'
 " All of your Plugins must be added before the following line
@@ -46,6 +47,7 @@ filetype plugin indent on    " required
 
 set nu
 syntax on
+let g:colorizer_auto_color=1
 filetype plugin indent on 
 set backspace=indent,eol,start
 set t_Co=256

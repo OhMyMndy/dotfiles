@@ -92,3 +92,6 @@ ln -sf ~/dotfiles/.config/compton.conf ~/.config/compton.conf
 
 rm -rf ~/.config/beets
 ln -sf ~/dotfiles/.config/beets ~/.config/beets
+
+rm -f ~/.gtkrc-2.0
+ln -sf ~/dotfiles/.gtkrc-2.0 ~/.gtkrc-2.0
