@@ -1,4 +1,34 @@
 
+
+
+#define BACKGROUND #1c2023
+#define FOREGROUND #c7ccd1
+
+#define COLOR0     #1c2023
+#define COLOR8     #747c84
+
+#define COLOR1     #c7ae95
+#define COLOR9     #c7ae95
+
+#define COLOR2     #95c7ae
+#define COLOR10    #95c7ae
+
+#define COLOR3     #aec795
+#define COLOR11    #aec795
+
+#define COLOR4     #ae95c7
+#define COLOR12    #ae95c7
+
+#define COLOR5     #c795ae
+#define COLOR13    #c795ae
+
+#define COLOR6     #95aec7
+#define COLOR14    #95aec7
+
+#define COLOR7     #c7ccd1
+#define COLOR15    #f3f4f5
+
+
 Xft.dpi: 96
 Xft.antialias: true
 Xft.hinting: true
@@ -10,11 +40,11 @@ Xft.lcdfilter: lcddefault
 ! Enable the extended coloring options
 rofi.color-enabled: true
 !                  bg       border   separator
-rofi.color-window: #273238, #273238, #1e2529
+rofi.color-window: BACKGROUND, COLOR1, FOREGROUND
 !                  bg       fg       bg-alt   hl-bg    hl-fg
-rofi.color-normal: #273238, #c1c1c1, #273238, #394249, #ffffff
-rofi.color-active: #273238, #80cbc4, #273238, #394249, #80cbc4
-rofi.color-urgent: #273238, #ff1844, #273238, #394249, #ff1844
+rofi.color-normal: COLOR0, COLOR15, COLOR0, BACKGROUND, COLOR3
+rofi.color-active: COLOR2, COLOR0, COLOR0, COLOR0, COLOR2
+rofi.color-urgent: COLOR0, COLOR5, COLOR0, COLOR0, COLOR5
 rofi.separator-style: solid
 rofi.sidebar-mode: true
 rofi.bw: 1
@@ -31,16 +61,16 @@ rofi.fixed-num-lines: true
 
 ! ##### COLORS #####
 ! special
-*.foreground:   #c7ccd1
-*.background:   #1c2023
-*.cursorColor:  #c7ccd1
+*.foreground:   FOREGROUND
+*.background:   BACKGROUND
+*.cursorColor:  FOREGROUND
 
 ! black
-*.color0:       #1c2023
-*.color8:       #747c84
+*.color0:       COLOR0
+*.color8:       COLOR8
 
 ! red
-*.color1:       #c7ae95
+*.color1:       COLOR1
 *.color9:       #c7ae95
 
 ! green

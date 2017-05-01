@@ -11,7 +11,7 @@ fi
 if [ -f $HOME/.oh-my-zsh/oh-my-zsh.sh ]; then
 	source $HOME/.oh-my-zsh/oh-my-zsh.sh
 fi
-export PATH=$HOME/.local/bin:/usr/share/doc/git/contrib/diff-highlight/:$PATH
+export PATH=$HOME/bin:$HOME/.local/bin:/usr/share/doc/git/contrib/diff-highlight/:$PATH
 
 # Allow autocompletion for dot files/folders
 compinit
