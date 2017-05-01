@@ -89,3 +89,6 @@ ln -sf ~/dotfiles/.themes ~/.themes
 
 rm -f ~/.config/compton.conf
 ln -sf ~/dotfiles/.config/compton.conf ~/.config/compton.conf
+
+rm -rf ~/.config/beets
+ln -sf ~/dotfiles/.config/beets ~/.config/beets
