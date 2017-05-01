@@ -201,7 +201,7 @@ set_from_resource $urgent-bg-color     color5     #d33682
 set_from_resource $bright-green        color4     #268bd2
 # window colors
 #                       border              background         text                 indicator
-client.focused          $bg-color           $bg-color          $text-color          $bright-green
+client.focused          $bg-color           $bg-color          $color4          $bright-green
 client.unfocused        $inactive-bg-color $inactive-bg-color $inactive-text-color $bright-green
 client.focused_inactive $inactive-bg-color $inactive-bg-color $inactive-text-color $bright-green
 client.urgent           $urgent-bg-color    $urgent-bg-color   $text-color          $bright-green
