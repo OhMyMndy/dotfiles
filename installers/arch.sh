@@ -23,8 +23,11 @@ yaourt -S tig
 yaourt -S vim
 
 
-cd ~/.local/share/fonts && curl -fLo "Droid Sans Mono for Powerline Nerd Font Complete.otf" https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/patched-fonts/DroidSansMono/complete/Droid%20Sans%20Mono%20for%20Powerline%20Nerd%20Font%20Complete.otf
+mkdir -p ~/.local/share/fonts; cd ~/.local/share/fonts && curl -fLo "Droid Sans Mono for Powerline Nerd Font Complete.otf" https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/patched-fonts/DroidSansMono/complete/Droid%20Sans%20Mono%20for%20Powerline%20Nerd%20Font%20Complete.otf
 
+# Install before polybar
+yaourt -S libmpdclient
+yaourt -S pulseaudio
 
 yaourt -S i3-gaps
 yaourt -S polybar
@@ -98,4 +101,26 @@ yaourt -S xorg-xauth
 # sudo sed -i -E 's|ExecStart.*$|ExecStart=/usr/bin/zfs mount -O -a|g' /usr/lib/systemd/system/zfs-mount.service
 
 
+
+export MAKEPKG="makepkg --skipinteg"
+yaourt -S vlc qt4
+
+
+cat <<'EOL' | sudo tee /etc/systemd/system/pulseaudio.service
+[Unit]
+Description=PulseAudio Daemon
+ 
+[Install]
+WantedBy=multi-user.target
+ 
+[Service]
+Type=simple
+PrivateTmp=true
+ExecStart=/usr/bin/pulseaudio --system --realtime --disallow-exit --no-cpu-limit 
+EOL
+
+sudo systemctl enable pulseaudio
+sudo systemctl start pulseaudio
+
+yaourt -S flatabulous-theme-git
 yaourt -S yad

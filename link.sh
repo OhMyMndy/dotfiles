@@ -92,3 +92,13 @@ ln -sf ~/dotfiles/.config/compton.conf ~/.config/compton.conf
 
 rm -rf ~/.config/beets
 ln -sf ~/dotfiles/.config/beets ~/.config/beets
+
+rm -f ~/.gtkrc-2.0
+ln -sf ~/dotfiles/.gtkrc-2.0 ~/.gtkrc-2.0
+
+mv -f ~/bin ~/bin_old 2>/dev/null || echo "1" > /dev/null
+ln -sf ~/dotfiles/bin ~/bin
+
+
+bash ~/.config/dunst/dunstrc.sh > ~/.config/dunst/dunstrc
+bash ~/.config/terminator/config.sh > ~/.config/terminator/config

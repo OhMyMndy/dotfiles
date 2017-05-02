@@ -1,3 +1,18 @@
+#!/usr/bin/env bash
+
+function getColor() {
+echo $(xrdb -query -all | grep -i "\.$1:" | sed -n 's/.*\(#.*\)/\1/p')
+}
+color0=$(getColor 'color0')
+color1=$(getColor 'color1')
+color2=$(getColor 'color2')
+color3=$(getColor 'color3')
+color4=$(getColor 'color4')
+color5=$(getColor 'color5')
+background=$(getColor 'background')
+foreground=$(getColor 'foreground')
+
+cat <<EOF
 [global]
     font = "DroidSansMonoForPowerline Nerd Font 9"
     allow_markup = yes
@@ -19,7 +34,7 @@
     separator_height = 2
     padding = 12
     horizontal_padding = 12
-    separator_color = "#ae95c7"
+    separator_color = "${color4}"
     startup_notification = false
     # https://github.com/knopwob/dunst/issues/26#issuecomment-36159395
     #icon_position = left
@@ -27,7 +42,7 @@
 
 [frame]
     width = 2
-    color = "#95c7ae"
+    color = "${color2}"
 
 [shortcuts]
     close = ctrl+space
@@ -36,16 +51,17 @@
     context = ctrl+shift+period
 
 [urgency_low]
-    background = "#1c2023"
-    foreground = "#c7ccd1"
+    background = "${color0}"
+    foreground = "${foreground}"
     timeout = 5
 
 [urgency_normal]
-    background = "#1c2023"
-    foreground = "#95c7ae"
+    background = "${color0}"
+    foreground = "${color2}"
     timeout = 20
 
 [urgency_critical]
-    background = "#1c2023"
-    foreground = "#c795ae"
+    background = "${color0}"
+    foreground = "${color5}"
     timeout = 0
+EOF
