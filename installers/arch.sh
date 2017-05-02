@@ -96,3 +96,6 @@ yaourt -S xorg-xauth
 
 ## Make sure to always override if necessary
 # sudo sed -i -E 's|ExecStart.*$|ExecStart=/usr/bin/zfs mount -O -a|g' /usr/lib/systemd/system/zfs-mount.service
+
+
+yaourt -S yad
