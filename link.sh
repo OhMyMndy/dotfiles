@@ -102,3 +102,15 @@ ln -sf ~/dotfiles/bin ~/bin
 
 bash ~/.config/dunst/dunstrc.sh > ~/.config/dunst/dunstrc
 bash ~/.config/terminator/config.sh > ~/.config/terminator/config
+
+# disable notify-osd
+notify_osd_service="/usr/share/dbus-1/services/org.freedesktop.Notifications.service"
+killall notify-osd
+if [ -e "${notify_osd_service}" ]; then
+	sudo mv ${notify_osd_service}{,.disabled}
+fi
+
+
+xrdb -merge ~/.Xresources
+killall dunst; dunst  &>/dev/null
+notify-send summary body
