@@ -17,7 +17,7 @@ foreground = ${xrdb:color7}
 foreground-alt = ${xrdb:color6}
 primary = ${xrdb:color2}
 secondary = ${xrdb:color3}
-alert = ${xrdb:color1}
+alert = ${xrdb:color5}
 
 accent-dark1 = ${xrdb:color6}
 accent-dark2 = ${xrdb:color1}
@@ -38,7 +38,6 @@ height = 26
 offset-x = 0
 offset-y = 0
 
-;background = ${xrdb:color9}
 background = ${colors.background}
 foreground = ${colors.foreground}
 
@@ -57,9 +56,6 @@ module-margin-left = 1
 module-margin-right = 1
 
 font-0 = DroidSansMonoForPowerline Nerd Font:pixelsize=9;2
-# font-1 = fixed:pixelsize=10
-# font-2 = unifont:fontformat=truetype:size=6:heavy;-2
-# font-3 = FontAwesome:size=10
 
 modules-left = i3 xwindow
 modules-center = mpd 
@@ -69,18 +65,6 @@ tray-position = right
 ;tray-padding = 0
 tray-maxsize = 18
 ;tray-transparent = true
-;tray-background = #0063ff
-
-;wm-restack = bspwm
-;wm-restack = i3
-
-;override-redirect = true
-
-;scroll-up = bspwm-desknext
-;scroll-down = bspwm-deskprev
-
-;scroll-up = i3wm-wsnext
-;scroll-down = i3wm-wsprev
 
 
 [module/xwindow]
@@ -92,8 +76,9 @@ type = internal/xkeyboard
 blacklist-0 = num lock
 label-layout = %{F#55}%{F-} %layout%
 label-layout-underline = ${colors.secondary}
-#label-indicator-padding = 2
+label-indicator-padding = 1
 #label-indicator-margin = 1
+label-indicator-foreground = ${colors.background}
 label-indicator-background = ${colors.secondary}
 label-indicator-underline = ${colors.secondary}
 
@@ -157,6 +142,7 @@ label-occupied-padding = 1
 
 label-urgent = %index%!
 label-urgent-background = ${colors.alert}
+label-urgent-foreground = ${colors.background-alt}
 label-urgent-padding = 1
 
 label-empty = %index%
@@ -183,6 +169,7 @@ label-unfocused-padding = ${module/bspwm.label-occupied-padding}
 
 label-urgent = %index%! %icon%
 label-urgent-background = ${module/bspwm.label-urgent-background}
+label-urgent-foreground = ${module/bspwm.label-urgent-foreground}
 label-urgent-padding = ${module/bspwm.label-urgent-padding}
 
 label-visible = %index% %icon%
@@ -284,8 +271,8 @@ ramp-signal-foreground = ${colors.foreground-alt}
 
 [module/eth]
 type = internal/network
-interface = enp0s3
-interval = 3.0
+interface = ${xrdb.ethinterface:eth0}
+interval = 3 
 ;   up - down icons
 format-connected-underline = ${colors.accent-light2}
 format-connected-prefix = " "
@@ -326,13 +313,13 @@ format-muted-foreground = ${colors.foreground-alt}
 label-muted = sound muted
 
 bar-volume-width = 10
-bar-volume-foreground-0 = #55aa55
-bar-volume-foreground-1 = #55aa55
-bar-volume-foreground-2 = #55aa55
-bar-volume-foreground-3 = #55aa55
-bar-volume-foreground-4 = #55aa55
-bar-volume-foreground-5 = #f5a70a
-bar-volume-foreground-6 = #ff5555
+bar-volume-foreground-0 = ${colors.accent-light1}
+bar-volume-foreground-1 = ${colors.accent-light1}
+bar-volume-foreground-2 = ${colors.accent-light1}
+bar-volume-foreground-3 = ${colors.accent-light1}
+bar-volume-foreground-4 = ${colors.accent-light1}
+bar-volume-foreground-5 = ${colors.accent-dark2}
+bar-volume-foreground-6 = ${colors.alert}
 bar-volume-gradient = false
 bar-volume-indicator = 
 bar-volume-indicator-font = 2
@@ -402,17 +389,20 @@ type = custom/menu
 
 format-spacing = 1
 
-label-open =  power
+label-open = " power"
 label-open-foreground = ${colors.foreground}
-label-close =  cancel
+label-close = cancel
 label-close-foreground = ${colors.alert}
 label-separator = |
 label-separator-foreground = ${colors.primary}
 
-menu-0-0 = reboot
+menu-0-0 = " reboot"
 menu-0-0-exec = menu-open-1
-menu-0-1 = power off
+menu-0-1 = " power off"
 menu-0-1-exec = menu-open-2
+menu-0-2 = " lock"
+menu-0-2-exec = bash ~/.config/i3/scripts/lock 
+
 
 menu-1-0 = cancel
 menu-1-0-exec = menu-open-0

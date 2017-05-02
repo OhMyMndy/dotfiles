@@ -1,5 +1,5 @@
-
-
+#include ".Xresources-local"
+ethinterface:     enp1s0
 
 #define BACKGROUND #1c2023
 #define FOREGROUND #c7ccd1
@@ -55,7 +55,7 @@ rofi.yoffset: 0
 rofi.fake-transparency: false
 rofi.location: 0
 rofi.width: 50
-rofi.font: Hasklig 12
+rofi.font: DroidSansMonoForPowerline Nerd Font Book 11
 rofi.lines: 15
 rofi.fixed-num-lines: true
 

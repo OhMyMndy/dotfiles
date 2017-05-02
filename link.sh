@@ -31,6 +31,7 @@ ln -sf ~/dotfiles/.gtkrc-2.0 ~/.gtkrc-2.0
 
 rm -rf ~/.Xresources
 ln -sf ~/dotfiles/.Xresources ~/.Xresources
+touch ~/.Xresources-local
 
 rm -rf ~/.conkyrc
 ln -sf ~/dotfiles/.conkyrc ~/.conkyrc
@@ -82,6 +83,9 @@ touch ~/.z
 rm -rf ~/.themes
 ln -sf ~/dotfiles/.themes ~/.themes
 
+rm -rf ~/.icons
+ln -sf ~/dotfiles/.icons ~/.icons
+
 #sudo mkdir -p /etc/lightdm
 #sudo rm -f /etc/lightdm/lightm.conf
 #sudo cp ~/dotfiles/etc/lightdm/lightdm.conf /etc/lightdm/lightdm.conf
@@ -97,6 +101,7 @@ rm -f ~/.gtkrc-2.0
 ln -sf ~/dotfiles/.gtkrc-2.0 ~/.gtkrc-2.0
 
 mv -f ~/bin ~/bin_old 2>/dev/null || echo "1" > /dev/null
+rm -rf ~/bin
 ln -sf ~/dotfiles/bin ~/bin
 
 
