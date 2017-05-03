@@ -59,7 +59,7 @@ font-0 = DroidSansMonoForPowerline Nerd Font:pixelsize=9;2
 
 modules-left = i3 xwindow
 modules-center = mpd 
-modules-right = volume xkill terminal monitor vpn xkeyboard memory cpu eth temperature date powermenu
+modules-right = volume xkill terminal monitor vpn xkeyboard filesystem memory cpu eth temperature date powermenu
 
 tray-position = right
 ;tray-padding = 0
@@ -117,17 +117,12 @@ format-underline = ${colors.foreground-alt}
 format-prefix = " "
 
 [module/filesystem]
-type = internal/fs
+type=custom/script
+click-left = /usr/bin/xkill
+exec = df --output=pcent / -h | tail -1
 interval = 25
-
-mount-0 = /
-mount-1 = /home
-mount-2 = /invalid/mountpoint
-
-label-mounted = %mountpoint%: %percentage_free%%
-
-label-unmounted = %mountpoint%: not mounted
-label-unmounted-foreground = ${colors.foreground-alt}
+format-underline = ${colors.accent-dark1}
+format-prefix = ""
 
 [module/bspwm]
 type = internal/bspwm

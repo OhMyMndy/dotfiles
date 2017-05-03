@@ -36,4 +36,5 @@ export UID
 export TZ='Europe/Brussels'
 export LOCAL_PROJECT_DIR='/var/www/html/'
 export DISABLE_AUTO_TITLE="true"
-
+export CHROMIUM_PORT=5910
+export ELASTICSEARCH_MEMORY="256m"

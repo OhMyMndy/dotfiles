@@ -8,7 +8,6 @@
   title_receive_bg_color = "#ae95c7"
   title_transmit_bg_color = "#95c7ae"
   title_transmit_fg_color = "#1c2023"
-  title_use_system_font = False
 [keybindings]
   go_down = <Alt><Super>Down
   go_left = <Alt><Super>Left
@@ -28,10 +27,10 @@
   [[default]]
     background_color = "#1c2023"
     cursor_color = "#c7ccd1"
+    custom_command = TERM=xterm-256color zsh
     foreground_color = "#c7ccd1"
     palette = "#95c7ae:#c795ae:#95c7ae:#c7ae95:#95aec7:#ae95c7:#aec795:#c7ccd1:#747c84:#c795ae:#95c7ae:#c7ae95:#95aec7:#ae95c7:#95c7ae:#f3f4f5"
     scrollback_infinite = True
-    custom_command = TERM=xterm-256color zsh
     use_custom_command = True
   [[gruvbox-dark]]
     background_color = "#282828"
