@@ -3,11 +3,11 @@
   inactive_color_offset = 0.74
   title_font = DroidSansMonoForPowerline Nerd Font 10
   title_hide_sizetext = True
-  title_inactive_bg_color = ""
-  title_inactive_fg_color = ""
-  title_receive_bg_color = ""
-  title_transmit_bg_color = ""
-  title_transmit_fg_color = ""
+  title_inactive_bg_color = "#c7ccd1"
+  title_inactive_fg_color = "#1c2023"
+  title_receive_bg_color = "#ae95c7"
+  title_transmit_bg_color = "#95c7ae"
+  title_transmit_fg_color = "#1c2023"
   title_use_system_font = False
 [keybindings]
   go_down = <Alt><Super>Down
@@ -26,10 +26,10 @@
 [plugins]
 [profiles]
   [[default]]
-    background_color = ""
-    cursor_color = ""
-    foreground_color = ""
-    palette = ":::::::::::::::"
+    background_color = "#1c2023"
+    cursor_color = "#c7ccd1"
+    foreground_color = "#c7ccd1"
+    palette = "#95c7ae:#c795ae:#95c7ae:#c7ae95:#95aec7:#ae95c7:#aec795:#c7ccd1:#747c84:#c795ae:#95c7ae:#c7ae95:#95aec7:#ae95c7:#95c7ae:#f3f4f5"
     scrollback_infinite = True
     custom_command = TERM=xterm-256color zsh
     use_custom_command = True
@@ -59,7 +59,7 @@
     palette = "#073642:#dc322f:#859900:#b58900:#268bd2:#d33682:#2aa198:#eee8d5:#002b36:#cb4b16:#586e75:#657b83:#839496:#6c71c4:#93a1a1:#fdf6e3"
     scrollback_infinite = True
   [[xresource]]
-    background_color = ""
-    cursor_color = ""
-    foreground_color = ""
-    palette = ":::::::::::::::"
+    background_color = "#1c2023"
+    cursor_color = "#c7ccd1"
+    foreground_color = "#c7ccd1"
+    palette = "#95c7ae:#c795ae:#95c7ae:#c7ae95:#95aec7:#ae95c7:#aec795:#c7ccd1:#747c84:#c795ae:#95c7ae:#c7ae95:#95aec7:#ae95c7:#95c7ae:#f3f4f5"
