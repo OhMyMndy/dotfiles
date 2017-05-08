@@ -1,35 +1,35 @@
 #include ".Xresources-local"
-ethinterface:     enp1s0
 
-#define BACKGROUND #1c2023
-#define FOREGROUND #c7ccd1
+#define BACKGROUND #1d1f21
+#define FOREGROUND #c5c8c6
 
-#define COLOR0     #1c2023
-#define COLOR8     #747c84
+#define COLOR0     #1d1f21
+#define COLOR8     #969896
 
-#define COLOR1     #c7ae95
-#define COLOR9     #c7ae95
+#define COLOR1     #cc342b
+#define COLOR9     #cc342b
 
-#define COLOR2     #95c7ae
-#define COLOR10    #95c7ae
+#define COLOR2     #198844
+#define COLOR10    #198844
 
-#define COLOR3     #aec795
-#define COLOR11    #aec795
+#define COLOR3     #fba922
+#define COLOR11    #fba922
 
-#define COLOR4     #ae95c7
-#define COLOR12    #ae95c7
+#define COLOR4     #3971ed
+#define COLOR12    #3971ed
 
-#define COLOR5     #c795ae
-#define COLOR13    #c795ae
+#define COLOR5     #a36ac7
+#define COLOR13    #a36ac7
 
-#define COLOR6     #95aec7
-#define COLOR14    #95aec7
+#define COLOR6     #3971ed
+#define COLOR14    #3971ed
 
-#define COLOR7     #c7ccd1
-#define COLOR15    #f3f4f5
+#define COLOR7     #c5c8c6
+#define COLOR15    #ffffff
 
 
 Xft.dpi: 96
+! Xft.dpia: 180
 Xft.antialias: true
 Xft.hinting: true
 Xft.rgba: rgb

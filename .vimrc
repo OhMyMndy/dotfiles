@@ -50,6 +50,8 @@ syntax on
 let g:colorizer_auto_color=1
 filetype plugin indent on 
 set backspace=indent,eol,start
+set ignorecase
+set hlsearch
 set t_Co=256
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif

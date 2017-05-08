@@ -7,28 +7,28 @@ local return_code="%(?..$fg[red]%%? ↵$reset_color%)"
 
 # primary prompt
 PROMPT='$FG[237]------------------------------------------------------------%{$reset_color%}
-$FG[033]%n$FG[214]@$FG[041]%m \
-$FG[033]%~\
+%{$fg[blue]%}%n%{$fg[yellow]%}@%{$fg[cyan]%}%m \
+%{$fg[blue]%}%~\
 $(git_prompt_info) \
-$FG[105]%(!.#.»)%{$reset_color%} '
-PROMPT2='$fg[red]%\ $reset_color%'
+%{$fg[blue]%}%(!.#.»)%{$reset_color%} '
+PROMPT2='%{$fg[red]%}\\ $reset_color%'
 RPS1='${return_code}'
 
 
 # color vars
-eval my_gray='$FG[033]'
-eval my_orange='$FG[214]'
+eval my_gray='%{$fg[green]%}'
+eval my_orange='%{$fg[red]%}'
 
 # right prompt
 if type "virtualenv_prompt_info" > /dev/null
 then
 	RPROMPT='$(virtualenv_prompt_info)$my_gray%*%{$reset_color%}%'
 else
-	RPROMPT='$my_gray%*%{$reset_color%}%'
+	RPROMPT='$my_gray%*$reset_color%'
 fi
 
 # git settings
-ZSH_THEME_GIT_PROMPT_PREFIX="$FG[075]($FG[078]"
+ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[green]%}(%{$fg[green]%}"
 ZSH_THEME_GIT_PROMPT_CLEAN=""
 ZSH_THEME_GIT_PROMPT_DIRTY="$my_orange*%{$reset_color%}"
-ZSH_THEME_GIT_PROMPT_SUFFIX="$FG[075])%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_SUFFIX="%{$fg[green]%})%{$reset_color%}"

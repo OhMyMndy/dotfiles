@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
 function getColor() {
-echo $(xrdb -query -all | grep -i "$1:" | sed -n 's/.*\(#.*\)/\1/p')
+	echo $(xrdb -query | awk "/$1:/ { print \$2 }")
+	#echo $(xrdb -query -all | grep -i "$1:" | sed -n 's/.*\(#.*\)/\1/p')
 }
 color0=$(getColor 'color0')
 color1=$(getColor 'color1')
