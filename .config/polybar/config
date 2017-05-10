@@ -59,7 +59,7 @@ font-0 = DroidSansMonoForPowerline Nerd Font:pixelsize=9;2
 
 modules-left = i3 xwindow
 modules-center = mpd 
-modules-right = volume xkill terminal monitor vpn xkeyboard filesystem memory cpu eth temperature date powermenu
+modules-right = volume redshift xkill terminal monitor vpn xkeyboard filesystem memory cpu eth temperature date powermenu
 
 tray-position = right
 ;tray-padding = 0
@@ -123,6 +123,12 @@ exec = df --output=pcent / -h | tail -1
 interval = 25
 format-underline = ${colors.accent-dark1}
 format-prefix = ""
+
+[module/redshift]
+type = custom/script
+interval = 5
+
+exec = ~/.config/polybar/scripts/redshift.sh
 
 [module/bspwm]
 type = internal/bspwm

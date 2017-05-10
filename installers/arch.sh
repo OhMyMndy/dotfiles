@@ -27,7 +27,7 @@ mkdir -p ~/.local/share/fonts; cd ~/.local/share/fonts && curl -fLo "Droid Sans 
 fc-cache -f -v
 
 dconf write /org/gnome/desktop/interface/font-name "'Sans 10'"
-dconf write /org/gnome/desktop/interface/monospace-font-name "'DroidSansMonoForPowerline Nerd Font Book 11'"
+dconf write /org/gnome/desktop/interface/monospace-font-name "'DroidSansMonoForPowerline Nerd Font Book 10'"
 dconf write /org/gnome/desktop/interface/text-scaling-factor 1
 
 # Install before polybar

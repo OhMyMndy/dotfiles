@@ -6,3 +6,4 @@
 .vim/.netrwhist
 *.sublime_session
 *.ssh-agent
+*.log

@@ -42,11 +42,12 @@ precmd () { print -Pn "\e]0;$TITLE\a" }
 title() { export TITLE="$*" }
 
 export VISUAL="vim"
-
+export EDITOR='vim'
 export IP_ADDRESS=$(ip -4 route get 1 | head -1 | cut -d' ' -f7)
 export GID=$(id -g)
 export UID=$(id -u)
 export TZ='Europe/Brussels'
 export LOCAL_PROJECT_DIR='/var/www/html/'
 export DISABLE_AUTO_TITLE="true"
+export AUTO_TITLE=false
 export CHROMIUM_PORT=5910
