@@ -105,6 +105,12 @@ rm -rf ~/bin
 ln -sf ~/dotfiles/bin ~/bin
 
 
+rm -rf ~/.tmux
+ln -sf ~/dotfiles/.tmux ~/.tmux
+
+ln -sf ~/.byobu/.tmux.conf ~/.tmux.conf
+
+
 # disable notify-osd
 notify_osd_service="/usr/share/dbus-1/services/org.freedesktop.Notifications.service"
 killall notify-osd > /dev/null || echo "No notify-osd running"
