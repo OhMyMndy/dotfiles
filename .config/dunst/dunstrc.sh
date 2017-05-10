@@ -52,13 +52,13 @@ cat <<EOF
     context = ctrl+shift+period
 
 [urgency_low]
-    background = "${color0}"
+    background = "${background}"
     foreground = "${foreground}"
     timeout = 5
 
 [urgency_normal]
-    background = "${color0}"
-    foreground = "${color2}"
+    background = "${background}"
+    foreground = "${foreground}"
     timeout = 20
 
 [urgency_critical]

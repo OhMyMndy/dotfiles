@@ -119,5 +119,5 @@ bash ~/.config/dunst/dunstrc.sh > ~/.config/dunst/dunstrc
 bash ~/.config/terminator/config.sh > ~/.config/terminator/config
 
 
-killall dunst; dunst  &
+killall dunst > /dev/null || echo "No dunst found"; dunst  &
 notify-send summary body

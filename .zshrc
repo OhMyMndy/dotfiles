@@ -1,7 +1,7 @@
 source $HOME/z.sh
 export ZSH=/$HOME/.oh-my-zsh
 ZSH_THEME="mandy"
-plugins=(git, docker, phpunit, zsh-completions, z, zsh-syntax-highlighting, zsh-autosuggestions)
+plugins=(git, docker, phpunit, zsh-completions, z, zsh-syntax-highlighting, ssh)
 
 if [ -f $HOME/.bash_aliases ]; then
 	source $HOME/.bash_aliases
@@ -36,6 +36,7 @@ grepc()
 }
 
 alias hl='grepc "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+"'
+alias find="find \$@ 2>/dev/null"
 
 precmd () { print -Pn "\e]0;$TITLE\a" }
 title() { export TITLE="$*" }
