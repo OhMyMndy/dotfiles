@@ -12,6 +12,8 @@ if [ -f $HOME/.oh-my-zsh/oh-my-zsh.sh ]; then
 fi
 export PATH=$HOME/bin:$HOME/.local/bin:/usr/share/doc/git/contrib/diff-highlight/:$PATH
 
+source $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
 # Allow autocompletion for dot files/folders
 compinit
 _comp_options+=(globdots)

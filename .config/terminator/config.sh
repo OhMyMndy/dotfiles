@@ -56,7 +56,7 @@ cat <<EOF
     background_color = "${background}"
     cursor_color = "${foreground}"
     foreground_color = "${foreground}"
-    palette = "${color2}:${color5}:${color2}:${color1}:${color6}:${color4}:${color3}:${foreground}:${color8}:${color13}:${color10}:${color9}:${color14}:${color12}:${color10}:${color15}"
+    palette = "${background}:${color5}:${color2}:${color1}:${color6}:${color4}:${color3}:${foreground}:${color8}:${color13}:${color10}:${color9}:${color14}:${color12}:${color10}:${color15}"
     scrollback_infinite = True
     custom_command = TERM=xterm-256color zsh
     use_custom_command = True
@@ -89,5 +89,5 @@ cat <<EOF
     background_color = "${background}"
     cursor_color = "${foreground}"
     foreground_color = "${foreground}"
-    palette = "${color2}:${color5}:${color2}:${color1}:${color6}:${color4}:${color3}:${foreground}:${color8}:${color13}:${color10}:${color9}:${color14}:${color12}:${color10}:${color15}"
+    palette = "${background}:${color5}:${color2}:${color1}:${color6}:${color4}:${color3}:${foreground}:${color8}:${color13}:${color10}:${color9}:${color14}:${color12}:${color10}:${color15}"
 EOF

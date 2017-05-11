@@ -258,7 +258,7 @@ for_window [window_role="Preferences"] floating enable
 for_window [window_type="dialog"] floating enable
 for_window [window_type="menu"] floating enable
 # Float IntelliJ update window
-for_window [class="com-intellij-updater-Runner"] floating enable
+for_window [class="sun-awt-X11-XDialogPeer"] floating enable
 # Execs
 exec_always --no-startup-id killall notify-osd
 exec --no-startup-id redshift

@@ -21,7 +21,7 @@ ln -sf ~/dotfiles/.config/redshift.conf ~/.config/redshift.conf
 
 ln -sfn ~/dotfiles/.config/i3 ~/.config/i3
 
-ln -sf ~/dotfiles/.wallpaper.jpg ~/
+ln -sf ~/dotfiles/.wallpaper.jpg ~/.wallpaper.jpg
 
 rm -rf ~/.config/gtk-3.0
 ln -sfn ~/dotfiles/.config/gtk-3.0 ~/.config/gtk-3.0
