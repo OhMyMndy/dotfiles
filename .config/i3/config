@@ -236,6 +236,7 @@ assign [class="TeamViewer"] $workspace8
 assign [title=".*Wunderlist$"] $workspace7
 assign [class="Thunar"] $workspace3
 assign [class="KeePass2"] $workspace5
+assign [class="KeeWeb"] $workspace5
 #assign [class="Terminator"] $workspace2
 
 for_window [class="TeamViewer"] floating enable, move container to $workspace8
@@ -274,10 +275,8 @@ exec --no-startup-id parcellite
 exec --no-startup-id nm-applet
 exec --no-startup-id volumeicon
 #exec --no-startup-id conky
- exec --no-startup-id teamviewer
-#exec --no-startup-id wine "/home/mandy/.wine/drive_c/Program Files (x86)/1Password 4/Agile1pAgent.exe"
 #exec --no-startup-id pstorm
-exec --no-startup-id keepass2
+exec --no-startup-id keeweb
 exec --no-startup-id dunst
 exec --no-startup-id mopidy
 exec --no-startup-id udiskie
@@ -285,7 +284,7 @@ exec_always --no-startup-id killall polybar; polybar example
 exec --no-startup-id autokey-gtk
 exec_always --no-startup-id compton
 exec --no-startup-id slack
-exec --no-startup-id /usr/lib/vino/vino-server
+
 # Custom bindsym
 
 bindsym $mod+Shift+greater move workspace to output right
