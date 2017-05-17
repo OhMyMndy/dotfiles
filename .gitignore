@@ -7,3 +7,4 @@
 *.sublime_session
 *.ssh-agent
 *.log
+*Package Control.last-run

@@ -63,3 +63,4 @@
     cursor_color = "#c5c8c6"
     foreground_color = "#c5c8c6"
     palette = "#1d1f21:#a36ac7:#198844:#cc342b:#3971ed:#3971ed:#fba922:#c5c8c6:#969896:#a36ac7:#198844:#cc342b:#3971ed:#3971ed:#198844:#ffffff"
+    scrollback_infinite = True

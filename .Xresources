@@ -29,7 +29,7 @@
 
 
 Xft.dpi: 96
-! Xft.dpia: 180
+! Xft.dpi: 180
 Xft.antialias: true
 Xft.hinting: true
 Xft.rgba: rgb
@@ -55,7 +55,7 @@ rofi.yoffset: 0
 rofi.fake-transparency: false
 rofi.location: 0
 rofi.width: 50
-rofi.font: DroidSansMonoForPowerline Nerd Font Book 11
+rofi.font: DroidSansMonoForPowerline Nerd Font Book 9
 rofi.lines: 15
 rofi.fixed-num-lines: true
 

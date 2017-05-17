@@ -18,7 +18,6 @@ source "$HOME/.sdkman/bin/sdkman-init.sh"
 export HISTFILE="$HOME/.zhistory"
 HISTSIZE=100000
 SAVEHIST=100000
-unsetopt EXTENDED_HISTORY
 
 # Allow autocompletion for dot files/folders
 compinit
@@ -45,7 +44,7 @@ grepc()
 
 alias hl='grepc "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+"'
 alias find="find \$@ 2>/dev/null"
-
+alias current-window-process='ps -o args= $(xprop -id $(xprop -root -f _NET_ACTIVE_WINDOW 0x " \$0\\n" _NET_ACTIVE_WINDOW | awk "{print \$2}") -f _NET_WM_PID 0c " \$0\\n" _NET_WM_PID | awk "{print \$2}")'
 histcmd() {
 fc -l 1 |  awk '{line=$1; $1=""; CMD_LINE[$0]=line; CMD[$0]++;count++; for (a in CMD)print CMD[a] " " CMD_LINE[a] " " a;}' | sort -rn 
 }

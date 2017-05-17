@@ -90,4 +90,5 @@ cat <<EOF
     cursor_color = "${foreground}"
     foreground_color = "${foreground}"
     palette = "${background}:${color5}:${color2}:${color1}:${color6}:${color4}:${color3}:${foreground}:${color8}:${color13}:${color10}:${color9}:${color14}:${color12}:${color10}:${color15}"
+    scrollback_infinite = True
 EOF

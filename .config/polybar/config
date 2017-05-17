@@ -49,13 +49,14 @@ underline-color = ${colors.primary}
 border-bottom-size = 2
 border-bottom-color = ${colors.accent-dark1}
 
-padding-left = 0
+padding-left = 1
 padding-right = 1
 
-module-margin-left = 1
-module-margin-right = 1
+module-margin-left = 2
+module-margin-right = 2
 
-font-0 = DroidSansMonoForPowerline Nerd Font:pixelsize=9;2
+font-0 = Sans:pixelsize=10;2
+font-1 = DroidSansMonoForPowerline Nerd Font:pixelsize=9;2
 
 modules-left = i3 xwindow
 modules-center = mpd 
@@ -63,7 +64,7 @@ modules-right = volume redshift xkill terminal monitor vpn xkeyboard filesystem 
 
 tray-position = right
 ;tray-padding = 0
-tray-maxsize = 18
+tray-maxsize = 12
 ;tray-transparent = true
 
 
@@ -403,16 +404,13 @@ menu-0-1 = " power off"
 menu-0-1-exec = menu-open-2
 menu-0-2 = " lock"
 menu-0-2-exec = bash ~/.config/i3/scripts/lock 
+menu-0-3 = " switch user"
+menu-0-3-exec = dm-tool switch-to-greeter
 
+menu-1-0 = " reboot"
+menu-1-0-exec = reboot
 
-menu-1-0 = cancel
-menu-1-0-exec = menu-open-0
-menu-1-1 = reboot
-menu-1-1-exec = sudo reboot -h now
-
-menu-2-0 = power off
+menu-2-0 = " power off"
 menu-2-0-exec = poweroff
-menu-2-1 = cancel
-menu-2-1-exec = menu-open-0
 
 ; vim:ft=dosini
