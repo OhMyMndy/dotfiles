@@ -92,8 +92,7 @@ yaourt -S exfat-utils
 yaourt -S nmap
 yaourt -S accountsservice
 yaourt -S xorg-xauth
-
-
+yaourt -S meld
 
 ## Install zfs
 
