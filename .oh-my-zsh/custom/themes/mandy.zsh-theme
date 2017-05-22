@@ -20,12 +20,7 @@ eval my_gray='%{$fg[green]%}'
 eval my_orange='%{$fg[red]%}'
 
 # right prompt
-if type "virtualenv_prompt_info" > /dev/null
-then
-	RPROMPT='$(virtualenv_prompt_info)$my_gray%*%{$reset_color%}%'
-else
-	RPROMPT='$my_gray%*$reset_color%'
-fi
+RPROMPT='%{$my_gray%}*%{$reset_color%}'
 
 # git settings
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[green]%}(%{$fg[green]%}"

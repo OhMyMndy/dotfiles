@@ -110,6 +110,11 @@ ln -sf ~/dotfiles/.tmux ~/.tmux
 
 ln -sf ~/.byobu/.tmux.conf ~/.tmux.conf
 
+rm -f ~/.apm-packages
+ln -sf ~/dotfiles/.apm-packages ~/.apm-packages
+
+rm -f ~/.imwheelrc
+ln -sf ~/dotfiles/.imwheelrc ~/.imwheelrc
 
 # disable notify-osd
 notify_osd_service="/usr/share/dbus-1/services/org.freedesktop.Notifications.service"
