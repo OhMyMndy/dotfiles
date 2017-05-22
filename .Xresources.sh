@@ -1,10 +1,39 @@
-#include ".Xresources-local"
+#!/usr/bin/env bash
 
+cat <<EOF
+#include ".Xresources-local"
+EOF
+
+
+dark_mode=$(cat ~/.dark-mode 2>/dev/null || echo '1')
+
+if [ "$dark_mode" = "1" ]; then
+cat <<EOF
 #define BACKGROUND #1d1f21
 #define FOREGROUND #c5c8c6
 
 #define COLOR0     #1d1f21
 #define COLOR8     #969896
+
+#define COLOR7     #c5c8c6
+#define COLOR15    #ffffff
+EOF
+else
+cat <<EOF
+#define BACKGROUND #fdfdfd
+#define FOREGROUND #1d1f21
+
+#define COLOR0     #fdfdfd
+#define COLOR8     #ffffff
+
+#define COLOR7     #1d1f21
+#define COLOR15    #969896
+
+EOF
+fi
+
+cat <<EOF
+
 
 #define COLOR1     #cc342b
 #define COLOR9     #cc342b
@@ -23,9 +52,6 @@
 
 #define COLOR6     #3971ed
 #define COLOR14    #3971ed
-
-#define COLOR7     #c5c8c6
-#define COLOR15    #ffffff
 
 
 Xft.dpi: 96
@@ -98,3 +124,4 @@ rofi.fixed-num-lines: true
 *color15:      COLOR15
 
 ! ##### END COLORS #####
+EOF

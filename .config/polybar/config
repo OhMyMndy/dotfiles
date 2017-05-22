@@ -60,7 +60,7 @@ font-1 = DroidSansMonoForPowerline Nerd Font:pixelsize=9;2
 
 modules-left = i3 xwindow
 modules-center = mpd 
-modules-right = volume redshift xkill terminal monitor vpn xkeyboard filesystem memory cpu eth temperature date powermenu
+modules-right = volume redshift dark-mode xkill terminal monitor vpn xkeyboard filesystem memory cpu eth temperature date powermenu
 
 tray-position = right
 ;tray-padding = 0
@@ -124,6 +124,15 @@ exec = df --output=pcent / -h | tail -1
 interval = 25
 format-underline = ${colors.accent-dark1}
 format-prefix = ""
+
+
+[module/dark-mode]
+type=custom/script
+click-left=toggle-dark
+exec = cat ~/.dark-mode 2>/dev/null
+interval = 10
+format-underline = ${colors.accent-dark2}
+
 
 [module/redshift]
 type = custom/script

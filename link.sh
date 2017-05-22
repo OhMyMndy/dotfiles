@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+dark_mode=$(cat ~/.dark_mode 2>/dev/null | echo "1")
+
 set -e
 
 mkdir -p ~/.config
@@ -28,10 +30,6 @@ ln -sfn ~/dotfiles/.config/gtk-3.0 ~/.config/gtk-3.0
 
 rm -f ~/.gtkrc-2.0
 ln -sf ~/dotfiles/.gtkrc-2.0 ~/.gtkrc-2.0
-
-rm -rf ~/.Xresources
-ln -sf ~/dotfiles/.Xresources ~/.Xresources
-touch ~/.Xresources-local
 
 rm -rf ~/.conkyrc
 ln -sf ~/dotfiles/.conkyrc ~/.conkyrc
@@ -123,11 +121,23 @@ if [ -e "${notify_osd_service}" ]; then
 	sudo mv ${notify_osd_service}{,.disabled}
 fi
 
+rm -rf ~/.Xresources
+touch ~/.Xresources-local
+bash ~/dotfiles/.Xresources.sh > ~/.Xresources
+
 xrdb -remove
 xrdb -override ~/.Xresources
 
+
 bash ~/.config/dunst/dunstrc.sh > ~/.config/dunst/dunstrc
 bash ~/.config/terminator/config.sh > ~/.config/terminator/config
+
+if [ "$dark_mode" = "1" ]; then
+	sed -E -i 's/one-light/one-dark/g' ~/.atom/config.cson
+else
+	sed -E 's/one-dar/one-light/g' ~/.atom/config.cson
+fi
+
 
 
 killall dunst > /dev/null || echo "No dunst found"; dunst  &
