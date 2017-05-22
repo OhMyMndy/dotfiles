@@ -55,7 +55,7 @@ padding-right = 1
 module-margin-left = 2
 module-margin-right = 2
 
-font-0 = Sans:pixelsize=10;2
+font-0 = Noto Sans:style=Regular:pixelsize=9;2
 font-1 = DroidSansMonoForPowerline Nerd Font:pixelsize=9;2
 
 modules-left = i3 xwindow

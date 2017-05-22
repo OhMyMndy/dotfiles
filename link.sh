@@ -123,8 +123,8 @@ if [ -e "${notify_osd_service}" ]; then
 	sudo mv ${notify_osd_service}{,.disabled}
 fi
 
-
-xrdb -merge ~/.Xresources
+xrdb -remove
+xrdb -override ~/.Xresources
 
 bash ~/.config/dunst/dunstrc.sh > ~/.config/dunst/dunstrc
 bash ~/.config/terminator/config.sh > ~/.config/terminator/config

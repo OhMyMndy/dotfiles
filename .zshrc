@@ -12,8 +12,9 @@ if [ -f $HOME/.oh-my-zsh/oh-my-zsh.sh ]; then
 fi
 export PATH=$HOME/bin:$HOME/.local/bin:/usr/share/doc/git/contrib/diff-highlight/:$PATH
 
-source $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source "$HOME/.sdkman/bin/sdkman-init.sh"
+if [ -f $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
+	source $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+fi
 
 export HISTFILE="$HOME/.zhistory"
 HISTSIZE=100000
@@ -62,6 +63,7 @@ export LOCAL_PROJECT_DIR='/var/www/html/'
 export DISABLE_AUTO_TITLE="true"
 export AUTO_TITLE=false
 export CHROMIUM_PORT=5910
+
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="/home/mandy/.sdkman"
