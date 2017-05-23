@@ -55,7 +55,7 @@ title() { export TITLE="$*" }
 
 export VISUAL="vim"
 export EDITOR='vim'
-export IP_ADDRESS=$(ip -4 route get 1 | head -1 | cut -d' ' -f7)
+export IP_ADDRESS=$(ip -4 route get 1 | head -1 | awk '{print $7}' )
 export GID=$(id -g)
 export UID=$(id -u)
 export TZ='Europe/Brussels'
