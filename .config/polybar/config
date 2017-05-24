@@ -60,7 +60,7 @@ font-1 = DroidSansMonoForPowerline Nerd Font:pixelsize=9;2
 
 modules-left = i3 xwindow
 modules-center = mpd 
-modules-right = volume redshift dark-mode xkill terminal monitor vpn xkeyboard filesystem memory cpu eth temperature date powermenu
+modules-right = volume redshift dark-mode terminal monitor vpn xkeyboard filesystem memory swap cpu eth temperature date powermenu
 
 tray-position = right
 ;tray-padding = 0
@@ -98,7 +98,7 @@ type = custom/script
 click-left = bash ~/.config/polybar/scripts/display-resolution.sh
 exec = echo disp
 interval = 9000
-format-underline = ${colors.accent-light1}
+format-underline = ${colors.accent-dark2}
 format-prefix = " "
 
 [module/terminal]
@@ -122,14 +122,15 @@ type=custom/script
 click-left = /usr/bin/xkill
 exec = df --output=pcent / -h | tail -1
 interval = 25
-format-underline = ${colors.accent-dark1}
+format-underline = ${colors.accent-light2}
 format-prefix = ""
 
 
 [module/dark-mode]
 type=custom/script
 click-left=toggle-dark
-exec = cat ~/.dark-mode 2>/dev/null
+# exec = cat ~/.dark-mode 2>/dev/null
+exec = dark_mode=$(cat ~/.dark_mode 2>/dev/null); if [ "$dark_mode" = "1" ]; then echo "Dark"; else echo "Light"; fi 
 interval = 10
 format-underline = ${colors.accent-dark2}
 
@@ -139,6 +140,7 @@ type = custom/script
 interval = 5
 
 exec = ~/.config/polybar/scripts/redshift.sh
+format-underline = ${colors.primary}
 
 [module/bspwm]
 type = internal/bspwm
@@ -249,16 +251,31 @@ type = internal/cpu
 interval = 2
 format-prefix = "CPU "
 format-prefix-foreground = ${colors.foreground}
-format-underline = ${colors.foreground-alt}
+format-underline = ${colors.accent-dark2}
 label = %percentage%%
 
+#[module/memory]
+#type = internal/memory
+#interval = 2
+#format-prefix = " "
+#format-prefix-foreground = ${colors.foreground}
+#format-underline = ${colors.accent-light1}
+#label = %percentage_used%%
+
 [module/memory]
-type = internal/memory
-interval = 2
-format-prefix = " "
-format-prefix-foreground = ${colors.foreground}
+type=custom/script
+exec = awk '$3=="kB"{if ($2>1024**2){$2=$2/1024**2;$3="GB";} else if ($2>1024){$2=$2/1024;$3="MB";}} 1' /proc/meminfo | grep MemFree | awk '{printf("%.1f %s\n",$2, $3)}'
+interval = 10
+format-underline = ${colors.accent-dark3}
+format-prefix = "Mem free: "
+
+
+[module/swap]
+type=custom/script
+exec = awk '$3=="kB"{if ($2>1024**2){$2=$2/1024**2;$3="GB";} else if ($2>1024){$2=$2/1024;$3="MB";}} 1' /proc/meminfo | grep SwapFree | awk '{printf("%.1f %s\n",$2, $3)}'
+interval = 10
 format-underline = ${colors.accent-light1}
-label = %percentage_used%%
+format-prefix = "Swap free: "
 
 [module/wlan]
 type = internal/network

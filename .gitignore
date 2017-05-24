@@ -8,3 +8,5 @@
 *.ssh-agent
 *.log
 *.last-run
+.tmux/plugins/*
+!.tmux/plugins/tpm
