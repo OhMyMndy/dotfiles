@@ -9,4 +9,5 @@
 *.log
 *.last-run
 .tmux/plugins/*
-!.tmux/plugins/tpm
+.vim/bundle/*
+.oh-my-zsh

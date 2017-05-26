@@ -142,3 +142,17 @@ fi
 
 killall dunst > /dev/null || echo "No dunst found"; dunst  &
 notify-send summary body
+
+
+if [ -f "~/.tmux/plugins/tpm" ]; then
+	git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plugins/tpm/bin/install_plugins
+fi
+
+tmux source ~/.tmux.conf
+$HOME/.tmux/plugins/tpm/bin/install_plugins
+
+
+if [ -f "~/.vim/bundle/Vundle.vim" ]; then
+	git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+fi
+vim +PluginInstall +qall
