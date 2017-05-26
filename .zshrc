@@ -1,7 +1,7 @@
 source $HOME/z.sh
 export ZSH=/$HOME/.oh-my-zsh
 ZSH_THEME="mandy"
-plugins=(git, docker, phpunit, zsh-completions, z, zsh-syntax-highlighting, ssh)
+plugins=(git, docker, phpunit, zsh-completions, z, zsh-syntax-highlighting, ssh, node, extract)
 
 if [ -f $HOME/.bash_aliases ]; then
 	source $HOME/.bash_aliases

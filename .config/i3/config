@@ -203,6 +203,7 @@ bindsym $mod+r mode "resize"
 # inactive-bg-color was 2c2e2f
 #
 set_from_resource $bg-color 	       color2     #2aa198
+set_from_resource $background-color    background #2aa198
 set_from_resource $inactive-bg-color   color0     #002b36
 set_from_resource $text-color          color7     #eee8d5
 set_from_resource $inactive-text-color foreground #586e75
@@ -210,7 +211,7 @@ set_from_resource $urgent-bg-color     color5     #d33682
 set_from_resource $bright-green        color4     #268bd2
 # window colors
 #                       border              background         text                 indicator
-client.focused          $bg-color           $bg-color          $color4          $bright-green
+client.focused          $bg-color           $bg-color          $background-color          $bright-green
 client.unfocused        $inactive-bg-color $inactive-bg-color $inactive-text-color $bright-green
 client.focused_inactive $inactive-bg-color $inactive-bg-color $inactive-text-color $bright-green
 client.urgent           $urgent-bg-color    $urgent-bg-color   $text-color          $bright-green
