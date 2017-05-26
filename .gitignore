@@ -10,4 +10,4 @@
 *.last-run
 .tmux/plugins/*
 .vim/bundle/*
-.oh-my-zsh
+.oh-my-zsh/custom/plugins

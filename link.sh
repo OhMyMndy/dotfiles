@@ -144,7 +144,7 @@ killall dunst > /dev/null || echo "No dunst found"; dunst  &
 notify-send summary body
 
 
-if [ -f "~/.tmux/plugins/tpm" ]; then
+if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
 	git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plugins/tpm/bin/install_plugins
 fi
 
@@ -152,7 +152,19 @@ tmux source ~/.tmux.conf
 $HOME/.tmux/plugins/tpm/bin/install_plugins
 
 
-if [ -f "~/.vim/bundle/Vundle.vim" ]; then
+if [ ! -d "$HOME/.vim/bundle/Vundle.vim" ]; then
 	git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 fi
 vim +PluginInstall +qall
+
+
+
+
+if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions" ]; then
+	git clone git://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+fi
+
+
+if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting" ]; then
+	git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+fi
