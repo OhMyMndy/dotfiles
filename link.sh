@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-dark_mode=$(cat ~/.dark_mode 2>/dev/null | echo "1")
-
+dark_mode=$(cat $HOME/.dark-mode 2>/dev/null)
+echo "dark mode: $dark_mode"
 set -e
 
 mkdir -p ~/.config
@@ -133,14 +133,14 @@ bash ~/.config/dunst/dunstrc.sh > ~/.config/dunst/dunstrc
 bash ~/.config/terminator/config.sh > ~/.config/terminator/config
 
 if [ "$dark_mode" = "1" ]; then
-	sed -E -i 's/one-light/one-dark/g' ~/.atom/config.cson
+	sed -E -i 's/one-light/one-dark/g' ~/.atom/config.cson > /dev/null 2>&1
 else
-	sed -E 's/one-dar/one-light/g' ~/.atom/config.cson
+	sed -E -i 's/one-dark/one-light/g' ~/.atom/config.cson > /dev/null 2>&1
 fi
 
 
 
-killall dunst > /dev/null || echo "No dunst found"; dunst  &
+killall dunst > /dev/null || echo "No dunst found"; dunst  > /dev/null 2>&1 &
 notify-send summary body
 
 
