@@ -50,9 +50,12 @@ histcmd() {
 fc -l 1 |  awk '{line=$1; $1=""; CMD_LINE[$0]=line; CMD[$0]++;count++; for (a in CMD)print CMD[a] " " CMD_LINE[a] " " a;}' | sort -rn 
 }
 
-precmd () { print -Pn "\e]0;$TITLE\a" }
-title() { export TITLE="$*" }
+#precmd () { print -Pn "\e]0;$TITLE\a" }
+title() { print -Pn "\e]0;$1\a" }
 
+
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
 export VISUAL="vim"
 export EDITOR='vim'
 export IP_ADDRESS=$(ip -4 route get 1 | head -1 | awk '{print $7}' )
@@ -60,10 +63,12 @@ export GID=$(id -g)
 export UID=$(id -u)
 export TZ='Europe/Brussels'
 export LOCAL_PROJECT_DIR='/var/www/html/'
-export DISABLE_AUTO_TITLE="true"
-export AUTO_TITLE=false
+# export DISABLE_AUTO_TITLE="true"
+# export AUTO_TITLE=false
 export CHROMIUM_PORT=5910
-
+export OS=$(lsb_release -si)
+export ARCH=$(uname -m | sed 's/x86_//;s/i[3-6]86/32/')
+export OS_VER=$(lsb_release -sr)
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="/home/mandy/.sdkman"
