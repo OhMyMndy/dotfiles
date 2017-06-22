@@ -114,6 +114,9 @@ ln -sf ~/dotfiles/.apm-packages ~/.apm-packages
 rm -f ~/.imwheelrc
 ln -sf ~/dotfiles/.imwheelrc ~/.imwheelrc
 
+rm -f ~/.inputrc
+ln -sf ~/dotfiles/.inputrc ~/.inputrc
+
 # disable notify-osd
 notify_osd_service="/usr/share/dbus-1/services/org.freedesktop.Notifications.service"
 killall notify-osd > /dev/null || echo "No notify-osd running"
@@ -164,6 +167,9 @@ if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions" ]; then
 	git clone git://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
 fi
 
+if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-completions" ]; then
+	git clone https://github.com/zsh-users/zsh-completions ~/.oh-my-zsh/custom/plugins/zsh-completions
+fi
 
 if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting" ]; then
 	git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting

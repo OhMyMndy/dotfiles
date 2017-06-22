@@ -124,4 +124,13 @@ rofi.fixed-num-lines: true
 *color15:      COLOR15
 
 ! ##### END COLORS #####
+
+! # XTerm.vt100.faceName: DroidSansMonoForPowerline Nerd Font Book
+! # XTerm.vt100.renderFont: false
+! # XTerm*renderFont: true
+XTerm*renderFont: true
+XTerm*faceName: DroidSansMonoForPowerline Nerd Font Book
+XTerm*faceSize: 9
+XTerm*eightBitInput: false
+XTerm*selectToClipboard:true
 EOF

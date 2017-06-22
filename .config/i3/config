@@ -287,7 +287,7 @@ exec --no-startup-id keeweb
 exec_always --no-startup-id killall dunst; dunst 2>/dev/null
 exec --no-startup-id mopidy
 exec --no-startup-id udiskie
-exec_always --no-startup-id killall polybar; polybar -r example
+exec_always --no-startup-id killall polybar; while pgrep -x polybar >/dev/null; do sleep 1; done; polybar -r example
 exec --no-startup-id autokey-gtk
 exec_always --no-startup-id compton
 exec --no-startup-id slack

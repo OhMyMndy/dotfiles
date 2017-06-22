@@ -130,9 +130,11 @@ sudo systemctl start pulseaudio
 
 yaourt -S flatabulous-theme-git
 yaourt -S yad
-
+yaourt -S mosh
 
 sudo easy_install3 pip 
 pip3 install ReText
 
 yaourt -S ncdu
+
+gem install teamocil

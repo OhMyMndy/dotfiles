@@ -11,3 +11,5 @@
 .tmux/plugins/*
 .vim/bundle/*
 .oh-my-zsh/custom/plugins
+sublime-text-2
+sublime-text-3
