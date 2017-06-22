@@ -4,10 +4,11 @@
 
 if [ $UID -eq 0 ]; then NCOLOR="red"; else NCOLOR="green"; fi
 local return_code="%(?..$fg[red]%%? ↵$reset_color%)"
+local SEGMENT_SEPARATOR="\ue0b0"
 
 # primary prompt
 PROMPT='$FG[237]------------------------------------------------------------%{$reset_color%}
-%{$fg[cyan]%}%n%{$fg[yellow]%}@%{$fg[cyan]%}%m \
+%{$FG[027]%} %n %{$reset_color%}%{$FG[208]%}@%{$FG[200]%}%m \
 %{$fg[cyan]%}%~\
 $(git_prompt_info) \
 %{$fg[cyan]%}%(!.#.»)%{$reset_color%} '

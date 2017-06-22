@@ -174,3 +174,21 @@ fi
 if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting" ]; then
 	git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
 fi
+
+
+if [ ! -f "$HOME/.oh-my-zsh/custom/themes/bullet-train.zsh-theme" ]; then
+    curl https://raw.githubusercontent.com/caiogondim/bullet-train-oh-my-zsh-theme/master/bullet-train.zsh-theme -o ~/.oh-my-zsh/custom/themes/bullet-train.zsh-theme
+fi
+
+
+if [ ! -f "$HOME/.local/share/fonts/Sauce Code Pro Nerd Font Complete.ttf" ]; then
+    mkdir -p ~/.local/share/fonts; cd ~/.local/share/fonts 
+    curl -fLo "Sauce Code Pro Nerd Font Complete.ttf" https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/patched-fonts/SourceCodePro/Regular/complete/Sauce%20Code%20Pro%20Nerd%20Font%20Complete.ttf
+	fc-cache -f -v
+fi
+
+if [ ! -f "$HOME/.local/share/fonts/Droid Sans Mono for Powerline Nerd Font Complete.otf" ]; then
+    mkdir -p ~/.local/share/fonts; cd ~/.local/share/fonts 
+    curl -fLo "Droid Sans Mono for Powerline Nerd Font Complete.otf" https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/patched-fonts/DroidSansMono/complete/Droid%20Sans%20Mono%20for%20Powerline%20Nerd%20Font%20Complete.otf
+	fc-cache -f -v
+fi

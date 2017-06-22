@@ -58,7 +58,7 @@ Xft.dpi: 96
 ! Xft.dpi: 180
 Xft.antialias: true
 Xft.hinting: true
-Xft.rgba: rgb
+Xft.rgba: none
 Xft.autohint: false
 Xft.hintstyle: hintfull
 Xft.lcdfilter: lcddefault
@@ -129,7 +129,8 @@ rofi.fixed-num-lines: true
 ! # XTerm.vt100.renderFont: false
 ! # XTerm*renderFont: true
 XTerm*renderFont: true
-XTerm*faceName: DroidSansMonoForPowerline Nerd Font Book
+XTerm*faceName: DroidSansMonoForPowerline Nerd Font
+! XTerm*faceName: SauceCodePro Nerd Font
 XTerm*faceSize: 9
 XTerm*eightBitInput: false
 XTerm*selectToClipboard:true
