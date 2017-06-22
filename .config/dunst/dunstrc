@@ -1,5 +1,5 @@
 [global]
-    font = "DroidSansMonoForPowerline Nerd Font 9"
+    font = "DejaVu Sans 9"
     allow_markup = yes
     format = "<b>%a</b>\n<b><i>%s</i></b>\n%b"
     sort = yes
