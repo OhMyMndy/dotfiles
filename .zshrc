@@ -51,6 +51,8 @@ histcmd() {
 fc -l 1 |  awk '{line=$1; $1=""; CMD_LINE[$0]=line; CMD[$0]++;count++; for (a in CMD)print CMD[a] " " CMD_LINE[a] " " a;}' | sort -rn 
 }
 
+eval $(thefuck --alias) 
+
 # precmd () { print -Pn "\e]0;$TITLE\a" }
 title() {
 	print -Pn "\e]0;$1\a" 

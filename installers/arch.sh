@@ -134,6 +134,7 @@ yaourt -S mosh
 
 sudo easy_install3 pip 
 pip3 install ReText
+pip3 install thefuck
 
 yaourt -S ncdu
 
