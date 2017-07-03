@@ -144,8 +144,7 @@ fi
 
 
 killall dunst > /dev/null || echo "No dunst found"; dunst  > /dev/null 2>&1 &
-notify-send summary body
-
+notify-send -i /usr/share/icons/gnome/256x256/status/trophy-gold.png "Summary of the message" "Here comes the message"
 
 if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
 	git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plugins/tpm/bin/install_plugins

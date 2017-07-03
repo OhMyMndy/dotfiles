@@ -17,7 +17,8 @@ cat <<EOF
 [global]
     font = "DejaVu Sans 9"
     allow_markup = yes
-    format = "<b>%a</b>\n<b><i>%s</i></b>\n%b"
+    #format = "<b>%a</b>\n<b><i>%s</i></b>\n%b"
+    format = "<b><i>%s</i></b>\n%b"
     sort = yes
     indicate_hidden = yes
     alignment = left
@@ -38,7 +39,7 @@ cat <<EOF
     separator_color = "${color4}"
     startup_notification = false
     # https://github.com/knopwob/dunst/issues/26#issuecomment-36159395
-    #icon_position = left
+    icon_position = left
     #icon_folders = /usr/share/icons/elementary/actions/16/
 
 [frame]

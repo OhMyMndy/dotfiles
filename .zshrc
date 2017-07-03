@@ -10,7 +10,7 @@ fi
 if [ -f $HOME/.oh-my-zsh/oh-my-zsh.sh ]; then
 	source $HOME/.oh-my-zsh/oh-my-zsh.sh
 fi
-export PATH=$HOME/bin:$HOME/.composer/vendor/bin:$HOME/.local/bin:/usr/share/doc/git/contrib/diff-highlight/:$PATH
+export PATH=$HOME/bin:$HOME/.config/composer/vendor/bin:$HOME/.composer/vendor/bin:$HOME/.local/bin:/usr/share/doc/git/contrib/diff-highlight/:$PATH
 
 if [ -f $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting  ]; then
 	source $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting 
@@ -50,7 +50,6 @@ alias current-window-process='ps -o args= $(xprop -id $(xprop -root -f _NET_ACTI
 histcmd() {
 fc -l 1 |  awk '{line=$1; $1=""; CMD_LINE[$0]=line; CMD[$0]++;count++; for (a in CMD)print CMD[a] " " CMD_LINE[a] " " a;}' | sort -rn 
 }
-
 eval $(thefuck --alias) 
 
 # precmd () { print -Pn "\e]0;$TITLE\a" }
