@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 dark_mode=$(cat $HOME/.dark-mode 2>/dev/null)
 echo "dark mode: $dark_mode"
 set -e
@@ -7,126 +8,128 @@ set -e
 mkdir -p ~/.config
 
 rm -f ~/.vimrc
-ln -sf ~/dotfiles/.vimrc ~/.vimrc
+ln -sf $DIR/.vimrc ~/.vimrc
 
 rm -rf ~/.vim
-ln -sf ~/dotfiles/.vim ~/.vim
+ln -sf $DIR/.vim ~/.vim
 
 rm -f ~/.zshrc
-ln -sf ~/dotfiles/.zshrc ~/.zshrc
+ln -sf $DIR/.zshrc ~/.zshrc
 
 rm -rf ~/.oh-my-zsh/custom
-ln -sf ~/dotfiles/.oh-my-zsh/custom ~/.oh-my-zsh/custom
+ln -sf $DIR/.oh-my-zsh/custom ~/.oh-my-zsh/custom
 
 rm -f ~/.config/redshift.conf
-ln -sf ~/dotfiles/.config/redshift.conf ~/.config/redshift.conf
+ln -sf $DIR/.config/redshift.conf ~/.config/redshift.conf
 
-ln -sfn ~/dotfiles/.config/i3 ~/.config/i3
+rm -rf ~/.config/i3
+ln -sfn $DIR/.config/i3 ~/.config/i3
 
-ln -sf ~/dotfiles/.wallpaper.jpg ~/.wallpaper.jpg
+ln -sf $DIR/.wallpaper.jpg ~/.wallpaper.jpg
 
 rm -rf ~/.config/gtk-3.0
-ln -sfn ~/dotfiles/.config/gtk-3.0 ~/.config/gtk-3.0
+ln -sfn $DIR/.config/gtk-3.0 ~/.config/gtk-3.0
 
 rm -f ~/.gtkrc-2.0
-ln -sf ~/dotfiles/.gtkrc-2.0 ~/.gtkrc-2.0
+ln -sf $DIR/.gtkrc-2.0 ~/.gtkrc-2.0
 
 rm -rf ~/.conkyrc
-ln -sf ~/dotfiles/.conkyrc ~/.conkyrc
+ln -sf $DIR/.conkyrc ~/.conkyrc
 
 rm -f ~/.screenrc
-ln -sf ~/dotfiles/.screenrc ~/.screenrc
+ln -sf $DIR/.screenrc ~/.screenrc
 
 rm -rf  ~/.config/dunst
-ln -sf ~/dotfiles/.config/dunst ~/.config/dunst
+ln -sf $DIR/.config/dunst ~/.config/dunst
 
 rm -rf ~/.config/rofi
-ln -sf ~/dotfiles/.config/rofi ~/.config/rofi
+ln -sf $DIR/.config/rofi ~/.config/rofi
 
 rm -rf ~/.config/terminator
-ln -sf ~/dotfiles/.config/terminator ~/.config/terminator
+ln -sf $DIR/.config/terminator ~/.config/terminator
 
 rm -rf ~/.config/polybar
-ln -sf ~/dotfiles/.config/polybar ~/.config/polybar
+ln -sf $DIR/.config/polybar ~/.config/polybar
 
 rm -rf ~/.byobu
-ln -sf ~/dotfiles/.byobu ~/.byobu
+ln -sf $DIR/.byobu ~/.byobu
 
 rm -rf ~/.config/fontconfig
-ln -sf ~/dotfiles/.config/fontconfig ~/.config/fontconfig
+ln -sf $DIR/.config/fontconfig ~/.config/fontconfig
 
 rm -f ~/.yaourtrc
-ln -sf ~/dotfiles/.yaourtrc ~/.yaourtrc
+ln -sf $DIR/.yaourtrc ~/.yaourtrc
 
 rm -rf ~/.config/mopidy
-ln -sf ~/dotfiles/.config/mopidy ~/.config/mopidy
+ln -sf $DIR/.config/mopidy ~/.config/mopidy
 
 rm -rf ~/.config/htop
-ln -sf ~/dotfiles/.config/htop ~/.config/htop
+ln -sf $DIR/.config/htop ~/.config/htop
 
 rm -rf ~/.screenlayout
-ln -sf ~/dotfiles/.screenlayout ~/.screenlayout
+ln -sf $DIR/.screenlayout ~/.screenlayout
 
 rm -rf ~/.config/sublime-text-2
-ln -sf ~/dotfiles/.config/sublime-text-2 ~/.config/sublime-text-2
+ln -sf $DIR/.config/sublime-text-2 ~/.config/sublime-text-2
 
 rm -f ~/z.sh
-ln -sf ~/dotfiles/z.sh ~/z.sh
+ln -sf $DIR/z.sh ~/z.sh
 
 rm -f ~/.xinitrc
-ln -sf ~/dotfiles/.xinitrc ~/.xinitrc
+ln -sf $DIR/.xinitrc ~/.xinitrc
 
 touch ~/.z
 
 rm -rf ~/.themes
-ln -sf ~/dotfiles/.themes ~/.themes
+ln -sf $DIR/.themes ~/.themes
 
 rm -rf ~/.icons
-ln -sf ~/dotfiles/.icons ~/.icons
+ln -sf $DIR/.icons ~/.icons
 
 #sudo mkdir -p /etc/lightdm
 #sudo rm -f /etc/lightdm/lightm.conf
-#sudo cp ~/dotfiles/etc/lightdm/lightdm.conf /etc/lightdm/lightdm.conf
+#sudo cp $DIR/etc/lightdm/lightdm.conf /etc/lightdm/lightdm.conf
 
 
 rm -f ~/.config/compton.conf
-ln -sf ~/dotfiles/.config/compton.conf ~/.config/compton.conf
+ln -sf $DIR/.config/compton.conf ~/.config/compton.conf
 
 rm -rf ~/.config/beets
-ln -sf ~/dotfiles/.config/beets ~/.config/beets
+ln -sf $DIR/.config/beets ~/.config/beets
 
 rm -f ~/.gtkrc-2.0
-ln -sf ~/dotfiles/.gtkrc-2.0 ~/.gtkrc-2.0
+ln -sf $DIR/.gtkrc-2.0 ~/.gtkrc-2.0
 
 mv -f ~/bin ~/bin_old 2>/dev/null || echo "1" > /dev/null
 rm -rf ~/bin
-ln -sf ~/dotfiles/bin ~/bin
+ln -sf $DIR/bin ~/bin
 
 
 rm -rf ~/.tmux
-ln -sf ~/dotfiles/.tmux ~/.tmux
+ln -sf $DIR/.tmux ~/.tmux
 
 ln -sf ~/.byobu/.tmux.conf ~/.tmux.conf
 
 rm -f ~/.apm-packages
-ln -sf ~/dotfiles/.apm-packages ~/.apm-packages
+ln -sf $DIR/.apm-packages ~/.apm-packages
 
 rm -f ~/.imwheelrc
-ln -sf ~/dotfiles/.imwheelrc ~/.imwheelrc
+ln -sf $DIR/.imwheelrc ~/.imwheelrc
 
 rm -f ~/.inputrc
-ln -sf ~/dotfiles/.inputrc ~/.inputrc
+ln -sf $DIR/.inputrc ~/.inputrc
 
 # disable notify-osd
 notify_osd_service="/usr/share/dbus-1/services/org.freedesktop.Notifications.service"
-killall notify-osd > /dev/null || echo "No notify-osd running"
+killall notify-osd > /dev/null || true
 if [ -e "${notify_osd_service}" ]; then
-	sudo mv ${notify_osd_service}{,.disabled}
+	sudo mv ${notify_osd_service}{,.disabled} || true
 fi
 
 rm -rf ~/.Xresources
 touch ~/.Xresources-local
-bash ~/dotfiles/.Xresources.sh > ~/.Xresources
+
+bash $DIR/.Xresources.sh > ~/.Xresources
 
 xrdb -remove
 xrdb -override ~/.Xresources
@@ -135,25 +138,23 @@ xrdb -override ~/.Xresources
 bash ~/.config/dunst/dunstrc.sh > ~/.config/dunst/dunstrc
 bash ~/.config/terminator/config.sh > ~/.config/terminator/config
 
-if [ "$dark_mode" = "1" ]; then
-	sed -E -i 's/one-light/one-dark/g' ~/.atom/config.cson > /dev/null 2>&1
-else
-	sed -E -i 's/one-dark/one-light/g' ~/.atom/config.cson > /dev/null 2>&1
+if [ "$dark_mode" = "1" ] && [ -f "~/.atom/config.cson" ]; then
+	sed -E -i 's/one-light/one-dark/g' ~/.atom/config.cson > /dev/null
+elif [ -f "~/.atom/config.cson" ]; then
+	sed -E -i 's/one-dark/one-light/g' ~/.atom/config.cson > /dev/null
 fi
 
-
-
-killall dunst > /dev/null || echo "No dunst found"; dunst  > /dev/null 2>&1 &
-notify-send summary body
-
+killall dunst > /dev/null || echo "No dunst found"; 
+dunst  > /dev/null 2>&1 || true &
+notify-send summary body || true
 
 if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
 	git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plugins/tpm/bin/install_plugins
 fi
 
-tmux source ~/.tmux.conf
-$HOME/.tmux/plugins/tpm/bin/install_plugins
-
+tmux source ~/.tmux.conf || true
+$HOME/.tmux/plugins/tpm/bin/install_plugins || true
+echo 3
 
 if [ ! -d "$HOME/.vim/bundle/Vundle.vim" ]; then
 	git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
