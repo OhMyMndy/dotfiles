@@ -1,6 +1,6 @@
 set nocompatible              " be iMproved, required
 filetype off                  " required
-colorscheme desert
+colorscheme cobalt
 " colorscheme wal
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
@@ -30,6 +30,8 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'chrisbra/Colorizer'
 Plugin 'davidhalter/jedi-vim'
 Plugin 'scrooloose/nerdtree'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -67,3 +69,12 @@ set tabstop=4
 set shiftwidth=4
 " On pressing tab, insert 4 spaces
 set expandtab
+
+
+" vim airline
+let g:airline#extensions#tabline#enabled = 1
+
+
+" Switch file tabs
+map <C-PageUp> :tabp<CR>
+map <C-PageDown> :tabn<CR>

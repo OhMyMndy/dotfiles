@@ -1,0 +1,129 @@
+
+#include ".Xresources-local"
+
+#define BACKGROUND <%= colors['BACKGROUND'] %>
+#define FOREGROUND <%= colors['FOREGROUND'] %>
+
+#define COLOR0     <%= colors['COLOR0'] %>
+#define COLOR8     <%= colors['COLOR8'] %>
+
+#define COLOR1     <%= colors['COLOR1'] %>
+#define COLOR9     <%= colors['COLOR9'] %>
+
+#define COLOR2     <%= colors['COLOR2'] %>
+#define COLOR10    <%= colors['COLOR10'] %>
+
+#define COLOR3     <%= colors['COLOR3'] %>
+#define COLOR11    <%= colors['COLOR11'] %>
+
+#define COLOR4     <%= colors['COLOR4'] %>
+#define COLOR12    <%= colors['COLOR12'] %>
+
+#define COLOR5     <%= colors['COLOR5'] %>
+#define COLOR13    <%= colors['COLOR13'] %>
+
+#define COLOR6     <%= colors['COLOR6'] %>
+#define COLOR14    <%= colors['COLOR14'] %>
+
+#define COLOR7     <%= colors['COLOR7'] %>
+#define COLOR15    <%= colors['COLOR15'] %>
+
+
+
+
+Xft.dpi: 96
+! Xft.dpi: 180
+Xft.antialias: true
+Xft.hinting: true
+Xft.rgba: none
+Xft.autohint: false
+Xft.hintstyle: hintfull
+Xft.lcdfilter: lcddefault
+
+! Enable the extended coloring options
+rofi.color-enabled: true
+!                  bg       border   separator
+rofi.color-window: BACKGROUND, COLOR1, FOREGROUND
+!                  bg       fg       bg-alt   hl-bg    hl-fg
+rofi.color-normal: COLOR0, COLOR15, COLOR0, BACKGROUND, COLOR3
+rofi.color-active: COLOR2, COLOR0, COLOR0, COLOR0, COLOR2
+rofi.color-urgent: COLOR0, COLOR5, COLOR0, COLOR0, COLOR5
+rofi.separator-style: solid
+rofi.sidebar-mode: true
+rofi.bw: 1
+rofi.columns: 1
+rofi.padding: 16
+
+rofi.yoffset: 0
+rofi.fake-transparency: false
+rofi.location: 0
+rofi.width: 50
+! rofi.font: DroidSansMonoForPowerline Nerd Font Book 9
+rofi.font: <%= fonts['monospace'].to_rofi %>
+rofi.lines: 15
+rofi.fixed-num-lines: true
+
+! ##### COLORS #####
+! special
+*foreground:   FOREGROUND
+*background:   BACKGROUND
+*cursorColor:  FOREGROUND
+
+! black
+*color0:       COLOR0
+*color8:       COLOR8
+
+! red
+*color1:       COLOR1
+*color9:       COLOR9
+
+! green
+*color2:       COLOR2
+*color10:      COLOR10
+
+! yellow
+*color3:       COLOR3
+*color11:      COLOR11
+
+! blue
+*color4:       COLOR4
+*color12:      COLOR12
+
+! magenta
+*color5:       COLOR5
+*color13:      COLOR13
+
+! cyan
+*color6:       COLOR6
+*color14:      COLOR14
+
+! white
+*color7:       COLOR7
+*color15:      COLOR15
+
+! ##### END COLORS #####
+
+XTerm*renderFont: true
+
+XTerm*faceName: <%= fonts['monospace'].to_xterm %>
+XTerm*faceSize: <%= fonts['monospace'].size %>
+XTerm*eightBitInput: false
+XTerm*selectToClipboard:true
+XTerm*background: #000000
+
+
+!################
+!# URXVT settings
+!################
+
+URxvt.depth:                32
+URxvt.geometry:             90x30
+URxvt.loginShell:           true
+URxvt.internalBorder:       3
+URxvt.lineSpace:            0
+
+URxvt*font: xft:DroidSansMonoForPowerline Nerd Font Book:pixelsize=12:antialias=true:hinting=true
+URxvt*boldFont: xft:DroidSansMonoForPowerline Nerd Font Book:bold:pixelsize=12
+URxvt*letterSpace: -3
+URxvt*scrollBar: false
+URxvt*background: #000000

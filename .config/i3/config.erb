@@ -186,10 +186,10 @@ bindsym $mod+r mode "resize"
 
 # window colors
 #                       border       background   text         indicator
-client.focused          #198844      #198844      #1d1f21      #198844
-client.unfocused        #1d1f21      #1d1f21      #eeeeee      #198844
-client.focused_inactive #1d1f21      #1d1f21      #eeeeee      #198844
-client.urgent           #a36ac7      #a36ac7      #ffffff      #198844
+client.focused          <%= i3['client']['focused'] %>
+client.unfocused        <%= i3['client']['unfocused'] %>
+client.focused_inactive <%= i3['client']['focused_inactive'] %>
+client.urgent           <%= i3['client']['urgent'] %>
 
 # Default workspaces
 assign [class=".*Slack$"]                                                               $workspace6
@@ -264,10 +264,10 @@ bindsym $mod+Shift+p exec keepass2 --auto-type
 
 
 # Gaps
-gaps inner 4
-gaps outer 4
+gaps inner <%= i3['gaps']['inner'] %>
+gaps outer <%= i3['gaps']['outer'] %>
 
-for_window [class="^.*"] border pixel 3
+for_window [class="^.*"] border pixel <%= i3['border'] %>
 
 new_float none
 

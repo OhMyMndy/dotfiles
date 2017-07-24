@@ -105,4 +105,25 @@ export OS_VER=$(lsb_release -sr)
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="/home/mandy/.sdkman"
 [[ -s "~/.sdkman/bin/sdkman-init.sh" ]] && source "~/.sdkman/bin/sdkman-init.sh"
-[[ -s "~/.fresh/build/shell.sh" ]] && source "~/.fresh/build/shell.sh" 
+
+which ls-i 2>&1 > /dev/null
+local lsINotExists=$?
+if [ "${lsINotExists}" = "0" ];
+then
+	LS_COLORS=$(ls_colors_generator)
+
+	run_ls() {
+		ls-i --color=auto -w $(tput cols) "$@"
+	}
+
+	run_dir() {
+		dir-i --color=auto -w $(tput cols) "$@"
+	}
+
+	run_vdir() {
+		vdir-i --color=auto -w $(tput cols) "$@"
+	}
+	alias ls="run_ls"
+	alias dir="run_dir"
+	alias vdir="run_vdir"/
+fi

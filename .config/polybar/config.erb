@@ -38,13 +38,13 @@ height = 24
 offset-x = 0
 offset-y = 0
 
-background = #1d1f21
-foreground = #eeeeee
+background = <%= polybar['background'] %>
+foreground = <%= polybar['foreground'] %>
 
 overline-size = 2
 overline-color = ${colors.foreground-alt}
 underline-size = 2
-underline-color = #198844
+underline-color = <%= polybar['underline_color'] %>
 
 ;border-bottom-size = 2
 ;border-bottom-color = ${colors.accent-dark1}
@@ -151,7 +151,7 @@ type = internal/bspwm
 
 label-focused = %index%
 label-focused-background = ${colors.background-alt}
-label-focused-underline= #198844
+label-focused-underline= <%= polybar['underline_color'] %>
 label-focused-padding = 2
 
 label-occupied = %index%
