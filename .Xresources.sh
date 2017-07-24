@@ -131,7 +131,7 @@ rofi.fixed-num-lines: true
 XTerm*renderFont: true
 XTerm*faceName: DroidSansMonoForPowerline Nerd Font
 ! XTerm*faceName: SauceCodePro Nerd Font
-XTerm*faceSize: 9
+XTerm*faceSize: 10
 XTerm*eightBitInput: false
 XTerm*selectToClipboard:true
 EOF

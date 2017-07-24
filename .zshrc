@@ -10,18 +10,20 @@ fi
 if [ -f $HOME/.oh-my-zsh/oh-my-zsh.sh ]; then
 	source $HOME/.oh-my-zsh/oh-my-zsh.sh
 fi
-export PATH=$HOME/bin:$HOME/.composer/vendor/bin:$HOME/.local/bin:/usr/share/doc/git/contrib/diff-highlight/:$PATH
+export PATH=$HOME/bin:$HOME/.config/composer/vendor/bin:$HOME/.composer/vendor/bin:$HOME/.local/bin:/usr/share/doc/git/contrib/diff-highlight:/usr/local/go/bin:$HOME/.go/bin:$PATH
 
 if [ -f $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting  ]; then
 	source $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting 
 fi
 compctl -g '~/.teamocil/*(:t:r)' teamocil
+eval "$(dircolors ~/.dircolors)"
+zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 
 
 export HISTFILE="$HOME/.zhistory"
-HISTSIZE=100000
-SAVEHIST=100000
-
+HISTSIZE=1000000
+SAVEHIST=$HISTSIZE
+setopt EXTENDED_HISTORY
 # Allow autocompletion for dot files/folders
 #_comp_options+=(globdots)
 
@@ -50,8 +52,16 @@ alias current-window-process='ps -o args= $(xprop -id $(xprop -root -f _NET_ACTI
 histcmd() {
 fc -l 1 |  awk '{line=$1; $1=""; CMD_LINE[$0]=line; CMD[$0]++;count++; for (a in CMD)print CMD[a] " " CMD_LINE[a] " " a;}' | sort -rn 
 }
-
 eval $(thefuck --alias) 
+
+which pbcopy 2>&1 > /dev/null
+local pbcopyNotExists=$?
+if [ "${pbcopyNotExists}" = "1" ];
+then
+    alias pbcopy='xsel --clipboard --input'
+    alias pbpaste='xsel --clipboard --output'
+fi
+
 
 # precmd () { print -Pn "\e]0;$TITLE\a" }
 title() {
@@ -75,6 +85,7 @@ function highlight() {
 	sed -u s"/$2/$fg_c\0$c_rs/g"
 }
 
+export GOPATH=$HOME/.go
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 export VISUAL="vim"
@@ -93,4 +104,5 @@ export OS_VER=$(lsb_release -sr)
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="/home/mandy/.sdkman"
-[[ -s "/home/mandy/.sdkman/bin/sdkman-init.sh" ]] && source "/home/mandy/.sdkman/bin/sdkman-init.sh"
+[[ -s "~/.sdkman/bin/sdkman-init.sh" ]] && source "~/.sdkman/bin/sdkman-init.sh"
+[[ -s "~/.fresh/build/shell.sh" ]] && source "~/.fresh/build/shell.sh" 

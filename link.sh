@@ -3,12 +3,15 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 dark_mode=$(cat $HOME/.dark-mode 2>/dev/null)
 echo "dark mode: $dark_mode"
-set -e
+#set -e
 
 mkdir -p ~/.config
 
 rm -f ~/.vimrc
 ln -sf $DIR/.vimrc ~/.vimrc
+
+rm -f ~/.dircolors
+ln -sf ~/dotfiles/.dircolors ~/.dircolors
 
 rm -rf ~/.vim
 ln -sf $DIR/.vim ~/.vim
@@ -144,7 +147,7 @@ elif [ -f "~/.atom/config.cson" ]; then
 	sed -E -i 's/one-dark/one-light/g' ~/.atom/config.cson > /dev/null
 fi
 
-killall dunst > /dev/null || echo "No dunst found"; 
+killall dunst > /dev/null || echo "No dunst found";
 dunst  > /dev/null 2>&1 || true &
 notify-send summary body || true
 
@@ -193,3 +196,39 @@ if [ ! -f "$HOME/.local/share/fonts/Droid Sans Mono for Powerline Nerd Font Comp
     curl -fLo "Droid Sans Mono for Powerline Nerd Font Complete.otf" https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/patched-fonts/DroidSansMono/complete/Droid%20Sans%20Mono%20for%20Powerline%20Nerd%20Font%20Complete.otf
 	fc-cache -f -v
 fi
+
+if [ ! -f "$HOME/.local/share/fonts/Anonymice Powerline Nerd Font Complete.ttf" ]; then
+    mkdir -p ~/.local/share/fonts; cd ~/.local/share/fonts
+    curl -fLo "Anonymice Powerline Nerd Font Complete.ttf" https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/AnonymousPro/complete/Anonymice%20Powerline%20Nerd%20Font%20Complete.ttf?raw=true
+	fc-cache -f -v
+fi
+
+if [ ! -f "$HOME/.local/share/fonts/DejaVu Sans Mono Nerd Font Complete.ttf" ]; then
+    mkdir -p ~/.local/share/fonts; cd ~/.local/share/fonts
+    curl -fLo "DejaVu Sans Mono Nerd Font Complete.ttf" https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/DejaVuSansMono/Regular/complete/DejaVu%20Sans%20Mono%20Nerd%20Font%20Complete.ttf?raw=true
+	fc-cache -f -v
+fi
+
+if [ ! -d "$HOME/.local/share/fonts/overpass" ]; then
+    mkdir -p ~/.local/share/fonts; cd ~/.local/share/fonts
+    curl -fLo "/tmp/overpass.zip" https://github.com/RedHatBrand/Overpass/releases/download/3.0.2/overpass-desktop-fonts.zip
+	unzip /tmp/overpass.zip
+	fc-cache -f -v
+fi
+
+if [ ! -d "$HOME/.local/share/fonts/YosemiteSanFranciscoFont-master" ]; then
+    mkdir -p ~/.local/share/fonts/;
+	cd ~/.local/share/fonts/
+    curl -fLo "/tmp/sanfrancisco.zip" https://github.com/supermarin/YosemiteSanFranciscoFont/archive/master.zip
+	unzip /tmp/sanfrancisco.zip
+	fc-cache -f -v
+fi
+
+# if [ ! -d "$HOME/.local/share/fonts/fonts-master" ]; then
+#     mkdir -p ~/.local/share/fonts/;
+# 	cd ~/.local/share/fonts/
+#     curl -fLo "/tmp/google-fonts.zip" https://github.com/google/fonts/archive/master.zip
+# 	unzip /tmp/google-fonts.zip
+# 	fc-cache -f -v
+# fi
+

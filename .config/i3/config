@@ -14,12 +14,6 @@ set $mod Mod4
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
 font pango:DejaVu Sans:style=Regular 8
-#font pango:DroidSansMonoForPowerline Nerd Font 8
-#font pango:System San Francisco Display 9
-
-# This font is widely installed, provides lots of unicode glyphs, right-to-left
-# text rendering and scalability on retina/hidpi displays (thanks to pango).
-#font pango:DejaVu Sans Mono 8
 
 # Before i3 v4.8, we used to recommend this one as the default:
 # font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
@@ -39,14 +33,7 @@ bindsym $mod+Shift+q kill
 bindsym Control+Shift+q kill
 
 # start dmenu (a program launcher)
-# bindsym $mod+d exec dmenu_run
-# bindsym $mod+d exec "rofi -show run"
-#bindsym $mod+d exec "rofi -show drun -modi drun"
 bindsym $mod+d exec "rofi -combi-modi window,run,drun -show combi -modi combi"
-# There also is the (new) i3-dmenu-desktop which only displays applications
-# shipping a .desktop file. It is a wrapper around dmenu, so you need that
-# installed.
-# bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
 
 # change focus
 bindsym $mod+j focus left
@@ -174,21 +161,21 @@ mode "resize" {
         # Pressing right will grow the window’s width.
         # Pressing up will shrink the window’s height.
         # Pressing down will grow the window’s height.
-        bindsym j resize shrink width 10 px or 10 ppt
-        bindsym k resize grow height 10 px or 10 ppt
-        bindsym l resize shrink height 10 px or 10 ppt
-        bindsym semicolon resize grow width 10 px or 10 ppt
+        bindsym j resize shrink width 10 px
+        bindsym k resize grow height 10 px
+        bindsym l resize shrink height 10 px
+        bindsym semicolon resize grow width 10 px
 
         # same bindings, but for the arrow keys
-        bindsym Left resize shrink width 10 px or 10 ppt
-        bindsym Down resize grow height 10 px or 10 ppt
-        bindsym Up resize shrink height 10 px or 10 ppt
-        bindsym Right resize grow width 10 px or 10 ppt
+        bindsym Left resize shrink width 10 px
+        bindsym Down resize grow height 10 px
+        bindsym Up resize shrink height 10 px
+        bindsym Right resize grow width 10 px
 
-        bindsym Shift+Left resize shrink width 50 px or 50 ppt
-        bindsym Shift+Down resize grow height 50 px or 50 ppt
-        bindsym Shift+Up resize shrink height 50 px or 50 ppt
-        bindsym Shift+Right resize grow width 50 px or 50 ppt
+        bindsym Shift+Left resize shrink width 50 px
+        bindsym Shift+Down resize grow height 50 px
+        bindsym Shift+Up resize shrink height 50 px
+        bindsym Shift+Right resize grow width 50 px
 
 
         # back to normal: Enter or Escape
@@ -218,22 +205,6 @@ client.focused_inactive $inactive-bg-color $inactive-bg-color $inactive-text-col
 client.urgent           $urgent-bg-color    $urgent-bg-color   $text-color          $bright-green
 
 
-# bar
-# bar {
-	#position top
-  	#status_command i3blocks -c /home/mandy/.config/i3/i3blocks.conf
-  	#status_command conky -c $HOME/.conkyrc
-  	#status_command polybar example
-#	colors {
-#		background $inactive-bg-color
-#	    	separator #2aa198
-		#                  border             background         text
-#		focused_workspace  $inactive-bg-color          $inactive-bg-color          #268bd2
-#		inactive_workspace $inactive-bg-color $inactive-bg-color $inactive-text-color
-#		urgent_workspace   $urgent-bg-color   $urgent-bg-color   $text-color
-#	}
-#}
-
 # Default workspaces
 assign [class=".*Slack$"] $workspace6
 assign [class="Thunderbird"] $workspace6
@@ -247,82 +218,73 @@ assign [title=".*Wunderlist$"] $workspace7
 assign [class="Thunar"] $workspace3
 assign [class="KeePass2"] $workspace5
 assign [class="KeeWeb"] $workspace5
-#assign [class="Terminator"] $workspace2
 
+
+# For windows
 for_window [class="Yad"] floating enable
 for_window [title=".*Wunderlist$"] move container to workspace $workspace7
 for_window [title=".*Slack$"] move container to workspace $workspace6
-
-# source: https://github.com/Airblader/dotfiles-manjaro/blob/master/.i3/config
-#for_window [class="(?i)VirtualBox" title="(?i)Manager"] floating enable
-#for_window [class="(?i)VirtualBox"] floating enable
-
-
 for_window [window_role="pop-up"] floating enable
 for_window [window_role="bubble"] floating enable
 for_window [window_role="task_dialog"] floating enable
 for_window [window_role="Preferences"] floating enable
-
 for_window [window_type="dialog"] floating enable
 for_window [window_type="menu"] floating enable
 # Float IntelliJ update window
 for_window [class="sun-awt-X11-XDialogPeer"] floating enable
 for_window [class="com-intellij-updater-Runner"] floating enable
+for_window [class="Gloobus-preview"] floating enable, border none
+# source: https://github.com/Airblader/dotfiles-manjaro/blob/master/.i3/config
+#for_window [class="(?i)VirtualBox" title="(?i)Manager"] floating enable
+#for_window [class="(?i)VirtualBox"] floating enable
+
+
 # Execs
-exec_always --no-startup-id killall notify-osd
 exec --no-startup-id redshift
-exec_always --no-startup-id feh --bg-scale $HOME/.wallpaper.jpg
+exec --no-startup-id xrandr --output HDMI2 --mode 1920x1080 --pos 1920x0 --rotate normal --output HDMI1 --primary --mode 1920x1080 --pos 3840x0 --rotate normal --output VIRTUAL1 --off --output DP1 --off
+exec --no-startup-id parcellite
+exec --no-startup-id nm-applet
+exec --no-startup-id volumeicon
+exec --no-startup-id keeweb
+exec --no-startup-id mopidy
+exec --no-startup-id udiskie
+exec --no-startup-id autokey-gtk
+exec --no-startup-id slack
 #exec --no-startup-id thunderbird
 #exec --no-startup-id google-chrome
 #exec --no-startup-id gnome-terminal
 #exec --no-startup-id pstorm
-exec --no-startup-id xrandr --output HDMI2 --mode 1920x1080 --pos 1920x0 --rotate normal --output HDMI1 --primary --mode 1920x1080 --pos 3840x0 --rotate normal --output VIRTUAL1 --off --output DP1 --off
-#exec google-chrome --profile-directory=Default --app-id=ojcflmmmcfpacggndoaaflkmcoblhnbh
-#exec --no-startup-id thunar 
-exec --no-startup-id parcellite
-exec --no-startup-id nm-applet
-exec --no-startup-id volumeicon
 #exec --no-startup-id conky
 #exec --no-startup-id pstorm
-exec --no-startup-id keeweb
-exec_always --no-startup-id killall dunst; dunst 2>/dev/null
-exec --no-startup-id mopidy
-exec --no-startup-id udiskie
-exec_always --no-startup-id killall polybar; while pgrep -x polybar >/dev/null; do sleep 1; done; polybar -r example
-exec --no-startup-id autokey-gtk
-exec_always --no-startup-id compton
-exec --no-startup-id slack
+#exec google-chrome --profile-directory=Default --app-id=ojcflmmmcfpacggndoaaflkmcoblhnbh
+#exec --no-startup-id thunar
+
+
+# Exec always
 exec_always --no-startup-id killall imwheel; imwheel
+exec_always --no-startup-id killall polybar; while pgrep -x polybar >/dev/null; do sleep 1; done; polybar -r example
+exec_always --no-startup-id killall dunst; dunst 2>/dev/null
+exec_always --no-startup-id feh --bg-scale $HOME/.wallpaper.jpg
+#exec_always --no-startup-id compton
 
 # Custom bindsym
-
 bindsym $mod+Shift+greater move workspace to output right
 bindsym $mod+Shift+less move workspace to output left
 bindsym Scroll_Lock exec bash ~/.config/i3/scripts/lock
 bindsym $mod+Shift+p exec keepass2 --auto-type
-bindsym Print exec shutter -n
-# Gaps
 
+
+
+# Gaps
 set $default_gaps_inner 4
 set $default_gaps_outer 4
 gaps inner $default_gaps_inner
 gaps outer $default_gaps_outer
 
-for_window [class="^.*"] border pixel 4
+for_window [class="^.*"] border pixel 3
 
-
+new_float none
 
 
 # FOCUS
-#
 focus_on_window_activation urgent
-# focus [class=".*"]
-#
-#
-#
-#
-# i3 tab
-set $i3t_alt_tab        ~/.config/i3/scripts/i3t.py n
-set $i3t_alt_shift_tab  ~/.config/i3/scripts/i3t.py p
-bindsym Mod1+Tab exec   exec $i3t_alt_tab
-bindsym Mod1+Shift+Tab  exec $i3t_alt_shift_tab

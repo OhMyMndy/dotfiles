@@ -21,7 +21,7 @@ eval my_gray='%{$FG[154]%}'
 eval my_orange='%{$fg[red]%}'
 
 # right prompt
-RPROMPT='%{$my_gray%}%D{%L:%M:%S}%{$reset_color%}'
+RPROMPT='%{$my_gray%}%D{%H:%M:%S}%{$reset_color%}'
 
 # git settings
 ZSH_THEME_GIT_PROMPT_PREFIX=" %{$FG[154]%}(%{$FG[154]%}"
