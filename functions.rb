@@ -15,7 +15,7 @@ class Font
 
     def to_xterm
         if @style
-            "#{@name}:style=#{@style}"
+            "#{@name} #{@style}"
         else
             "#{@name}"
         end

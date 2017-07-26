@@ -66,6 +66,14 @@ end
 %x( killall dunst > /dev/null || echo "No dunst found"; dunst  > /dev/null 2>&1 & )
 %x( notify-send -i /usr/share/icons/gnome/256x256/status/trophy-gold.png "Summary of the message" "Here comes the message" )
 
+
+#############
+# Gnome desktop settings
+#############
+%x( dconf write /org/gnome/desktop/interface/font-name "'#{$theme_instance.fonts['normal'].to_gtk}'" )
+%x( dconf write /org/gnome/desktop/interface/monospace-font-name "'#{$theme_instance.fonts['monospace'].to_gtk}'" )
+%x( dconf write /org/gnome/desktop/interface/text-scaling-factor 1 )
+
 #############
 # Install even better ls
 #############
@@ -84,7 +92,7 @@ exit
 %x( git config --global pager.show 'diff-highlight | less' )
 %x( git config --global pager.diff 'diff-highlight | less' )
 
-git config --global user.name "Mandy Schoep"
+%x( git config --global user.name "Mandy Schoep" )
 # git config --global user.email
 
 

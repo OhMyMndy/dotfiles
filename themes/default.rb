@@ -44,11 +44,11 @@ class Default
         @urgent_color = @colors['COLOR5']
 
 
-        @monospace_font = "DejaVuSansMono Nerd Font"
-        @monospace_font_style = "Book"
-        @monospace_font_size = 10;
-        @normal_font = "Overpass"
-        @normal_font_style = ""
+        @monospace_font = "AnonymicePowerline Nerd Font"
+        @monospace_font_style = "Regular"
+        @monospace_font_size = 11;
+        @normal_font = "Roboto Condensed"
+        @normal_font_style = "Regular"
         @normal_font_size = 10;
 
         @fonts = {
@@ -57,8 +57,8 @@ class Default
         }
 
         @gtk = {
-            "theme"           => "Flatabulous",
-            "icon_theme"      => "Flat-Remix",
+            "theme"           => "Arc-Darker",
+            "icon_theme"      => "Papirus",
         }
 
         @dunst = {
