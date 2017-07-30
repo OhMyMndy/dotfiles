@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 install() {
     yaourt --needed -S $@
 }
@@ -35,10 +37,14 @@ yaourt -Syu
 # Desktop Environment / Defaults
 ###############
 install base-devel git plymouth xorg-xauth accountsservice lightdm lightdm-gtk-greeter
-install gtk-engine-murrine i3-gaps polybar-git
-install ruby rofi zsh redshift openssh chromium
+yes | yaourt -R i3-wm
+install gtk-engine-murrine i3-gaps polybar-git ttf-roboto
+install ruby rofi zsh redshift openssh chromium xcursor-dmz gtk-theme-arc-git
+# Hardcode-tray + dependencies
+install hardcode-tray sni-qt-patched-git # lib32-sni-qt-patched-git
 
-install dunst byobu network-manager-applet thunar ranger lxappearance parcellite udisks2 udiskie i3lock
+
+install dunst byobu network-manager-applet thunar ranger lxappearance parcellite udisks2 udiskie i3lock arandr
 # Network/system utilities
 install nmap meld  yad ncdu
 
@@ -70,7 +76,7 @@ install tig vim
 ###############
 # Music
 ###############
-install pulseaudio libmpdclient mopidy mpd ncmpcpp
+install pulseaudio libmpdclient mopidy mpd ncmpcpp shntool mac
 
 cat <<'EOL' | sudo tee /etc/systemd/system/pulseaudio.service
 [Unit]
@@ -142,3 +148,6 @@ sudo pip3 install ReText
 sudo pip3 install thefuck
 
 sudo gem install teamocil
+
+
+# todo purevpn, newshosting, torrent, inkdrop,yaourt

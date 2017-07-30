@@ -12,6 +12,7 @@ mpdupdate:
 
 smartplaylist:
     playlist_dir: ~/MyMusic/Playlists
+    relative_to: ~/MyMusic/Playlists
     playlists:
         - name: all.m3u
           query: ''                  # Matches all music in your library
@@ -19,4 +20,7 @@ smartplaylist:
         - name: languages/Russian.m3u8
           query: 'language:Russian'
 
-        - name:
+        - name: artists/$artist.m3u8
+          query: ''
+        - name: genres/$genre.m3u8
+          query: ''
