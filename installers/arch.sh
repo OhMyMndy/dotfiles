@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+install() {
+    yaourt --needed -S $@
+}
 
 if ! grep 'QT_STYLE_OVERRIDE=gtk' /etc/environment ; then
     cat <<'EOL' | sudo tee -a /etc/environment
@@ -16,81 +19,105 @@ Server = http://repo.archlinux.fr/$arch
 EOL
 fi
 
+if [ ! -f "~/.yaourtrc" ];
+then
+cat <<'EOL' | sudo tee -a ~/.yaourtrc
+NOCONFIRM=1
+BUILD_NOCONFIRM=1
+EDITFILES=0
+EOL
+fi
+
 sudo pacman -Syu yaourt
 yaourt -Syu
-yaourt -S git
-yaourt -S tig
-yaourt -S vim
 
-sudo dconf write /org/gnome/desktop/interface/font-name "'Sans 10'"
-sudo dconf write /org/gnome/desktop/interface/monospace-font-name "'DroidSansMonoForPowerline Nerd Font Book 9'"
-sudo dconf write /org/gnome/desktop/interface/text-scaling-factor 1
+###############
+# Desktop Environment / Defaults
+###############
+install base-devel git plymouth xorg-xauth accountsservice lightdm lightdm-gtk-greeter
+install gtk-engine-murrine i3-gaps polybar-git
+install ruby rofi zsh redshift openssh chromium
 
-# Install before polybar
-yaourt -S libmpdclient
-yaourt -S pulseaudio
+install dunst byobu network-manager-applet thunar ranger lxappearance parcellite udisks2 udiskie i3lock
+# Network/system utilities
+install nmap meld  yad ncdu
 
-yaourt -S i3-gaps
-yaourt -S polybar
-yaourt -S rofi
-yaourt -S zsh
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-git clone git://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions
+# autokey-py3
 
-yaourt -S ttf-chromeos-fonts
-yaourt -S nerd-fonts-source-code-pro
-yaourt -S parcellite
-yaourt -S redshift
-yaourt -S chromium
-yaourt -S lightdm
-yaourt -S gtk-engine-murrine
-yaourt -S autokey-py3
-yaourt -S openssh
-cat /dev/zero | ssh-keygen -b 2048 -t rsa
+# Lightdm
+sed -E 's/.*greeter-session=.*/greeter-session=lightdm-gtk-greeter/g' /etc/lightdm/lightdm.conf
+sudo systemctl enable lightdm
+sudo systemctl start lightdm
+
+
+# Udisks2
+sudo systemctl enable udisks2
+sudo systemctl start udisks2
+
+
+# SSH
+cat /dev/zero | ssh-keygen -b 2048 -t rsa || true
 sudo systemctl enable sshd
 sudo systemctl start sshd
 
 
-yaourt -S mopidy
-yaourt -S mpd
-yaourt -S ncmpcpp
+###############
+# Development
+###############
+install tig vim
 
-yaourt -S dunst
-yaourt -Sy xorg
-yaourt -S lightdm-gtk-greeter
-yaourt -S terminator
-yaourt -S byobu
-yaourt -S network-manager-applet
-yaourt -S thunar
-yaourt -S ranger
-yaourt -S super-flat-remix-icon-theme 
-yaourt -S lxappearance
 
-sudo systemctl enable lightdm
+###############
+# Music
+###############
+install pulseaudio libmpdclient mopidy mpd ncmpcpp
 
-yaourt -S docker
+cat <<'EOL' | sudo tee /etc/systemd/system/pulseaudio.service
+[Unit]
+Description=PulseAudio Daemon
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+Type=simple
+PrivateTmp=true
+ExecStart=/usr/bin/pulseaudio --system --realtime --disallow-exit --no-cpu-limit
+EOL
+
+sudo systemctl enable pulseaudio
+sudo systemctl start pulseaudio
+
+
+
+
+###############
+# Settings
+###############
+sudo dconf write /org/gnome/desktop/interface/font-name "'Sans 10'"
+sudo dconf write /org/gnome/desktop/interface/monospace-font-name "'DroidSansMonoForPowerline Nerd Font Book 9'"
+sudo dconf write /org/gnome/desktop/interface/text-scaling-factor 1
+
+
+
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+git clone git://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions
+
+
+
+
+###############
+# Docker
+###############
+install docker
 sudo systemctl enable docker
 sudo systemctl start docker
-sudo usermod -a -g docker $(whoami)
+sudo usermod -a -G docker $(whoami)
 
-yaourt -S ntpd
+# date
 sudo systemctl enable ntp
 sudo timedatectl set-ntp yes
-
-yaourt -S udisks2
-sudo systemctl enable udisks2
-sudo systemctl start udisks2
-
-yaourt -S udiskie
-yaourt -S exfat-utils
-
-yaourt -S nmap
-yaourt -S accountsservice
-yaourt -S xorg-xauth
-yaourt -S meld
-
-## Install zfs
 
 ## I had to manually change the kernel version in zfs-linux and it's dependencies
 # yaourt -S zfs-linux
@@ -103,35 +130,15 @@ yaourt -S meld
 # sudo sed -i -E 's|ExecStart.*$|ExecStart=/usr/bin/zfs mount -O -a|g' /usr/lib/systemd/system/zfs-mount.service
 
 
-
+###############
+# Video
+###############
 export MAKEPKG="makepkg --skipinteg"
-yaourt -S vlc qt4
+install vlc qt4
 
-
-cat <<'EOL' | sudo tee /etc/systemd/system/pulseaudio.service
-[Unit]
-Description=PulseAudio Daemon
- 
-[Install]
-WantedBy=multi-user.target
- 
-[Service]
-Type=simple
-PrivateTmp=true
-ExecStart=/usr/bin/pulseaudio --system --realtime --disallow-exit --no-cpu-limit 
-EOL
-
-sudo systemctl enable pulseaudio
-sudo systemctl start pulseaudio
-
-yaourt -S flatabulous-theme-git
-yaourt -S yad
-yaourt -S mosh
 
 sudo easy_install3 pip 
-pip3 install ReText
-pip3 install thefuck
+sudo pip3 install ReText
+sudo pip3 install thefuck
 
-yaourt -S ncdu
-
-gem install teamocil
+sudo gem install teamocil
