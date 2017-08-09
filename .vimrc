@@ -72,8 +72,10 @@ set expandtab
 
 
 " vim airline
-let g:airline#extensions#tabline#enabled = 1
-
+let g:airline_powerline_fonts = 1
+" let g:airline#extensions#tabline#enabled = 1
+" let g:airline_theme='luna'
+" let g:Powerline_symbols = 'fancy'
 
 " Switch file tabs
 map <C-PageUp> :tabp<CR>

@@ -1,0 +1,34 @@
+#!/usr/bin/env ruby
+
+# json to aliases
+
+class Hash
+ def self.to_dotted_hash(hash, recursive_key = "")
+    hash.each_with_object({}) do |(k, v), ret|
+      key = recursive_key + k.to_s
+      if v.is_a? Hash
+        ret.merge! to_dotted_hash(v, key + ".")
+      else
+        ret[key] = v
+      end
+    end
+  end
+end
+
+require 'json'
+
+file_name = File.expand_path '~/commands.json'
+commands = JSON.parse(File.read file_name)
+commands = Hash.to_dotted_hash commands
+commands = commands.to_a.map { |pair| [pair.first.downcase, pair.last] }.to_h
+
+commands.each do |command,value|
+    if value.is_a? Array
+        value = value.join '; '
+    end
+    value.gsub! /'/, "'\"'\"'"
+    # value.gsub! /"/, '\\\"'
+    command = command.gsub /\s/, '_'
+    $alias = "alias #{command}='#{value}'"
+    puts $alias
+end

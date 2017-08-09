@@ -98,6 +98,9 @@ ln -sf ~/dotfiles/.config/compton.conf ~/.config/compton.conf
 rm -rf ~/.config/beets
 ln -sf ~/dotfiles/.config/beets ~/.config/beets
 
+rm -rf ~/.config/ranger
+ln -sf ~/dotfiles/.config/ranger ~/.config/ranger
+
 rm -f ~/.gtkrc-2.0
 ln -sf ~/dotfiles/.gtkrc-2.0 ~/.gtkrc-2.0
 
@@ -229,4 +232,10 @@ fi
 # 	unzip /tmp/google-fonts.zip
 # 	fc-cache -f -v
 # fi
+
+crontab -l 2>/dev/null | grep -q "$HOME/bin/disk-usage-warning"
+inCrontab=$?
+if [ "${inCrontab}" == "1" ]; then
+	(crontab -l 2>/dev/null; echo "*/5 * * * * $HOME/bin/disk-usage-warning") | crontab -
+fi
 

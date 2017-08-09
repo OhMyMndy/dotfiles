@@ -10,6 +10,12 @@ fi
 if [ -f $HOME/.oh-my-zsh/oh-my-zsh.sh ]; then
 	source $HOME/.oh-my-zsh/oh-my-zsh.sh
 fi
+
+if [ -f $HOME/bin/commands-to-aliases ]; then
+	$HOME/bin/commands-to-aliases > $HOME/.aliases
+	source $HOME/.aliases
+fi
+
 export PATH=$HOME/bin:$HOME/.config/composer/vendor/bin:$HOME/.composer/vendor/bin:$HOME/.local/bin:/usr/share/doc/git/contrib/diff-highlight:/usr/local/go/bin:$HOME/.go/bin:$PATH
 
 if [ -f $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting  ]; then
@@ -46,6 +52,7 @@ grepc()
   sed -E 's"'"$pattern"'"'$esc'[32m&'$esc'[0m"g' "$@"
 }
 
+alias docker-ps-min='docker ps --format "table{{.Names}}\t{{.RunningFor}}\t{{.Status}}"'
 alias hl='grepc "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+"'
 alias find="find \$@ 2>/dev/null"
 alias current-window-process='ps -o args= $(xprop -id $(xprop -root -f _NET_ACTIVE_WINDOW 0x " \$0\\n" _NET_ACTIVE_WINDOW | awk "{print \$2}") -f _NET_WM_PID 0c " \$0\\n" _NET_WM_PID | awk "{print \$2}")'

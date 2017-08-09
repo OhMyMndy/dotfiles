@@ -1,0 +1,10 @@
+#!/bin/bash
+CURRENT=$(df / | grep / | awk '{ print $5}' | sed 's/%//g')
+THRESHOLD=93
+
+echo "Current:  ${CURRENT}"
+echo "Treshold: ${THRESHOLD}"
+
+if [ "$CURRENT" -gt "$THRESHOLD" ] ; then
+    notify-send -i /usr/share/icons/gnome/256x256/status/dialog-warning.png 'Disk Space Alert' "Your root partition remaining free space is critically low. Used: $CURRENT%"
+fi

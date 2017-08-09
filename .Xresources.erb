@@ -31,7 +31,7 @@
 
 
 
-Xft.dpi: 96
+Xft.dpi: <%= dpi %>
 ! Xft.dpi: 180
 Xft.antialias: true
 Xft.hinting: true
@@ -110,7 +110,8 @@ XTerm*faceSize: <%= fonts['monospace'].size %>
 XTerm*eightBitInput: false
 XTerm*selectToClipboard:true
 XTerm*background: #000000
-
+XTerm*saveLines: 16384
+XTerm*loginShell: true
 
 !################
 !# URXVT settings
@@ -122,8 +123,9 @@ URxvt.loginShell:           true
 URxvt.internalBorder:       3
 URxvt.lineSpace:            0
 
-URxvt*font: xft:DroidSansMonoForPowerline Nerd Font Book:pixelsize=12:antialias=true:hinting=true
-URxvt*boldFont: xft:DroidSansMonoForPowerline Nerd Font Book:bold:pixelsize=12
-URxvt*letterSpace: -3
-URxvt*scrollBar: false
-URxvt*background: #000000
+URxvt*font:                 <%= fonts['monospace'].to_xft %>
+! URxvt*boldFont:             <%= fonts['monospace'].to_xft_bold %>
+URxvt*letterSpace:          0
+URxvt*scrollBar:            false
+URxvt*background:           #000000
+URxvt.termName:             xterm-256color

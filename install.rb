@@ -16,11 +16,15 @@ if $args.key?('theme') && File.exists("themes/" + $args['theme'] + '.erb')
     $theme = $args['theme']
 end
 
+$dpi = $args.key?('dpi') && $args['dpi'].to_i > 0 ? $args['dpi'].to_i : 96
+
+
 puts "Using theme '#{$theme}'"
+puts "Dpi         '#{$dpi}'"
 require_relative "themes/#{$theme}.rb"
 $theme.ucfirst!
 
-$theme_instance = Object.const_get($theme).new
+$theme_instance = Object.const_get($theme).new $dpi
 
 $parameters = $theme_instance.get_binding
 puts "Parameters: "

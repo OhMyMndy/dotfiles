@@ -135,3 +135,6 @@ pip3 install thefuck
 yaourt -S ncdu
 
 gem install teamocil
+
+
+yaourt -S xbanish

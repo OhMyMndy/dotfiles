@@ -15,9 +15,9 @@ class Font
 
     def to_xterm
         if @style
-            "#{@name} #{@style}"
+            "#{@name}:style=#{@style}".gsub! ' ', '\\ '
         else
-            "#{@name}"
+            "#{@name}".gsub! ' ', '\\ '
         end
     end
 
@@ -31,6 +31,18 @@ class Font
 
     def to_dunst
         to_gtk
+    end
+
+    def to_xft
+        "xft:#{@name}:pixelsize=#{@size}:antialias=true:hinting=true".gsub! ' ', '\\ '
+    end
+
+    def to_xft_bold
+        if @style
+            "xft:#{@name}:bold:pixelsize=#{@size}:antialias=true:hinting=true:style=#{@style}".gsub! ' ', '\\ '
+        else
+            "xft:#{@name}:bold:pixelsize=#{@size}:antialias=true:hinting=true".gsub! ' ', '\\ '
+        end
     end
 
 end

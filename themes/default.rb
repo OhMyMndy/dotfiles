@@ -7,8 +7,10 @@ class Default
     attr_accessor :dunst
     attr_accessor :i3
     attr_accessor :polybar
-    
-    def initialize
+    attr_accessor :dpi
+
+    def initialize dpi
+        @dpi = dpi
         @colors = {
             "COLOR0"         => "#1d1f21",
             "COLOR8"         => "#969896",
@@ -44,7 +46,7 @@ class Default
         @urgent_color = @colors['COLOR5']
 
 
-        @monospace_font = "AnonymicePowerline Nerd Font"
+        @monospace_font = "SauceCodePro Nerd Font"
         @monospace_font_style = "Regular"
         @monospace_font_size = 11;
         @normal_font = "Roboto Condensed"
@@ -95,14 +97,14 @@ class Default
             "font" => @fonts['normal'].to_i3,
             "border" => 3,
             "client" => {
-                "focused"           => I3Colors.new(@highlight_color, @highlight_color, @colors['COLOR0'], @highlight_color),
-                "unfocused"         => I3Colors.new(@colors['COLOR0'], @colors['COLOR0'], @colors['FOREGROUND'], @highlight_color),
-                "focused_inactive"  => I3Colors.new(@colors['COLOR0'], @colors['COLOR0'], @colors['FOREGROUND'], @highlight_color),
-                "urgent"            => I3Colors.new(@urgent_color, @urgent_color, @colors['COLOR7'], @highlight_color),
+                "focused"           => I3Colors.new(@highlight_color, @highlight_color, @colors['COLOR0'], @colors['COLOR4']),
+                "unfocused"         => I3Colors.new(@colors['COLOR0'], @colors['COLOR0'], @colors['FOREGROUND'], @colors['COLOR4']),
+                "focused_inactive"  => I3Colors.new(@colors['COLOR0'], @colors['COLOR0'], @colors['FOREGROUND'], @colors['COLOR4']),
+                "urgent"            => I3Colors.new(@urgent_color, @urgent_color, @colors['COLOR7'], @colors['COLOR4']),
             },
             "gaps" => {
                 "inner" => 4,
-                "outer" => 4
+                "outer" => 2
             }
         }
 
