@@ -41,8 +41,10 @@ yes | yaourt -R i3-wm
 install gtk-engine-murrine i3-gaps polybar-git ttf-roboto
 install ruby rofi zsh redshift openssh chromium xcursor-dmz gtk-theme-arc-git
 # Hardcode-tray + dependencies
-install hardcode-tray sni-qt-patched-git # lib32-sni-qt-patched-git
+install hardcode-tray sni-qt-patched-git at # lib32-sni-qt-patched-git
 
+sudo systemctl enable atd
+sudo systemctl start atd
 
 install dunst byobu network-manager-applet thunar ranger lxappearance parcellite udisks2 udiskie i3lock arandr
 # Network/system utilities

@@ -1,0 +1,28 @@
+#!/usr/bin/env ruby
+
+$remote_folder = "Music/"
+$remote_volume = "/Volumes/DAP1"
+$local_folder = "/Volumes/Data/Music"
+cmd = "/usr/local/Cellar/rsync/3.1.2/bin/rsync -hrt --info=progress2 --no-i-r #{$local_folder} #{$remote_volume}"
+puts cmd
+%x( #{cmd} )
+
+Dir.chdir $remote_volume + "/Music/Playlists"
+playlists = Dir.glob('**/*.m3u*')
+
+
+playlists.each do |playlist|
+    # puts playlist
+    folder_count = playlist.scan(/\//).count + 2
+
+    file_prefix = '../' * folder_count + $remote_folder
+    file_prefix.gsub!(/\//, '\\')
+    contents = File.read playlist
+    contents.gsub!(file_prefix, '')
+    contents.gsub!(/^\.\.[\/\\]/, '')
+    # file_prefix = $remote_folder
+    new_content = ''
+    contents.each_line { |line| new_content << file_prefix + line }
+    new_content.gsub!(/\//, '\\')
+    File.write playlist, new_content
+end

@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+set -e
+
+cueFile=$1
+flacFile=$2
+
+
+if [ $(echo $cueFile | grep -c -o '\.cue$') == '0' ]; then
+    echo "First argument should be a cue file"
+    exit 2
+
+fi
+
+if [ $(echo $flacFile | grep -c -o '\.flac$') == '0' ]; then
+    echo "First argument should be a flac file"
+    exit 3
+
+fi
+
+dir=$(dirname "$cueFile")
+echo $dir
+cd "$dir"
+
+shnsplit -f "$cueFile" -o flac "$flacFile"
+mkdir -p flac; rm -f flac/split*.flac; mv split*.flac flac
+set -x
+iconv -f WINDOWS-1251 -t UTF-8 "$cueFile" > "$cueFile.new.cue"
+cuetag.sh "$cueFile.new.cue" flac/split-*.flac

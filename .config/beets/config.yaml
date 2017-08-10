@@ -12,7 +12,8 @@ mpdupdate:
 
 smartplaylist:
     playlist_dir: ~/MyMusic/Playlists
-    relative_to: ~/MyMusic/Playlists
+    relative_to: ~/MyMusic/Playlists/
+    auto: no
     playlists:
         - name: all.m3u
           query: ''                  # Matches all music in your library
@@ -22,5 +23,9 @@ smartplaylist:
 
         - name: artists/$artist.m3u8
           query: ''
+
         - name: genres/$genre.m3u8
           query: ''
+
+        - name: playlists/metal/punk-goes-pop.m3u8
+          query: 'album:punk goes pop'
