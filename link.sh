@@ -239,3 +239,5 @@ if [ "${inCrontab}" == "1" ]; then
 	(crontab -l 2>/dev/null; echo "*/5 * * * * $HOME/bin/disk-usage-warning") | crontab -
 fi
 
+
+mkdir -p $HOME/.ssh/sockets
