@@ -1,7 +1,13 @@
+export SHELL=zsh
 source $HOME/z.sh
+source $HOME/.functions
+
 export ZSH=/$HOME/.oh-my-zsh
+
 ZSH_THEME="mandy"
+ZSH_CUSTOM=$HOME/.oh-my-zsh-custom
 plugins=(git, docker, phpunit, zsh-completions, z, zsh-syntax-highlighting, node, extract)
+
 autoload -U compinit && compinit
 if [ -f $HOME/.bash_aliases ]; then
 	source $HOME/.bash_aliases
@@ -15,8 +21,13 @@ export PATH=$HOME/bin:$HOME/.config/composer/vendor/bin:$HOME/.composer/vendor/b
 if [ -f $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting  ]; then
 	source $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting 
 fi
+
 compctl -g '~/.teamocil/*(:t:r)' teamocil
-eval "$(dircolors ~/.dircolors)"
+
+if [ -d ~/.dircolors ]; then
+    eval "$(dircolors ~/.dircolors)"
+fi
+
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 
 
@@ -33,18 +44,6 @@ setopt EXTENDED_HISTORY
 #alias git='LC_ALL=C git' 
 
 
-grepc()
-{
-  pattern=$1
-  shift
-  if [ ! -z $2 ]; then
-    esc=$(printf "\0\$2")
-    shift
-  else
-    esc=$(printf "\033")
-  fi
-  sed -E 's"'"$pattern"'"'$esc'[32m&'$esc'[0m"g' "$@"
-}
 
 alias hl='grepc "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+"'
 alias find="find \$@ 2>/dev/null"
@@ -52,38 +51,23 @@ alias current-window-process='ps -o args= $(xprop -id $(xprop -root -f _NET_ACTI
 histcmd() {
 fc -l 1 |  awk '{line=$1; $1=""; CMD_LINE[$0]=line; CMD[$0]++;count++; for (a in CMD)print CMD[a] " " CMD_LINE[a] " " a;}' | sort -rn 
 }
-eval $(thefuck --alias) 
-
-which pbcopy 2>&1 > /dev/null
-local pbcopyNotExists=$?
-if [ "${pbcopyNotExists}" = "1" ];
-then
-    alias pbcopy='xsel --clipboard --input'
-    alias pbpaste='xsel --clipboard --output'
+alias git-https-to-ssh='sed -E -i "s/https:\/\/github\.com\//git@github\.com:/"
+'
+if exists thefuck; then
+    eval $(thefuck --alias)
 fi
 
+if ! exists pbcopy; then
+    if exists xsel; then
+        alias pbcopy='xsel --clipboard --input'
+        alias pbpaste='xsel --clipboard --output'
+    elif exists termux-clipboard-get; then
+        alias pbcopy='termux-clipboard-set'
+        alias pbpaste='termux-clipboard-get'
+    fi
 
-# precmd () { print -Pn "\e]0;$TITLE\a" }
-title() {
-	print -Pn "\e]0;$1\a" 
-}
+fi
 
-
-# @see https://github.com/kepkin/dev-shell-essentials/blob/master/highlight.sh
-function highlight() {
-	declare -A fg_color_map
-	fg_color_map[black]=30
-	fg_color_map[red]=31
-	fg_color_map[green]=32
-	fg_color_map[yellow]=33
-	fg_color_map[blue]=34
-	fg_color_map[magenta]=35
-	fg_color_map[cyan]=36
-	 
-	fg_c=$(echo -e "\e[1;${fg_color_map[$1]}m")
-	c_rs=$'\e[0m'
-	sed -u s"/$2/$fg_c\0$c_rs/g"
-}
 
 export GOPATH=$HOME/.go
 export LC_ALL=en_US.UTF-8

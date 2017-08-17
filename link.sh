@@ -19,8 +19,11 @@ ln -sf $DIR/.vim ~/.vim
 rm -f ~/.zshrc
 ln -sf $DIR/.zshrc ~/.zshrc
 
-rm -rf ~/.oh-my-zsh/custom
-ln -sf $DIR/.oh-my-zsh/custom ~/.oh-my-zsh/custom
+rm -f ~/.functions
+ln -sf $DIR/.functions ~/.functions
+
+rm -rf ~/.oh-my-zsh-custom
+ln -sf $DIR/.oh-my-zsh-custom ~/.oh-my-zsh-custom
 
 rm -f ~/.config/redshift.conf
 ln -sf $DIR/.config/redshift.conf ~/.config/redshift.conf
