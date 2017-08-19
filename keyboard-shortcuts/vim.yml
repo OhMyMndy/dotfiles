@@ -1,0 +1,51 @@
+---
+edit:
+    substitute:
+        command: "%s/search/replace/g"
+        description: "Find each occurrence of 'foo' (in all lines), and
+        replace it with 'bar'."
+        example: "%s/foo/bar/g"
+
+
+    indent left:
+        command: 1 > >
+
+    indent right:
+        command: 1 < <
+
+movement:
+    word left:
+        command: b
+        description: Move cursor word left
+
+    word right:
+        command: w
+        description: Move cursor word right
+
+    begin sentence:
+        command: (
+        description: Move to the begin of the sentence
+
+    end sentence:
+        command: )
+        description: Move to the end of the sentence
+
+    next buffer:
+        command: bn
+
+    previous buffer:
+        command: bp
+
+    close buffer:
+        command: bd
+
+    show all buffers:
+        command: buffers
+
+    go to specified buffer:
+        command: b2
+        description: replace 2 with the buffer you want to go to
+other:
+    reload vimrc:
+        command: so ~/.vimrc
+        description: Reload vim configfile without restarting vim

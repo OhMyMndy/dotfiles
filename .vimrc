@@ -1,6 +1,5 @@
 set nocompatible              " be iMproved, required
 filetype off                  " required
-colorscheme desert
 " colorscheme wal
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
@@ -30,6 +29,11 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'chrisbra/Colorizer'
 Plugin 'davidhalter/jedi-vim'
 Plugin 'scrooloose/nerdtree'
+Plugin 'scrooloose/syntastic'
+ "Plugin 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
+Plugin 'flazz/vim-colorschemes'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -48,7 +52,8 @@ filetype plugin indent on    " required
 set nu
 syntax on
 let g:colorizer_auto_color=1
-filetype plugin indent on 
+filetype plugin indent on
+set wildmenu
 set backspace=indent,eol,start
 set ignorecase
 set hlsearch
@@ -60,6 +65,9 @@ map <C-n> :NERDTreeToggle<CR>
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 set mouse=a
 
+
+colorscheme wellsokai
+
 filetype plugin indent on
 " show existing tab with 4 spaces width
 set tabstop=4
@@ -67,3 +75,32 @@ set tabstop=4
 set shiftwidth=4
 " On pressing tab, insert 4 spaces
 set expandtab
+
+"Easier split navigation
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+
+set splitbelow
+set splitright
+
+" Switch between buffers without having to save each buffer
+set hidden
+
+
+"Syntastic
+
+" set statusline+=%#warningmsg#
+" set statusline+=%{SyntasticStatuslineFlag()}
+" set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+let g:syntastic_yaml_checkers = ['yamllint']
+
+set signcolumn=yes
+
