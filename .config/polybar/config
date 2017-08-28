@@ -31,7 +31,7 @@ accent-light2 = ${xrdb:color4}
 #margin-bottom = 10
 
 
-[bar/example]
+[bar/top]
 ;monitor = ${env:MONITOR:HDMI-1}
 width = 100%
 height = 24
@@ -56,15 +56,15 @@ module-margin-left = 1
 module-margin-right = 1
 
 
-font-0 = DejaVuSansMono Nerd Font:style=Book:pixelsize=11;0
+font-0 = Roboto:style=Regular:pixelsize=11;0
 ; font-0 = Overpass Mono:style=Regular:pixelsize=11;0
-font-1 = DroidSansMonoForPowerline Nerd Font:pixelsize=11;0
+font-1 = SauceCodePro Nerd Font:style=Regular:pixelsize=11;0
 
-modules-left = volume mpd
+modules-left = mpd
 modules-center = i3 
 ; xwindow
 ; modules-right = volume redshift dark-mode terminal monitor vpn xkeyboard filesystem memory swap cpu eth temperature date powermenu
-modules-right = terminal monitor vpn cpu eth date
+modules-right = terminal monitor vpn filesystem cpu eth date
 
 tray-position = right
 ;tray-padding = 0
@@ -266,19 +266,12 @@ card = intel_backlight
 
 [module/cpu]
 type = internal/cpu
-interval = 2
+interval = 5
 format-prefix = " "
 format-prefix-foreground = ${colors.foreground}
 ;format-underline = ${colors.accent-dark2}
-label = %percentage:2%%
+label = %percentage:3%%
 
-#[module/memory]
-#type = internal/memory
-#interval = 2
-#format-prefix = " "
-#format-prefix-foreground = ${colors.foreground}
-#format-underline = ${colors.accent-light1}
-#label = %percentage_used%%
 
 [module/memory]
 type=custom/script
@@ -335,11 +328,11 @@ label-disconnected-foreground = ${colors.foreground-alt}
 type = internal/date
 interval = 5
 
-date =
-date-alt = "%d-%m-%Y"
+date = "%d-%m-%Y"
+date-alt =
 
 time = %H:%M
-time-alt = %H:%M:%S
+time-alt = %H:%M
 
 ;format-prefix = ' '
 format-prefix-foreground = ${colors.foreground}

@@ -49,9 +49,9 @@ class Default
         @monospace_font = "SauceCodePro Nerd Font"
         @monospace_font_style = "Regular"
         @monospace_font_size = 11;
-        @normal_font = "Roboto Condensed"
+        @normal_font = "Roboto"
         @normal_font_style = "Regular"
-        @normal_font_size = 10;
+        @normal_font_size = 11;
 
         @fonts = {
             "monospace"       => Font.new(@monospace_font, @monospace_font_size, @monospace_font_style),
@@ -94,7 +94,7 @@ class Default
         }
 
         @i3 = {
-            "font" => @fonts['normal'].to_i3,
+            "font" => @fonts["normal"].to_gtk,
             "border" => 3,
             "client" => {
                 "focused"           => I3Colors.new(@highlight_color, @highlight_color, @colors['COLOR0'], @colors['COLOR4']),
@@ -113,6 +113,11 @@ class Default
             "background"           => @colors['BACKGROUND'],
             "foreground"           => @colors['FOREGROUND'],
             "underline_color"      => @highlight_color,
+            "height"               => 24,
+            "fonts"                => [
+                @fonts["normal"].to_polybar,
+                @fonts["monospace"].to_polybar
+            ]
         }
     end
 

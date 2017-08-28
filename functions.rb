@@ -45,6 +45,16 @@ class Font
         end
     end
 
+    def to_polybar (size=nil)
+        size = @size if size == nil
+        # DejaVuSansMono Nerd Font:style=Book:pixelsize=11;0
+        if @style
+            "#{@name}:style=#{@style}:pixelsize=#{size};0"
+        else
+            "#{@name}:pixelsize=#{size};0"
+        end
+    end
+
 end
 
 
