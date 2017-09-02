@@ -81,8 +81,6 @@ ln -sf ~/dotfiles/.xinitrc ~/.xinitrc
 
 touch ~/.z
 
-rm -rf ~/.themes
-ln -sf ~/dotfiles/.themes ~/.themes
 
 rm -rf ~/.icons
 ln -sf ~/dotfiles/.icons ~/.icons
@@ -106,7 +104,7 @@ ln -sf ~/dotfiles/.gtkrc-2.0 ~/.gtkrc-2.0
 
 mv -f ~/bin ~/bin_old 2>/dev/null || echo "1" > /dev/null
 rm -rf ~/bin
-ln -sf ~/dotfiles/bin ~/bin
+ln -sf ~/dotfiles/bin ~/bin/
 
 
 rm -rf ~/.tmux
@@ -123,34 +121,12 @@ ln -sf ~/dotfiles/.imwheelrc ~/.imwheelrc
 rm -f ~/.inputrc
 ln -sf ~/dotfiles/.inputrc ~/.inputrc
 
-# disable notify-osd
-notify_osd_service="/usr/share/dbus-1/services/org.freedesktop.Notifications.service"
-killall notify-osd > /dev/null || echo "No notify-osd running"
-if [ -e "${notify_osd_service}" ]; then
-	sudo mv ${notify_osd_service}{,.disabled}
-fi
-
-rm -rf ~/.Xresources
-touch ~/.Xresources-local
-bash ~/dotfiles/.Xresources.sh > ~/.Xresources
-
-xrdb -remove
-xrdb -override ~/.Xresources
-
-
-bash ~/.config/dunst/dunstrc.sh > ~/.config/dunst/dunstrc
-bash ~/.config/terminator/config.sh > ~/.config/terminator/config
 
 if [ "$dark_mode" = "1" ]; then
 	sed -E -i 's/one-light/one-dark/g' ~/.atom/config.cson > /dev/null 2>&1
 else
 	sed -E -i 's/one-dark/one-light/g' ~/.atom/config.cson > /dev/null 2>&1
 fi
-
-
-
-killall dunst > /dev/null || echo "No dunst found"; dunst  > /dev/null 2>&1 &
-notify-send -i /usr/share/icons/gnome/256x256/status/trophy-gold.png "Summary of the message" "Here comes the message"
 
 if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
 	git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plugins/tpm/bin/install_plugins
@@ -180,7 +156,7 @@ if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting" ]; then
 	git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
 fi
 
-
+set -ex
 if [ ! -f "$HOME/.oh-my-zsh/custom/themes/bullet-train.zsh-theme" ]; then
     curl https://raw.githubusercontent.com/caiogondim/bullet-train-oh-my-zsh-theme/master/bullet-train.zsh-theme -o ~/.oh-my-zsh/custom/themes/bullet-train.zsh-theme
 fi
@@ -194,19 +170,19 @@ fi
 
 if [ ! -f "$HOME/.local/share/fonts/Droid Sans Mono for Powerline Nerd Font Complete.otf" ]; then
     mkdir -p ~/.local/share/fonts; cd ~/.local/share/fonts 
-    curl -fLo "Droid Sans Mono for Powerline Nerd Font Complete.otf" https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/patched-fonts/DroidSansMono/complete/Droid%20Sans%20Mono%20for%20Powerline%20Nerd%20Font%20Complete.otf
+    curl -fLo "Droid Sans Mono for Powerline Nerd Font Complete.otf" https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf
 	fc-cache -f -v
 fi
 
 if [ ! -f "$HOME/.local/share/fonts/Anonymice Powerline Nerd Font Complete.ttf" ]; then
     mkdir -p ~/.local/share/fonts; cd ~/.local/share/fonts 
-    curl -fLo "Anonymice Powerline Nerd Font Complete.ttf" https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/AnonymousPro/complete/Anonymice%20Powerline%20Nerd%20Font%20Complete.ttf?raw=true 
+    curl -fLo "Anonymice Powerline Nerd Font Complete.ttf" https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/AnonymousPro/complete/Anonymice%20Nerd%20Font%20Complete.ttf
 	fc-cache -f -v
 fi
 
 if [ ! -f "$HOME/.local/share/fonts/DejaVu Sans Mono Nerd Font Complete.ttf" ]; then
     mkdir -p ~/.local/share/fonts; cd ~/.local/share/fonts 
-    curl -fLo "DejaVu Sans Mono Nerd Font Complete.ttf" https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/DejaVuSansMono/Regular/complete/DejaVu%20Sans%20Mono%20Nerd%20Font%20Complete.ttf?raw=true 
+    curl -fLo "DejaVu Sans Mono Nerd Font Complete.ttf" https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/DejaVuSansMono/Regular/complete/DejaVu%20Sans%20Mono%20Nerd%20Font%20Complete.ttf
 	fc-cache -f -v
 fi
 
@@ -225,13 +201,13 @@ if [ ! -d "$HOME/.local/share/fonts/YosemiteSanFranciscoFont-master" ]; then
 	fc-cache -f -v
 fi
 
-# if [ ! -d "$HOME/.local/share/fonts/fonts-master" ]; then
-#     mkdir -p ~/.local/share/fonts/; 
-# 	cd ~/.local/share/fonts/
-#     curl -fLo "/tmp/google-fonts.zip" https://github.com/google/fonts/archive/master.zip
-# 	unzip /tmp/google-fonts.zip
-# 	fc-cache -f -v
-# fi
+if [ ! -d "$HOME/.themes/macOS-Sierra-master" ]; then
+    mkdir -p ~/.themes
+	cd ~/.themes
+    wget https://github.com/B00merang-Project/macOS-Sierra/archive/master.zip
+    unzip *master.zip
+fi
+
 
 crontab -l 2>/dev/null | grep -q "$HOME/bin/disk-usage-warning"
 inCrontab=$?

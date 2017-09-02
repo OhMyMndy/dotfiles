@@ -36,6 +36,8 @@ class Default
             "COLOR7"         => "#ffffff",
             "COLOR15"        => "#ffffff",
 
+            "COLOR16"        => "#888888",
+
             "BACKGROUND"     => "#1d1f21",
             "FOREGROUND"     => "#eeeeee",
         }
@@ -43,15 +45,15 @@ class Default
         @dark_mode = File.read(dark_mode_file) if File.exists?(dark_mode_file)
 
         @highlight_color = @colors['COLOR2']
-        @urgent_color = @colors['COLOR5']
+        @urgent_color = @colors['COLOR6']
 
 
         @monospace_font = "SauceCodePro Nerd Font"
         @monospace_font_style = "Regular"
-        @monospace_font_size = 11;
+        @monospace_font_size = 10;
         @normal_font = "Roboto"
         @normal_font_style = "Regular"
-        @normal_font_size = 11;
+        @normal_font_size = 9;
 
         @fonts = {
             "monospace"       => Font.new(@monospace_font, @monospace_font_size, @monospace_font_style),
@@ -95,17 +97,17 @@ class Default
 
         @i3 = {
             "font" => @fonts["normal"].to_gtk,
-            "border" => 3,
+            "border" => 2,
             "client" => {
-                "focused"           => I3Colors.new(@highlight_color, @highlight_color, @colors['COLOR0'], @colors['COLOR4']),
+                "focused"           => I3Colors.new(@colors['COLOR16'], @colors['COLOR16'], @colors['COLOR0'], @colors['COLOR4']),
                 "unfocused"         => I3Colors.new(@colors['COLOR0'], @colors['COLOR0'], @colors['FOREGROUND'], @colors['COLOR4']),
                 "focused_inactive"  => I3Colors.new(@colors['COLOR0'], @colors['COLOR0'], @colors['FOREGROUND'], @colors['COLOR4']),
                 "urgent"            => I3Colors.new(@urgent_color, @urgent_color, @colors['COLOR7'], @colors['COLOR4']),
             },
             "gaps" => {
-                "inner" => 4,
-                "outer" => 2
-            }
+                "inner" => 2,
+                "outer" => 0
+            },
         }
 
 

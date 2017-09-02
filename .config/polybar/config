@@ -56,15 +56,14 @@ module-margin-left = 1
 module-margin-right = 1
 
 
-font-0 = Roboto:style=Regular:pixelsize=11;0
+font-0 = Roboto:style=Regular:pixelsize=9;0
 ; font-0 = Overpass Mono:style=Regular:pixelsize=11;0
-font-1 = SauceCodePro Nerd Font:style=Regular:pixelsize=11;0
+font-1 = SauceCodePro Nerd Font:style=Regular:pixelsize=10;0
 
-modules-left = mpd
-modules-center = i3 
+modules-left = i3 xwindow mpd
+modules-center = date
 ; xwindow
-; modules-right = volume redshift dark-mode terminal monitor vpn xkeyboard filesystem memory swap cpu eth temperature date powermenu
-modules-right = terminal monitor vpn filesystem cpu eth date
+modules-right = terminal monitor vpn filesystem cpu eth
 
 tray-position = right
 ;tray-padding = 0

@@ -60,11 +60,10 @@ font-0 = <%= polybar['fonts'][0] %>
 ; font-0 = Overpass Mono:style=Regular:pixelsize=11;0
 font-1 = <%= polybar['fonts'][1] %>
 
-modules-left = mpd
-modules-center = i3 
+modules-left = i3 xwindow mpd
+modules-center = date
 ; xwindow
-; modules-right = volume redshift dark-mode terminal monitor vpn xkeyboard filesystem memory swap cpu eth temperature date powermenu
-modules-right = terminal monitor vpn filesystem cpu eth date
+modules-right = terminal monitor vpn filesystem cpu eth
 
 tray-position = right
 ;tray-padding = 0

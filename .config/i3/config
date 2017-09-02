@@ -13,7 +13,7 @@ set $mod Mod4
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
-font pango: Roboto 11
+font pango: Roboto 9
 # Before i3 v4.8, we used to recommend this one as the default:
 # font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
 # The font above is very space-efficient, that is, it looks good, sharp and
@@ -25,7 +25,7 @@ font pango: Roboto 11
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec i3-sensible-terminal
+bindsym $mod+Return exec xterm
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -189,10 +189,10 @@ bindsym $mod+r mode "resize"
 
 # window colors
 #                       border       background   text         indicator
-client.focused          #198844      #198844      #1d1f21      #3971ed
+client.focused          #888888      #888888      #1d1f21      #3971ed
 client.unfocused        #1d1f21      #1d1f21      #eeeeee      #3971ed
 client.focused_inactive #1d1f21      #1d1f21      #eeeeee      #3971ed
-client.urgent           #a36ac7      #a36ac7      #ffffff      #3971ed
+client.urgent           #3971ed      #3971ed      #ffffff      #3971ed
 
 # Default workspaces
 assign [class=".*Slack$"]                                                               $workspace6
@@ -255,7 +255,7 @@ exec --no-startup-id slack
 exec_always --no-startup-id killall imwheel; imwheel
 exec_always --no-startup-id killall polybar; while pgrep -x polybar >/dev/null; do sleep 1; done; polybar -r top
 exec_always --no-startup-id killall dunst; dunst 2>/dev/null
-exec_always --no-startup-id feh --bg-scale $HOME/.wallpaper.jpg
+exec_always --no-startup-id feh --bg-scale $HOME/.themes/macOS-Sierra-master/Wallpaper.jpg
 # exec_always --no-startup-id wmname LG3D
 exec_always --no-startup-id compton --xrender-sync-fence
 exec_always --no-startup-id xbanish
@@ -269,10 +269,10 @@ bindsym $mod+Shift+p exec keepass2 --auto-type
 
 
 # Gaps
-gaps inner 4
-gaps outer 2
+gaps inner 2
+gaps outer 0
 
-for_window [class="^.*"] border pixel 3
+for_window [class="^.*"] border pixel 2
 
 new_float none
 

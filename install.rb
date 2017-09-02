@@ -45,9 +45,12 @@ end
 
 #############
 
-root_dir = File.dirname(__FILE__)
+$root_dir = File.dirname(__FILE__)
 
-Dir.chdir root_dir
+Dir.chdir $root_dir
+
+%x( bash "#{$root_dir}/link.sh" )
+
 
 Dir.glob ['*.erb', '.config/**/*.erb'], File::FNM_DOTMATCH do |file|
     new_file_name = get_new_filename file
@@ -59,8 +62,8 @@ Dir.glob ['*.erb', '.config/**/*.erb'], File::FNM_DOTMATCH do |file|
         puts "Content is empty"
         exit 2
     end
-    File.delete new_file_name if File.exists? new_file_name
-    File.write new_file_name, new_content
+    File.open(new_file_name, 'w') { |f| f.write new_content }
+
 end
 
 
