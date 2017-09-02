@@ -227,6 +227,12 @@ if [ ! -d "$HOME/.local/share/fonts/YosemiteSanFranciscoFont-master" ]; then
 	fc-cache -f -v
 fi
 
+if [ ! -d "$HOME/.themes/macOS-Sierra-master" ]; then
+    mkdir -p ~/.themes
+	cd ~/.themes
+    wget https://github.com/B00merang-Project/macOS-Sierra/archive/master.zip
+    unzip *master.zip
+fi
 # if [ ! -d "$HOME/.local/share/fonts/fonts-master" ]; then
 #     mkdir -p ~/.local/share/fonts/;
 # 	cd ~/.local/share/fonts/

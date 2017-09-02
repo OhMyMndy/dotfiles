@@ -264,7 +264,8 @@ exec --no-startup-id slack
 exec_always --no-startup-id killall imwheel; imwheel
 exec_always --no-startup-id killall polybar; while pgrep -x polybar >/dev/null; do sleep 1; done; polybar -r example
 exec_always --no-startup-id killall dunst; dunst 2>/dev/null
-exec_always --no-startup-id feh --bg-scale $HOME/.wallpaper.jpg
+#exec_always --no-startup-id feh --bg-scale $HOME/.wallpaper.jpg
+exec_always --no-startup-id feh --bg-scale $HOME/.themes/macOS-Sierra-master/Wallpaper.jpg
 #exec_always --no-startup-id compton
 
 # Custom bindsym

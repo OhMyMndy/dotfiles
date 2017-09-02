@@ -46,7 +46,7 @@ install hardcode-tray sni-qt-patched-git at # lib32-sni-qt-patched-git
 sudo systemctl enable atd
 sudo systemctl start atd
 
-install dunst byobu network-manager-applet thunar ranger lxappearance parcellite udisks2 udiskie i3lock arandr
+install dunst byobu network-manager-applet thunar ranger lxappearance parcellite udisks2 udiskie i3lock arandr unzip feh
 # Network/system utilities
 install nmap meld  yad ncdu
 
