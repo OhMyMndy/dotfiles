@@ -265,6 +265,7 @@ bindsym $mod+Shift+greater move workspace to output right
 bindsym $mod+Shift+less move workspace to output left
 bindsym Scroll_Lock exec bash ~/.config/i3/scripts/lock
 bindsym $mod+Shift+p exec keepass2 --auto-type
+bindsym $mod+Shift+o exec ruby ~/bin/copy-tmux-sidebar-command.rb
 
 
 

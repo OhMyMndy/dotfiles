@@ -104,7 +104,7 @@ ln -sf ~/dotfiles/.gtkrc-2.0 ~/.gtkrc-2.0
 
 mv -f ~/bin ~/bin_old 2>/dev/null || echo "1" > /dev/null
 rm -rf ~/bin
-ln -sf ~/dotfiles/bin ~/bin/
+ln -sf ~/dotfiles/bin ~/bin
 
 
 rm -rf ~/.tmux

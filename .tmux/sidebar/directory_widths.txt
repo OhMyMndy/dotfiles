@@ -1,0 +1,12 @@
+/var/www/docker/jenkins	40
+/var/www/docker/jenkins	40
+/var/www/docker/jenkins	40
+/var/www/docker/jenkins	40
+/var/www/docker/jenkins	40
+/var/www/docker/jenkins	40
+/var/www/docker/jenkins	40
+/var/www/docker/jenkins	40
+/var/www/docker/jenkins	40
+/var/www/docker/jenkins	40
+/var/www/docker/jenkins	40
+/var/www/docker/jenkins	40

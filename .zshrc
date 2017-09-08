@@ -56,6 +56,7 @@ alias docker-ps-min='docker ps --format "table{{.Names}}\t{{.RunningFor}}\t{{.St
 alias hl='grepc "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+"'
 alias find="find \$@ 2>/dev/null"
 alias current-window-process='ps -o args= $(xprop -id $(xprop -root -f _NET_ACTIVE_WINDOW 0x " \$0\\n" _NET_ACTIVE_WINDOW | awk "{print \$2}") -f _NET_WM_PID 0c " \$0\\n" _NET_WM_PID | awk "{print \$2}")'
+alias disk-usage='sudo du -h -t200M -x / 2>/dev/null'
 histcmd() {
 fc -l 1 |  awk '{line=$1; $1=""; CMD_LINE[$0]=line; CMD[$0]++;count++; for (a in CMD)print CMD[a] " " CMD_LINE[a] " " a;}' | sort -rn 
 }
@@ -134,3 +135,21 @@ then
 	alias dir="run_dir"
 	alias vdir="run_vdir"/
 fi
+
+alias fixssh='eval $(tmux show-env -s |grep "^SSH_")'
+
+#fixssh
+
+# Launch SSH agent if not running
+if ! ps aux |grep $(whoami) |grep ssh-agent |grep -v grep >/dev/null; then ssh-agent ; fi
+
+# Link the latest ssh-agent socket
+ln -sf $(find /tmp -maxdepth 2 -type s -name "agent*" -user $USER -printf '%T@ %p\n' 2>/dev/null |sort -n|tail -1|cut -d' ' -f2) ~/.ssh/ssh_auth_sock
+
+export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock
+
+
+
+export LOCAL_DOCKER_DIR='/var/www/docker/'
+
+export LOCAL_PHING_DIR='/var/www/phing/'

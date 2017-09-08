@@ -1,0 +1,7 @@
+{
+    "commands": {
+    },
+    "tmux-sidebar": {
+        ".*zsh.*": ".*docker\\.web56.*"
+    }
+}
