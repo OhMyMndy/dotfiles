@@ -1,7 +1,10 @@
 source $HOME/z.sh
 export ZSH=/$HOME/.oh-my-zsh
 ZSH_THEME="mandy"
-plugins=(git, docker, phpunit, zsh-completions, z, zsh-syntax-highlighting, node, extract)
+
+# Compleat https://limpet.net/mbrubeck/2009/10/30/compleat.html``
+
+plugins=(git docker phpunit zsh-completions z zsh-autosuggestions zsh-syntax-highlighting node extract common-aliases compleat)
 autoload -U compinit && compinit
 if [ -f $HOME/.bash_aliases ]; then
 	source $HOME/.bash_aliases
@@ -18,9 +21,6 @@ fi
 
 export PATH=$HOME/bin:$HOME/.config/composer/vendor/bin:$HOME/.composer/vendor/bin:$HOME/.local/bin:/usr/share/doc/git/contrib/diff-highlight:/usr/local/go/bin:$HOME/.go/bin:$PATH
 
-if [ -f $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting  ]; then
-	source $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting 
-fi
 compctl -g '~/.teamocil/*(:t:r)' teamocil
 eval "$(dircolors ~/.dircolors)"
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
@@ -102,13 +102,45 @@ export IP_ADDRESS=$(ip -4 route get 1 | head -1 | awk '{print $7}' )
 export GID=$(id -g)
 export UID=$(id -u)
 export TZ='Europe/Brussels'
-export LOCAL_PROJECT_DIR='/var/www/html/'
 export DISABLE_AUTO_TITLE="false"
 export AUTO_TITLE=true
 export CHROMIUM_PORT=5910
-export OS=$(lsb_release -si)
 export ARCH=$(uname -m | sed 's/x86_//;s/i[3-6]86/32/')
-export OS_VER=$(lsb_release -sr)
+
+## OS and Architecture
+
+if [ -f /etc/os-release ]; then
+    # freedesktop.org and systemd
+    . /etc/os-release
+    OS=$NAME
+    VER=$VERSION_ID
+elif type lsb_release >/dev/null 2>&1; then
+    # linuxbase.org
+    OS=$(lsb_release -si)
+    VER=$(lsb_release -sr)
+elif [ -f /etc/lsb-release ]; then
+    # For some versions of Debian/Ubuntu without lsb_release command
+    . /etc/lsb-release
+    OS=$DISTRIB_ID
+    VER=$DISTRIB_RELEASE
+elif [ -f /etc/debian_version ]; then
+    # Older Debian/Ubuntu/etc.
+    OS=Debian
+    VER=$(cat /etc/debian_version)
+elif [ -f /etc/SuSe-release ]; then
+    # Older SuSE/etc.
+    ...
+elif [ -f /etc/redhat-release ]; then
+    # Older Red Hat, CentOS, etc.
+    ...
+else
+    # Fall back to uname, e.g. "Linux <version>", also works for BSD, etc.
+    OS=$(uname -s)
+    VER=$(uname -r)
+fi
+
+
+
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="/home/mandy/.sdkman"
@@ -149,7 +181,6 @@ ln -sf $(find /tmp -maxdepth 2 -type s -name "agent*" -user $USER -printf '%T@ %
 export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock
 
 
-
 export LOCAL_DOCKER_DIR='/var/www/docker/'
-
 export LOCAL_PHING_DIR='/var/www/phing/'
+export LOCAL_PROJECT_DIR='/var/www/html/'

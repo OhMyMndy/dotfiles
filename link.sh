@@ -18,8 +18,8 @@ ln -sf ~/dotfiles/.vim ~/.vim
 rm -f ~/.zshrc
 ln -sf ~/dotfiles/.zshrc ~/.zshrc
 
-rm -rf ~/.oh-my-zsh/custom
-ln -sf ~/dotfiles/.oh-my-zsh/custom ~/.oh-my-zsh/custom
+rm -rf ~/.oh-my-zsh/custom/themes
+ln -sf ~/dotfiles/.oh-my-zsh/custom/themes ~/.oh-my-zsh/custom/themes
 
 rm -f ~/.config/redshift.conf
 ln -sf ~/dotfiles/.config/redshift.conf ~/.config/redshift.conf
@@ -105,6 +105,7 @@ ln -sf ~/dotfiles/.gtkrc-2.0 ~/.gtkrc-2.0
 mv -f ~/bin ~/bin_old 2>/dev/null || echo "1" > /dev/null
 rm -rf ~/bin
 ln -sf ~/dotfiles/bin ~/bin
+chmod +x -R ~/bin/
 
 
 rm -rf ~/.tmux
@@ -202,7 +203,7 @@ if [ ! -d "$HOME/.local/share/fonts/YosemiteSanFranciscoFont-master" ]; then
 fi
 
 if [ ! -d "$HOME/.themes/macOS-Sierra-master" ]; then
-    mkdir -p ~/.themes
+    mkdir -p ~/.themes | true
 	cd ~/.themes
     wget https://github.com/B00merang-Project/macOS-Sierra/archive/master.zip
     unzip *master.zip
@@ -212,7 +213,7 @@ fi
 crontab -l 2>/dev/null | grep -q "$HOME/bin/disk-usage-warning"
 inCrontab=$?
 if [ "${inCrontab}" == "1" ]; then
-	(crontab -l 2>/dev/null; echo "*/5 * * * * $HOME/bin/disk-usage-warning") | crontab -
+	(crontab -l 2>/dev/null; echo "*/5 * * * * export DISPLAY=:0 && $HOME/bin/disk-usage-warning 2>&1 > /dev/null") | crontab -
 fi
 
 

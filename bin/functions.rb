@@ -1,7 +1,7 @@
 def get_commands_from_commands_file commands_file
     file_name = File.expand_path '~/commands.json'
     commands = JSON.parse(File.read file_name)
-    commands = Hash.to_dotted_hash commands
+    commands = Hash.to_dotted_hash commands['commands']
     commands = commands.to_a.map { |pair| [pair.first.downcase, pair.last] }.to_h
 end
 

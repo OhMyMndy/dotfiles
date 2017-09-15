@@ -25,10 +25,11 @@ puts "Parent command: #{parent_command}"
 puts ""
 
 config.each do |key, value|
-    match = Regexp.new(key).match(command)
+    match = Regexp.new(key).match(parent_command)
     # puts "key #{key} => command #{command}, match => #{match}"
-    match = Regexp.new(key).match(parent_command) if not match
+    match = Regexp.new(key).match(command) if not match
     # puts "key #{key} => command #{parent_command}, match => #{match}"
+    
     if match
         commands.each_with_index do |(command_key, command_value), command_index|
             command_match = Regexp.new(value).match(command_key)
