@@ -1,5 +1,6 @@
 set nocompatible              " be iMproved, required
 filetype off                  " required
+colorscheme cobalt
 " colorscheme wal
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
@@ -30,7 +31,6 @@ Plugin 'chrisbra/Colorizer'
 Plugin 'davidhalter/jedi-vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/syntastic'
- "Plugin 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'flazz/vim-colorschemes'
@@ -104,3 +104,13 @@ let g:syntastic_yaml_checkers = ['yamllint']
 
 set signcolumn=yes
 
+
+" vim airline
+let g:airline_powerline_fonts = 1
+" let g:airline#extensions#tabline#enabled = 1
+" let g:airline_theme='luna'
+" let g:Powerline_symbols = 'fancy'
+
+" Switch file tabs
+map <C-PageUp> :tabp<CR>
+map <C-PageDown> :tabn<CR>

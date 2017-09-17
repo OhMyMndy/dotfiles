@@ -21,9 +21,7 @@ ln -sf $DIR/.zshrc ~/.zshrc
 
 rm -f ~/.functions
 ln -sf $DIR/.functions ~/.functions
-
-rm -rf ~/.oh-my-zsh-custom
-ln -sf $DIR/.oh-my-zsh-custom ~/.oh-my-zsh-custom
+ln -sf ~/dotfiles/.oh-my-zsh/custom/themes/mandy.zsh ~/.oh-my-zsh/custom/themes/mandy.zsh
 
 rm -f ~/.config/redshift.conf
 ln -sf $DIR/.config/redshift.conf ~/.config/redshift.conf
@@ -86,15 +84,13 @@ ln -sf $DIR/.xinitrc ~/.xinitrc
 
 touch ~/.z
 
-rm -rf ~/.themes
-ln -sf $DIR/.themes ~/.themes
 
 rm -rf ~/.icons
 ln -sf $DIR/.icons ~/.icons
 
 #sudo mkdir -p /etc/lightdm
 #sudo rm -f /etc/lightdm/lightm.conf
-#sudo cp $DIR/etc/lightdm/lightdm.conf /etc/lightdm/lightdm.conf
+#sudo cp ~/dotfiles/etc/lightdm/lightdm.conf /etc/lightdm/lightdm.conf
 
 
 rm -f ~/.config/compton.conf
@@ -103,12 +99,16 @@ ln -sf $DIR/.config/compton.conf ~/.config/compton.conf
 rm -rf ~/.config/beets
 ln -sf $DIR/.config/beets ~/.config/beets
 
+rm -rf ~/.config/ranger
+ln -sf $DIR/.config/ranger ~/.config/ranger
+
 rm -f ~/.gtkrc-2.0
 ln -sf $DIR/.gtkrc-2.0 ~/.gtkrc-2.0
 
 mv -f ~/bin ~/bin_old 2>/dev/null || echo "1" > /dev/null
 rm -rf ~/bin
 ln -sf $DIR/bin ~/bin
+chmod +x -R ~/bin/
 
 
 rm -rf ~/.tmux
@@ -125,42 +125,22 @@ ln -sf $DIR/.imwheelrc ~/.imwheelrc
 rm -f ~/.inputrc
 ln -sf $DIR/.inputrc ~/.inputrc
 
-# disable notify-osd
-notify_osd_service="/usr/share/dbus-1/services/org.freedesktop.Notifications.service"
-killall notify-osd > /dev/null || true
-if [ -e "${notify_osd_service}" ]; then
-	sudo mv ${notify_osd_service}{,.disabled} || true
-fi
-
-rm -rf ~/.Xresources
-touch ~/.Xresources-local
-
-bash $DIR/.Xresources.sh > ~/.Xresources
-
-xrdb -remove
-xrdb -override ~/.Xresources
+ln -sf ~/dotfiles/functions.sh ~/functions.sh
 
 
-bash ~/.config/dunst/dunstrc.sh > ~/.config/dunst/dunstrc
-bash ~/.config/terminator/config.sh > ~/.config/terminator/config
 
-if [ "$dark_mode" = "1" ] && [ -f "~/.atom/config.cson" ]; then
-	sed -E -i 's/one-light/one-dark/g' ~/.atom/config.cson > /dev/null
-elif [ -f "~/.atom/config.cson" ]; then
-	sed -E -i 's/one-dark/one-light/g' ~/.atom/config.cson > /dev/null
-fi
 
-killall dunst > /dev/null || echo "No dunst found";
-dunst  > /dev/null 2>&1 || true &
-notify-send summary body || true
+
+killall dunst > /dev/null || echo "No dunst found"; dunst  > /dev/null 2>&1 &
+notify-send -i /usr/share/icons/gnome/256x256/status/trophy-gold.png "Summary of the message" "Here comes the message"
 
 if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
 	git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plugins/tpm/bin/install_plugins
 fi
 
-tmux source ~/.tmux.conf || true
-$HOME/.tmux/plugins/tpm/bin/install_plugins || true
-echo 3
+tmux source ~/.tmux.conf
+$HOME/.tmux/plugins/tpm/bin/install_plugins
+
 
 if [ ! -d "$HOME/.vim/bundle/Vundle.vim" ]; then
 	git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
@@ -169,75 +149,104 @@ vim +PluginInstall +qall
 
 
 
+function installZshPlugin()
+{
+	pluginUrl="$1"
+	pluginDir="$2"
 
-if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions" ]; then
-	git clone git://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+	if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/$pluginDir" ]; then
+		echo "Installing ZSH plugin '$pluginDir'"
+		git clone $pluginUrl ~/.oh-my-zsh/custom/plugins/$pluginDir
+	else
+		echo "ZSH plugin '$pluginDir' is already installed"
+	fi
+
+}
+
+
+function installZshTheme()
+{
+	pluginUrl="$1"
+	pluginDir="$2"
+
+	if [ ! -f "$HOME/.oh-my-zsh/custom/themes/$pluginDir" ]; then
+		echo "Installing ZSH theme '$pluginDir'"
+		cd  ~/.oh-my-zsh/custom/themes/
+		curl -fLo "$pluginDir" "$pluginUrl"
+	else
+		echo "ZSH theme '$pluginDir' is already installed"
+	fi
+
+}
+
+function installFont()
+{
+	fontUrl="$1"
+	fontName="$2"
+ 	mkdir -p ~/.local/share/fonts
+	cd ~/.local/share/fonts
+
+	if [ ! -f "$fontName" ]; then
+		curl -fLo "$fontName" "$fontUrl"
+	fi
+}
+
+function installFontsFromZip()
+{
+	fontUrl="$1"
+	fontName="$2"
+	mkdir -p ~/.local/share/fonts
+	cd ~/.local/share/fonts
+
+	if [ ! -d "$fontName" ]; then
+		rm -f "/tmp/$fontName.zip"
+    	curl -fLo "/tmp/$fontName.zip" "$fontUrl"
+		unzip "/tmp/$fontName.zip" -d "$fontName"
+	fi
+}
+
+function installGtkTheme()
+{
+	if [[ "$(uname -s)" == *"Linux"* ]]; then
+		themeUrl="$1"
+		themeName="$2"
+		mkdir -p ~/.themes | true
+		cd ~/.themes
+		if [ ! -d "$themeName" ]; then
+			rm -f "/tmp/$themeName.zip"
+			curl -fLo "/tmp/$themeName.zip" "$themeUrl"
+			unzip "/tmp/$themeName.zip" -d "$themeName"
+		fi
+	fi
+}
+
+set -e
+installZshPlugin "git://github.com/zsh-users/zsh-autosuggestions" "zsh-autosuggestions"
+installZshPlugin "https://github.com/zsh-users/zsh-completions" "zsh-completions"
+installZshPlugin "https://github.com/zsh-users/zsh-syntax-highlighting.git" "zsh-syntax-highlighting"
+
+installZshTheme "https://raw.githubusercontent.com/caiogondim/bullet-train-oh-my-zsh-theme/master/bullet-train.zsh-theme" "bullet-train.zsh-theme"
+
+
+installFont "https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/patched-fonts/SourceCodePro/Regular/complete/Sauce%20Code%20Pro%20Nerd%20Font%20Complete.ttf" "Sauce Code Pro Nerd Font Complete.ttf"
+installFont "https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf" "Droid Sans Mono for Powerline Nerd Font Complete.otf"
+installFont "https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/AnonymousPro/complete/Anonymice%20Nerd%20Font%20Complete.ttf" "Anonymice Powerline Nerd Font Complete.ttf"
+installFont "https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/DejaVuSansMono/Regular/complete/DejaVu%20Sans%20Mono%20Nerd%20Font%20Complete.ttf" "DejaVu Sans Mono Nerd Font Complete.ttf"
+installFont "https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/DejaVuSansMono/Regular/complete/DejaVu%20Sans%20Mono%20Nerd%20Font%20Complete.ttf" "DejaVu Sans Mono Nerd Font Complete.ttf"
+
+installFontsFromZip "https://github.com/RedHatBrand/Overpass/releases/download/3.0.2/overpass-desktop-fonts.zip" "overpass"
+installFontsFromZip "https://github.com/supermarin/YosemiteSanFranciscoFont/archive/master.zip" "sanfrancisco"
+
+fc-cache -f -v
+
+installGtkTheme "https://github.com/B00merang-Project/macOS-Sierra/archive/master.zip" "macOS-Sierra"
+
+
+crontab -l 2>/dev/null | grep -q "$HOME/bin/disk-usage-warning"
+inCrontab=$?
+if [ "${inCrontab}" == "1" ]; then
+	(crontab -l 2>/dev/null; echo "*/5 * * * * export DISPLAY=:0 && $HOME/bin/disk-usage-warning 2>&1 > /dev/null") | crontab -
 fi
 
-if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-completions" ]; then
-	git clone https://github.com/zsh-users/zsh-completions ~/.oh-my-zsh/custom/plugins/zsh-completions
-fi
 
-if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting" ]; then
-	git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
-fi
-
-
-if [ ! -f "$HOME/.oh-my-zsh/custom/themes/bullet-train.zsh-theme" ]; then
-    curl https://raw.githubusercontent.com/caiogondim/bullet-train-oh-my-zsh-theme/master/bullet-train.zsh-theme -o ~/.oh-my-zsh/custom/themes/bullet-train.zsh-theme
-fi
-
-
-if [ ! -f "$HOME/.local/share/fonts/Sauce Code Pro Nerd Font Complete.ttf" ]; then
-    mkdir -p ~/.local/share/fonts; cd ~/.local/share/fonts 
-    curl -fLo "Sauce Code Pro Nerd Font Complete.ttf" https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/patched-fonts/SourceCodePro/Regular/complete/Sauce%20Code%20Pro%20Nerd%20Font%20Complete.ttf
-	fc-cache -f -v
-fi
-
-if [ ! -f "$HOME/.local/share/fonts/Droid Sans Mono for Powerline Nerd Font Complete.otf" ]; then
-    mkdir -p ~/.local/share/fonts; cd ~/.local/share/fonts 
-    curl -fLo "Droid Sans Mono for Powerline Nerd Font Complete.otf" https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/patched-fonts/DroidSansMono/complete/Droid%20Sans%20Mono%20for%20Powerline%20Nerd%20Font%20Complete.otf
-	fc-cache -f -v
-fi
-
-if [ ! -f "$HOME/.local/share/fonts/Anonymice Powerline Nerd Font Complete.ttf" ]; then
-    mkdir -p ~/.local/share/fonts; cd ~/.local/share/fonts
-    curl -fLo "Anonymice Powerline Nerd Font Complete.ttf" https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/AnonymousPro/complete/Anonymice%20Powerline%20Nerd%20Font%20Complete.ttf?raw=true
-	fc-cache -f -v
-fi
-
-if [ ! -f "$HOME/.local/share/fonts/DejaVu Sans Mono Nerd Font Complete.ttf" ]; then
-    mkdir -p ~/.local/share/fonts; cd ~/.local/share/fonts
-    curl -fLo "DejaVu Sans Mono Nerd Font Complete.ttf" https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/DejaVuSansMono/Regular/complete/DejaVu%20Sans%20Mono%20Nerd%20Font%20Complete.ttf?raw=true
-	fc-cache -f -v
-fi
-
-if [ ! -d "$HOME/.local/share/fonts/overpass" ]; then
-    mkdir -p ~/.local/share/fonts; cd ~/.local/share/fonts
-    curl -fLo "/tmp/overpass.zip" https://github.com/RedHatBrand/Overpass/releases/download/3.0.2/overpass-desktop-fonts.zip
-	unzip /tmp/overpass.zip
-	fc-cache -f -v
-fi
-
-if [ ! -d "$HOME/.local/share/fonts/YosemiteSanFranciscoFont-master" ]; then
-    mkdir -p ~/.local/share/fonts/;
-	cd ~/.local/share/fonts/
-    curl -fLo "/tmp/sanfrancisco.zip" https://github.com/supermarin/YosemiteSanFranciscoFont/archive/master.zip
-	unzip /tmp/sanfrancisco.zip
-	fc-cache -f -v
-fi
-
-if [ ! -d "$HOME/.themes/macOS-Sierra-master" ]; then
-    mkdir -p ~/.themes
-	cd ~/.themes
-    wget https://github.com/B00merang-Project/macOS-Sierra/archive/master.zip
-    unzip *master.zip
-fi
-# if [ ! -d "$HOME/.local/share/fonts/fonts-master" ]; then
-#     mkdir -p ~/.local/share/fonts/;
-# 	cd ~/.local/share/fonts/
-#     curl -fLo "/tmp/google-fonts.zip" https://github.com/google/fonts/archive/master.zip
-# 	unzip /tmp/google-fonts.zip
-# 	fc-cache -f -v
-# fi
-
+mkdir -p $HOME/.ssh/sockets

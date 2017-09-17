@@ -13,7 +13,7 @@ set $mod Mod4
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
-font pango: Roboto 9
+font pango: <%= i3['font'] %>
 # Before i3 v4.8, we used to recommend this one as the default:
 # font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
 # The font above is very space-efficient, that is, it looks good, sharp and
@@ -29,7 +29,6 @@ bindsym $mod+Return exec xterm
 
 # kill focused window
 bindsym $mod+Shift+q kill
-bindsym Control+Shift+q kill
 
 # start dmenu (a program launcher)
 bindsym $mod+d exec "rofi -combi-modi window,run,drun -show combi -modi combi"
@@ -175,9 +174,9 @@ mode "resize" {
         bindsym Right resize grow width 10 px
 
         bindsym Shift+Left resize shrink width 50 px
-        bindsym Shift+Down resize grow height 50 px
-        bindsym Shift+Up resize shrink height 50 px
-        bindsym Shift+Right resize grow width 50 px
+        bindsym Shift+Down resize grow height 50 px 
+        bindsym Shift+Up resize shrink height 50 px 
+        bindsym Shift+Right resize grow width 50 px 
 
 
         # back to normal: Enter or Escape
@@ -190,10 +189,10 @@ bindsym $mod+r mode "resize"
 
 # window colors
 #                       border       background   text         indicator
-client.focused          #888888      #888888      #1d1f21      #3971ed
-client.unfocused        #1d1f21      #1d1f21      #eeeeee      #3971ed
-client.focused_inactive #1d1f21      #1d1f21      #eeeeee      #3971ed
-client.urgent           #3971ed      #3971ed      #ffffff      #3971ed
+client.focused          <%= i3['client']['focused'] %>
+client.unfocused        <%= i3['client']['unfocused'] %>
+client.focused_inactive <%= i3['client']['focused_inactive'] %>
+client.urgent           <%= i3['client']['urgent'] %>
 
 # Default workspaces
 assign [class=".*Slack$"]                                                               $workspace6
@@ -271,10 +270,10 @@ bindsym $mod+Shift+o exec ruby ~/bin/copy-tmux-sidebar-command.rb
 
 
 # Gaps
-gaps inner 2
-gaps outer 0
+gaps inner <%= i3['gaps']['inner'] %>
+gaps outer <%= i3['gaps']['outer'] %>
 
-for_window [class="^.*"] border pixel 2
+for_window [class="^.*"] border pixel <%= i3['border'] %>
 
 new_float none
 

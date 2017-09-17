@@ -145,7 +145,7 @@ export MAKEPKG="makepkg --skipinteg"
 install vlc qt4
 
 
-sudo easy_install3 pip 
+sudo easy_install3 pip
 sudo pip3 install ReText
 sudo pip3 install thefuck
 

@@ -2,9 +2,9 @@
 # Any customization should be done in ~/.gtkrc-2.0.mine instead.
 
 include "/home/mandy/.gtkrc-2.0.mine"
-gtk-theme-name="Paper"
-gtk-icon-theme-name="Papirus"
-gtk-font-name="Roboto 9"
+gtk-theme-name="<%= gtk['theme'] %>"
+gtk-icon-theme-name="<%= gtk['icon_theme'] %>"
+gtk-font-name="<%= fonts['normal'].to_gtk %>"
 gtk-cursor-theme-name="DMZ-White"
 gtk-cursor-theme-size=0
 gtk-toolbar-style=GTK_TOOLBAR_BOTH

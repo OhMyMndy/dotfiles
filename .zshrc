@@ -1,33 +1,50 @@
-export SHELL=zsh
 source $HOME/z.sh
-source $HOME/.functions
-
 export ZSH=/$HOME/.oh-my-zsh
-
 ZSH_THEME="mandy"
-ZSH_CUSTOM=$HOME/.oh-my-zsh-custom
-plugins=(git, docker, phpunit, zsh-completions, z, zsh-syntax-highlighting, node, extract)
 
-autoload -U compinit && compinit
-if [ -f $HOME/.bash_aliases ]; then
-	source $HOME/.bash_aliases
+source $HOME/functions.sh
+
+detect_os
+
+# Compleat https://limpet.net/mbrubeck/2009/10/30/compleat.html``
+
+plugins=(git docker zsh-completions z zsh-autosuggestions zsh-syntax-highlighting extract common-aliases jira httpie)
+
+if [ "$OS" = "Ubuntu" ]; then
+    plugins+=(debian)
+elif [ "$OS" = "Arch Linux" ]; then
+    plugins+=(archlinux)
 fi
+
+
+# Autoload zsh commands
+autoload -Uz compinit
+if [ "$ZSH_COMPDUMP" != '' ] && [[ $(find "$ZSH_COMPDUMP" -mtime +100 -print) ]]; then
+	compinit
+else
+	compinit -C;
+fi
+
+if [ -f $HOME/.bash_aliases ]; then
+    source $HOME/.bash_aliases
+fi
+
 
 if [ -f $HOME/.oh-my-zsh/oh-my-zsh.sh ]; then
-	source $HOME/.oh-my-zsh/oh-my-zsh.sh
+    source $HOME/.oh-my-zsh/oh-my-zsh.sh
 fi
+
+
+if [ -f $HOME/bin/commands-to-aliases ]; then
+    $HOME/bin/commands-to-aliases > $HOME/.aliases
+    source $HOME/.aliases
+fi
+
+
 export PATH=$HOME/bin:$HOME/.config/composer/vendor/bin:$HOME/.composer/vendor/bin:$HOME/.local/bin:/usr/share/doc/git/contrib/diff-highlight:/usr/local/go/bin:$HOME/.go/bin:$PATH
 
-if [ -f $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting  ]; then
-	source $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting 
-fi
-
 compctl -g '~/.teamocil/*(:t:r)' teamocil
-
-if [ -d ~/.dircolors ]; then
-    eval "$(dircolors ~/.dircolors)"
-fi
-
+if [ "$(command_exists 'dircolors')" = 0 ]; then eval "$(dircolors ~/.dircolors)";  fi
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 
 
@@ -41,32 +58,30 @@ setopt EXTENDED_HISTORY
 # Prevent Git from:
 # perl: warning: Setting locale failed.
 # perl: warning: Please check that your locale settings:
-#alias git='LC_ALL=C git' 
+#alias git='LC_ALL=C git'
 
 
 
+
+alias docker-ps-min='docker ps --format "table{{.Names}}\t{{.RunningFor}}\t{{.Status}}"'
 alias hl='grepc "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+"'
 alias find="find \$@ 2>/dev/null"
 alias current-window-process='ps -o args= $(xprop -id $(xprop -root -f _NET_ACTIVE_WINDOW 0x " \$0\\n" _NET_ACTIVE_WINDOW | awk "{print \$2}") -f _NET_WM_PID 0c " \$0\\n" _NET_WM_PID | awk "{print \$2}")'
-histcmd() {
-fc -l 1 |  awk '{line=$1; $1=""; CMD_LINE[$0]=line; CMD[$0]++;count++; for (a in CMD)print CMD[a] " " CMD_LINE[a] " " a;}' | sort -rn 
+alias disk-usage='sudo du -h -t200M -x / 2>/dev/null'
+
+
+if [ "$(command_exists 'thefuck')" = 0 ]; then eval $(thefuck --alias); fi
+
+if [ "$(command_exists 'pbcopy')" = 0 ];
+then
+    alias pbcopy='xsel --clipboard --input'
+    alias pbpaste='xsel --clipboard --output'
+fi
+
+
+title() {
+	print -Pn "\e]0;$1\a"
 }
-alias git-https-to-ssh='sed -E -i "s/https:\/\/github\.com\//git@github\.com:/"
-'
-if exists thefuck; then
-    eval $(thefuck --alias)
-fi
-
-if ! exists pbcopy; then
-    if exists xsel; then
-        alias pbcopy='xsel --clipboard --input'
-        alias pbpaste='xsel --clipboard --output'
-    elif exists termux-clipboard-get; then
-        alias pbcopy='termux-clipboard-set'
-        alias pbpaste='termux-clipboard-get'
-    fi
-
-fi
 
 
 export GOPATH=$HOME/.go
@@ -74,19 +89,38 @@ export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 export VISUAL="vim"
 export EDITOR='vim'
-export IP_ADDRESS=$(ip -4 route get 1 | awk '{split($5,a,"/");print a[1]}' )
+export IP_ADDRESS=$(ip -4 route get 1 | head -1 | awk '{print $7}' )
 export GID=$(id -g)
 export UID=$(id -u)
 export TZ='Europe/Brussels'
-export LOCAL_PROJECT_DIR='/var/www/html/'
 export DISABLE_AUTO_TITLE="false"
 export AUTO_TITLE=true
 export CHROMIUM_PORT=5910
-export OS=$(lsb_release -si)
 export ARCH=$(uname -m | sed 's/x86_//;s/i[3-6]86/32/')
-export OS_VER=$(lsb_release -sr)
+
+
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="/home/mandy/.sdkman"
 [[ -s "~/.sdkman/bin/sdkman-init.sh" ]] && source "~/.sdkman/bin/sdkman-init.sh"
-[[ -s "~/.fresh/build/shell.sh" ]] && source "~/.fresh/build/shell.sh" 
+
+
+setup_lsi
+
+
+#alias fixssh='eval $(tmux show-env -s |grep "^SSH_")'
+
+#fixssh
+
+# Launch SSH agent if not running
+if ! ps aux |grep $(whoami) |grep ssh-agent |grep -v grep >/dev/null; then ssh-agent ; fi
+
+# Link the latest ssh-agent socket
+ln -sf $(find /tmp -maxdepth 2 -type s -name "agent*" -user $USER -printf '%T@ %p\n' 2>/dev/null |sort -n|tail -1|cut -d' ' -f2) ~/.ssh/ssh_auth_sock
+
+export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock
+
+
+export LOCAL_DOCKER_DIR='/var/www/docker/'
+export LOCAL_PHING_DIR='/var/www/phing/'
+export LOCAL_PROJECT_DIR='/var/www/html/'

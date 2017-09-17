@@ -34,17 +34,17 @@ accent-light2 = ${xrdb:color4}
 [bar/top]
 ;monitor = ${env:MONITOR:HDMI-1}
 width = 100%
-height = 24
+height = <%= polybar['height'] %>
 offset-x = 0
 offset-y = 0
 
-background = #1d1f21
-foreground = #eeeeee
+background = <%= polybar['background'] %>
+foreground = <%= polybar['foreground'] %>
 
 overline-size = 2
 overline-color = ${colors.foreground-alt}
 underline-size = 2
-underline-color = #198844
+underline-color = <%= polybar['underline_color'] %>
 
 ;border-bottom-size = 2
 ;border-bottom-color = ${colors.accent-dark1}
@@ -56,9 +56,9 @@ module-margin-left = 1
 module-margin-right = 1
 
 
-font-0 = Roboto:style=Regular:pixelsize=9;0
+font-0 = <%= polybar['fonts'][0] %>
 ; font-0 = Overpass Mono:style=Regular:pixelsize=11;0
-font-1 = SauceCodePro Nerd Font:style=Regular:pixelsize=10;0
+font-1 = <%= polybar['fonts'][1] %>
 
 modules-left = i3 xwindow mpd
 modules-center = date
@@ -150,7 +150,7 @@ type = internal/bspwm
 
 label-focused = %index%
 label-focused-background = ${colors.background-alt}
-label-focused-underline= #198844
+label-focused-underline= <%= polybar['underline_color'] %>
 label-focused-padding = 2
 
 label-occupied = %index%

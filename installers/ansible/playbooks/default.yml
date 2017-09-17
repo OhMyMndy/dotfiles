@@ -1,0 +1,5 @@
+---
+- hosts: all
+  tasks:  
+    - name: Install basic packages
+      package: name=tmux-2.3 state=latest

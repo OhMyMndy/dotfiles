@@ -1,0 +1,13 @@
+/var/www/docker/jenkins	40
+/var/www/docker/jenkins	40
+/var/www/docker/jenkins	40
+/var/www/docker/jenkins	40
+/var/www/docker/jenkins	40
+/var/www/docker/jenkins	40
+/var/www/docker/jenkins	40
+/var/www/docker/jenkins	40
+/var/www/docker/jenkins	40
+/var/www/docker/jenkins	40
+/var/www/docker/jenkins	40
+/var/www/docker/jenkins	40
+/var/www/html/cregoratool	55
