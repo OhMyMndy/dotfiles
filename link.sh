@@ -8,85 +8,84 @@ echo "dark mode: $dark_mode"
 mkdir -p ~/.config
 
 rm -f ~/.vimrc
-ln -sf $DIR/.vimrc ~/.vimrc
+ln -sf ${DIR}/.vimrc ~/.vimrc
 
 rm -f ~/.dircolors
 ln -sf ~/dotfiles/.dircolors ~/.dircolors
 
 rm -rf ~/.vim
-ln -sf $DIR/.vim ~/.vim
+ln -sf ${DIR}/.vim ~/.vim
 
 rm -f ~/.zshrc
-ln -sf $DIR/.zshrc ~/.zshrc
+ln -sf ${DIR}/.zshrc ~/.zshrc
 
-rm -f ~/.functions
-ln -sf $DIR/.functions ~/.functions
-ln -sf ~/dotfiles/.oh-my-zsh/custom/themes/mandy.zsh ~/.oh-my-zsh/custom/themes/mandy.zsh
+mkdir -p ${DIR}/.oh-my-zsh/custom/themes
+ln -sf ${DIR}/.oh-my-zsh/custom/themes/mandy.zsh-theme ~/.oh-my-zsh/custom/themes/mandy.zsh-theme
 
 rm -f ~/.config/redshift.conf
-ln -sf $DIR/.config/redshift.conf ~/.config/redshift.conf
+ln -sf ${DIR}/.config/redshift.conf ~/.config/redshift.conf
 
 rm -rf ~/.config/i3
-ln -sfn $DIR/.config/i3 ~/.config/i3
+ln -sfn ${DIR}/.config/i3 ~/.config/i3
 
-ln -sf $DIR/.wallpaper.jpg ~/.wallpaper.jpg
+ln -sf ${DIR}/.wallpaper.jpg ~/.wallpaper.jpg
 
 rm -rf ~/.config/gtk-3.0
-ln -sfn $DIR/.config/gtk-3.0 ~/.config/gtk-3.0
+ln -sfn ${DIR}/.config/gtk-3.0 ~/.config/gtk-3.0
 
 rm -f ~/.gtkrc-2.0
-ln -sf $DIR/.gtkrc-2.0 ~/.gtkrc-2.0
+ln -sf ${DIR}/.gtkrc-2.0 ~/.gtkrc-2.0
 
 rm -rf ~/.conkyrc
-ln -sf $DIR/.conkyrc ~/.conkyrc
+ln -sf ${DIR}/.conkyrc ~/.conkyrc
 
 rm -f ~/.screenrc
-ln -sf $DIR/.screenrc ~/.screenrc
+ln -sf ${DIR}/.screenrc ~/.screenrc
 
 rm -rf  ~/.config/dunst
-ln -sf $DIR/.config/dunst ~/.config/dunst
+ln -sf ${DIR}/.config/dunst ~/.config/dunst
 
 rm -rf ~/.config/rofi
-ln -sf $DIR/.config/rofi ~/.config/rofi
+ln -sf ${DIR}/.config/rofi ~/.config/rofi
 
 rm -rf ~/.config/terminator
-ln -sf $DIR/.config/terminator ~/.config/terminator
+ln -sf ${DIR}/.config/terminator ~/.config/terminator
 
 rm -rf ~/.config/polybar
-ln -sf $DIR/.config/polybar ~/.config/polybar
+ln -sf ${DIR}/.config/polybar ~/.config/polybar
 
 rm -rf ~/.byobu
-ln -sf $DIR/.byobu ~/.byobu
+ln -sf ${DIR}/.byobu ~/.byobu
 
 rm -rf ~/.config/fontconfig
-ln -sf $DIR/.config/fontconfig ~/.config/fontconfig
+ln -sf ${DIR}/.config/fontconfig ~/.config/fontconfig
 
 rm -f ~/.yaourtrc
-ln -sf $DIR/.yaourtrc ~/.yaourtrc
+ln -sf ${DIR}/.yaourtrc ~/.yaourtrc
 
 rm -rf ~/.config/mopidy
-ln -sf $DIR/.config/mopidy ~/.config/mopidy
+ln -sf ${DIR}/.config/mopidy ~/.config/mopidy
 
 rm -rf ~/.config/htop
-ln -sf $DIR/.config/htop ~/.config/htop
+ln -sf ${DIR}/.config/htop ~/.config/htop
 
 rm -rf ~/.screenlayout
-ln -sf $DIR/.screenlayout ~/.screenlayout
+ln -sf ${DIR}/.screenlayout ~/.screenlayout
 
 rm -rf ~/.config/sublime-text-2
-ln -sf $DIR/.config/sublime-text-2 ~/.config/sublime-text-2
+ln -sf ${DIR}/.config/sublime-text-2 ~/.config/sublime-text-2
 
 rm -f ~/z.sh
-ln -sf $DIR/z.sh ~/z.sh
+ln -sf ${DIR}/z.sh ~/z.sh
 
 rm -f ~/.xinitrc
-ln -sf $DIR/.xinitrc ~/.xinitrc
+ln -sf ${DIR}/.xinitrc ~/.xinitrc
 
 touch ~/.z
 
 
 rm -rf ~/.icons
-ln -sf $DIR/.icons ~/.icons
+ln -sf ${DIR}/.icons ~/.icons
 
 #sudo mkdir -p /etc/lightdm
 #sudo rm -f /etc/lightdm/lightm.conf
@@ -94,41 +93,38 @@ ln -sf $DIR/.icons ~/.icons
 
 
 rm -f ~/.config/compton.conf
-ln -sf $DIR/.config/compton.conf ~/.config/compton.conf
+ln -sf ${DIR}/.config/compton.conf ~/.config/compton.conf
 
 rm -rf ~/.config/beets
-ln -sf $DIR/.config/beets ~/.config/beets
+ln -sf ${DIR}/.config/beets ~/.config/beets
 
 rm -rf ~/.config/ranger
-ln -sf $DIR/.config/ranger ~/.config/ranger
+ln -sf ${DIR}/.config/ranger ~/.config/ranger
 
 rm -f ~/.gtkrc-2.0
-ln -sf $DIR/.gtkrc-2.0 ~/.gtkrc-2.0
+ln -sf ${DIR}/.gtkrc-2.0 ~/.gtkrc-2.0
 
 mv -f ~/bin ~/bin_old 2>/dev/null || echo "1" > /dev/null
 rm -rf ~/bin
-ln -sf $DIR/bin ~/bin
+ln -sf ${DIR}/bin ~/bin
 chmod +x -R ~/bin/
 
 
 rm -rf ~/.tmux
-ln -sf $DIR/.tmux ~/.tmux
+ln -sf ${DIR}/.tmux ~/.tmux
 
 ln -sf ~/.byobu/.tmux.conf ~/.tmux.conf
 
 rm -f ~/.apm-packages
-ln -sf $DIR/.apm-packages ~/.apm-packages
+ln -sf ${DIR}/.apm-packages ~/.apm-packages
 
 rm -f ~/.imwheelrc
-ln -sf $DIR/.imwheelrc ~/.imwheelrc
+ln -sf ${DIR}/.imwheelrc ~/.imwheelrc
 
 rm -f ~/.inputrc
-ln -sf $DIR/.inputrc ~/.inputrc
+ln -sf ${DIR}/.inputrc ~/.inputrc
 
 ln -sf ~/dotfiles/functions.sh ~/functions.sh
-
-
-
 
 
 killall dunst > /dev/null || echo "No dunst found"; dunst  > /dev/null 2>&1 &
@@ -145,6 +141,7 @@ $HOME/.tmux/plugins/tpm/bin/install_plugins
 if [ ! -d "$HOME/.vim/bundle/Vundle.vim" ]; then
 	git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 fi
+
 vim +PluginInstall +qall
 
 
@@ -171,6 +168,7 @@ function installZshTheme()
 
 	if [ ! -f "$HOME/.oh-my-zsh/custom/themes/$pluginDir" ]; then
 		echo "Installing ZSH theme '$pluginDir'"
+		mkdir -p  ~/.oh-my-zsh/custom/themes/
 		cd  ~/.oh-my-zsh/custom/themes/
 		curl -fLo "$pluginDir" "$pluginUrl"
 	else

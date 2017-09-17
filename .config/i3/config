@@ -29,7 +29,6 @@ bindsym $mod+Return exec xterm
 
 # kill focused window
 bindsym $mod+Shift+q kill
-bindsym Control+Shift+q kill
 
 # start dmenu (a program launcher)
 bindsym $mod+d exec "rofi -combi-modi window,run,drun -show combi -modi combi"
@@ -175,9 +174,9 @@ mode "resize" {
         bindsym Right resize grow width 10 px
 
         bindsym Shift+Left resize shrink width 50 px
-        bindsym Shift+Down resize grow height 50 px
-        bindsym Shift+Up resize shrink height 50 px
-        bindsym Shift+Right resize grow width 50 px
+        bindsym Shift+Down resize grow height 50 px 
+        bindsym Shift+Up resize shrink height 50 px 
+        bindsym Shift+Right resize grow width 50 px 
 
 
         # back to normal: Enter or Escape

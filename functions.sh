@@ -99,3 +99,36 @@ grepc()
 histcmd() {
     fc -l 1 |  awk '{line=$1; $1=""; CMD_LINE[$0]=line; CMD[$0]++;count++; for (a in CMD)print CMD[a] " " CMD_LINE[a] " " a;}' | sort -rn 
 }
+
+
+function r()
+{
+    source $HOME/.zshrc
+}
+
+
+function validate-yml()
+{
+	#!/bin/bash
+
+	#
+	# Efstathios Xagoraris <sxagoraris@gmail.com>
+	# Validate YAML files using ruby
+	#
+
+
+	if [ $# -eq 0 ]
+	  then
+		echo "Please provide a yaml file as argument eg $0 file.yaml"
+		exit 1
+	fi
+
+	ruby -ryaml -e "YAML.parse(File.open('${1}'))"
+
+	if [[ $? -ne 0 ]]
+	  then
+		echo "$1 is not valid YAML"
+	  else
+		echo "$1 is a valid YAML"
+	fi
+}
