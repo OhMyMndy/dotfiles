@@ -18,8 +18,8 @@ ln -sf ~/dotfiles/.vim ~/.vim
 rm -f ~/.zshrc
 ln -sf ~/dotfiles/.zshrc ~/.zshrc
 
-rm -rf ~/.oh-my-zsh/custom/themes
-ln -sf ~/dotfiles/.oh-my-zsh/custom/themes ~/.oh-my-zsh/custom/themes
+
+ln -sf ~/dotfiles/.oh-my-zsh/custom/themes/mandy.zsh ~/.oh-my-zsh/custom/themes/mandy.zsh
 
 rm -f ~/.config/redshift.conf
 ln -sf ~/dotfiles/.config/redshift.conf ~/.config/redshift.conf
@@ -122,6 +122,7 @@ ln -sf ~/dotfiles/.imwheelrc ~/.imwheelrc
 rm -f ~/.inputrc
 ln -sf ~/dotfiles/.inputrc ~/.inputrc
 
+ln -sf ~/dotfiles/functions.sh ~/functions.sh
 
 if [ "$dark_mode" = "1" ]; then
 	sed -E -i 's/one-light/one-dark/g' ~/.atom/config.cson > /dev/null 2>&1
@@ -151,7 +152,7 @@ function installZshPlugin()
 
 	if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/$pluginDir" ]; then
 		echo "Installing ZSH plugin '$pluginDir'"
-		git clone $pluginUrl ~/.oh-my-zsh/custom/plugins/$pluginDi
+		git clone $pluginUrl ~/.oh-my-zsh/custom/plugins/$pluginDir
 	else
 		echo "ZSH plugin '$pluginDir' is already installed"
 	fi

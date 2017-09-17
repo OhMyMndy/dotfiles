@@ -124,9 +124,7 @@ EOL
 sudo systemctl enable pulseaudio
 sudo systemctl start pulseaudio
 
-yaourt -S flatabulous-theme-git
 yaourt -S yad
-yaourt -S mosh
 
 sudo easy_install3 pip 
 pip3 install ReText
@@ -138,3 +136,7 @@ gem install teamocil
 
 
 yaourt -S xbanish
+
+yaourt -S xsel xclip
+yaourt -S paper-gtk-theme-git
+yaourt -S intellij-idea-ce
