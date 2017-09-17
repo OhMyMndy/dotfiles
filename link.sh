@@ -84,9 +84,6 @@ ln -sf ${DIR}/.xinitrc ~/.xinitrc
 touch ~/.z
 
 
-rm -rf ~/.icons
-ln -sf ${DIR}/.icons ~/.icons
-
 #sudo mkdir -p /etc/lightdm
 #sudo rm -f /etc/lightdm/lightm.conf
 #sudo cp ~/dotfiles/etc/lightdm/lightdm.conf /etc/lightdm/lightdm.conf
@@ -124,7 +121,12 @@ ln -sf ${DIR}/.imwheelrc ~/.imwheelrc
 rm -f ~/.inputrc
 ln -sf ${DIR}/.inputrc ~/.inputrc
 
-ln -sf ~/dotfiles/functions.sh ~/functions.sh
+ln -sf ${DIR}/functions.sh ~/functions.sh
+
+
+rm -f ~/.config/udiskie/config.yml
+mkdir -p ~/.config/udiskie
+ln -sf ${DIR}/.config/udiskie/config.yml ~/.config/udiskie/config.yml
 
 
 killall dunst > /dev/null || echo "No dunst found"; dunst  > /dev/null 2>&1 &

@@ -1,0 +1,7 @@
+# https://www.systutorials.com/docs/linux/man/8-udiskie-mount/
+
+
+device_config:
+  # https://help.ubuntu.com/community/AutomaticallyMountPartitions
+  - id_type: hfsplus # match file system type
+    options: "nosuid,rw"               # list of mount

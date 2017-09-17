@@ -30,27 +30,84 @@ EDITFILES=0
 EOL
 fi
 
-sudo pacman -Syu yaourt
-yaourt -Syu
+# Update packages
+
+# Update gpg keys
+# sudo pacman -Sy archlinux-keyring
+#sudo pacman-key --refresh-keys
+
+
+#yes | sudo pacman -Sy yaourt
+#yaourt -Sy
 
 ###############
 # Desktop Environment / Defaults
 ###############
-install base-devel git plymouth xorg-xauth accountsservice lightdm lightdm-gtk-greeter
-yes | yaourt -R i3-wm
-install gtk-engine-murrine i3-gaps polybar-git ttf-roboto
-install ruby rofi zsh redshift openssh chromium xcursor-dmz gtk-theme-arc-git
-# Hardcode-tray + dependencies
-install hardcode-tray sni-qt-patched-git at # lib32-sni-qt-patched-git
 
+# WM + greeter
+install base-devel git plymouth xorg-xauth accountsservice lightdm lightdm-gtk-greeter
+yes | yaourt -R i3-wm | true
+
+
+# Interface\
+install i3-gaps-git
+install gtk-engine-murrine polybar-git ttf-roboto xcursor-dmz
+
+
+# Essentials
+install unzip openssh zsh
+
+
+# Interface dependencies
+install arandr lxappearance parcellite
+install rofi redshift dunst byobu network-manager-applet
+install i3lock feh
+install xbanish xsel xclip paper-gtk-theme-git
+install yad peco
+
+
+# File managers
+install pcmanfm ranger
+
+
+# Hardcode-tray + dependencies
+install hardcode-tray sni-qt-patched-git
+
+
+# Browsers
+install chromium
+
+
+# Editors
+install vim intellij-idea-ce
+
+
+# Git tools
+install tig
+
+
+# Interpreters / compilers
+install ruby
+
+
+# Network/system utilities
+install nmap ncdu
+
+
+# Development utilities
+install meld
+
+
+# At
+install at
 sudo systemctl enable atd
 sudo systemctl start atd
 
-install dunst byobu network-manager-applet thunar ranger lxappearance parcellite udisks2 udiskie i3lock arandr unzip feh
-# Network/system utilities
-install nmap meld  yad ncdu
 
-# autokey-py3
+# Udiskie + disk utils
+install udisks2 udiskie exfat-utils
+
+
 
 # Lightdm
 sed -E 's/.*greeter-session=.*/greeter-session=lightdm-gtk-greeter/g' /etc/lightdm/lightdm.conf
@@ -69,10 +126,6 @@ sudo systemctl enable sshd
 sudo systemctl start sshd
 
 
-###############
-# Development
-###############
-install tig vim
 
 
 ###############
@@ -95,24 +148,6 @@ EOL
 
 sudo systemctl enable pulseaudio
 sudo systemctl start pulseaudio
-
-
-
-
-###############
-# Settings
-###############
-sudo dconf write /org/gnome/desktop/interface/font-name "'Sans 10'"
-sudo dconf write /org/gnome/desktop/interface/monospace-font-name "'DroidSansMonoForPowerline Nerd Font Book 9'"
-sudo dconf write /org/gnome/desktop/interface/text-scaling-factor 1
-
-
-
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-git clone git://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions
-
-
 
 
 ###############
@@ -145,9 +180,12 @@ export MAKEPKG="makepkg --skipinteg"
 install vlc qt4
 
 
+
+
 sudo easy_install3 pip
 sudo pip3 install ReText
 sudo pip3 install thefuck
+sudo pip3 install beets pylast requests
 
 sudo gem install teamocil
 
