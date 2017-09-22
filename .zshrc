@@ -41,8 +41,8 @@ fi
 
 
 # Compleat https://limpet.net/mbrubeck/2009/10/30/compleat.html``
-
-plugins=(git docker phpunit zsh-completions z zsh-autosuggestions zsh-syntax-highlighting node extract common-aliases compleat jira httpie)
+# sysadmin-util https://github.com/skx/sysadmin-util
+plugins=(git docker phpunit zsh-completions z zsh-autosuggestions zsh-syntax-highlighting node extract common-aliases compleat jira httpie zsh-peco-history sysadmin-util)
 
 if [ "$OS" = "Ubuntu" ]; then
 	plugins+=(debian)

@@ -50,10 +50,10 @@ class Default
 
         @monospace_font = "SauceCodePro Nerd Font"
         @monospace_font_style = "Regular"
-        @monospace_font_size = 10;
-        @normal_font = "Roboto"
+        @monospace_font_size = 11;
+        @normal_font = "SFNS Display"
         @normal_font_style = "Regular"
-        @normal_font_size = 9;
+        @normal_font_size = 10;
 
         @fonts = {
             "monospace"       => Font.new(@monospace_font, @monospace_font_size, @monospace_font_style),
