@@ -18,8 +18,8 @@ ln -sf ~/dotfiles/.vim ~/.vim
 rm -f ~/.zshrc
 ln -sf ~/dotfiles/.zshrc ~/.zshrc
 
-rm -rf ~/.oh-my-zsh/custom/themes
-ln -sf ~/dotfiles/.oh-my-zsh/custom/themes ~/.oh-my-zsh/custom/themes
+
+ln -sf ~/dotfiles/.oh-my-zsh/custom/themes/mandy.zsh ~/.oh-my-zsh/custom/themes/mandy.zsh
 
 rm -f ~/.config/redshift.conf
 ln -sf ~/dotfiles/.config/redshift.conf ~/.config/redshift.conf
@@ -111,6 +111,7 @@ ln -sf ~/dotfiles/.imwheelrc ~/.imwheelrc
 rm -f ~/.inputrc
 ln -sf ~/dotfiles/.inputrc ~/.inputrc
 
+ln -sf ~/dotfiles/functions.sh ~/functions.sh
 
 rm -rf ~/.config/peco
 ln -sf ~/dotfiles/.config/peco ~/.config/peco

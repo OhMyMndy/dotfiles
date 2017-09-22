@@ -61,7 +61,7 @@ class Default
         }
 
         @gtk = {
-            "theme"           => "Arc-Darker",
+            "theme"           => "Paper",
             "icon_theme"      => "Papirus",
         }
 

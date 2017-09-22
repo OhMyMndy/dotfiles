@@ -2,7 +2,7 @@
 # Any customization should be done in ~/.gtkrc-2.0.mine instead.
 
 include "/home/mandy/.gtkrc-2.0.mine"
-gtk-theme-name="Arc-Darker"
+gtk-theme-name="Paper"
 gtk-icon-theme-name="Papirus"
 gtk-font-name="SFNS Display 10"
 gtk-cursor-theme-name="DMZ-White"
