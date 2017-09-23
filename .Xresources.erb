@@ -32,11 +32,12 @@
 
 
 Xft.dpi: <%= dpi %>
+! Xft.dpi: 180
 Xft.antialias: true
 Xft.hinting: true
-Xft.rgba: none
+Xft.rgba: rgb
 Xft.autohint: false
-Xft.hintstyle: hintfull
+Xft.hintstyle: hintslight
 Xft.lcdfilter: lcddefault
 
 ! Enable the extended coloring options
@@ -112,6 +113,8 @@ XTerm*selectToClipboard:true
 XTerm*background: #000000
 XTerm*saveLines: 16384
 XTerm*loginShell: true
+XTerm*termName: xterm-256color
+XTerm*scaleHeight: 1
 
 !################
 !# URXVT settings
@@ -128,4 +131,7 @@ URxvt*font:                 <%= fonts['monospace'].to_xft %>
 URxvt*letterSpace:          0
 URxvt*scrollBar:            false
 URxvt*background:           #000000
-URxvt.termName:             xterm-256color
+!URxvt.termName:             xterm-256colorURxvt.keysym.Home: \033[1~
+URxvt.keysym.End: \033[4~
+URxvt.keysym.KP_Home: \033[1~
+URxvt.keysym.KP_End:  \033[4~

@@ -7,8 +7,8 @@ source $HOME/functions.sh
 detect_os
 
 # Compleat https://limpet.net/mbrubeck/2009/10/30/compleat.html``
-
-plugins=(git docker zsh-completions z zsh-autosuggestions zsh-syntax-highlighting extract common-aliases jira httpie)
+# sysadmin-util https://github.com/skx/sysadmin-util
+plugins=(git docker zsh-completions z zsh-autosuggestions zsh-syntax-highlighting extract common-aliases jira httpie zsh-peco-history sysadmin-util)
 
 if [ "$OS" = "Ubuntu" ]; then
     plugins+=(debian)

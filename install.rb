@@ -1,4 +1,5 @@
 require 'erb'
+require 'fileutils'
 require_relative 'functions.rb'
 
 class String
@@ -61,6 +62,10 @@ Dir.glob ['*.erb', '.config/**/*.erb'], File::FNM_DOTMATCH do |file|
     if new_content.empty? || new_content.length < 2
         puts "Content is empty"
         exit 2
+    end
+    dirname = File.dirname(new_file_name)
+    unless File.directory?(dirname)
+      FileUtils.mkdir_p(dirname)
     end
     File.open(new_file_name, 'w') { |f| f.write new_content }
 
