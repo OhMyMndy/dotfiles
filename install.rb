@@ -50,7 +50,7 @@ $root_dir = File.dirname(__FILE__)
 
 Dir.chdir $root_dir
 
-%x( bash "#{$root_dir}/link.sh" )
+Process.fork { system "bash \"#{$root_dir}/link.sh\"" }
 
 
 Dir.glob ['*.erb', '.config/**/*.erb'], File::FNM_DOTMATCH do |file|
@@ -75,9 +75,10 @@ end
 %x( xrdb -remove )
 %x( xrdb -override ~/.Xresources )
 
-%x( killall dunst > /dev/null || echo "No dunst found"; dunst  > /dev/null 2>&1 & )
+Process.fork { system "pkill dunst; dunst" }
 %x( notify-send -i /usr/share/icons/gnome/256x256/status/trophy-gold.png "Summary of the message" "Here comes the message" )
-
+Process.fork { system "xrandr --dpi #{$dpi}" }
+Process.fork { system "pkill polybar; polybar top" }
 
 #############
 # Gnome desktop settings

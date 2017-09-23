@@ -1,8 +1,8 @@
 source $HOME/z.sh
-export ZSH=/$HOME/.oh-my-zsh
+export ZSH=$HOME/.oh-my-zsh
 ZSH_THEME="mandy"
 
-source $HOME/functions.sh
+source $HOME/.functions
 
 detect_os
 

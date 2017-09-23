@@ -19,8 +19,6 @@ ln -sf ${DIR}/.vim ~/.vim
 rm -f ~/.zshrc
 ln -sf ${DIR}/.zshrc ~/.zshrc
 
-mkdir -p ${DIR}/.oh-my-zsh/custom/themes
-ln -sf ${DIR}/.oh-my-zsh/custom/themes/mandy.zsh-theme ~/.oh-my-zsh/custom/themes/mandy.zsh-theme
 
 rm -f ~/.config/redshift.conf
 ln -sf ${DIR}/.config/redshift.conf ~/.config/redshift.conf
@@ -73,6 +71,9 @@ ln -sf ${DIR}/z.sh ~/z.sh
 rm -f ~/.xinitrc
 ln -sf ${DIR}/.xinitrc ~/.xinitrc
 
+rm -rf ~/wallpapers
+ln -sf ${DIR}/wallpapers ~/wallpapers
+
 touch ~/.z
 
 
@@ -96,8 +97,7 @@ ln -sf ${DIR}/bin ~/bin
 chmod +x -R ~/bin/
 
 
-rm -rf ~/.tmux
-ln -sf ${DIR}/.tmux ~/.tmux
+mkdir -p ~/.tmux
 
 ln -sf ~/.byobu/.tmux.conf ~/.tmux.conf
 
@@ -110,16 +110,13 @@ ln -sf ${DIR}/.imwheelrc ~/.imwheelrc
 rm -f ~/.inputrc
 ln -sf ${DIR}/.inputrc ~/.inputrc
 
-ln -sf ${DIR}/functions.sh ~/functions.sh
+ln -sf ${DIR}/.functions ~/.functions
 
 
 rm -f ~/.config/udiskie/config.yml
 mkdir -p ~/.config/udiskie
 ln -sf ${DIR}/.config/udiskie/config.yml ~/.config/udiskie/config.yml
 
-
-killall dunst > /dev/null || echo "No dunst found"; dunst  > /dev/null 2>&1 &
-notify-send -i /usr/share/icons/gnome/256x256/status/trophy-gold.png "Summary of the message" "Here comes the message"
 
 rm -rf ~/.config/peco
 ln -sf ~/dotfiles/.config/peco ~/.config/peco
@@ -134,7 +131,17 @@ else
 	sed -E -i 's/one-dark/one-light/g' ~/.atom/config.cson > /dev/null 2>&1
 fi
 
-if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
+
+if [ ! -d ~/.oh-my-zsh ]; then
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+fi
+
+mkdir -p ~/.oh-my-zsh/custom/themes
+ln -sf ${DIR}/.oh-my-zsh/custom/themes/mandy.zsh-theme ~/.oh-my-zsh/custom/themes/mandy.zsh-theme
+
+
+mkdir -p ~/.tmux/plugins
+if [ ! -d "~/.tmux/plugins/tpm" ]; then
 	git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plugins/tpm/bin/install_plugins
 fi
 
@@ -284,10 +291,7 @@ function installJetbrainsPlugin() {
     set +x
 }
 set -e
-installJetbrainsPlugin 'IDEA-C' '1293-ruby'
-
-
-exit 2
+#installJetbrainsPlugin 'IDEA-C' '1293-ruby'
 
 
 installZshPlugin "git://github.com/zsh-users/zsh-autosuggestions" "zsh-autosuggestions"

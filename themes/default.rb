@@ -50,10 +50,10 @@ class Default
 
         @monospace_font = "SauceCodePro Nerd Font"
         @monospace_font_style = "Regular"
-        @monospace_font_size = 11;
+        @monospace_font_size = 10;
         @normal_font = "SFNS Display"
         @normal_font_style = "Regular"
-        @normal_font_size = 10;
+        @normal_font_size = 9;
 
         @fonts = {
             "monospace"       => Font.new(@monospace_font, @monospace_font_size, @monospace_font_style),
@@ -115,7 +115,7 @@ class Default
             "background"           => @colors['BACKGROUND'],
             "foreground"           => @colors['FOREGROUND'],
             "underline_color"      => @highlight_color,
-            "height"               => 24,
+            "height"               => "2.5%",
             "fonts"                => [
                 @fonts["normal"].to_polybar,
                 @fonts["monospace"].to_polybar

@@ -1,5 +1,5 @@
 [global]
-    font = "SFNS Display 10"
+    font = "SFNS Display 9"
     allow_markup = yes
     format = "<b><i>%s</i></b>\n%b"
     sort = yes

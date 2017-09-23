@@ -35,7 +35,7 @@ accent-light2 = ${xrdb:color4}
 ;monitor = ${env:MONITOR:HDMI-1}
 dpi = ${xrdb:Xft.dpi:-1}
 width = 100%
-height = 24
+height = 2.5%
 offset-x = 0
 offset-y = 0
 
@@ -57,9 +57,9 @@ module-margin-left = 1
 module-margin-right = 1
 
 
-font-0 = SFNS Display:style=Regular:pixelsize=10;0
+font-0 = SFNS Display:style=Regular:pixelsize=9;0
 ; font-0 = Overpass Mono:style=Regular:pixelsize=11;0
-font-1 = SauceCodePro Nerd Font:style=Regular:pixelsize=11;0
+font-1 = SauceCodePro Nerd Font:style=Regular:pixelsize=10;0
 
 modules-left = i3 xwindow mpd
 modules-center = date
@@ -68,7 +68,7 @@ modules-right = terminal monitor vpn filesystem cpu eth
 
 tray-position = right
 ;tray-padding = 0
-tray-maxsize = 12
+tray-maxsize = 40$
 ;tray-transparent = true
 
 
@@ -325,20 +325,14 @@ label-disconnected = %ifname% disconnected
 label-disconnected-foreground = ${colors.foreground-alt}
 
 [module/date]
-type = internal/date
-interval = 5
-
-date = "%d-%m-%Y"
-date-alt =
-
-time = %H:%M
-time-alt = %H:%M
-
-;format-prefix = ' '
+type=custom/script
+#type = internal/date
+interval = 30
+exec = date +"%d-%m-%Y %H:%M"
+format-prefix = " "
 format-prefix-foreground = ${colors.foreground}
-;format-underline = ${colors.primary}
+click-right = gsimplecal
 
-label = %date% %time%
 
 [module/volume]
 type = internal/volume

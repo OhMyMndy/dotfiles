@@ -2,9 +2,7 @@
 
 set -e
 
-install() {
-    yaourt --needed -S $@
-}
+source $HOME/.functions
 
 if ! grep 'QT_STYLE_OVERRIDE=gtk' /etc/environment ; then
     cat <<'EOL' | sudo tee -a /etc/environment
@@ -37,8 +35,7 @@ fi
 #sudo pacman-key --refresh-keys
 
 
-#yes | sudo pacman -Sy yaourt
-#yaourt -Sy
+yaourt -Swy # update index, do not install all updates
 
 ###############
 # Desktop Environment / Defaults
@@ -49,13 +46,13 @@ install base-devel git plymouth xorg-xauth accountsservice lightdm lightdm-gtk-g
 yes | yaourt -R i3-wm | true
 
 
-# Interface\
+# Interface
 install i3-gaps-git
 install gtk-engine-murrine polybar-git ttf-roboto xcursor-dmz
 
 
 # Essentials
-install unzip openssh zsh
+install unzip openssh zsh htop
 
 
 # Interface dependencies
@@ -63,7 +60,7 @@ install arandr lxappearance parcellite
 install rofi redshift dunst byobu network-manager-applet
 install i3lock feh
 install xbanish xsel xclip paper-gtk-theme-git
-install yad peco
+install yad peco gsimplecal
 
 
 # File managers

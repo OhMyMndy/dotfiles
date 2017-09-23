@@ -68,7 +68,7 @@ modules-right = terminal monitor vpn filesystem cpu eth
 
 tray-position = right
 ;tray-padding = 0
-tray-maxsize = 12
+tray-maxsize = 40$
 ;tray-transparent = true
 
 
@@ -325,20 +325,14 @@ label-disconnected = %ifname% disconnected
 label-disconnected-foreground = ${colors.foreground-alt}
 
 [module/date]
-type = internal/date
-interval = 5
-
-date = "%d-%m-%Y"
-date-alt =
-
-time = %H:%M
-time-alt = %H:%M
-
-;format-prefix = ' '
+type=custom/script
+#type = internal/date
+interval = 30
+exec = date +"%d-%m-%Y %H:%M"
+format-prefix = " "
 format-prefix-foreground = ${colors.foreground}
-;format-underline = ${colors.primary}
+click-right = gsimplecal
 
-label = %date% %time%
 
 [module/volume]
 type = internal/volume
