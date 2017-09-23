@@ -59,9 +59,9 @@ install unzip openssh zsh htop
 install arandr lxappearance parcellite
 install rofi redshift dunst byobu network-manager-applet
 install i3lock feh
-install xbanish xsel xclip paper-gtk-theme-git
+install xbanish xsel xclip paper-gtk-theme-git papirus-icon-theme
 install yad peco gsimplecal
-
+install volti
 
 # File managers
 install pcmanfm ranger
@@ -74,6 +74,8 @@ install hardcode-tray sni-qt-patched-git
 # Browsers
 install chromium
 
+# Chat applications
+install aur/slack-desktop
 
 # Editors
 install vim intellij-idea-ce

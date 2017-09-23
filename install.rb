@@ -79,6 +79,7 @@ Process.fork { system "pkill dunst; dunst" }
 %x( notify-send -i /usr/share/icons/gnome/256x256/status/trophy-gold.png "Summary of the message" "Here comes the message" )
 Process.fork { system "xrandr --dpi #{$dpi}" }
 Process.fork { system "pkill polybar; polybar top" }
+Process.fork { system "sudo hardcode-tray --theme Papirus --apply" }
 
 #############
 # Gnome desktop settings
