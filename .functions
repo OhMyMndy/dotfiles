@@ -20,7 +20,11 @@ randomWallpaper() {
 }
 
 setRandomWallpaper() {
-    feh
+    # Without the echo $RANDOM, result is always the same...
+    echo $RANDOM
+    wallpaper=$(randomWallpaper)
+    echo "Setting wallpaper to ${wallpaper}"
+    feh --bg-scale "${wallpaper}"
 }
 
 getInstalledPackages() {
