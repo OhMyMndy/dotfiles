@@ -53,7 +53,7 @@ Dir.chdir $root_dir
 Process.fork { system "bash \"#{$root_dir}/link.sh\"" }
 
 
-Dir.glob ['*.erb', '.config/**/*.erb'], File::FNM_DOTMATCH do |file|
+Dir.glob ['*.erb', '.byobu/*.erb', '.config/**/*.erb'], File::FNM_DOTMATCH do |file|
     new_file_name = get_new_filename file
     
 
@@ -71,7 +71,6 @@ Dir.glob ['*.erb', '.config/**/*.erb'], File::FNM_DOTMATCH do |file|
 
 end
 
-
 %x( xrdb -remove )
 %x( xrdb -override ~/.Xresources )
 
@@ -79,7 +78,7 @@ Process.fork { system "pkill dunst; dunst" }
 %x( notify-send -i /usr/share/icons/gnome/256x256/status/trophy-gold.png "Summary of the message" "Here comes the message" )
 Process.fork { system "xrandr --dpi #{$dpi}" }
 Process.fork { system "pkill polybar; polybar top" }
-Process.fork { system "sudo hardcode-tray --theme Papirus --apply" }
+# Process.fork { system "sudo hardcode-tray --theme Papirus --apply" }
 
 #############
 # Gnome desktop settings

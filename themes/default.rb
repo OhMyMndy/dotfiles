@@ -8,6 +8,7 @@ class Default
     attr_accessor :i3
     attr_accessor :polybar
     attr_accessor :dpi
+    attr_accessor :byobu
 
     def initialize dpi
         @dpi = dpi
@@ -120,6 +121,15 @@ class Default
                 @fonts["normal"].to_polybar,
                 @fonts["monospace"].to_polybar
             ]
+        }
+
+        @byobu = {
+            "color.tmux" => {
+                "dark" => @colors['BACKGROUND'],
+                "light" => @colors['FOREGROUND'],
+                "accent" => @colors['COLOR5'],
+                "hightlight" => @highlight_color,
+            }
         }
     end
 
