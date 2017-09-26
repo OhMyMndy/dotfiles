@@ -61,10 +61,10 @@ install rofi redshift dunst byobu network-manager-applet
 install i3lock feh
 install xbanish xsel xclip paper-gtk-theme-git papirus-icon-theme
 install yad peco gsimplecal
-install volti
+install volti w3m
 
 # File managers
-install pcmanfm ranger
+install pcmanfm ranger file-roller
 
 
 # Hardcode-tray + dependencies
@@ -106,7 +106,8 @@ sudo systemctl start atd
 # Udiskie + disk utils
 install udisks2 udiskie exfat-utils
 
-
+# Developer tools
+install node
 
 # Lightdm
 sed -E 's/.*greeter-session=.*/greeter-session=lightdm-gtk-greeter/g' /etc/lightdm/lightdm.conf
@@ -130,7 +131,8 @@ sudo systemctl start sshd
 ###############
 # Music
 ###############
-install pulseaudio libmpdclient mopidy mpd ncmpcpp shntool mac
+# mopidy
+install pulseaudio libmpdclient  mpd ncmpcpp shntool mac
 
 cat <<'EOL' | sudo tee /etc/systemd/system/pulseaudio.service
 [Unit]
@@ -188,5 +190,7 @@ sudo pip3 install beets pylast requests
 
 sudo gem install teamocil
 
+
+sudo npm install -g gtop vtop yarn dockly
 
 # todo purevpn, newshosting, torrent, inkdrop,yaourt

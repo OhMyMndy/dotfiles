@@ -125,6 +125,9 @@ rm -f ~/.fonts.conf
 ln -sf ~/dotfiles/.fonts.conf ~/.fonts.conf
 
 
+rm -rf ~/.distro-logos
+ln -sf ${DIR}/.distro-logos ~/.distro-logos
+
 if [ "$dark_mode" = "1" ]; then
 	sed -E -i 's/one-light/one-dark/g' ~/.atom/config.cson > /dev/null 2>&1
 else
