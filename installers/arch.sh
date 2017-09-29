@@ -187,6 +187,7 @@ sudo easy_install3 pip
 sudo pip3 install ReText
 sudo pip3 install thefuck
 sudo pip3 install beets pylast requests
+sudo pip3 install cheat
 
 sudo gem install teamocil
 

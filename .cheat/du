@@ -1,0 +1,3 @@
+# Get all files larger than 400MB only on the root disk with a max depth of 4 levels
+# older versions of du do not support -t
+sudo du -h --max-depth=4 -t400M -x / 2>/dev/null # sort by size  | sort -h

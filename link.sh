@@ -74,6 +74,9 @@ ln -sf ${DIR}/.xinitrc ~/.xinitrc
 rm -rf ~/wallpapers
 ln -sf ${DIR}/wallpapers ~/wallpapers
 
+rm -rf ~/.cheat
+ln -sf ${DIR}/.cheat ~/.cheat
+
 touch ~/.z
 
 
@@ -119,14 +122,21 @@ ln -sf ${DIR}/.config/udiskie/config.yml ~/.config/udiskie/config.yml
 
 
 rm -rf ~/.config/peco
-ln -sf ~/dotfiles/.config/peco ~/.config/peco
+ln -sf ${DIR}/.config/peco ~/.config/peco
 
 rm -f ~/.fonts.conf
-ln -sf ~/dotfiles/.fonts.conf ~/.fonts.conf
+ln -sf ${DIR}/.fonts.conf ~/.fonts.conf
 
 
 rm -rf ~/.distro-logos
 ln -sf ${DIR}/.distro-logos ~/.distro-logos
+
+rm -rf ~/.local/share/applications/HeidiSQL.desktop
+ln -sf ${DIR}/.local/share/applications/HeidiSQL.desktop ~/.local/share/applications/HeidiSQL.desktop
+
+rm -rf ~/dockerFiles
+ln -sf  ${DIR}/dockerFiles ~/dockerFiles
+
 
 if [ "$dark_mode" = "1" ]; then
 	sed -E -i 's/one-light/one-dark/g' ~/.atom/config.cson > /dev/null 2>&1
