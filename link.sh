@@ -134,6 +134,12 @@ ln -sf ${DIR}/.distro-logos ~/.distro-logos
 rm -rf ~/.local/share/applications/HeidiSQL.desktop
 ln -sf ${DIR}/.local/share/applications/HeidiSQL.desktop ~/.local/share/applications/HeidiSQL.desktop
 
+rm -rf ~/.local/share/applications/1Password.desktop
+ln -sf ${DIR}/.local/share/applications/1Password.desktop ~/.local/share/applications/1Password.desktop
+
+rm -rf ~/.local/share/applications/Wunderlist.desktop
+ln -sf ${DIR}/.local/share/applications/Wunderlist.desktop ~/.local/share/applications/Wunderlist.desktop
+
 rm -rf ~/dockerFiles
 ln -sf  ${DIR}/dockerFiles ~/dockerFiles
 

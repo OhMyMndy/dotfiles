@@ -2,6 +2,10 @@
 
 set -e
 
+install() {
+    echo "Installing '$@'"
+    yaourt --needed -S $@
+}
 source $HOME/.functions
 
 if ! grep 'QT_STYLE_OVERRIDE=gtk' /etc/environment ; then
@@ -78,7 +82,7 @@ install chromium
 install aur/slack-desktop
 
 # Editors
-install vim intellij-idea-ce
+install vim intellij-idea-ce phpstorm-jre
 
 
 # Git tools
@@ -94,7 +98,7 @@ install nmap ncdu
 
 
 # Development utilities
-install meld
+install meld node
 
 
 # At
