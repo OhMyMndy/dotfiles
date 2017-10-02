@@ -194,3 +194,13 @@ sudo gem install teamocil
 sudo npm install -g gtop vtop yarn dockly
 
 # todo purevpn, newshosting, torrent, inkdrop,yaourt
+
+
+
+# Install go
+curl -o /tmp/go.tgz https://storage.googleapis.com/golang/go1.9.linux-amd64.tar.gz
+cd /usr/local
+sudo tar xzvf /tmp/go.tgz
+
+mkdir -p ~/.go/bin/
+curl https://glide.sh/get | sh

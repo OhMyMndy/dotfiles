@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+resolution="$1" # 2880 1800 60
+output="${2:-VGA-1}"
+echo $resolution
+echo $output
+
+cvtLine=$(cvt ${resolution} | tail -1 | cut -d ' ' -f 2-200)
+
+
+
+mode=$(echo "${cvtLine}" | cut -d ' ' -f1)
+
+
+xrandr --newmode ${cvtLine}
+xrandr --addmode "${output}" ${mode}
+xrandr --output "${output}" --mode ${mode}
