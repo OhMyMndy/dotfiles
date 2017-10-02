@@ -98,6 +98,7 @@ export AUTO_TITLE=true
 export CHROMIUM_PORT=5910
 export ARCH=$(uname -m | sed 's/x86_//;s/i[3-6]86/32/')
 
+export CHEATCOLORS=true
 
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!

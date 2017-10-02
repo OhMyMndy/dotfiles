@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=HeidiSQL
+Exec=wine /home/mandy/bin/heidisql/heidisql.exe
+StartupNotify=true
+Terminal=false
+Type=Application
+Comment=HeidiSQL
+Icon=/home/mandy/bin/heidisql/HeidiSQL_logo_image.png
+Categories=Application;Development

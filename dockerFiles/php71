@@ -1,0 +1,65 @@
+FROM php:7.1.8-apache
+
+RUN apt-get update && apt-get upgrade -y
+
+RUN apt-get update \
+  && apt-get install -y curl zlib1g-dev libicu-dev g++ \
+  && rm -rf /var/lib/apt/lists/* \
+  && apt-get autoremove -y \
+  && apt-get clean \
+
+
+RUN docker-php-ext-install curl \
+  && docker-php-ext-install mysqli \
+  && docker-php-ext-install pdo_mysql \
+  && docker-php-ext-configure intl \
+  && docker-php-ext-install intl \
+  && docker-php-ext-install mbstring \
+  && docker-php-ext-install zip \
+  && pecl install apcu-5.1.5 \
+  && docker-php-ext-enable apcu
+
+
+ENV PHPREDIS_VERSION 3.1.4
+
+RUN curl -L -o /tmp/redis.tar.gz https://github.com/phpredis/phpredis/archive/$PHPREDIS_VERSION.tar.gz  \
+ && mkdir /tmp/redis \
+ && tar -xf /tmp/redis.tar.gz -C /tmp/redis \
+ && rm /tmp/redis.tar.gz \
+ && ( \
+ cd /tmp/redis/phpredis-$PHPREDIS_VERSION \
+ && phpize \
+     && ./configure \
+ && make -j$(nproc) \
+     && make install \
+ ) \
+ && rm -r /tmp/redis \
+ && docker-php-ext-enable redis
+
+# Install Composer
+RUN curl -sS https://getcomposer.org/installer | php \
+  && mv composer.phar /usr/local/bin/composer
+
+RUN chown www-data:www-data /var/www -R
+
+RUN a2enmod rewrite
+
+RUN apt-get update \
+  && apt-get install libldap2-dev less at man links lynx supervisor mailutils msmtp -y \
+  && rm -rf /var/lib/apt/lists/* \
+  && apt-get autoremove -y \
+  && apt-get clean \
+  && docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ \
+  && docker-php-ext-install ldap \
+  && docker-php-ext-enable ldap
+
+RUN apt-get update \
+  && apt-get install -y libgmp-dev \
+  && ln -s /usr/include/x86_64-linux-gnu/gmp.h /usr/include/gmp.h \
+  && docker-php-ext-install gmp bcmath \
+  && rm -rf /var/lib/apt/lists/* \
+  && apt-get autoremove -y \
+  && apt-get clean
+
+
+RUN su www-data -s /bin/bash -c "composer global require \"squizlabs/php_codesniffer=*"\"

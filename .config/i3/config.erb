@@ -152,6 +152,10 @@ bindsym $mod+Shift+c reload
 
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
+
+# restart polybar
+bindsym $mod+Shift+p killall polybar; while pgrep -x polybar >/dev/null; do sleep 1; done; polybar -r top
+
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
@@ -266,7 +270,6 @@ exec_always --no-startup-id xbanish
 bindsym $mod+Shift+greater move workspace to output right
 bindsym $mod+Shift+less move workspace to output left
 bindsym Scroll_Lock exec bash ~/.config/i3/scripts/lock
-bindsym $mod+Shift+p exec keepass2 --auto-type
 bindsym $mod+Shift+o exec ruby ~/bin/copy-tmux-sidebar-command.rb
 
 

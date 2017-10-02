@@ -50,8 +50,6 @@ $root_dir = File.dirname(__FILE__)
 
 Dir.chdir $root_dir
 
-Process.fork { system "bash \"#{$root_dir}/link.sh\"" }
-
 
 Dir.glob ['*.erb', '.byobu/*.erb', '.config/**/*.erb'], File::FNM_DOTMATCH do |file|
     new_file_name = get_new_filename file
@@ -74,18 +72,21 @@ end
 %x( xrdb -remove )
 %x( xrdb -override ~/.Xresources )
 
-Process.fork { system "pkill dunst; dunst" }
+
+
+Process.fork { system "bash \"#{$root_dir}/link.sh\" > /tmp/output-link.sh 2>&1 " }
+Process.fork { system "pkill dunst; dunst > /dev/null 2>&1 " }
 %x( notify-send -i /usr/share/icons/gnome/256x256/status/trophy-gold.png "Summary of the message" "Here comes the message" )
-Process.fork { system "xrandr --dpi #{$dpi}" }
-Process.fork { system "pkill polybar; polybar top" }
+Process.fork { system "xrandr --dpi #{$dpi} > /dev/null 2>&1 " }
+Process.fork { system "pkill polybar; polybar top >/dev/null 2>&1 " }
 # Process.fork { system "sudo hardcode-tray --theme Papirus --apply" }
 
 #############
 # Gnome desktop settings
 #############
-%x( dconf write /org/gnome/desktop/interface/font-name "'#{$theme_instance.fonts['normal'].to_gtk}'" )
-%x( dconf write /org/gnome/desktop/interface/monospace-font-name "'#{$theme_instance.fonts['monospace'].to_gtk}'" )
-%x( dconf write /org/gnome/desktop/interface/text-scaling-factor 1 )
+#%x( dconf write /org/gnome/desktop/interface/font-name "'#{$theme_instance.fonts['normal'].to_gtk}'" )
+#%x( dconf write /org/gnome/desktop/interface/monospace-font-name "'#{$theme_instance.fonts['monospace'].to_gtk}'" )
+#%x( dconf write /org/gnome/desktop/interface/text-scaling-factor 1 )
 
 #############
 # Install even better ls
