@@ -77,6 +77,9 @@ ln -sf ${DIR}/wallpapers ~/wallpapers
 rm -rf ~/.cheat
 ln -sf ${DIR}/.cheat ~/.cheat
 
+rm -rf ~/commands.txt
+ln -sf ${DIR}/commands.txt ~/commands.txt
+
 touch ~/.z
 
 

@@ -89,6 +89,7 @@ bindsym $mod+a focus parent
 
 # Execute xkill
 bindsym $mod+Escape exec "xterm -name floating -geometry 40x4 -e xkill"
+bindsym $mod+F1 exec "xterm -name floating -geometry 80x40 +ls -e '~/bin/get_history'"
 
 set $workspace1 "1"
 set $workspace2 "2"

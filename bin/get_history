@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+result=$(cat ~/commands.txt | grep -v -E '^#|^\s*$' | peco)
+
+if [ "$result" = '' ]; then
+    exit 0
+fi
+
+# remove all comments
+result=$(sed -r 's/#.*[^''";]+\s*$//g' <<< $result)
+
+display_time=$(tmux show-options -g display-time | grep -o '[0-9]*')
+
+tmux set-option -g display-time 1
+tmux display-message
+tmux set-option -g display-time $display_time
+
+export TMUX_WINDOW=$(tmux show-messages | tail -1 | grep -o 'current pane \([0-9]\)' | grep -o '[0-9]*')
+
+tmux send-keys -t "$TMUX_WINDOW" "$result"

@@ -1,0 +1,12 @@
+
+# Composer
+composer dump-autoload -o
+composer install --no-dev
+composer update
+
+
+# Docker-compose
+echo "Service name: "; read service && docker-compose stop $service; docker-compose rm -f $service; docker-compose up -d $service # Recreated single service
+
+
+

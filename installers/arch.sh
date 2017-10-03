@@ -195,3 +195,4 @@ sudo gem install teamocil
 sudo npm install -g gtop vtop yarn dockly
 
 # todo purevpn, newshosting, torrent, inkdrop,yaourt
+install fortune
