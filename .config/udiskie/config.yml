@@ -4,4 +4,9 @@
 device_config:
   # https://help.ubuntu.com/community/AutomaticallyMountPartitions
   - id_type: hfsplus # match file system type
-    options: "nosuid,rw"               # list of mount
+    options: "umask=22,rw"               # list of mount
+    ignore: true
+
+
+    # sudo mkdir -p /run/media/mandy/Data\ 2; sudo mount -t hfsplus -o force,rw /dev/sdd1 /run/media/mandy/Data\ 2
+    # sudo mkdir -p /run/media/mandy/Data; sudo mount -t hfsplus -o force,rw /dev/sdd2 /run/media/mandy/Data

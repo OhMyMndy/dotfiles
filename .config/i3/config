@@ -155,7 +155,7 @@ bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
 
 # restart polybar
-bindsym $mod+Shift+p killall polybar; while pgrep -x polybar >/dev/null; do sleep 1; done; polybar -r top
+bindsym $mod+Shift+p exec "killall polybar; while pgrep -x polybar >/dev/null; do sleep 1; done; polybar -r top"
 
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
@@ -203,13 +203,13 @@ client.urgent           #3971ed      #3971ed      #ffffff      #3971ed
 # Default workspaces
 assign [class=".*Slack$"]                                                               $workspace6
 assign [class="Thunderbird"]                                                            $workspace6
-assign [class="Google-chrome"]                                                          $workspace1
-assign [class="Chromium"]                                                               $workspace1
+#assign [class="Google-chrome"]                                                          $workspace1
+#assign [class="Chromium"]                                                               $workspace1
 assign [class="Gnome-terminal"]                                                         $workspace2
 assign [class="jetbrains-phpstorm"]                                                     $workspace4
-assign [class="Google-chrome" instance="crx_ojcflmmmcfpacggndoaaflkmcoblhnbh"]          $workspace7
 assign [class="Vmplayer"]                                                               $workspace8
-assign [title=".*Wunderlist$"]                                                          $workspace7
+assign [class=".*Wunderlist$"]                                                          $workspace7
+assign [class=".*1password"]                                                          $workspace7
 assign [class="Thunar"]                                                                 $workspace3
 assign [class="KeePass2"]                                                               $workspace5
 assign [class="KeeWeb"]                                                                 $workspace5

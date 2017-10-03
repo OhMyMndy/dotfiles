@@ -11,8 +11,8 @@ mpdupdate:
     port: 6600 
 
 smartplaylist:
-    playlist_dir: ~/MyMusic/Playlists
-    relative_to: ~/MyMusic/Playlists/
+    playlist_dir: ~/MyMusic/Playlists/dynamic/
+    relative_to: ~/MyMusic/Playlists/dynamic/
     auto: no
     playlists:
         - name: all.m3u
@@ -28,4 +28,12 @@ smartplaylist:
           query: ''
 
         - name: playlists/metal/punk-goes-pop.m3u8
-          query: 'album:punk goes pop'
+          query: ['album:"punk goes pop"', 'punkgoespop:1']
+
+        - name: playlists/metal/melodical-death-metal.m3u8
+          query:
+            - 'genre:"melodic death metal"'
+
+        - name: playlists/metal/metalcore.m3u8
+          query:
+            - 'genre:metalcore'

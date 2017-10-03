@@ -2,6 +2,10 @@
 
 set -e
 
+install() {
+    echo "Installing '$@'"
+    yaourt --needed -S $@
+}
 source $HOME/.functions
 
 if ! grep 'QT_STYLE_OVERRIDE=gtk' /etc/environment ; then
@@ -78,7 +82,7 @@ install chromium
 install aur/slack-desktop
 
 # Editors
-install vim intellij-idea-ce
+install vim intellij-idea-ce phpstorm-jre
 
 
 # Git tools
@@ -94,7 +98,7 @@ install nmap ncdu
 
 
 # Development utilities
-install meld
+install meld node
 
 
 # At
@@ -195,4 +199,15 @@ sudo gem install teamocil
 sudo npm install -g gtop vtop yarn dockly
 
 # todo purevpn, newshosting, torrent, inkdrop,yaourt
+
+
+
+# Install go
+curl -o /tmp/go.tgz https://storage.googleapis.com/golang/go1.9.linux-amd64.tar.gz
+cd /usr/local
+sudo tar xzvf /tmp/go.tgz
+
+mkdir -p ~/.go/bin/
+curl https://glide.sh/get | sh
+
 install fortune
