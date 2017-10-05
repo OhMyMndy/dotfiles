@@ -46,7 +46,7 @@ ln -sf ${DIR}/.config/polybar ~/.config/polybar
 
 rm -rf ~/.byobu
 ln -sf ${DIR}/.byobu ~/.byobu
-sudo sed -E -i 's/printf "%s"/printf/' /usr/lib/byobu/logo
+
 rm -rf ~/.config/fontconfig
 ln -sf ${DIR}/.config/fontconfig ~/.config/fontconfig
 
