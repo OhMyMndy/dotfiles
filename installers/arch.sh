@@ -192,12 +192,12 @@ sudo pip3 install ReText
 sudo pip3 install thefuck
 sudo pip3 install beets pylast requests
 sudo pip3 install cheat
+sudo pip3 install powerline-status
 
 sudo gem install teamocil
 
 
-sudo npm install -g gtop vtop yarn dockly
-
+sudo npm install -g gtop vtop yarn dockly vue-cli
 # todo purevpn, newshosting, torrent, inkdrop,yaourt
 
 

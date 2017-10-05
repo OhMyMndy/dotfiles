@@ -105,7 +105,7 @@ exit
 %x( git config --global pager.log 'diff-highlight | less' )
 %x( git config --global pager.show 'diff-highlight | less' )
 %x( git config --global pager.diff 'diff-highlight | less' )
-
+%x( git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit" )
 %x( git config --global user.name "Mandy Schoep" )
 # git config --global user.email
 
