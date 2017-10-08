@@ -76,7 +76,7 @@ end
 
 Process.fork { system "bash \"#{$root_dir}/link.sh\" > /tmp/output-link.sh 2>&1 " }
 Process.fork { system "pkill dunst; dunst > /dev/null 2>&1 " }
-%x( notify-send -i /usr/share/icons/gnome/256x256/status/trophy-gold.png "Summary of the message" "Here comes the message" )
+%x( notify-send -i /usr/share/icons/gnome/256x256/status/dialog-information.png "Fortune" "$(fortune)" )
 Process.fork { system "xrandr --dpi #{$dpi} > /dev/null 2>&1 " }
 Process.fork { system "pkill polybar; polybar top >/dev/null 2>&1 " }
 # Process.fork { system "sudo hardcode-tray --theme Papirus --apply" }
@@ -105,7 +105,7 @@ exit
 %x( git config --global pager.log 'diff-highlight | less' )
 %x( git config --global pager.show 'diff-highlight | less' )
 %x( git config --global pager.diff 'diff-highlight | less' )
-
+%x( git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit" )
 %x( git config --global user.name "Mandy Schoep" )
 # git config --global user.email
 

@@ -62,9 +62,6 @@ ln -sf ${DIR}/.config/htop ~/.config/htop
 rm -rf ~/.screenlayout
 ln -sf ${DIR}/.screenlayout ~/.screenlayout
 
-rm -rf ~/.config/sublime-text-2
-ln -sf ${DIR}/.config/sublime-text-2 ~/.config/sublime-text-2
-
 rm -f ~/z.sh
 ln -sf ${DIR}/z.sh ~/z.sh
 
@@ -76,6 +73,9 @@ ln -sf ${DIR}/wallpapers ~/wallpapers
 
 rm -rf ~/.cheat
 ln -sf ${DIR}/.cheat ~/.cheat
+
+rm -rf ~/commands.txt
+ln -sf ${DIR}/commands.txt ~/commands.txt
 
 touch ~/.z
 
@@ -134,9 +134,17 @@ ln -sf ${DIR}/.distro-logos ~/.distro-logos
 rm -rf ~/.local/share/applications/HeidiSQL.desktop
 ln -sf ${DIR}/.local/share/applications/HeidiSQL.desktop ~/.local/share/applications/HeidiSQL.desktop
 
+rm -rf ~/.local/share/applications/1Password.desktop
+ln -sf ${DIR}/.local/share/applications/1Password.desktop ~/.local/share/applications/1Password.desktop
+
+rm -rf ~/.local/share/applications/Wunderlist.desktop
+ln -sf ${DIR}/.local/share/applications/Wunderlist.desktop ~/.local/share/applications/Wunderlist.desktop
+
 rm -rf ~/dockerFiles
 ln -sf  ${DIR}/dockerFiles ~/dockerFiles
 
+rm -rf ~/.config/powerline
+ln -sf  ${DIR}/.config/powerline ~/.config/powerline
 
 if [ "$dark_mode" = "1" ]; then
 	sed -E -i 's/one-light/one-dark/g' ~/.atom/config.cson > /dev/null 2>&1
@@ -158,6 +166,8 @@ if [ ! -d "~/.tmux/plugins/tpm" ]; then
 	git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plugins/tpm/bin/install_plugins
 fi
 
+# do not scroll down on copying
+sed -E -i 's/copy-pipe-and-cancel/copy-pipe/g' ~/.tmux/plugins/tmux-yank/yank.tmux
 tmux source ~/.tmux.conf
 $HOME/.tmux/plugins/tpm/bin/install_plugins
 

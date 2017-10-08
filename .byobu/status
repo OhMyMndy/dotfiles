@@ -22,6 +22,11 @@
 
 # Status beginning with '#' are disabled.
 
+distro=$(lsb_release -si 2>/dev/null)
+if [ "$distro" = "Ubuntu" ]; then
+    LOGO=$(bash -c 'printf " \uf30c  \n"')
+fi
+
 # Screen has two status lines, with 4 quadrants for status
 screen_upper_left="color"
 screen_upper_right="color whoami hostname ip_address menu"
