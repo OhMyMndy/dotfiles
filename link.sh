@@ -16,10 +16,6 @@ ln -sf ~/dotfiles/.dircolors ~/.dircolors
 rm -rf ~/.vim
 ln -sf ${DIR}/.vim ~/.vim
 
-rm -f ~/.zshrc
-ln -sf ${DIR}/.zshrc ~/.zshrc
-
-
 rm -f ~/.config/redshift.conf
 ln -sf ${DIR}/.config/redshift.conf ~/.config/redshift.conf
 
@@ -159,6 +155,10 @@ fi
 
 mkdir -p ~/.oh-my-zsh/custom/themes
 ln -sf ${DIR}/.oh-my-zsh/custom/themes/mandy.zsh-theme ~/.oh-my-zsh/custom/themes/mandy.zsh-theme
+
+
+rm -f ~/.zshrc
+ln -sf ${DIR}/.zshrc ~/.zshrc
 
 
 mkdir -p ~/.tmux/plugins
