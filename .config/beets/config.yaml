@@ -2,7 +2,7 @@ directory: ~/MyMusic/Music/                   # Where does the music live?
 library: ~/MyMusic/musiclibrary.blb  # Where does the beets database live?
 import:
     move: yes                              # Move your files to ~/Music/beets after import
-plugins: lastgenre fetchart ftintitle smartplaylist random embedart # mpdupdate
+plugins: lastgenre fetchart ftintitle smartplaylist random embedart info duplicates # mpdupdate
 embedart:
     auto: yes 
 
@@ -18,8 +18,8 @@ smartplaylist:
         - name: all.m3u
           query: ''                  # Matches all music in your library
 
-        - name: languages/Russian.m3u8
-          query: 'language:Russian'
+        - name: languages/$language.m3u8
+          query: ''
 
         - name: artists/$artist.m3u8
           query: ''
