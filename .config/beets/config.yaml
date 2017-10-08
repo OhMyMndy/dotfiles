@@ -16,7 +16,7 @@ smartplaylist:
     auto: no
     playlists:
         - name: all.m3u
-          query: ''                  # Matches all music in your library
+          query: ''
 
         - name: languages/$language.m3u8
           query: ''
@@ -29,11 +29,3 @@ smartplaylist:
 
         - name: playlists/metal/punk-goes-pop.m3u8
           query: ['album:"punk goes pop"', 'punkgoespop:1']
-
-        - name: playlists/metal/melodical-death-metal.m3u8
-          query:
-            - 'genre:"melodic death metal"'
-
-        - name: playlists/metal/metalcore.m3u8
-          query:
-            - 'genre:metalcore'

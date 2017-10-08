@@ -1,25 +1,33 @@
 #!/usr/bin/env ruby
 
 $remote_folder = "Music/"
-$remote_volume = "/Volumes/DAP1"
-$local_folder = "/Volumes/Data/Music"
-cmd = "/usr/local/Cellar/rsync/3.1.2/bin/rsync -hrt --info=progress2 --no-i-r #{$local_folder} #{$remote_volume}"
-puts cmd
-%x( #{cmd} )
+$remote_volume = "/Volumes/DAP1/Music"
+$local_folder = "rsync://192.168.0.120:12000/files"
+#cmd = "/usr/local/Cellar/rsync/3.1.2/bin/rsync -hrt --info=progress2 --no-i-r #{$local_folder} #{$remote_volume}"
+#cmd = "/usr/local/Cellar/rsync/3.1.2/bin/rsync -hrt --info=progress2 #{$local_folder} #{$remote_volume}"
+#cmd ="usr/local/Cellar/rsync/3.1.2/bin/rsync -hrtaz --info=progress2 -e 'ssh -T -o Compression=no -x' mandy@192.168.0.120:/tank/media/music/ /Volumes/DAP1/Music"
+#puts cmd
+#%x( #{cmd} )
 
-Dir.chdir $remote_volume + "/Music/Playlists"
+Dir.chdir $remote_volume + "/Playlists"
 playlists = Dir.glob('**/*.m3u*')
 
 
 playlists.each do |playlist|
     # puts playlist
-    folder_count = playlist.scan(/\//).count + 2
+    folder_count = playlist.scan(/\//).count + 1
+    #file_prefix = '../' * folder_count + $remote_folder
+    file_prefix = '../' * folder_count
 
-    file_prefix = '../' * folder_count + $remote_folder
-    file_prefix.gsub!(/\//, '\\')
+    #puts playlist
+    #puts file_prefix
+    #puts folder_count
+    #exit 2
+
+    #file_prefix.gsub!(/\//, '\\')
     contents = File.read playlist
     contents.gsub!(file_prefix, '')
-    contents.gsub!(/^\.\.[\/\\]/, '')
+    contents.gsub!(/\.\.[\/\\]/, '')
     # file_prefix = $remote_folder
     new_content = ''
     contents.each_line { |line| new_content << file_prefix + line }
