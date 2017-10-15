@@ -142,6 +142,10 @@ ln -sf  ${DIR}/dockerFiles ~/dockerFiles
 rm -rf ~/.config/powerline
 ln -sf  ${DIR}/.config/powerline ~/.config/powerline
 
+rm -rf ~/.mpdconf
+ln -sf  ${DIR}/.mpdconf ~/.mpdconf
+
+
 if [ "$dark_mode" = "1" ]; then
 	sed -E -i 's/one-light/one-dark/g' ~/.atom/config.cson > /dev/null 2>&1
 else
