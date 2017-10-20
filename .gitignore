@@ -15,3 +15,4 @@ sublime-text-2
 sublime-text-3
 *.vscode
 .history/*
+*node_modules*

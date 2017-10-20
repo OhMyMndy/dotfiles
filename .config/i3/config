@@ -89,7 +89,7 @@ bindsym $mod+a focus parent
 
 # Execute xkill
 bindsym $mod+Escape exec "xterm -name floating -geometry 40x4 -e xkill"
-bindsym $mod+F1 exec "xterm -name floating -geometry 80x40 +ls -e '~/bin/get_history'"
+bindsym $mod+F1 exec "xterm -name floating -geometry 80x40 +ls -e '~/bin/get_commands'"
 
 set $workspace1 "1"
 set $workspace2 "2"
@@ -241,20 +241,11 @@ exec --no-startup-id redshift
 exec --no-startup-id xrandr --output HDMI2 --mode 1920x1080 --pos 1920x0 --rotate normal --output HDMI1 --primary --mode 1920x1080 --pos 3840x0 --rotate normal --output VIRTUAL1 --off --output DP1 --off
 exec --no-startup-id parcellite
 exec --no-startup-id nm-applet
-exec --no-startup-id volumeicon
 exec --no-startup-id keeweb
-exec --no-startup-id mopidy
 exec --no-startup-id udiskie
-exec --no-startup-id autokey-gtk
 exec --no-startup-id slack
-#exec --no-startup-id thunderbird
 #exec --no-startup-id google-chrome
 #exec --no-startup-id gnome-terminal
-#exec --no-startup-id pstorm
-#exec --no-startup-id conky
-#exec --no-startup-id pstorm
-#exec google-chrome --profile-directory=Default --app-id=ojcflmmmcfpacggndoaaflkmcoblhnbh
-#exec --no-startup-id thunar 
 
 
 # Exec always
@@ -262,10 +253,11 @@ exec_always --no-startup-id killall imwheel; imwheel
 exec_always --no-startup-id killall polybar; while pgrep -x polybar >/dev/null; do sleep 1; done; polybar -r top
 exec_always --no-startup-id killall dunst; dunst 2>/dev/null
 exec_always --no-startup-id bash -c "source ~/.functions; setRandomWallpaper"
-exec_always --no-startup-id volti
+#exec_always --no-startup-id volti
 # exec_always --no-startup-id wmname LG3D
 exec_always --no-startup-id compton --xrender-sync-fence
 exec_always --no-startup-id xbanish
+exec_always --no-startup-id pkill -f volumeicon; volumeicon
 
 # Custom bindsym
 bindsym $mod+Shift+greater move workspace to output right
@@ -273,7 +265,27 @@ bindsym $mod+Shift+less move workspace to output left
 bindsym Scroll_Lock exec bash ~/.config/i3/scripts/lock
 bindsym $mod+Shift+o exec ruby ~/bin/copy-tmux-sidebar-command.rb
 
+# Pulse Audio controls
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% #increase sound volume
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% #decrease sound volume
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # mute sound
 
+
+# Media player controls
+bindsym XF86AudioPlay exec mpc play
+bindsym XF86AudioPause exec mpc pause
+bindsym XF86AudioNext exec mpc next
+bindsym XF86AudioPrev exec mpc prev
+
+
+bindsym $mod+ctrl+u exec mpc prev
+bindsym $mod+ctrl+i exec mpc stop
+bindsym $mod+ctrl+o exec mpc toggle
+bindsym $mod+ctrl+p exec mpc next
+
+# Screen brightness controls
+bindsym XF86MonBrightnessUp exec xbacklight -inc 20 # increase screen brightness
+bindsym XF86MonBrightnessDown exec xbacklight -dec 20 # decrease screen brightness
 
 # Gaps
 gaps inner 2

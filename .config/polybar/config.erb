@@ -50,21 +50,20 @@ underline-color = <%= polybar['underline_color'] %>
 ;border-bottom-size = 2
 ;border-bottom-color = ${colors.accent-dark1}
 
-padding-left = 1
-padding-right = 1
+padding-left = 2
+padding-right = 2
 
 module-margin-left = 1
 module-margin-right = 1
 
 
 font-0 = <%= polybar['fonts'][0] %>
-; font-0 = Overpass Mono:style=Regular:pixelsize=11;0
 font-1 = <%= polybar['fonts'][1] %>
 
-modules-left = i3 xwindow mpd
+modules-left = i3 xwindow
 modules-center = date
 ; xwindow
-modules-right = terminal monitor vpn filesystem cpu eth
+modules-right = mpd terminal monitor vpn filesystem cpu eth
 
 tray-position = right
 ;tray-padding = 0
@@ -74,7 +73,7 @@ tray-maxsize = 15%
 
 [module/xwindow]
 type = internal/xwindow
-label = %title:0:30:...%
+label = "%title:0:80:...%"
 
 [module/xkeyboard]
 type = internal/xkeyboard
@@ -208,7 +207,7 @@ ws-icon-9 = 10;
 [module/mpd]
 type = internal/mpd
 
-format-online = <label-song>     <label-time>  <bar-progress>  <icon-prev> <icon-seekb> <icon-stop> <toggle> <icon-seekf> <icon-next>  <icon-repeat> <icon-random>
+format-online = "<icon-prev> <icon-seekb> <icon-stop> <toggle> <icon-seekf> <icon-next>  <icon-repeat> <icon-random>  <label-song>     <label-time>  <bar-progress>  "
 
 ; Available tokens:
 ;   %artist%
@@ -218,16 +217,16 @@ format-online = <label-song>     <label-time>  <bar-progress>  <icon-prev> <icon
 ; Default: %artist% - %title%
 label-song = "%artist% - %title%"
 
-icon-prev = 
-icon-seekb = 
-icon-stop = 
-icon-play = 
-icon-pause = 
-icon-next = 
-icon-seekf = 
+icon-prev = " "
+icon-seekb = " "
+icon-stop = " "
+icon-play = " "
+icon-pause = " "
+icon-next = " "
+icon-seekf = " "
 
-icon-random = 
-icon-repeat = 
+icon-random = " "
+icon-repeat = " "
 
 bar-progress-width = 15
 bar-progress-indicator = 
@@ -328,7 +327,7 @@ label-disconnected-foreground = ${colors.foreground-alt}
 type=custom/script
 #type = internal/date
 interval = 30
-exec = date +"%d-%m-%Y %H:%M"
+exec = date +"%a %d-%m-%Y %H:%M"
 ;format-prefix = " "
 ;format-prefix-foreground = ${colors.foreground}
 click-right = gsimplecal

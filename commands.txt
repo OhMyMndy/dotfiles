@@ -1,12 +1,13 @@
 
 # Composer
-composer dump-autoload -o
-composer install --no-dev
-composer update
+ `# Composer - Dump autoload #` composer dump-autoload -o
+ `# Composer - Install #` composer install --no-dev
+ `# Composer - Update #` composer update
 
 
 # Docker-compose
-echo "Service name: "; read service && docker-compose stop $service; docker-compose rm -f $service; docker-compose up -d $service # Recreated single service
-
+ `# docker-compose - Recreate single service #` echo "Service name: "; read service && docker-compose stop $service; docker-compose rm -f $service; docker-compose up -d $service
+ `# docker-compose - Log service #` echo "Service name: "; read service && while true; do docker-compose logs --tail 10 -f $service; sleep 2; done
+ `# docker-compose - Force service up #` echo "Service name: "; read service && docker-compose up -d --force-recreate $service
 
 

@@ -73,6 +73,9 @@ ln -sf ${DIR}/.cheat ~/.cheat
 rm -rf ~/commands.txt
 ln -sf ${DIR}/commands.txt ~/commands.txt
 
+rm -rf ~/.mpdconf
+ln -sf ${DIR}/.mpdconf ~/.mpdconf
+
 touch ~/.z
 
 
@@ -142,6 +145,8 @@ ln -sf  ${DIR}/dockerFiles ~/dockerFiles
 rm -rf ~/.config/powerline
 ln -sf  ${DIR}/.config/powerline ~/.config/powerline
 
+touch ~/custom_commands.txt
+
 if [ "$dark_mode" = "1" ]; then
 	sed -E -i 's/one-light/one-dark/g' ~/.atom/config.cson > /dev/null 2>&1
 else
@@ -166,8 +171,6 @@ if [ ! -d "~/.tmux/plugins/tpm" ]; then
 	git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plugins/tpm/bin/install_plugins
 fi
 
-# do not scroll down on copying
-sed -E -i 's/copy-pipe-and-cancel/copy-pipe/g' ~/.tmux/plugins/tmux-yank/yank.tmux
 tmux source ~/.tmux.conf
 $HOME/.tmux/plugins/tpm/bin/install_plugins
 
