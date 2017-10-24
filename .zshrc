@@ -2,6 +2,8 @@ source $HOME/z.sh
 export ZSH=$HOME/.oh-my-zsh
 ZSH_THEME="mandy"
 
+zshaddhistory() { whence ${${(z)1}[1]} >| /dev/null || return 1 }
+
 source $HOME/.functions
 
 detect_os
@@ -92,6 +94,7 @@ export EDITOR='vim'
 export IP_ADDRESS=$(ip -4 route get 1 | head -1 | awk '{print $7}' )
 export GID=$(id -g)
 export UID=$(id -u)
+export DOCKER_GID=$(getent group docker 2>/dev/null)
 export TZ='Europe/Brussels'
 export DISABLE_AUTO_TITLE="false"
 export AUTO_TITLE=true
