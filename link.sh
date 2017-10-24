@@ -343,7 +343,7 @@ installFont "https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/D
 installFont "https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/DejaVuSansMono/Regular/complete/DejaVu%20Sans%20Mono%20Nerd%20Font%20Complete.ttf" "DejaVu Sans Mono Nerd Font Complete.ttf"
 
 installFontsFromZip "https://github.com/RedHatBrand/Overpass/releases/download/3.0.2/overpass-desktop-fonts.zip" "overpass"
-installFontsFromZip "https://github.com/supermarin/YosemiteSanFranciscoFont/archive/master.zip" "sanfrancisco"
+installFontsFromZip "https://github.com/AppleDesignResources/SanFranciscoFont/archive/master.zip" "sanfrancisco"
 installFontsFromZip "http://dl.1001fonts.com/alte-din-1451-mittelschrift.zip" "din-1451"
 
 fc-cache -f -v
