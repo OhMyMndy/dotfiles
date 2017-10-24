@@ -119,6 +119,7 @@ class Default
             "height"               => "2.5%",
             "fonts"                => [
                 @fonts["normal"].to_polybar,
+                "Roboto:style=Regular:pixelsize=9;0",
                 @fonts["monospace"].to_polybar
             ]
         }
