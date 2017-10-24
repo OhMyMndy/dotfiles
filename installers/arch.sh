@@ -211,4 +211,4 @@ sudo tar xzvf /tmp/go.tgz
 mkdir -p ~/.go/bin/
 curl https://glide.sh/get | sh
 
-install fortune pdftotext rmlint
+install fortune-mod pdftotext rmlint
