@@ -75,6 +75,8 @@ install pcmanfm ranger file-roller
 install hardcode-tray sni-qt-patched-git
 
 
+install coreutils
+
 # Browsers
 install chromium
 
@@ -135,8 +137,7 @@ sudo systemctl start sshd
 ###############
 # Music
 ###############
-# mopidy
-install pulseaudio libmpdclient  mpd ncmpcpp shntool mac
+install pulseaudio libmpdclient  mpd ncmpcpp shntool mac alsa-utils
 
 cat <<'EOL' | sudo tee /etc/systemd/system/pulseaudio.service
 [Unit]
@@ -210,4 +211,4 @@ sudo tar xzvf /tmp/go.tgz
 mkdir -p ~/.go/bin/
 curl https://glide.sh/get | sh
 
-install fortune pdftotext rmlint
+install fortune-mod pdftotext rmlint

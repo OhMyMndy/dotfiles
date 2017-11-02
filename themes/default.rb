@@ -53,7 +53,7 @@ class Default
         @monospace_font = "SauceCodePro Nerd Font"
         @monospace_font_style = "Regular"
         @monospace_font_size = 10;
-        @normal_font = "SFNS Display"
+        @normal_font = "San Francisco Display"
         @normal_font_style = "Regular"
         @normal_font_size = 9;
 
