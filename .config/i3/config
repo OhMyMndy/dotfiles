@@ -195,10 +195,10 @@ bindsym $mod+r mode "resize"
 
 # window colors
 #                       border       background   text         indicator
-client.focused          #888888      #888888      #1d1f21      #3971ed
+client.focused          #555555      #555555      #eeeeee      #3971ed
 client.unfocused        #1d1f21      #1d1f21      #eeeeee      #3971ed
 client.focused_inactive #1d1f21      #1d1f21      #eeeeee      #3971ed
-client.urgent           #3971ed      #3971ed      #ffffff      #3971ed
+client.urgent           #fba922      #fba922      #ffffff      #3971ed
 
 # Default workspaces
 assign [class=".*Slack$"]                                                               $workspace6

@@ -31,6 +31,10 @@ if [ -f $HOME/.bash_aliases ]; then
     source $HOME/.bash_aliases
 fi
 
+if [ -f $HOME/.profile ]; then
+    source $HOME/.profile
+fi
+
 
 if [ -f $HOME/.oh-my-zsh/oh-my-zsh.sh ]; then
     source $HOME/.oh-my-zsh/oh-my-zsh.sh
@@ -91,23 +95,12 @@ export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 export VISUAL="vim"
 export EDITOR='vim'
-export IP_ADDRESS=$(ip -4 route get 1 | head -1 | awk '{print $7}' )
-export GID=$(id -g)
-export UID=$(id -u)
-export DOCKER_GID=$(getent group docker 2>/dev/null)
 export TZ='Europe/Brussels'
 export DISABLE_AUTO_TITLE="false"
 export AUTO_TITLE=true
-export CHROMIUM_PORT=5910
 export ARCH=$(uname -m | sed 's/x86_//;s/i[3-6]86/32/')
 
 export CHEATCOLORS=true
-
-
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR="/home/mandy/.sdkman"
-[[ -s "~/.sdkman/bin/sdkman-init.sh" ]] && source "~/.sdkman/bin/sdkman-init.sh"
-
 
 setup_lsi
 
@@ -124,7 +117,3 @@ ln -sf $(find /tmp -maxdepth 2 -type s -name "agent*" -user $USER -printf '%T@ %
 
 export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock
 
-
-export LOCAL_DOCKER_DIR='/var/www/docker/'
-export LOCAL_PHING_DIR='/var/www/phing/'
-export LOCAL_PROJECT_DIR='/var/www/html/'

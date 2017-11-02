@@ -8,7 +8,7 @@ local SEGMENT_SEPARATOR="\ue0b0"
 
 # primary prompt
 PROMPT='$FG[237]------------------------------------------------------------%{$reset_color%}
-%{$FG[154]%} %n %{$reset_color%}%{$FG[208]%}@ %{$FG[171]%}%m \
+%{$bg[3]%} %n %{$reset_color%}%{$FG[208]%}@ %{$FG[171]%}%m \
 %{$FG[117]%}%~\
 $(git_prompt_info) \
 %{$FG[117]%}%(!.#.»)%{$reset_color%} '
