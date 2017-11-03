@@ -53,13 +53,20 @@ class Default
         @monospace_font = "SauceCodePro Nerd Font"
         @monospace_font_style = "Regular"
         @monospace_font_size = 10;
+
         @normal_font = "San Francisco Display"
         @normal_font_style = "Regular"
-        @normal_font_size = 9;
+        @normal_font_size = 10;
+
+        @normal_font_alternative = "Roboto"
+        @normal_font_style_alternative = "Regular"
+        @normal_font_size_alternative = 10;
 
         @fonts = {
-            "monospace"       => Font.new(@monospace_font, @monospace_font_size, @monospace_font_style),
-            "normal"          => Font.new(@normal_font, @normal_font_size, @normal_font_style)
+            "monospace"           => Font.new(@monospace_font, @monospace_font_size, @monospace_font_style),
+            "normal"              => Font.new(@normal_font, @normal_font_size, @normal_font_style),
+             # Fall back to Roboto for Cyrillic in Polybar
+            "normal_alternative"  => Font.new(@normal_font_alternative, @normal_font_size_alternative, @normal_font_style_alternative)
         }
 
         @gtk = {
@@ -123,6 +130,7 @@ class Default
             "height"               => "28px",
             "fonts"                => [
                 @fonts["normal"].to_polybar(nil, -1),
+                @fonts["normal_alternative"].to_polybar(nil, -1),
                 @fonts["monospace"].to_polybar
             ]
         }

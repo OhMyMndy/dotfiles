@@ -62,8 +62,10 @@ module-margin-right = 2
 
 font-0 = <%= polybar['fonts'][0] %>
 font-1 = <%= polybar['fonts'][1] %>
+font-2 = <%= polybar['fonts'][2] %>
 
-modules-left = i3  ; window
+modules-left = i3
+; window
 modules-center = date
 ; xwindow
 modules-right = mpd terminal monitor vpn filesystem cpu eth
@@ -110,7 +112,7 @@ interval = 9000
 
 [module/terminal]
 type=custom/script
-click-left = terminator
+click-left = termite
 exec = echo " "
 interval = 9000
 ; format-underline = ${colors.accent-dark3}
@@ -155,27 +157,27 @@ format = <label-state> <label-mode>
 index-sort = true
 wrapping-scroll = false
 
-label-padding = 2
+label-padding = 6
 
-label-mode-padding = 2
+label-mode-padding = 6
 label-mode-foreground = <%= polybar['inactive_color'] %>
 ;label-mode-background = ${colors.primary}
 
 label-focused = "%icon%"
 label-focused-foreground = ${colors.foreground}
-label-focused-padding = 2
+label-focused-padding = 6
 
 label-unfocused = "%icon%"
 label-unfocused-foreground = <%= polybar['inactive_color'] %>
-label-unfocused-padding = 2
+label-unfocused-padding = 6
 
 label-urgent = "%icon%!"
 label-urgent-foreground = <%= polybar['urgent_color'] %>
-label-urgent-padding = 2
+label-urgent-padding = 6
 
 label-visible = "%icon%"
 label-visible-foreground = <%= polybar['inactive_color'] %>
-label-visible-padding = 2
+label-visible-padding = 6
 
 ws-icon-0 = 1;
 ws-icon-1 = 2;

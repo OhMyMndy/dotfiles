@@ -47,7 +47,7 @@ class Font
 
     def to_polybar (size=nil, offset=nil)
         size = @size if size == nil
-        size = size * 1.25
+        size = size * 1.15
         offset = 0 if offset == nil
         # DejaVuSansMono Nerd Font:style=Book:pixelsize=11;0
         if @style
