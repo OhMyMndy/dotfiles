@@ -31,13 +31,13 @@ class Default
             "COLOR5"         => "#a36ac7",
             "COLOR13"        => "#a36ac7",
 
-            "COLOR6"         => "#3971ed",
-            "COLOR14"        => "#3971ed",
+            "COLOR6"         => "#1045ed",
+            "COLOR14"        => "#1045ed",
 
             "COLOR7"         => "#ffffff",
             "COLOR15"        => "#ffffff",
 
-            "COLOR16"        => "#888888",
+            "COLOR16"        => "#555555",
 
             "BACKGROUND"     => "#1d1f21",
             "FOREGROUND"     => "#eeeeee",
@@ -45,20 +45,28 @@ class Default
         dark_mode_file = Dir.home + '.dark-mode'
         @dark_mode = File.read(dark_mode_file) if File.exists?(dark_mode_file)
 
-        @highlight_color = @colors['COLOR2']
-        @urgent_color = @colors['COLOR6']
+        @highlight_color = @colors['COLOR6']
+        @urgent_color = @colors['COLOR3']
+        @inactive_color = @colors['COLOR16']
 
 
         @monospace_font = "SauceCodePro Nerd Font"
         @monospace_font_style = "Regular"
         @monospace_font_size = 10;
+
         @normal_font = "San Francisco Display"
         @normal_font_style = "Regular"
-        @normal_font_size = 9;
+        @normal_font_size = 10;
+
+        @normal_font_alternative = "Roboto"
+        @normal_font_style_alternative = "Regular"
+        @normal_font_size_alternative = 10;
 
         @fonts = {
-            "monospace"       => Font.new(@monospace_font, @monospace_font_size, @monospace_font_style),
-            "normal"          => Font.new(@normal_font, @normal_font_size, @normal_font_style)
+            "monospace"           => Font.new(@monospace_font, @monospace_font_size, @monospace_font_style),
+            "normal"              => Font.new(@normal_font, @normal_font_size, @normal_font_style),
+             # Fall back to Roboto for Cyrillic in Polybar
+            "normal_alternative"  => Font.new(@normal_font_alternative, @normal_font_size_alternative, @normal_font_style_alternative)
         }
 
         @gtk = {
@@ -70,14 +78,15 @@ class Default
             "global"          => {
                 "font"            => @fonts['normal'].to_dunst,
                 "format"          => "<b><i>%s</i></b>\\n%b",
-                "separator_color" => @colors['COLOR4'],
+                "separator_color" => @colors['COLOR1'],
                 "geometry"        => "360x6-6+32",
                 "separator_height"=> 2,
-                "padding"         => 12,
-                "horizontal_padding" => 12,
+                "padding"         => 10,
+                "horizontal_padding" => 10,
             },
             "frame"     => {
-                "color" => @colors['COLOR2'],
+                "color" => @colors['COLOR6'],
+                "width" => 1
             },
             "urgency_low"     => {
                 "background"  => @colors['BACKGROUND'],
@@ -100,7 +109,7 @@ class Default
             "font" => @fonts["normal"].to_gtk,
             "border" => 2,
             "client" => {
-                "focused"           => I3Colors.new(@colors['COLOR16'], @colors['COLOR16'], @colors['COLOR0'], @colors['COLOR4']),
+                "focused"           => I3Colors.new(@colors['COLOR16'], @colors['COLOR16'], @colors['FOREGROUND'], @colors['COLOR4']),
                 "unfocused"         => I3Colors.new(@colors['COLOR0'], @colors['COLOR0'], @colors['FOREGROUND'], @colors['COLOR4']),
                 "focused_inactive"  => I3Colors.new(@colors['COLOR0'], @colors['COLOR0'], @colors['FOREGROUND'], @colors['COLOR4']),
                 "urgent"            => I3Colors.new(@urgent_color, @urgent_color, @colors['COLOR7'], @colors['COLOR4']),
@@ -115,11 +124,13 @@ class Default
         @polybar = {
             "background"           => @colors['BACKGROUND'],
             "foreground"           => @colors['FOREGROUND'],
-            "underline_color"      => @highlight_color,
-            "height"               => "2.5%",
+            "highlight_color"      => @highlight_color,
+            "urgent_color"         => @urgent_color,
+            "inactive_color"       => @inactive_color,
+            "height"               => "28px",
             "fonts"                => [
-                @fonts["normal"].to_polybar,
-                "Roboto:style=Regular:pixelsize=9;0",
+                @fonts["normal"].to_polybar(nil, -1),
+                @fonts["normal_alternative"].to_polybar(nil, -1),
                 @fonts["monospace"].to_polybar
             ]
         }
@@ -128,7 +139,7 @@ class Default
             "color.tmux" => {
                 "dark" => @colors['BACKGROUND'],
                 "light" => @colors['FOREGROUND'],
-                "accent" => @colors['COLOR5'],
+                "accent" => @urgent_color,
                 "hightlight" => @highlight_color,
             }
         }

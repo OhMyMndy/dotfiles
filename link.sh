@@ -76,6 +76,9 @@ ln -sf ${DIR}/commands.txt ~/commands.txt
 rm -rf ~/.mpdconf
 ln -sf ${DIR}/.mpdconf ~/.mpdconf
 
+rm -rf ~/.myclirc
+ln -sf ${DIR}/.myclirc ~/.myclirc
+
 touch ~/.z
 
 
@@ -360,3 +363,25 @@ fi
 
 
 mkdir -p $HOME/.ssh/sockets
+
+function sedeasy {
+    sed -i "s/.*$(echo $1 | sed -e 's/\([[\/.*]\|\]\)/\\&/g').*$/$(echo $2 | sed -e 's/[\/&]/\\&/g')/g" $3
+}
+
+function addToProfile() {
+    var="$1"
+    value="$2"
+
+    newline="export $var=$value"
+    if grep -q "export $var=" ~/.profile; then
+        sedeasy "export $var=" "$newline" ~/.profile
+    else
+        echo "$newline" | tee -a ~/.profile >/dev/null
+    fi
+}
+
+addToProfile 'IP_ADDRESS' '$(ip -4 route get 1 | head -1 | awk "{print \$7}" )'
+addToProfile 'UID' '$(id -u)'
+addToProfile 'GID' '$(id -g)'
+addToProfile 'DOCKER_GID' '$(getent group docker 2>/dev/null | cut -d: -f3 )'
+

@@ -4,7 +4,7 @@
 
 set -g pane-active-border-fg white
 set -g pane-border-status top
-set -g pane-border-format "#{pane_index} #T"
+set -g pane-border-format " #{pane_index} #T "
 #set-option -s set-clipboard off
 
 # don't rename windows automatically
@@ -20,7 +20,8 @@ set-option -g history-limit 10000
 
 set -g status-right '#{?pane_synchronized, #[bg=red]Sync Panes#[default],}'
 set -ag status-right '#{prefix_highlight} #F #(byobu-status tmux_right)'$BYOBU_DATE$BYOBU_TIME
-
+set -g message-command-style 'fg=<%= byobu['color.tmux']['dark'] %>,bg=<%= byobu['color.tmux']['accent'] %>'
+set -g message-style 'fg=<%= byobu['color.tmux']['dark'] %>,bg=<%= byobu['color.tmux']['accent'] %>'
 
 set -g @scroll-in-moused-over-pane "on"
 set -g @scroll-down-exit-copy-mode "on"
@@ -28,7 +29,7 @@ set -g @scroll-speed-num-lines-per-scroll 3
 
 # window status
 setw -g window-status-format "#[fg=colour15] #I: #W "
-setw -g window-status-current-format "#[bg=colour0]#[fg=colour15] #I #[bg=colour15]#[fg=colour5] #W "
+setw -g window-status-current-format "#[bg=<%= byobu['color.tmux']['dark'] %>]#[fg=<%= byobu['color.tmux']['accent'] %>] #I #[bg=<%= byobu['color.tmux']['accent'] %>]#[fg=<%= byobu['color.tmux']['dark'] %>] #W "
 # List of plugins
 set -g @plugin 'tmux-plugins/tpm'
 set -g @plugin 'tmux-plugins/tmux-sensible'

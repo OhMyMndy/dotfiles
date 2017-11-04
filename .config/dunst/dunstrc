@@ -1,5 +1,5 @@
 [global]
-    font = "San Francisco Display 9"
+    font = "San Francisco Display 10"
     allow_markup = yes
     format = "<b><i>%s</i></b>\n%b"
     sort = yes
@@ -17,9 +17,9 @@
     sticky_history = yes
     line_height = 0
     separator_height = 2
-    padding =  12
-    horizontal_padding = 12
-    separator_color = "#3971ed"
+    padding =  10
+    horizontal_padding = 10
+    separator_color = "#cc342b"
     startup_notification = false
     # https://github.com/knopwob/dunst/issues/26#issuecomment-36159395
     icon_position = left
@@ -27,8 +27,8 @@
     max_icon_size = 32
 
 [frame]
-    width = 2
-    color = "#198844"
+    width = 1
+    color = "#1045ed"
 
 [shortcuts]
     close = ctrl+space

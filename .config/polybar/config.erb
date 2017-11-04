@@ -27,8 +27,10 @@ accent-light2 = ${xrdb:color4}
 
 
 [global/wm]
-#margin-top = 10
-#margin-bottom = 10
+;margin-top = 10
+;margin-bottom = 10
+;padding-left: 2
+;padding-right: 2
 
 
 [bar/top]
@@ -45,7 +47,7 @@ foreground = <%= polybar['foreground'] %>
 overline-size = 2
 overline-color = ${colors.foreground-alt}
 underline-size = 2
-underline-color = <%= polybar['underline_color'] %>
+underline-color = <%= polybar['highlight_color'] %>
 
 ;border-bottom-size = 2
 ;border-bottom-color = ${colors.accent-dark1}
@@ -53,23 +55,26 @@ underline-color = <%= polybar['underline_color'] %>
 padding-left = 2
 padding-right = 2
 
+
 module-margin-left = 1
-module-margin-right = 1
+module-margin-right = 2
 
 
 font-0 = <%= polybar['fonts'][0] %>
 font-1 = <%= polybar['fonts'][1] %>
 font-2 = <%= polybar['fonts'][2] %>
 
-modules-left = i3 xwindow
+modules-left = i3
+; window
 modules-center = date
 ; xwindow
 modules-right = mpd terminal monitor vpn filesystem cpu eth
 
 tray-position = right
-;tray-padding = 0
-tray-maxsize = 15%
+tray-padding = 2
+tray-maxsize = 18%
 ;tray-transparent = true
+
 
 
 [module/xwindow]
@@ -107,7 +112,7 @@ interval = 9000
 
 [module/terminal]
 type=custom/script
-click-left = terminator
+click-left = termite
 exec = echo " "
 interval = 9000
 ; format-underline = ${colors.accent-dark3}
@@ -126,7 +131,7 @@ type=custom/script
 click-left = /usr/bin/xkill
 exec = df --output=pcent / -h | tail -1
 interval = 25
-format-underline = ${colors.accent-light2}
+;format-underline = ${colors.accent-light2}
 format-prefix = ""
 
 
@@ -146,53 +151,33 @@ interval = 5
 exec = ~/.config/polybar/scripts/redshift.sh
 format-underline = ${colors.primary}
 
-[module/bspwm]
-type = internal/bspwm
-
-label-focused = %index%
-label-focused-background = ${colors.background-alt}
-label-focused-underline= <%= polybar['underline_color'] %>
-label-focused-padding = 2
-
-label-occupied = %index%
-label-occupied-padding = 2
-
-label-urgent = %index%!
-label-urgent-background = ${colors.alert}
-label-urgent-foreground = ${colors.background-alt}
-label-urgent-padding = 2
-
-label-empty = %index%
-label-empty-foreground = ${colors.foreground-alt}
-label-empty-padding = 2
-
 [module/i3]
 type = internal/i3
 format = <label-state> <label-mode>
 index-sort = true
 wrapping-scroll = false
 
-label-mode-padding = 2
-label-mode-foreground = ${colors.foreground}
-label-mode-background = ${colors.primary}
+label-padding = 6
 
-label-focused = %icon%
-label-focused-background = ${module/bspwm.label-focused-background}
-label-focused-underline = ${module/bspwm.label-focused-underline}
-label-focused-padding = ${module/bspwm.label-focused-padding}
+label-mode-padding = 6
+label-mode-foreground = <%= polybar['inactive_color'] %>
+;label-mode-background = ${colors.primary}
 
-label-unfocused = %icon%
-label-unfocused-padding = ${module/bspwm.label-occupied-padding}
+label-focused = "%icon%"
+label-focused-foreground = ${colors.foreground}
+label-focused-padding = 6
 
-label-urgent = %icon%!
-label-urgent-background = ${module/bspwm.label-urgent-background}
-label-urgent-foreground = ${module/bspwm.label-urgent-foreground}
-label-urgent-padding = ${module/bspwm.label-urgent-padding}
+label-unfocused = "%icon%"
+label-unfocused-foreground = <%= polybar['inactive_color'] %>
+label-unfocused-padding = 6
 
-label-visible = %icon%
-label-visible-background = ${self.label-focused-background}
-label-visible-underline = ${self.label-focused-underline}
-label-visible-padding = ${self.label-focused-padding}
+label-urgent = "%icon%!"
+label-urgent-foreground = <%= polybar['urgent_color'] %>
+label-urgent-padding = 6
+
+label-visible = "%icon%"
+label-visible-foreground = <%= polybar['inactive_color'] %>
+label-visible-padding = 6
 
 ws-icon-0 = 1;
 ws-icon-1 = 2;
@@ -208,7 +193,8 @@ ws-icon-9 = 10;
 [module/mpd]
 type = internal/mpd
 
-format-online = "<icon-prev> <icon-seekb> <icon-stop> <toggle> <icon-seekf> <icon-next>  <icon-repeat> <icon-random>  <label-song>     <label-time>  <bar-progress>  "
+; format-online = "<icon-prev> <icon-seekb> <icon-stop> <toggle> <icon-seekf> <icon-next>  <icon-repeat> <icon-random>  <label-song>     <label-time>  <bar-progress>  "
+format-online = "<icon-prev> <toggle> <icon-next>  <label-song>  <label-time>  <bar-progress> "
 
 ; Available tokens:
 ;   %artist%
@@ -229,7 +215,7 @@ icon-seekf = " "
 icon-random = " "
 icon-repeat = " "
 
-bar-progress-width = 15
+bar-progress-width = 10
 bar-progress-indicator = 
 bar-progress-indicator-foreground = #bb
 bar-progress-fill = ─
@@ -240,7 +226,6 @@ bar-progress-empty-foreground = #44
 bar-progress-empty-font = 3
 
 label-time-foreground = #88
-
 
 [module/xbacklight]
 type = internal/xbacklight
