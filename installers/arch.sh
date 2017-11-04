@@ -96,7 +96,7 @@ install ruby
 
 
 # Network/system utilities
-install nmap ncdu
+install nmap ncdu bind-tools
 
 
 # Development utilities

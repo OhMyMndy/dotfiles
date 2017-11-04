@@ -43,7 +43,9 @@ set -g @plugin 'tmux-plugins/tmux-sidebar'
 # set -g @plugin 'git@github.com/user/plugin'
 # set -g @plugin 'git@bitbucket.com/user/plugin'
 
-set -g @yank_selection 'primary' # or 'secondary' or 'clipboard'
+bind-key -T copy-mode-vi "y"            send-keys -X copy-pipe "xclip -selection clipboard && tmux display-message 'Selection copied to clipboard!' || tmux display-message 'Selection copying to clipboard failed!'"
+bind-key -T copy-mode    "y"            send-keys -X copy-pipe "xclip -selection clipboard && tmux display-message 'Selection copied to clipboard!' || tmux display-message 'Selection copying to clipboard failed!'"
+
 
 ## not available on tmux 2.3
 #setw -g c0-change-interval 50
