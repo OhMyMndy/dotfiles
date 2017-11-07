@@ -22,6 +22,7 @@ set -g status-right '#{?pane_synchronized, #[bg=red]Sync Panes#[default],}'
 set -ag status-right '#{prefix_highlight} #F #(byobu-status tmux_right)'$BYOBU_DATE$BYOBU_TIME
 set -g message-command-style 'fg=<%= byobu['color.tmux']['dark'] %>,bg=<%= byobu['color.tmux']['accent'] %>'
 set -g message-style 'fg=<%= byobu['color.tmux']['dark'] %>,bg=<%= byobu['color.tmux']['accent'] %>'
+set -g mode-style 'fg=<%= byobu['color.tmux']['dark'] %>,bg=<%= byobu['color.tmux']['accent'] %>'
 
 set -g @scroll-in-moused-over-pane "on"
 set -g @scroll-down-exit-copy-mode "on"

@@ -133,6 +133,11 @@ ln -sf ${DIR}/.fonts.conf ~/.fonts.conf
 rm -rf ~/.distro-logos
 ln -sf ${DIR}/.distro-logos ~/.distro-logos
 
+##### START DESKTOP FILES #####
+
+rm -rf ~/.local/share/applications/icons
+ln -sf ${DIR}/.local/share/applications/icons ~/.local/share/applications/icons
+
 rm -rf ~/.local/share/applications/HeidiSQL.desktop
 ln -sf ${DIR}/.local/share/applications/HeidiSQL.desktop ~/.local/share/applications/HeidiSQL.desktop
 
@@ -141,6 +146,14 @@ ln -sf ${DIR}/.local/share/applications/1Password.desktop ~/.local/share/applica
 
 rm -rf ~/.local/share/applications/Wunderlist.desktop
 ln -sf ${DIR}/.local/share/applications/Wunderlist.desktop ~/.local/share/applications/Wunderlist.desktop
+
+mkdir -p ~/.local/share/icons/hicolor/48x48/apps/
+ln -s ${DIR}/.local/share/applications/icons/wunderlist.png ~/.local/share/icons/hicolor/48x48/apps/wunderlist.png 2>/dev/null
+ln -s ${DIR}/.local/share/applications/icons/1password.png ~/.local/share/icons/hicolor/48x48/apps/1password.png 2>/dev/null
+
+
+##### END DESKTOP FILES #####
+
 
 rm -rf ~/dockerFiles
 ln -sf  ${DIR}/dockerFiles ~/dockerFiles
@@ -152,6 +165,9 @@ touch ~/custom_commands.txt
 
 rm -rf ~/.mpdconf
 ln -sf  ${DIR}/.mpdconf ~/.mpdconf
+
+rm -rf ~/.config/albert/albert.conf
+ln -sf  ${DIR}/.config/albert/albert.conf ~/.config/albert/albert.conf
 
 
 if [ "$dark_mode" = "1" ]; then
@@ -348,6 +364,7 @@ installFont "https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/D
 installFontsFromZip "https://github.com/RedHatBrand/Overpass/releases/download/3.0.2/overpass-desktop-fonts.zip" "overpass"
 installFontsFromZip "https://github.com/AppleDesignResources/SanFranciscoFont/archive/master.zip" "sanfrancisco"
 installFontsFromZip "http://dl.1001fonts.com/alte-din-1451-mittelschrift.zip" "din-1451"
+installFontsFromZip "https://github.com/KDE/oxygen-fonts/archive/master.zip" "oxygen"
 
 fc-cache -f -v
 

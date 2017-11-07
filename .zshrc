@@ -48,10 +48,12 @@ fi
 
 
 export PATH=$HOME/bin:$HOME/.config/composer/vendor/bin:$HOME/.composer/vendor/bin:$HOME/.local/bin:/usr/share/doc/git/contrib/diff-highlight:/usr/local/go/bin:$HOME/.go/bin:$PATH
-
+export LESS="-RS"
 compctl -g '~/.teamocil/*(:t:r)' teamocil
-if [ "$(command_exists 'dircolors')" = 0 ]; then eval "$(dircolors ~/.dircolors)";  fi
-zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
+if exists dircolors; then 
+    eval "$(dircolors ~/.dircolors)";
+fi
+#zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 
 
 export HISTFILE="$HOME/.zhistory"
@@ -76,9 +78,9 @@ alias current-window-process='ps -o args= $(xprop -id $(xprop -root -f _NET_ACTI
 alias disk-usage='sudo du -h -t200M -x / 2>/dev/null'
 
 
-if [ "$(command_exists 'thefuck')" = 0 ]; then eval $(thefuck --alias); fi
+if exists thefuck; then eval $(thefuck --alias); fi
 
-if [ "$(command_exists 'pbcopy')" = 0 ];
+if exists pbcopy;
 then
     alias pbcopy='xsel --clipboard --input'
     alias pbpaste='xsel --clipboard --output'

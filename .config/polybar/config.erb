@@ -52,8 +52,8 @@ underline-color = <%= polybar['highlight_color'] %>
 ;border-bottom-size = 2
 ;border-bottom-color = ${colors.accent-dark1}
 
-padding-left = 2
-padding-right = 2
+padding-left = <%= polybar['padding'] %>
+padding-right = <%= polybar['padding'] %>
 
 
 module-margin-left = 1
@@ -71,7 +71,7 @@ modules-center = date
 modules-right = mpd terminal monitor vpn filesystem cpu eth
 
 tray-position = right
-tray-padding = 2
+tray-padding = <%= polybar['padding'] %>
 tray-maxsize = 18%
 ;tray-transparent = true
 
@@ -86,7 +86,7 @@ type = internal/xkeyboard
 blacklist-0 = num lock
 label-layout = %{F#55}%{F-} %layout%
 label-layout-underline = ${colors.secondary}
-label-indicator-padding = 1
+label-indicator-padding = <%= polybar['padding'] %>
 #label-indicator-margin = 1
 label-indicator-foreground = ${colors.background}
 label-indicator-background = ${colors.secondary}
@@ -157,27 +157,27 @@ format = <label-state> <label-mode>
 index-sort = true
 wrapping-scroll = false
 
-label-padding = 6
+label-padding = <%= polybar['wm_padding'] %>
 
-label-mode-padding = 6
+label-mode-padding = <%= polybar['wm_padding'] %>
 label-mode-foreground = <%= polybar['inactive_color'] %>
 ;label-mode-background = ${colors.primary}
 
 label-focused = "%icon%"
 label-focused-foreground = ${colors.foreground}
-label-focused-padding = 6
+label-focused-padding = <%= polybar['wm_padding'] %>
 
 label-unfocused = "%icon%"
 label-unfocused-foreground = <%= polybar['inactive_color'] %>
-label-unfocused-padding = 6
+label-unfocused-padding = <%= polybar['wm_padding'] %>
 
 label-urgent = "%icon%!"
 label-urgent-foreground = <%= polybar['urgent_color'] %>
-label-urgent-padding = 6
+label-urgent-padding = <%= polybar['wm_padding'] %>
 
 label-visible = "%icon%"
 label-visible-foreground = <%= polybar['inactive_color'] %>
-label-visible-padding = 6
+label-visible-padding = <%= polybar['wm_padding'] %>
 
 ws-icon-0 = 1;
 ws-icon-1 = 2;

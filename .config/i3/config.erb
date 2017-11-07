@@ -32,7 +32,8 @@ bindsym $mod+Shift+q kill
 bindsym ctrl+Shift+q kill
 
 # start dmenu (a program launcher)
-bindsym $mod+d exec "rofi -combi-modi window,run,drun -show combi -modi combi"
+# bindsym $mod+d exec "rofi -combi-modi window,run,drun -show combi -modi combi"
+bindsym $mod+d exec "albert toggle"
 
 # change focus
 bindsym $mod+j focus left
@@ -252,6 +253,7 @@ exec --no-startup-id slack
 exec_always --no-startup-id killall imwheel; imwheel
 exec_always --no-startup-id killall polybar; while pgrep -x polybar >/dev/null; do sleep 1; done; polybar -r top
 exec_always --no-startup-id killall dunst; dunst 2>/dev/null
+exec_always --no-startup-id killall albert; albert 2>/dev/null
 exec_always --no-startup-id bash -c "source ~/.functions; setRandomWallpaper"
 #exec_always --no-startup-id volti
 # exec_always --no-startup-id wmname LG3D

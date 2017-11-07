@@ -16,3 +16,5 @@ sublime-text-3
 *.vscode
 .history/*
 *node_modules*
+heidisql
+.oh-my-zsh

@@ -54,7 +54,7 @@ class Default
         @monospace_font_style = "Regular"
         @monospace_font_size = 10;
 
-        @normal_font = "San Francisco Display"
+        @normal_font = "Oxygen"
         @normal_font_style = "Regular"
         @normal_font_size = 10;
 
@@ -128,8 +128,10 @@ class Default
             "urgent_color"         => @urgent_color,
             "inactive_color"       => @inactive_color,
             "height"               => "28px",
+            "padding"              => 1,
+            "wm_padding"           => 3,
             "fonts"                => [
-                @fonts["normal"].to_polybar(nil, -1),
+                @fonts["normal"].to_polybar(nil, 0),
                 @fonts["normal_alternative"].to_polybar(nil, -1),
                 @fonts["monospace"].to_polybar
             ]
