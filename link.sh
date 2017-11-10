@@ -365,6 +365,10 @@ installFontsFromZip "https://github.com/RedHatBrand/Overpass/releases/download/3
 installFontsFromZip "https://github.com/AppleDesignResources/SanFranciscoFont/archive/master.zip" "sanfrancisco"
 installFontsFromZip "http://dl.1001fonts.com/alte-din-1451-mittelschrift.zip" "din-1451"
 installFontsFromZip "https://github.com/KDE/oxygen-fonts/archive/master.zip" "oxygen"
+installFontsFromZip "https://www.fontsquirrel.com/fonts/download/archivo-narrow" "archivo-narrow"
+installFontsFromZip "https://www.fontsquirrel.com/fonts/download/TeX-Gyre-Heros" "text-gyre-heros"
+installFontsFromZip "https://dl.dafont.com/dl/?f=liberation_sans" "liberation-sans"
+installFontsFromZip "https://www.fontsquirrel.com/fonts/download/montserrat" "montserrat"
 
 fc-cache -f -v
 

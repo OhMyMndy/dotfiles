@@ -1,5 +1,5 @@
 [global]
-    font = "Oxygen 10"
+    font = "Roboto 10"
     allow_markup = yes
     format = "<b><i>%s</i></b>\n%b"
     sort = yes

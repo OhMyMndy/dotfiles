@@ -1,3 +1,5 @@
+require 'json'
+
 class Font
     attr_accessor :name
     attr_accessor :size
@@ -74,3 +76,27 @@ class I3Colors
     end
 
 end
+
+class SlackColors
+end
+
+def set_slack_theme
+    file_name = Dir.home + '/.config/Slack/storage/slack-teams'
+    puts file_name
+    colors = '{"column_bg":"#073642","menu_bg":"#002B36","active_item":"#B58900","active_item_text":"#FDF6E3","hover_item":"#CB4B16","text_color":"#FDF6E3","active_presence":"#2AA198","badge":"#DC322F"}'
+
+    File.open(file_name, 'r+') { |f| 
+        json = f.read
+        puts json
+        json = JSON.parse(json) if json && json.length >= 2
+        if json
+            json.each do |k, el|
+                puts k
+                # el['theme'] = el['theme'] +
+            end
+        end
+    }
+    
+end
+
+set_slack_theme

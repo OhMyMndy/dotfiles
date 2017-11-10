@@ -98,8 +98,8 @@ export LANG=en_US.UTF-8
 export VISUAL="vim"
 export EDITOR='vim'
 export TZ='Europe/Brussels'
-export DISABLE_AUTO_TITLE="false"
-export AUTO_TITLE=true
+export DISABLE_AUTO_TITLE=true
+export AUTO_TITLE=false
 export ARCH=$(uname -m | sed 's/x86_//;s/i[3-6]86/32/')
 
 export CHEATCOLORS=true

@@ -13,7 +13,7 @@ set $mod Mod4
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
-font pango: Oxygen 10
+font pango: Roboto 10
 # Before i3 v4.8, we used to recommend this one as the default:
 # font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
 # The font above is very space-efficient, that is, it looks good, sharp and
@@ -240,32 +240,29 @@ for_window [class="Gloobus-preview"]                                            
 # Execs
 exec --no-startup-id redshift
 exec --no-startup-id xrandr --output HDMI2 --mode 1920x1080 --pos 1920x0 --rotate normal --output HDMI1 --primary --mode 1920x1080 --pos 3840x0 --rotate normal --output VIRTUAL1 --off --output DP1 --off
-exec --no-startup-id parcellite
-exec --no-startup-id nm-applet
-exec --no-startup-id keeweb
 exec --no-startup-id udiskie
 exec --no-startup-id slack
-#exec --no-startup-id google-chrome
-#exec --no-startup-id gnome-terminal
-
 
 # Exec always
-exec_always --no-startup-id killall imwheel; imwheel
+exec_always --no-startup-id killall imwheel; while pgrep -x imwheel >/dev/null; do sleep 1; done; imwheel
+exec_always --no-startup-id killall parcellite; while pgrep -x parcellite >/dev/null; do sleep 1; done; parcellite
+exec_always --no-startup-id killall nm-applet; while pgrep -x nm-applet >/dev/null; do sleep 1; done; nm-applet
 exec_always --no-startup-id killall polybar; while pgrep -x polybar >/dev/null; do sleep 1; done; polybar -r top
-exec_always --no-startup-id killall dunst; dunst 2>/dev/null
-exec_always --no-startup-id killall albert; albert 2>/dev/null
+exec_always --no-startup-id killall dunst; while pgrep -x dunst >/dev/null; do sleep 1; done; dunst
+exec_always --no-startup-id killall albert; while pgrep -x albert >/dev/null; do sleep 1; done; albert
 exec_always --no-startup-id bash -c "source ~/.functions; setRandomWallpaper"
-#exec_always --no-startup-id volti
-# exec_always --no-startup-id wmname LG3D
-exec_always --no-startup-id compton --xrender-sync-fence
-exec_always --no-startup-id xbanish
-exec_always --no-startup-id pkill -f volumeicon; volumeicon
+exec_always --no-startup-id killall compton; while pgrep -x compton >/dev/null; do sleep 1; done; compton --config ~/.config/compton.conf -b --dbe
+exec_always --no-startup-id killall xbanish; while pgrep -x xbanish >/dev/null; do sleep 1; done; xbanish
+exec_always --no-startup-id killall volumeicon; while pgrep -x volumeicon >/dev/null; do sleep 1; done; volumeicon
+exec_always --no-startup-id killall volumeicon; while pgrep -x shutter >/dev/null; do sleep 1; done; shutter --min_at_startup
 
 # Custom bindsym
 bindsym $mod+Shift+greater move workspace to output right
 bindsym $mod+Shift+less move workspace to output left
 bindsym Scroll_Lock exec bash ~/.config/i3/scripts/lock
 bindsym $mod+Shift+o exec ruby ~/bin/copy-tmux-sidebar-command.rb
+bindsym Print exec shutter -s
+bindsym $mod+Print exec shutter -f
 
 # Pulse Audio controls
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% #increase sound volume

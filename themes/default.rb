@@ -54,7 +54,7 @@ class Default
         @monospace_font_style = "Regular"
         @monospace_font_size = 10;
 
-        @normal_font = "Oxygen"
+        @normal_font = "Roboto"
         @normal_font_style = "Regular"
         @normal_font_size = 10;
 
