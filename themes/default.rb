@@ -50,7 +50,12 @@ class Default
         @inactive_color = @colors['COLOR16']
 
 
-        @monospace_font = "SauceCodePro Nerd Font"
+        # @monospace_font = "FuraMono Nerd Font Mono"
+        #@monospace_font = "RobotoMono Nerd Font"
+        #@monospace_font = "ProFontIIx Nerd Font Mono"
+        #@monospace_font = "mononoki Nerd Font"
+        @monospace_font = "Hack Nerd Font Mono"
+        #@monospace_font = "SpaceMono Nerd Font Mono"
         @monospace_font_style = "Regular"
         @monospace_font_size = 10;
 

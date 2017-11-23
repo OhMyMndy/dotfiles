@@ -8,12 +8,17 @@ if [ "$result" = '' ]; then
 fi
 
 # to test
-#result="\`# Recreated single service #\` echo \"Service name: \"; \`# another comment \` read service && docker-compose stop \$service; docker-compose rm -f \$service; docker-compose up -d \$service # comment here"
+# result="\`# Recreated single service #\` echo \"Service name: \"; \`# another comment \` read service && docker-compose stop \$service; docker-compose rm -f \$service; docker-compose up -d \$service; echo \"sdfsd\"; # comment here"
+
+# result="\`# Mysql - safe to bootstrap #\` if [ \"\$mysql_data_dir\" = '' ]; then echo \"MySQL data dir: \"; read mysql_data_dir; fi; sed -i 's/^safe_to_bootstrap:.*/safe_to_bootstrap: 1/' \"\${mysql_data_dir}/grastate.dat\""
+
+
+
+# remove inline comments
+result=$(sed -r 's/`#[^`]*#`//g' <<< "$result")
 
 # remove comment end of the line
-result=$(sed -r 's/[^`]#[^`][^''";]+$//g' <<< $result)
-# remove inline comments
-result=$(sed -r 's/`#[^`]*`//g' <<< $result)
+result=$(sed -r 's/#.+$//g' <<< "$result")
 
 display_time=$(tmux show-options -g display-time | grep -o '[0-9]*')
 

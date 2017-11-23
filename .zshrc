@@ -119,3 +119,9 @@ ln -sf $(find /tmp -maxdepth 2 -type s -name "agent*" -user $USER -printf '%T@ %
 
 export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock
 
+export IP_ADDRESS=$(ip route get 1 | awk '{print $NF;exit}')
+export GID=$(id -g)
+export LOCAL_PROJECT_DIR=/var/www/html/
+export LOCAL_DOCKER_DIR=/var/www/docker/
+export LOCAL_PHING_DIR=/var/www/phing/
+export UID
