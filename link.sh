@@ -31,6 +31,12 @@ ln -sfn ${DIR}/.config/gtk-3.0 ~/.config/gtk-3.0
 rm -rf ~/.conkyrc
 ln -sf ${DIR}/.conkyrc ~/.conkyrc
 
+rm -rf ~/.config/conky
+ln -sf ${DIR}/.config/conky ~/.config/conky
+
+rm -rf ~/.synergy.conf
+ln -sf ${DIR}/.synergy.conf ~/.synergy.conf
+
 rm -f ~/.screenrc
 ln -sf ${DIR}/.screenrc ~/.screenrc
 

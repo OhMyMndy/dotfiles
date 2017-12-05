@@ -10,3 +10,25 @@ pid_file           "/home/mandy/.config/mpd/pid"
 state_file         "/home/mandy/.config/mpd/state"
 sticker_file       "/home/mandy/.config/mpd/sticker.sql"
 
+audio_output {
+	type		"httpd"
+	name		"FLAC Stream"
+	encoder		"flac"		# optional
+	port		"8002"
+	#compression "1"
+	# format		"44100:16:1"
+	format "44100:16:2"
+	always_on       "yes"			# prevent MPD from disconnecting all listeners when playback is stopped.
+	tags            "yes"			# httpd supports sending tags to listening streams.
+}
+
+audio_output {
+	type		"httpd"
+	name		"OGG Vorbis Stream"
+	encoder		"vorbis"		# optional
+	port		"8001"
+	quality     "10.0"
+	#format		"44100:16:1"
+	always_on       "yes"			# prevent MPD from disconnecting all listeners when playback is stopped.
+	tags            "yes"			# httpd supports sending tags to listening streams.
+}

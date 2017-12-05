@@ -43,6 +43,7 @@ Xft.hintstyle: hintslight
 Xft.lcdfilter: lcddefault
 
 ! Enable the extended coloring options
+rofi.modi: drun,window,ssh
 rofi.color-enabled: true
 !                  bg       border   separator
 rofi.color-window: BACKGROUND, COLOR1, FOREGROUND
@@ -61,11 +62,11 @@ rofi.fake-transparency: false
 rofi.location: 0
 rofi.width: 50
 ! rofi.font: DroidSansMonoForPowerline Nerd Font Book 9
-rofi.font: <%= fonts['monospace'].to_rofi %>
+rofi.font: <%= fonts['normal'].to_rofi %>
 rofi.lines: 15
 rofi.fixed-num-lines: true
 rofi.dpi: <%= dpi %>
-
+rofi.show-icons: true
 ! ##### COLORS #####
 ! special
 *foreground:   FOREGROUND

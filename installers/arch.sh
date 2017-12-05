@@ -52,7 +52,7 @@ yes | yaourt -R i3-wm | true
 
 # Interface
 install i3-gaps-git
-install gtk-engine-murrine polybar-git ttf-roboto xcursor-dmz
+install gtk-engine-murrine polybar-git ttf-roboto xcursor-dmz compton
 
 
 # Essentials
@@ -68,12 +68,14 @@ install yad peco gsimplecal
 install volti w3m
 
 # File managers
-install pcmanfm ranger file-roller
+install pcmanfm ranger file-roller evince
 
 
 # Hardcode-tray + dependencies
 install hardcode-tray sni-qt-patched-git
 
+# Monitoring
+install sensors lm_sensors hardinfo
 
 install coreutils
 
@@ -81,7 +83,7 @@ install coreutils
 install chromium
 
 # Chat applications
-install aur/slack-desktop
+install slack-desktop
 
 # Editors
 install vim intellij-idea-ce phpstorm-jre
@@ -101,7 +103,8 @@ install nmap ncdu bind-tools
 
 # Development utilities
 install meld node
-
+install archiso
+install synergy
 
 # At
 install at
@@ -112,8 +115,7 @@ sudo systemctl start atd
 # Udiskie + disk utils
 install udisks2 udiskie exfat-utils
 
-# Developer tools
-install node
+
 
 # Lightdm
 sed -E 's/.*greeter-session=.*/greeter-session=lightdm-gtk-greeter/g' /etc/lightdm/lightdm.conf
@@ -137,7 +139,7 @@ sudo systemctl start sshd
 ###############
 # Music
 ###############
-install pulseaudio libmpdclient  mpd ncmpcpp shntool mac alsa-utils
+install pulseaudio libmpdclient  mpd mpc ncmpcpp shntool mac alsa-utils
 
 cat <<'EOL' | sudo tee /etc/systemd/system/pulseaudio.service
 [Unit]
@@ -183,8 +185,7 @@ sudo timedatectl set-ntp yes
 # Video
 ###############
 export MAKEPKG="makepkg --skipinteg"
-install vlc qt4
-
+install mpv ffmpeg youtube-dl
 
 
 

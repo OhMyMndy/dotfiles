@@ -2,7 +2,7 @@ directory: ~/MyMusic/Music/                   # Where does the music live?
 library: ~/MyMusic/musiclibrary.blb  # Where does the beets database live?
 import:
     move: yes                              # Move your files to ~/Music/beets after import
-plugins: lastgenre fetchart ftintitle smartplaylist random embedart info duplicates # mpdupdate
+plugins: lastgenre fetchart ftintitle smartplaylist random embedart info duplicates web # mpdupdate
 embedart:
     auto: yes 
 

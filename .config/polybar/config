@@ -60,9 +60,9 @@ module-margin-left = 1
 module-margin-right = 2
 
 
-font-0 = Roboto:style=Regular:pixelsize=11.5;0
-font-1 = Roboto:style=Regular:pixelsize=11.5;-1
-font-2 = Hack Nerd Font Mono:style=Regular:pixelsize=11.5;0
+font-0 = Roboto:style=Regular:pixelsize=11.5;1
+font-1 = Roboto:style=Regular:pixelsize=11.5;1
+font-2 = Hack Nerd Font Mono:style=Regular:pixelsize=11.5;3
 
 modules-left = i3
 ; window
@@ -298,7 +298,7 @@ type = internal/network
 interface = ${xrdb.ethinterface:eth0}
 interval = 3 
 ;   up - down icons
-format-connected-underline = ${colors.accent-light2}
+; format-connected-underline = ${colors.accent-light2}
 format-connected-prefix = " "
 format-connected-foreground-foreground = ${colors.foreground-alt}
 label-connected =  %downspeed%  %upspeed%

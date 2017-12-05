@@ -75,7 +75,7 @@ class Default
         }
 
         @gtk = {
-            "theme"           => "Paper",
+            "theme"           => "Arc-Darker",
             "icon_theme"      => "Papirus",
         }
 
@@ -136,9 +136,9 @@ class Default
             "padding"              => 1,
             "wm_padding"           => 3,
             "fonts"                => [
-                @fonts["normal"].to_polybar(nil, 0),
-                @fonts["normal_alternative"].to_polybar(nil, -1),
-                @fonts["monospace"].to_polybar
+                @fonts["normal"].to_polybar(nil, 1),
+                @fonts["normal_alternative"].to_polybar(nil, 1),
+                @fonts["monospace"].to_polybar(nil, 3)
             ]
         }
 
