@@ -80,6 +80,7 @@ Process.fork { system "pkill dunst; dunst > /dev/null 2>&1 " }
 %x( notify-send -i /usr/share/icons/gnome/256x256/status/audio-volume-medium.png "Now playing" "STIGMATA - "СЕНТЯБРЬ" (LIVE @КАЗАНЬ 15.05.2015)" )
 Process.fork { system "xrandr --dpi #{$dpi} > /dev/null 2>&1 " }
 Process.fork { system "pkill polybar; polybar top >/dev/null 2>&1 " }
+Process.fork { system "i3 reload" }
 # Process.fork { system "sudo hardcode-tray --theme Papirus --apply" }
 
 #############
