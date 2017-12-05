@@ -168,3 +168,14 @@ function validate-yml()
 		echo "$1 is a valid YAML"
 	fi
 }
+
+current_tmux_window() {
+    display_time=$(tmux show-options -g display-time | grep -o '[0-9]*')
+
+    tmux set-option -g display-time 1
+    tmux display-message
+    tmux set-option -g display-time $display_time
+
+    export TMUX_WINDOW=$(tmux show-messages | tail -1 | grep -o 'current pane \([0-9]\)' | grep -o '[0-9]*')
+    echo $TMUX_WINDOW
+}

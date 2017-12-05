@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 
+source ~/.functions
+
 # Remove lines starting with # and all empty lines
-result=$(cat ~/commands.txt ~/custom_commands.txt | grep -v -E '^#|^\s*$' | peco)
+result=$(cat ~/commands.txt ~/custom_commands.txt | grep -v -E '^#|^\s*$' | sort | peco)
 
 if [ "$result" = '' ]; then
     exit 1
@@ -20,12 +22,6 @@ result=$(sed -r 's/`#[^`]*#`//g' <<< "$result")
 # remove comment end of the line
 result=$(sed -r 's/#.+$//g' <<< "$result")
 
-display_time=$(tmux show-options -g display-time | grep -o '[0-9]*')
+window=$(current_tmux_window)
 
-tmux set-option -g display-time 1
-tmux display-message
-tmux set-option -g display-time $display_time
-
-export TMUX_WINDOW=$(tmux show-messages | tail -1 | grep -o 'current pane \([0-9]\)' | grep -o '[0-9]*')
-
-tmux send-keys -t "$TMUX_WINDOW" "$result"
+tmux send-keys -t "$window" "$result"

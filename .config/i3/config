@@ -32,8 +32,8 @@ bindsym $mod+Shift+q kill
 bindsym ctrl+Shift+q kill
 
 # start dmenu (a program launcher)
-# bindsym $mod+d exec "rofi -combi-modi window,run,drun -show combi -modi combi"
-bindsym $mod+d exec "albert toggle"
+bindsym $mod+d exec "rofi -combi-modi window,run,drun -show combi -modi combi"
+#bindsym $mod+d exec "albert toggle"
 
 # change focus
 bindsym $mod+j focus left
@@ -263,6 +263,9 @@ bindsym Scroll_Lock exec bash ~/.config/i3/scripts/lock
 bindsym $mod+Shift+o exec ruby ~/bin/copy-tmux-sidebar-command.rb
 bindsym Print exec shutter -s
 bindsym $mod+Print exec shutter -f
+bindsym $mod+Delete exec "tmux list-panes -F '#{pane_pid}' | xargs -I {} pgrep -P {} | xargs kill -9; tmux list-panes -F '#{pane_pid}' | xargs kill -9"
+bindsym $mod+Insert exec notify-send "$(tmux list-panes -F '#{pane_pid}')"
+
 
 # Pulse Audio controls
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% #increase sound volume

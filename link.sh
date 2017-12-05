@@ -126,6 +126,9 @@ ln -sf ${DIR}/.config/udiskie/config.yml ~/.config/udiskie/config.yml
 rm -rf ~/.config/peco
 ln -sf ${DIR}/.config/peco ~/.config/peco
 
+rm -rf ~/.config/Trolltech.conf
+ln -sf ${DIR}/.config/Trolltech.conf ~/.config/Trolltech.conf
+
 rm -f ~/.fonts.conf
 ln -sf ${DIR}/.fonts.conf ~/.fonts.conf
 
@@ -428,4 +431,5 @@ addToProfile 'IP_ADDRESS' '$(ip -4 route get 1 | head -1 | awk "{print \$7}" )'
 addToProfile 'UID' '$(id -u)'
 addToProfile 'GID' '$(id -g)'
 addToProfile 'DOCKER_GID' '$(getent group docker 2>/dev/null | cut -d: -f3 )'
+addToProfile 'QT_QPA_PLATFORMTHEME=gtk2'
 

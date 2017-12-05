@@ -10,7 +10,7 @@ detect_os
 
 # Compleat https://limpet.net/mbrubeck/2009/10/30/compleat.html``
 # sysadmin-util https://github.com/skx/sysadmin-util
-plugins=(git docker zsh-completions z zsh-autosuggestions zsh-syntax-highlighting extract common-aliases jira httpie zsh-peco-history sysadmin-util)
+plugins=(git docker docker-compose zsh-completions z zsh-autosuggestions zsh-syntax-highlighting extract jira httpie zsh-peco-history wd)
 
 if [ "$OS" = "Ubuntu" ]; then
     plugins+=(debian)
@@ -47,10 +47,10 @@ if [ -f $HOME/bin/commands-to-aliases ]; then
 fi
 
 
-export PATH=$HOME/bin:$HOME/.config/composer/vendor/bin:$HOME/.composer/vendor/bin:$HOME/.local/bin:/usr/share/doc/git/contrib/diff-highlight:/usr/local/go/bin:$HOME/.go/bin:$PATH
+export PATH=$HOME/.config/composer/vendor/bin:$HOME/.composer/vendor/bin:$HOME/.local/bin:/usr/share/doc/git/contrib/diff-highlight:/usr/local/go/bin:$HOME/.go/bin:$PATH:$HOME/bin
 export LESS="-RS"
 compctl -g '~/.teamocil/*(:t:r)' teamocil
-if exists dircolors; then 
+if exists dircolors; then
     eval "$(dircolors ~/.dircolors)";
 fi
 #zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}

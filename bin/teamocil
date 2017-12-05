@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+set -e
+
+
+config="$1"
+
+tmp_config="$HOME/.teamocil/_tmp_$config.yml"
+
+touch "$tmp_config"
+
+cat "$HOME/.teamocil/$config.yml" > "$tmp_config"
+
+
+#set -x
+
+unset IFS
+args=() i=0
+for var in $(compgen -e); do
+    value="$(echo ${!var} | sed -e 's/[]\/$*.^|[]/\\&/g')"
+    key="$(echo ${var} | sed -e 's/[]\/$*.^|[]/\\&/g')"
+    pattern="s/{{$key}}/${value}/g"
+    sed -i "$pattern" $tmp_config
+done
+
+
+
+/usr/local/bin/teamocil "_tmp_$config"
+rm $tmp_config
