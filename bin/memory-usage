@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+awk '$3=="kB"{if ($2>1024**2){$2=$2/1024**2;$3="GB";} else if ($2>1024){$2=$2/1024;$3="MB";}} 1' /proc/meminfo | grep MemAvailable | awk -n '{printf("%.1f %s",$2, $3)}'
+echo -n " of "
+awk '$3=="kB"{if ($2>1024**2){$2=$2/1024**2;$3="GB";} else if ($2>1024){$2=$2/1024;$3="MB";}} 1' /proc/meminfo | grep MemTotal | awk -n '{printf("%.1f %s\n",$2, $3)}'

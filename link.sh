@@ -398,6 +398,7 @@ installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v
 installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/ProFont.zip" "ProFont"
 installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/ProggyClean.zip" "ProggyClean"
 installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/Hack.zip" "Hack"
+installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/Iosevka.zip" "Iosevka"
 
 
 
