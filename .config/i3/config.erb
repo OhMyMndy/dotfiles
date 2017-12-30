@@ -206,6 +206,7 @@ client.urgent           <%= i3['client']['urgent'] %>
 
 # Default workspaces
 assign [class=".*Slack$"]                                                               $workspace6
+assign [class=".*rambox"]                                                               $workspace6
 assign [class="Thunderbird"]                                                            $workspace6
 #assign [class="Google-chrome"]                                                         $workspace1
 #assign [class="Chromium"]                                                              $workspace1
@@ -226,6 +227,7 @@ for_window [class="mpv"]                                                        
 for_window [instance=".*floating.*"]                                                    floating enable
 for_window [title=".*Wunderlist$"]                                                      move container to workspace $workspace7
 for_window [title=".*Slack$"]                                                           move container to workspace $workspace6
+for_window [title=".*rambox"]                                                           move container to workspace $workspace6
 for_window [window_role="pop-up"]                                                       floating enable
 for_window [window_role="bubble"]                                                       floating enable
 for_window [window_role="task_dialog"]                                                  floating enable
@@ -250,7 +252,7 @@ for_window [class="(?i).*jetbrains.*"]                                          
 # Execs
 exec --no-startup-id redshift
 exec --no-startup-id udiskie
-exec --no-startup-id slack
+exec --no-startup-id rambox
 
 # Exec always
 exec_always --no-startup-id killall imwheel; while pgrep -x imwheel >/dev/null; do sleep 1; done; imwheel
@@ -265,7 +267,7 @@ exec_always --no-startup-id killall xbanish; while pgrep -x xbanish >/dev/null; 
 exec_always --no-startup-id killall volumeicon; while pgrep -x volumeicon >/dev/null; do sleep 1; done; volumeicon
 # exec_always --no-startup-id killall conky; while pgrep -x conky >/dev/null; do sleep 1; done; conky ~/.config/conky/conky.conf
 exec_always --no-startup-id killall shutter; while pgrep -x shutter >/dev/null; do sleep 1; done; shutter --min_at_startup
-# exec_always --no-startup-id pgrep synergy || synergy
+exec_always --no-startup-id killall synergys; while pgrep -x synergys >/dev/null; do sleep 1; done; synergys -c ~/.synergy.conf
 
 # Custom bindsym
 bindsym $mod+Shift+greater move workspace to output right

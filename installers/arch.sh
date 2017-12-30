@@ -4,7 +4,7 @@ set -e
 
 install() {
     echo "Installing '$@'"
-    yaourt --needed -S $@
+    yaourt --needed -S --noconfirm $@
 }
 source $HOME/.functions
 
@@ -83,11 +83,13 @@ install coreutils
 install chromium
 
 # Chat applications
-install slack-desktop
+install rambox
 
 # Editors
 install vim intellij-idea-ce phpstorm-jre
 
+# Graphic tools
+install shutter
 
 # Git tools
 install tig
