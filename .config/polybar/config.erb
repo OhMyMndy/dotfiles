@@ -68,7 +68,7 @@ modules-left = i3
 ; window
 modules-center = date
 ; xwindow
-modules-right = mpd terminal monitor vpn filesystem cpu eth
+modules-right = mpd terminal monitor vpn filesystem cpu memory load eth powermenu
 
 tray-position = right
 tray-padding = <%= polybar['padding'] %>
@@ -96,7 +96,7 @@ label-indicator-underline = ${colors.secondary}
 [module/vpn]
 type = custom/script
 exec = echo vpn
-exec-if = pgrep -x openvpn
+exec-if = pgrep -x pulsesvc || pgrep -x openvpn
 interval = 5
 format-underline = ${colors.accent-dark2}
 format-prefix = " "
@@ -104,7 +104,7 @@ format-prefix-foreground = #5b
 
 [module/monitor]
 type = custom/script
-click-left = bash ~/.config/polybar/scripts/display-resolution.sh
+click-left = bash ~/.config/polybar/scripts/display-resolution.sh &
 exec = echo " "
 interval = 9000
 ; format-underline = ${colors.accent-dark2}
@@ -112,19 +112,10 @@ interval = 9000
 
 [module/terminal]
 type=custom/script
-click-left = termite
+click-left = termite &
 exec = echo " "
 interval = 9000
-; format-underline = ${colors.accent-dark3}
-; format-prefix = " "
 
-[module/xkill]
-type=custom/script
-click-left = /usr/bin/xkill
-exec = echo xkill
-interval = 9000
-format-underline = ${colors.foreground-alt}
-format-prefix = " "
 
 [module/filesystem]
 type=custom/script
@@ -160,11 +151,11 @@ wrapping-scroll = false
 label-padding = <%= polybar['wm_padding'] %>
 
 label-mode-padding = <%= polybar['wm_padding'] %>
-label-mode-foreground = <%= polybar['inactive_color'] %>
+label-mode-foreground = <%= polybar['foreground'] %>
 ;label-mode-background = ${colors.primary}
 
 label-focused = "%icon%"
-label-focused-foreground = ${colors.foreground}
+label-focused-foreground = <%= polybar['foreground'] %>
 label-focused-padding = <%= polybar['wm_padding'] %>
 
 label-unfocused = "%icon%"
@@ -176,7 +167,7 @@ label-urgent-foreground = <%= polybar['urgent_color'] %>
 label-urgent-padding = <%= polybar['wm_padding'] %>
 
 label-visible = "%icon%"
-label-visible-foreground = <%= polybar['inactive_color'] %>
+label-visible-foreground = <%= polybar['foreground'] %>
 label-visible-padding = <%= polybar['wm_padding'] %>
 
 ws-icon-0 = 1;
@@ -251,27 +242,56 @@ card = intel_backlight
 
 [module/cpu]
 type = internal/cpu
-interval = 5
-format-prefix = " "
+interval = 2
+;format-prefix = " "
+format-prefix = "Cpu: "
 format-prefix-foreground = ${colors.foreground}
 ;format-underline = ${colors.accent-dark2}
+;format = <label> <ramp-coreload>
+format = <ramp-coreload>
 label = %percentage:3%%
-
+ramp-coreload-0 = ▁
+ramp-coreload-1 = ▂
+ramp-coreload-2 = ▃
+ramp-coreload-3 = ▄
+ramp-coreload-4 = ▅
+ramp-coreload-5 = ▆
+ramp-coreload-6 = ▇
+ramp-coreload-7 = █
 
 [module/memory]
-type=custom/script
-exec = awk '$3=="kB"{if ($2>1024**2){$2=$2/1024**2;$3="GB";} else if ($2>1024){$2=$2/1024;$3="MB";}} 1' /proc/meminfo | grep MemFree | awk '{printf("%.1f %s\n",$2, $3)}'
-interval = 10
-format-underline = ${colors.accent-dark3}
-format-prefix = "Mem free: "
+type = internal/memory
+interval = 3
+format = <label> <bar-used>
+label = "Mem:"
+; label = RAM %gb_used%/%gb_free%
+; Only applies if <bar-used> is used
+bar-used-indicator =
+bar-used-width = 7
+bar-used-foreground-0 = #55aa55
+bar-used-foreground-1 = #557755
+bar-used-foreground-2 = #f5a70a
+bar-used-foreground-3 = #ff5555
+bar-used-fill =▮
+bar-used-empty =▮
+bar-used-empty-foreground = #444444
 
 
 [module/swap]
 type=custom/script
-exec = awk '$3=="kB"{if ($2>1024**2){$2=$2/1024**2;$3="GB";} else if ($2>1024){$2=$2/1024;$3="MB";}} 1' /proc/meminfo | grep SwapFree | awk '{printf("%.1f %s\n",$2, $3)}'
+exec = bash ~/bin/swap-usage
 interval = 10
 format-underline = ${colors.accent-light1}
 format-prefix = "Swap free: "
+
+
+
+[module/load]
+type=custom/script
+interval = 2
+exec = cat /proc/loadavg | cut -f1-3 -d' '
+format-prefix = "Load: "
+
 
 [module/wlan]
 type = internal/network
@@ -292,6 +312,7 @@ ramp-signal-2 = 
 ramp-signal-3 = 
 ramp-signal-4 = 
 ramp-signal-foreground = ${colors.foreground-alt}
+
 
 [module/eth]
 type = internal/network
@@ -408,7 +429,7 @@ type = custom/menu
 
 format-spacing = 1
 
-label-open = " power"
+label-open = " "
 label-open-foreground = ${colors.foreground}
 label-close = cancel
 label-close-foreground = ${colors.alert}

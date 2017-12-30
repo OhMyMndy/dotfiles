@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+pkill polybar -9
+
+while pgrep -x polybar >/dev/null
+    do sleep 1
+done
+
+sleep 1
+polybar -r top & >/dev/null 2>&1

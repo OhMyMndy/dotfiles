@@ -159,7 +159,7 @@ bindsym $mod+Shift+r restart
 bindsym $mod+Shift+i exec "tmp=$(mktemp);tmp1=$(mktemp);ruby ~/dotfiles/install.rb 2>${tmp} >/${tmp1} && notify-send \\"Ruby install success\\" \\"$(cat ${tmp1})\\"|| notify-send \\"Ruby installer error\\" \\"$(cat ${tmp})\\"; rm -f ${tmp}; rm -f ${tmp1}"
 
 # restart polybar
-bindsym $mod+Shift+p exec "killall polybar; while pgrep -x polybar >/dev/null; do sleep 1; done; polybar -r top"
+bindsym $mod+Shift+p exec bash ~/bin/restart-polybar
 
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
@@ -207,13 +207,13 @@ client.urgent           <%= i3['client']['urgent'] %>
 # Default workspaces
 assign [class=".*Slack$"]                                                               $workspace6
 assign [class="Thunderbird"]                                                            $workspace6
-#assign [class="Google-chrome"]                                                          $workspace1
-#assign [class="Chromium"]                                                               $workspace1
+#assign [class="Google-chrome"]                                                         $workspace1
+#assign [class="Chromium"]                                                              $workspace1
 assign [class="Gnome-terminal"]                                                         $workspace2
 assign [class="jetbrains-phpstorm"]                                                     $workspace4
 assign [class="Vmplayer"]                                                               $workspace8
 assign [class=".*Wunderlist$"]                                                          $workspace7
-assign [class=".*1password"]                                                          $workspace7
+assign [class=".*1password"]                                                            $workspace7
 assign [class="Thunar"]                                                                 $workspace3
 assign [class="KeePass2"]                                                               $workspace5
 assign [class="KeeWeb"]                                                                 $workspace5
@@ -239,11 +239,16 @@ for_window [class="Gloobus-preview"]                                            
 # source: https://github.com/Airblader/dotfiles-manjaro/blob/master/.i3/config
 #for_window [class="(?i)VirtualBox" title="(?i)Manager"]                                floating enable
 #for_window [class="(?i)VirtualBox"]                                                    floating enable
+for_window [class="(?i).*chrome.*"]                                                     border pixel <%= i3['border'] %>
+for_window [class="(?i).*chromium.*"]                                                   border pixel <%= i3['border'] %>
+for_window [class="(?i).*xterm.*"]                                                      border pixel <%= i3['border'] %>
+for_window [class="(?i).*termite.*"]                                                    border pixel <%= i3['border'] %>
+for_window [class="(?i).*jetbrains.*"]                                                  border pixel <%= i3['border'] %>
+
 
 
 # Execs
 exec --no-startup-id redshift
-exec --no-startup-id xrandr --output HDMI2 --mode 1920x1080 --pos 1920x0 --rotate normal --output HDMI1 --primary --mode 1920x1080 --pos 3840x0 --rotate normal --output VIRTUAL1 --off --output DP1 --off
 exec --no-startup-id udiskie
 exec --no-startup-id slack
 
@@ -251,7 +256,7 @@ exec --no-startup-id slack
 exec_always --no-startup-id killall imwheel; while pgrep -x imwheel >/dev/null; do sleep 1; done; imwheel
 exec_always --no-startup-id killall parcellite; while pgrep -x parcellite >/dev/null; do sleep 1; done; parcellite
 exec_always --no-startup-id killall nm-applet; while pgrep -x nm-applet >/dev/null; do sleep 1; done; nm-applet
-exec_always --no-startup-id killall polybar; while pgrep -x polybar >/dev/null; do sleep 1; done; polybar -r top
+exec_always --no-startup-id bash ~/bin/restart-polybar
 exec_always --no-startup-id killall dunst; while pgrep -x dunst >/dev/null; do sleep 1; done; dunst
 exec_always --no-startup-id killall albert; while pgrep -x albert >/dev/null; do sleep 1; done; albert
 exec_always --no-startup-id bash -c "source ~/.functions; setRandomWallpaper"
@@ -296,10 +301,48 @@ bindsym XF86MonBrightnessDown exec xbacklight -dec 20 # decrease screen brightne
 gaps inner <%= i3['gaps']['inner'] %>
 gaps outer <%= i3['gaps']['outer'] %>
 
-for_window [class="^.*"] border pixel <%= i3['border'] %>
+# for_window [class="^.*"] border pixel <%= i3['border'] %>
 
-new_float none
+# new_float none
 
 
 # FOCUS
 focus_on_window_activation urgent
+
+
+
+# Display
+
+## Manual management of external displays
+# Set the shortcuts and what they do
+set $mode_display Display mode [w]ork dual displays, [s]ingle display Full HD, s[i]ngle display 1440x900
+mode "$mode_display" {
+    bindsym w exec --no-startup-id bash ~/.screenlayout/work.sh
+    bindsym s exec --no-startup-id bash ~/.screenlayout/1-display-full-hd.sh
+    bindsym i exec --no-startup-id bash ~/.screenlayout/1-display-1400x900.sh
+
+
+ # back to normal: Enter or Escape
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+# Declare here the shortcut to bring the display selection menu
+bindsym $mod+x mode "$mode_display"
+
+
+# Power management
+set $mode_system System (l) lock, (e) logout, (s) suspend, (h) hibernate, (r) reboot, (Shift+s) shutdown
+mode "$mode_system" {
+    bindsym l exec --no-startup-id $Locker, mode "default"
+    bindsym e exec --no-startup-id i3-msg exit, mode "default"
+    bindsym s exec --no-startup-id $Locker && systemctl suspend, mode "default"
+    bindsym h exec --no-startup-id $Locker && systemctl hibernate, mode "default"
+    bindsym r exec --no-startup-id systemctl reboot, mode "default"
+    bindsym Shift+s exec --no-startup-id systemctl poweroff -i, mode "default"
+
+ # back to normal: Enter or Escape
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+
+bindsym $mod+Pause mode "$mode_system"

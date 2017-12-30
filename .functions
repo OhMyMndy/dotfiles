@@ -14,7 +14,7 @@ title() {
 
 randomWallpaper() {
     wallpapers=($(ls -d ~/wallpapers/*))
-    index=$(($RANDOM % ${#wallpapers[@]} + 1))
+    index=$(($RANDOM % ${#wallpapers[@]} ))
     wallpaper=${wallpapers[$index]}
     echo ${wallpaper}
 }

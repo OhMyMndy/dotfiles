@@ -122,6 +122,11 @@ XTerm*loginShell: true
 XTerm*termName: xterm-256color
 XTerm*scaleHeight: 1
 
+XTerm*VT100.Translations:       #override\n\
+ Shift Ctrl <KeyPress> v: insert-selection(CLIPBOARD)\n\
+ Shift Ctrl <KeyPress> c: copy-selection(CLIPBOARD)\n
+
+
 !################
 !# URXVT settings
 !################
@@ -141,3 +146,10 @@ URxvt*background:           #000000
 URxvt.keysym.End: \033[4~
 URxvt.keysym.KP_Home: \033[1~
 URxvt.keysym.KP_End:  \033[4~
+
+URxvt.secondaryScreen: 1
+URxvt.secondaryScroll: 0
+
+URxvt.keysym.Shift-Control-V: eval:paste_clipboard
+URxvt.keysym.Shift-Control-C: eval:selection_to_clipboard
+URxvt*iso14755_52: false
