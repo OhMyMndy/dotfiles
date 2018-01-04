@@ -206,6 +206,7 @@ client.urgent           <%= i3['client']['urgent'] %>
 
 # Default workspaces
 assign [class=".*Slack$"]                                                               $workspace6
+assign [class=".*Rambox"]                                                               $workspace6
 assign [class="Thunderbird"]                                                            $workspace6
 #assign [class="Google-chrome"]                                                         $workspace1
 #assign [class="Chromium"]                                                              $workspace1
@@ -245,7 +246,6 @@ for_window [class="(?i).*chromium.*"]                                           
 for_window [class="(?i).*xterm.*"]                                                      border pixel <%= i3['border'] %>
 for_window [class="(?i).*termite.*"]                                                    border pixel <%= i3['border'] %>
 for_window [class="(?i).*jetbrains.*"]                                                  border pixel <%= i3['border'] %>
-for_window [class="Rambox"]                                                             border pixel <%= i3['border'] %>
 
 
 
@@ -266,7 +266,7 @@ exec_always --no-startup-id killall xbanish; while pgrep -x xbanish >/dev/null; 
 exec_always --no-startup-id killall volumeicon; while pgrep -x volumeicon >/dev/null; do sleep 1; done; volumeicon
 # exec_always --no-startup-id killall conky; while pgrep -x conky >/dev/null; do sleep 1; done; conky ~/.config/conky/conky.conf
 exec_always --no-startup-id killall shutter; while pgrep -x shutter >/dev/null; do sleep 1; done; shutter --min_at_startup
-# exec_always --no-startup-id pgrep synergy || synergy
+exec_always --no-startup-id killall synergys; while pgrep -x synergys >/dev/null; do sleep 1; done; synergys -c ~/.synergy.conf
 
 # Custom bindsym
 bindsym $mod+Shift+greater move workspace to output right

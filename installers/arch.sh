@@ -4,7 +4,7 @@ set -e
 
 install() {
     echo "Installing '$@'"
-    yaourt --needed -S $@
+    yaourt --needed -S --noconfirm $@
 }
 source $HOME/.functions
 
@@ -51,7 +51,7 @@ yes | yaourt -R i3-wm | true
 
 
 # Interface
-install i3-gaps
+install i3-gaps-git
 install gtk-engine-murrine polybar-git ttf-roboto xcursor-dmz compton
 
 
@@ -83,11 +83,13 @@ install coreutils
 install chromium
 
 # Chat applications
-install rambox #slack-desktop
+install rambox
 
 # Editors
 install vim intellij-idea-ce phpstorm-jre
 
+# Graphic tools
+install shutter
 
 # Git tools
 install tig
