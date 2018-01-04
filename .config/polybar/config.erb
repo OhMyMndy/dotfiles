@@ -96,7 +96,7 @@ label-indicator-underline = ${colors.secondary}
 [module/vpn]
 type = custom/script
 exec = echo vpn
-exec-if = pgrep -x pulsesvc || pgrep -x openvpn
+exec-if = ip addr list tun0 || ip addr list tun1 || pgrep -x openvpn
 interval = 5
 format-underline = ${colors.accent-dark2}
 format-prefix = " "
@@ -316,19 +316,19 @@ ramp-signal-foreground = ${colors.foreground-alt}
 
 [module/eth]
 type = internal/network
-interface = ${xrdb.ethinterface:eth0}
+interface = ${xrdb:ethinterface:eth0}
 interval = 3 
 ;   up - down icons
-; format-connected-underline = ${colors.accent-light2}
+;format-connected-underline = ${colors.accent-light2}
 format-connected-prefix = " "
-format-connected-foreground-foreground = ${colors.foreground-alt}
+format-connected-foreground = <%= polybar['foreground'] %>
 label-connected =  %downspeed%  %upspeed%
 label-connected-alt = %local_ip%  %downspeed%  %upspeed%
 
-format-disconnected-underline = ${self.format-connected-underline}
+;format-disconnected-underline = ${self.format-connected-underline}
 format-disconnected-prefix = " "
 label-disconnected = %ifname% disconnected
-label-disconnected-foreground = ${colors.foreground-alt}
+label-disconnected-foreground = <%= polybar['inactive_color'] %>
 
 [module/date]
 type=custom/script

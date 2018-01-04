@@ -51,7 +51,7 @@ yes | yaourt -R i3-wm | true
 
 
 # Interface
-install i3-gaps-git
+install i3-gaps
 install gtk-engine-murrine polybar-git ttf-roboto xcursor-dmz compton
 
 
@@ -75,7 +75,7 @@ install pcmanfm ranger file-roller evince
 install hardcode-tray sni-qt-patched-git
 
 # Monitoring
-install sensors lm_sensors hardinfo
+install lm_sensors hardinfo
 
 install coreutils
 
@@ -83,7 +83,7 @@ install coreutils
 install chromium
 
 # Chat applications
-install slack-desktop
+install rambox #slack-desktop
 
 # Editors
 install vim intellij-idea-ce phpstorm-jre

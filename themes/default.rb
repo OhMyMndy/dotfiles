@@ -9,6 +9,7 @@ class Default
     attr_accessor :polybar
     attr_accessor :dpi
     attr_accessor :byobu
+    attr_accessor :ethinterface
 
     def initialize dpi
         @dpi = dpi
@@ -150,6 +151,8 @@ class Default
                 "hightlight" => @highlight_color,
             }
         }
+
+        @ethinterface = %x(route | grep '^default' | grep -o '[^ ]*$')
     end
 
     def get_binding

@@ -226,6 +226,7 @@ for_window [class="mpv"]                                                        
 for_window [instance=".*floating.*"]                                                    floating enable
 for_window [title=".*Wunderlist$"]                                                      move container to workspace $workspace7
 for_window [title=".*Slack$"]                                                           move container to workspace $workspace6
+for_window [class="Rambox"]                                                             move container to workspace $workspace6
 for_window [window_role="pop-up"]                                                       floating enable
 for_window [window_role="bubble"]                                                       floating enable
 for_window [window_role="task_dialog"]                                                  floating enable
@@ -244,13 +245,14 @@ for_window [class="(?i).*chromium.*"]                                           
 for_window [class="(?i).*xterm.*"]                                                      border pixel <%= i3['border'] %>
 for_window [class="(?i).*termite.*"]                                                    border pixel <%= i3['border'] %>
 for_window [class="(?i).*jetbrains.*"]                                                  border pixel <%= i3['border'] %>
+for_window [class="Rambox"]                                                             border pixel <%= i3['border'] %>
 
 
 
 # Execs
 exec --no-startup-id redshift
 exec --no-startup-id udiskie
-exec --no-startup-id slack
+exec --no-startup-id rambox
 
 # Exec always
 exec_always --no-startup-id killall imwheel; while pgrep -x imwheel >/dev/null; do sleep 1; done; imwheel
@@ -258,7 +260,6 @@ exec_always --no-startup-id killall parcellite; while pgrep -x parcellite >/dev/
 exec_always --no-startup-id killall nm-applet; while pgrep -x nm-applet >/dev/null; do sleep 1; done; nm-applet
 exec_always --no-startup-id bash ~/bin/restart-polybar
 exec_always --no-startup-id killall dunst; while pgrep -x dunst >/dev/null; do sleep 1; done; dunst
-exec_always --no-startup-id killall albert; while pgrep -x albert >/dev/null; do sleep 1; done; albert
 exec_always --no-startup-id bash -c "source ~/.functions; setRandomWallpaper"
 exec_always --no-startup-id killall compton; while pgrep -x compton >/dev/null; do sleep 1; done; compton --config ~/.config/compton.conf -b --dbe
 exec_always --no-startup-id killall xbanish; while pgrep -x xbanish >/dev/null; do sleep 1; done; xbanish
