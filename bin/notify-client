@@ -1,0 +1,28 @@
+#!/usr/bin/env php
+<?php
+
+array_shift($argv);
+$ip = getenv('IP_ADDRESS');
+$hostHostname = getenv('HOST_HOSTNAME');
+if (!$hostHostname) {
+    $hostHostname = getenv('HOSTNAME');
+}
+
+
+
+$args = [];
+foreach ($argv as $arg) {
+    if ($arg[0] !== '-' && !is_integer($arg)) {
+        $arg = str_replace('"', '\"', $arg);
+        $args[] = "\"$arg\"";
+    } else {
+        $args[] = $arg;
+    }
+
+}
+$args = implode(' ', $args);
+
+$hash = sha1($hostHostname . $args);
+
+$url = 'http://' . $ip . ':12345?command=' . urlencode($args) . "&hash=$hash";
+echo file_get_contents($url);

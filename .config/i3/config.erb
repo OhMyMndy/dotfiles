@@ -70,7 +70,7 @@ bindsym $mod+f fullscreen toggle
 
 # change container layout (stacked, tabbed, toggle split)
 bindsym $mod+s layout stacking
-bindsym $mod+w layout tabbed
+bindsym $mod+t layout tabbed
 bindsym $mod+e layout toggle split
 
 # toggle tiling / floating
@@ -206,7 +206,7 @@ client.urgent           <%= i3['client']['urgent'] %>
 
 # Default workspaces
 assign [class=".*Slack$"]                                                               $workspace6
-assign [class=".*Rambox"]                                                               $workspace6
+assign [class="Rambox"]                                                                 $workspace6
 assign [class="Thunderbird"]                                                            $workspace6
 #assign [class="Google-chrome"]                                                         $workspace1
 #assign [class="Chromium"]                                                              $workspace1
@@ -218,6 +218,7 @@ assign [class=".*1password"]                                                    
 assign [class="Thunar"]                                                                 $workspace3
 assign [class="KeePass2"]                                                               $workspace5
 assign [class="KeeWeb"]                                                                 $workspace5
+assign [class="TeamViewer"]                                                             $workspace8
 
 
 # For windows
@@ -234,6 +235,7 @@ for_window [window_role="task_dialog"]                                          
 for_window [window_role="Preferences"]                                                  floating enable
 for_window [window_type="dialog"]                                                       floating enable
 for_window [window_type="menu"]                                                         floating enable
+for_window [class="TeamViewer"]                                                         floating enable
 # Float IntelliJ update window
 for_window [class="sun-awt-X11-XDialogPeer"]                                            floating enable
 for_window [class="com-intellij-updater-Runner"]                                        floating enable

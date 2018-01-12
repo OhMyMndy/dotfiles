@@ -43,7 +43,7 @@ Xft.hintstyle: hintslight
 Xft.lcdfilter: lcddefault
 
 ! Enable the extended coloring options
-rofi.modi: drun,window,ssh
+rofi.modi: drun,run,window,ssh
 rofi.color-enabled: true
 !                  bg       border   separator
 rofi.color-window: BACKGROUND, COLOR1, FOREGROUND
@@ -67,6 +67,7 @@ rofi.lines: 15
 rofi.fixed-num-lines: true
 rofi.dpi: <%= dpi %>
 rofi.show-icons: true
+rofi.run-command: zsh -c -i '{cmd}'
 ! ##### COLORS #####
 ! special
 *foreground:   FOREGROUND

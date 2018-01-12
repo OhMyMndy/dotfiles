@@ -127,3 +127,4 @@ export LOCAL_PROJECT_DIR=/var/www/html/
 export LOCAL_DOCKER_DIR=/var/www/docker/
 export LOCAL_PHING_DIR=/var/www/phing/
 export UID
+export HOSTNAME=$(hostname)

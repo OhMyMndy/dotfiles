@@ -70,7 +70,7 @@ bindsym $mod+f fullscreen toggle
 
 # change container layout (stacked, tabbed, toggle split)
 bindsym $mod+s layout stacking
-bindsym $mod+w layout tabbed
+bindsym $mod+t layout tabbed
 bindsym $mod+e layout toggle split
 
 # toggle tiling / floating
@@ -206,6 +206,7 @@ client.urgent           #fba922      #fba922      #ffffff      #3971ed
 
 # Default workspaces
 assign [class=".*Slack$"]                                                               $workspace6
+assign [class="Rambox"]                                                                 $workspace6
 assign [class="Thunderbird"]                                                            $workspace6
 #assign [class="Google-chrome"]                                                         $workspace1
 #assign [class="Chromium"]                                                              $workspace1
@@ -217,6 +218,7 @@ assign [class=".*1password"]                                                    
 assign [class="Thunar"]                                                                 $workspace3
 assign [class="KeePass2"]                                                               $workspace5
 assign [class="KeeWeb"]                                                                 $workspace5
+assign [class="TeamViewer"]                                                             $workspace8
 
 
 # For windows
@@ -226,13 +228,14 @@ for_window [class="mpv"]                                                        
 for_window [instance=".*floating.*"]                                                    floating enable
 for_window [title=".*Wunderlist$"]                                                      move container to workspace $workspace7
 for_window [title=".*Slack$"]                                                           move container to workspace $workspace6
-for_window [class="rambox"]                                                             move container to workspace $workspace6
+for_window [class="Rambox"]                                                             move container to workspace $workspace6
 for_window [window_role="pop-up"]                                                       floating enable
 for_window [window_role="bubble"]                                                       floating enable
 for_window [window_role="task_dialog"]                                                  floating enable
 for_window [window_role="Preferences"]                                                  floating enable
 for_window [window_type="dialog"]                                                       floating enable
 for_window [window_type="menu"]                                                         floating enable
+for_window [class="TeamViewer"]                                                         floating enable
 # Float IntelliJ update window
 for_window [class="sun-awt-X11-XDialogPeer"]                                            floating enable
 for_window [class="com-intellij-updater-Runner"]                                        floating enable
@@ -245,7 +248,6 @@ for_window [class="(?i).*chromium.*"]                                           
 for_window [class="(?i).*xterm.*"]                                                      border pixel 2
 for_window [class="(?i).*termite.*"]                                                    border pixel 2
 for_window [class="(?i).*jetbrains.*"]                                                  border pixel 2
-for_window [class="rambox"]                                                             border pixel 2
 
 
 
@@ -266,7 +268,7 @@ exec_always --no-startup-id killall xbanish; while pgrep -x xbanish >/dev/null; 
 exec_always --no-startup-id killall volumeicon; while pgrep -x volumeicon >/dev/null; do sleep 1; done; volumeicon
 # exec_always --no-startup-id killall conky; while pgrep -x conky >/dev/null; do sleep 1; done; conky ~/.config/conky/conky.conf
 exec_always --no-startup-id killall shutter; while pgrep -x shutter >/dev/null; do sleep 1; done; shutter --min_at_startup
-# exec_always --no-startup-id pgrep synergy || synergy
+exec_always --no-startup-id killall synergys; while pgrep -x synergys >/dev/null; do sleep 1; done; synergys -c ~/.synergy.conf
 
 # Custom bindsym
 bindsym $mod+Shift+greater move workspace to output right
