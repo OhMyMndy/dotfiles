@@ -10,6 +10,12 @@ pid_file           "/home/mandy/.config/mpd/pid"
 state_file         "/home/mandy/.config/mpd/state"
 sticker_file       "/home/mandy/.config/mpd/sticker.sql"
 
+
+audio_output {
+    type "alsa"
+    name "Alsa"
+}
+
 audio_output {
 	type		"httpd"
 	name		"FLAC Stream"
