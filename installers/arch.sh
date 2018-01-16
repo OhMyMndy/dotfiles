@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+if [[ $EUID -eq 0 ]]; then
+  echo "This script must NOT be run as root" 1>&2
+  exit 1
+fi
+
 set -e
 
 install() {
@@ -181,6 +186,11 @@ sudo timedatectl set-ntp yes
 
 ## Make sure to always override if necessary
 # sudo sed -i -E 's|ExecStart.*$|ExecStart=/usr/bin/zfs mount -O -a|g' /usr/lib/systemd/system/zfs-mount.service
+
+
+# Virtualization
+install virtualbox qemu kvm
+sudo adduser $USER vboxuser
 
 
 ###############

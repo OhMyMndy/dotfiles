@@ -255,6 +255,7 @@ for_window [class="(?i).*jetbrains.*"]                                          
 exec --no-startup-id redshift
 exec --no-startup-id udiskie
 exec --no-startup-id rambox
+exec --no-startup-id flameshot
 
 # Exec always
 exec_always --no-startup-id killall imwheel; while pgrep -x imwheel >/dev/null; do sleep 1; done; imwheel
@@ -266,8 +267,6 @@ exec_always --no-startup-id bash -c "source ~/.functions; setRandomWallpaper"
 exec_always --no-startup-id killall compton; while pgrep -x compton >/dev/null; do sleep 1; done; compton --config ~/.config/compton.conf -b --dbe
 exec_always --no-startup-id killall xbanish; while pgrep -x xbanish >/dev/null; do sleep 1; done; xbanish
 exec_always --no-startup-id killall volumeicon; while pgrep -x volumeicon >/dev/null; do sleep 1; done; volumeicon
-# exec_always --no-startup-id killall conky; while pgrep -x conky >/dev/null; do sleep 1; done; conky ~/.config/conky/conky.conf
-exec_always --no-startup-id killall shutter; while pgrep -x shutter >/dev/null; do sleep 1; done; shutter --min_at_startup
 exec_always --no-startup-id killall synergys; while pgrep -x synergys >/dev/null; do sleep 1; done; synergys -c ~/.synergy.conf
 
 # Custom bindsym
@@ -275,8 +274,8 @@ bindsym $mod+Shift+greater move workspace to output right
 bindsym $mod+Shift+less move workspace to output left
 bindsym Scroll_Lock exec bash ~/.config/i3/scripts/lock
 bindsym $mod+Shift+o exec ruby ~/bin/copy-tmux-sidebar-command.rb
-bindsym Print exec shutter -s
-bindsym $mod+Print exec shutter -f
+bindsym Print exec flameshot gui
+bindsym $mod+Print exec flameshot full -p ~/Pictures/ -c
 
 # Pulse Audio controls
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% #increase sound volume

@@ -212,7 +212,7 @@ webdev () {
         exit 2
     fi
 
-    if [ -z "$version" ]; then
+    if [ -z "$version" ] && [ "$action" != 'stop' ]; then
         echo "Please provide the version as the second parameter (56|71|72)"
         exit 3
     fi
@@ -220,26 +220,14 @@ webdev () {
     cd "$DOCKER_REPO_LOCATION"
 
     if [ "$action" = "up" ]; then
-        for d in Web*/ ; do
-            if [ "$d" = 'Web/' ]; then
-                continue
-            fi
-            cd "$DOCKER_REPO_LOCATION/${d}"
-            echo "Stopping ${d} first..."
-            docker-compose -f minimal.yml stop
-        done
+        echo "Stopping web[0-9]* containers"
+        docker ps -f "name=web[0-9]*" --format "{{.ID}}" | xargs docker kill
         cd "$DOCKER_REPO_LOCATION/Web${version}"
         echo "Upping ${version}..."
-        docker-compose -f minimal.yml up -d
+        docker-compose -f minimal.yml up -d --force-recreate
     elif [ "$action" = "stop" ]; then
-        for d in Web*/ ; do
-            if [ "$d" = 'Web/' ]; then
-                continue
-            fi
-            cd "$DOCKER_REPO_LOCATION/${d}"
-            echo "Stopping ${d}..."
-            docker-compose -f minimal.yml stop
-        done
+        echo "Stopping web[0-9]* containers"
+        docker ps -f "name=web[0-9]*" --format "{{.ID}}" | xargs docker kill
     elif [ "$action" = "logs" ]; then
         cd "$DOCKER_REPO_LOCATION/Web${version}"
         docker-compose logs --tail 100 -f $service
@@ -247,4 +235,8 @@ webdev () {
         echo "Action ${action} is not recognized..."
         exit 4
     fi
+}
+
+ip_address() {
+    ip route get 1 | awk '{print $NF;exit}'
 }
