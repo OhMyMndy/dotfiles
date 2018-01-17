@@ -23,8 +23,11 @@
     startup_notification = false
     # https://github.com/knopwob/dunst/issues/26#issuecomment-36159395
     icon_position = left
-    icon_folders = /usr/share/icons/gnome
+    icon_folders = /usr/share/icons/gnome/256x256/
     max_icon_size = 32
+
+    # Browser for opening urls in context menu.
+    browser = /usr/bin/chromium
 
 [frame]
     width = <%= dunst['frame']['width'] %>
@@ -48,5 +51,5 @@
 
 [urgency_critical]
     background = "<%= dunst['urgency_critical']['background'] %>"
-    foreground = "<%= dunst['urgency_critical']['background'] %>"
+    foreground = "<%= dunst['urgency_critical']['foreground'] %>"
     timeout    =  <%= dunst['urgency_critical']['timeout'] %>

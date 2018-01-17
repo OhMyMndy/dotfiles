@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+getHash () {
+    xrandr | sha256sum
+}
+
+old_hash=$(getHash)
+
+while true; do
+    new_hash=$(getHash)
+
+    if [ "$new_hash" != "$old_hash" ]; then
+        old_hash="$new_hash"
+        exec "$@" >/dev/null 2>&1 &
+    fi
+
+    sleep 5
+done

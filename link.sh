@@ -446,8 +446,8 @@ function addToProfile() {
 }
 
 addToProfile 'IP_ADDRESS' '$(ip -4 route get 1 | head -1 | awk "{print \$7}" )'
-addToProfile 'UID' '$(id -u)'
 addToProfile 'GID' '$(id -g)'
 addToProfile 'DOCKER_GID' '$(getent group docker 2>/dev/null | cut -d: -f3 )'
-addToProfile 'QT_QPA_PLATFORMTHEME=gtk2'
+addToProfile 'QT_QPA_PLATFORMTHEME' 'gtk2'
+addToProfile 'QT_STYLE_OVERRIDE' 'GTK+'
 

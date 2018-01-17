@@ -70,7 +70,7 @@ bindsym $mod+f fullscreen toggle
 
 # change container layout (stacked, tabbed, toggle split)
 bindsym $mod+s layout stacking
-bindsym $mod+w layout tabbed
+bindsym $mod+t layout tabbed
 bindsym $mod+e layout toggle split
 
 # toggle tiling / floating
@@ -206,7 +206,7 @@ client.urgent           <%= i3['client']['urgent'] %>
 
 # Default workspaces
 assign [class=".*Slack$"]                                                               $workspace6
-assign [class=".*Rambox"]                                                               $workspace6
+assign [class="Rambox"]                                                                 $workspace6
 assign [class="Thunderbird"]                                                            $workspace6
 #assign [class="Google-chrome"]                                                         $workspace1
 #assign [class="Chromium"]                                                              $workspace1
@@ -218,6 +218,7 @@ assign [class=".*1password"]                                                    
 assign [class="Thunar"]                                                                 $workspace3
 assign [class="KeePass2"]                                                               $workspace5
 assign [class="KeeWeb"]                                                                 $workspace5
+assign [class="TeamViewer"]                                                             $workspace8
 
 
 # For windows
@@ -234,6 +235,7 @@ for_window [window_role="task_dialog"]                                          
 for_window [window_role="Preferences"]                                                  floating enable
 for_window [window_type="dialog"]                                                       floating enable
 for_window [window_type="menu"]                                                         floating enable
+for_window [class="TeamViewer"]                                                         floating enable
 # Float IntelliJ update window
 for_window [class="sun-awt-X11-XDialogPeer"]                                            floating enable
 for_window [class="com-intellij-updater-Runner"]                                        floating enable
@@ -253,6 +255,7 @@ for_window [class="(?i).*jetbrains.*"]                                          
 exec --no-startup-id redshift
 exec --no-startup-id udiskie
 exec --no-startup-id rambox
+exec --no-startup-id flameshot
 
 # Exec always
 exec_always --no-startup-id killall imwheel; while pgrep -x imwheel >/dev/null; do sleep 1; done; imwheel
@@ -264,17 +267,18 @@ exec_always --no-startup-id bash -c "source ~/.functions; setRandomWallpaper"
 exec_always --no-startup-id killall compton; while pgrep -x compton >/dev/null; do sleep 1; done; compton --config ~/.config/compton.conf -b --dbe
 exec_always --no-startup-id killall xbanish; while pgrep -x xbanish >/dev/null; do sleep 1; done; xbanish
 exec_always --no-startup-id killall volumeicon; while pgrep -x volumeicon >/dev/null; do sleep 1; done; volumeicon
-# exec_always --no-startup-id killall conky; while pgrep -x conky >/dev/null; do sleep 1; done; conky ~/.config/conky/conky.conf
-exec_always --no-startup-id killall shutter; while pgrep -x shutter >/dev/null; do sleep 1; done; shutter --min_at_startup
 exec_always --no-startup-id killall synergys; while pgrep -x synergys >/dev/null; do sleep 1; done; synergys -c ~/.synergy.conf
+
+exec_always --no-startup-id bash "$HOME/.screenlayout/$(hostname).sh" 2>/dev/null
+exec_always --no-startup-id pkill -f restart-polybar; bash ~/bin/resolution-changed ~/bin/restart-polybar
 
 # Custom bindsym
 bindsym $mod+Shift+greater move workspace to output right
 bindsym $mod+Shift+less move workspace to output left
 bindsym Scroll_Lock exec bash ~/.config/i3/scripts/lock
 bindsym $mod+Shift+o exec ruby ~/bin/copy-tmux-sidebar-command.rb
-bindsym Print exec shutter -s
-bindsym $mod+Print exec shutter -f
+bindsym Print exec flameshot gui
+bindsym $mod+Print exec flameshot full -p ~/Pictures/ -c
 
 # Pulse Audio controls
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume $(pactl list short sinks | grep alsa_output | cut -f1) +2% #increase sound volume

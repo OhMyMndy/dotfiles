@@ -64,11 +64,11 @@ font-0 = <%= polybar['fonts'][0] %>
 font-1 = <%= polybar['fonts'][1] %>
 font-2 = <%= polybar['fonts'][2] %>
 
-modules-left = i3
+modules-left = i3 mpd
 ; window
-modules-center = date
+;modules-center = date
 ; xwindow
-modules-right = mpd terminal monitor vpn filesystem cpu memory load eth powermenu
+modules-right = terminal monitor vpn filesystem cpu memory load eth date powermenu
 
 tray-position = right
 tray-padding = <%= polybar['padding'] %>
@@ -185,7 +185,7 @@ ws-icon-9 = 10;
 type = internal/mpd
 
 ; format-online = "<icon-prev> <icon-seekb> <icon-stop> <toggle> <icon-seekf> <icon-next>  <icon-repeat> <icon-random>  <label-song>     <label-time>  <bar-progress>  "
-format-online = "<icon-prev> <toggle> <icon-next>  <label-song>  <label-time>  <bar-progress> "
+format-online = "<label-time> <bar-progress>  <icon-prev> <toggle> <icon-next>  <label-song>"
 
 ; Available tokens:
 ;   %artist%

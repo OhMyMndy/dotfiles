@@ -179,3 +179,64 @@ current_tmux_window() {
     export TMUX_WINDOW=$(tmux show-messages | tail -1 | grep -o 'current pane \([0-9]\)' | grep -o '[0-9]*')
     echo $TMUX_WINDOW
 }
+
+notify-on-error() {
+    tmp_file=$(mktemp)\
+    ARGS="$@"
+    eval $ARGS 2>$tmp_file
+    result=$?
+
+    if [ $result -ne 0 ]; then
+        error_content="$(cat $tmp_file)"
+        echo $error_content
+        notify-send -u critical -i status/important "Command failed!" "$ARGS\n$error_content"
+    fi
+}
+
+notify-finished() {
+    ARGS="$@"
+    result=$?
+    notify-on-error $ARGS
+    if [ $result -eq 0 ]; then
+        notify-send "Command Finished!" "$ARGS"
+    fi
+}
+
+webdev () {
+    action="$1"
+    version="$2"
+    service="$3"
+
+    if [ -z "$action" ]; then
+        echo "Please provide the action as the first parameter (up|stop|logs)"
+        exit 2
+    fi
+
+    if [ -z "$version" ] && [ "$action" != 'stop' ]; then
+        echo "Please provide the version as the second parameter (56|71|72)"
+        exit 3
+    fi
+
+    cd "$DOCKER_REPO_LOCATION"
+
+    if [ "$action" = "up" ]; then
+        echo "Stopping web[0-9]* containers"
+        docker ps -f "name=web[0-9]*" --format "{{.ID}}" | xargs docker kill
+        cd "$DOCKER_REPO_LOCATION/Web${version}"
+        echo "Upping ${version}..."
+        docker-compose -f minimal.yml up -d --force-recreate
+    elif [ "$action" = "stop" ]; then
+        echo "Stopping web[0-9]* containers"
+        docker ps -f "name=web[0-9]*" --format "{{.ID}}" | xargs docker kill
+    elif [ "$action" = "logs" ]; then
+        cd "$DOCKER_REPO_LOCATION/Web${version}"
+        docker-compose logs --tail 100 -f $service
+    else
+        echo "Action ${action} is not recognized..."
+        exit 4
+    fi
+}
+
+ip_address() {
+    ip route get 1 | awk '{print $NF;exit}'
+}

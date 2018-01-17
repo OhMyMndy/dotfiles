@@ -14,6 +14,15 @@ touch "$tmp_config"
 cat "$HOME/.teamocil/$config.yml" > "$tmp_config"
 
 
+set +e
+IFS=$'\n'
+before_commands=$(cat $tmp_config | grep '^#before' | cut -d' ' -f2-)
+for var in ${before_commands}; do
+    echo "Executing command before: $var"
+    eval $var
+done
+
+
 unset IFS
 args=() i=0
 for var in $(compgen -e); do
@@ -21,14 +30,6 @@ for var in $(compgen -e); do
     key="$(echo ${var} | sed -e 's/[]\/$*.^|[]/\\&/g')"
     pattern="s/{{$key}}/${value}/g"
     sed -i "$pattern" $tmp_config
-done
-
-set +e
-IFS=$'\n'
-before_commands=$(cat $tmp_config | grep '^#before' | cut -d' ' -f2-)
-for var in ${before_commands}; do
-    echo "Executing command before: $var"
-    eval "$var"
 done
 
 /usr/local/bin/teamocil "_tmp_$config"

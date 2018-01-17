@@ -102,12 +102,12 @@ class Default
             "urgency_normal"     => {
                 "background"  => @colors['BACKGROUND'],
                 "foreground"  => @colors['FOREGROUND'],
-                "timeout"     => 20
+                "timeout"     => 40
             },
             "urgency_critical"     => {
                 "background"  => @colors['COLOR0'],
                 "foreground"  => @urgent_color,
-                "timeout"     => 30
+                "timeout"     => 60
             },
         }
 
@@ -137,9 +137,9 @@ class Default
             "padding"              => 1,
             "wm_padding"           => 3,
             "fonts"                => [
-                @fonts["normal"].to_polybar(11, 3),
-                @fonts["normal_alternative"].to_polybar(11, 3),
-                @fonts["monospace"].to_polybar(17, 4)
+                @fonts["normal"].to_polybar(12, -2),
+                @fonts["normal_alternative"].to_polybar(12, -2),
+                @fonts["monospace"].to_polybar(17, 0)
             ]
         }
 
