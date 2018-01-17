@@ -269,6 +269,9 @@ exec_always --no-startup-id killall xbanish; while pgrep -x xbanish >/dev/null; 
 exec_always --no-startup-id killall volumeicon; while pgrep -x volumeicon >/dev/null; do sleep 1; done; volumeicon
 exec_always --no-startup-id killall synergys; while pgrep -x synergys >/dev/null; do sleep 1; done; synergys -c ~/.synergy.conf
 
+exec_always --no-startup-id bash "$HOME/.screenlayout/$(hostname).sh" 2>/dev/null
+exec_always --no-startup-id pkill -f restart-polybar; bash ~/bin/resolution-changed ~/bin/restart-polybar
+
 # Custom bindsym
 bindsym $mod+Shift+greater move workspace to output right
 bindsym $mod+Shift+less move workspace to output left
