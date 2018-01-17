@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -e
 cd ~/MyMusic/Playlists
-rm -rf ../MpdPlaylists && mkdir ../MpdPlaylists && find . -type f -exec sh -c 'cp -f "$0" "../MpdPlaylists/$(echo "$0" | sed -E "s/\s+/_/g" | sed -E "s/\.\///g" | sed -E "s/\//___/g" | sed -E "s/m3u8/m3u/g")" ' {} \;
+rm -rf ../MpdPlaylists && mkdir ../MpdPlaylists && find . -type f -exec sh -c 'cp -f "$0" "../MpdPlaylists/$(echo "$0" | sed -E "s/\s+/_/g" | sed -E "s/\.\///g" | sed -E "s/\//|/g" | sed -E "s/m3u8/m3u/g")" ' {} \;
 
 find ../MpdPlaylists -type f -exec sh -c 'sed -i -E "s/(\.+\/){1,}Music\///g" "$0"' {} \;

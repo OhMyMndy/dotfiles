@@ -146,6 +146,11 @@ ln -sf ${DIR}/.distro-logos ~/.distro-logos
 mkdir -p ~/.teamocil
 ln -sf ${DIR}/.teamocil/* ~/.teamocil/
 
+rm -rf ~/.ncmpcpp
+ln -sf ${DIR}/.ncmpcpp ~/.ncmpcpp
+
+rm -rf ~/.config/vis
+ln -sf ${DIR}/.config/vis ~/.config/vis
 
 ##### START DESKTOP FILES #####
 
@@ -181,7 +186,13 @@ rm -rf ~/.mpdconf
 ln -sf  ${DIR}/.mpdconf ~/.mpdconf
 
 rm -rf ~/.config/albert/albert.conf
+mkdir -p ~/.config/albert/
 ln -sf  ${DIR}/.config/albert/albert.conf ~/.config/albert/albert.conf
+
+rm -rf ~/.config/volumeicon/volumeicon
+mkdir -p ~/.config/volumeicon/
+ln -sf  ${DIR}/.config/volumeicon/volumeicon ~/.config/volumeicon/volumeicon
+
 
 
 if [ "$dark_mode" = "1" ]; then
@@ -435,7 +446,8 @@ function addToProfile() {
 }
 
 addToProfile 'IP_ADDRESS' '$(ip -4 route get 1 | head -1 | awk "{print \$7}" )'
+addToProfile 'UID' '$(id -u)'
 addToProfile 'GID' '$(id -g)'
 addToProfile 'DOCKER_GID' '$(getent group docker 2>/dev/null | cut -d: -f3 )'
-addToProfile 'QT_QPA_PLATFORMTHEME' 'gtk2'
+addToProfile 'QT_QPA_PLATFORMTHEME=gtk2'
 

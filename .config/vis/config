@@ -1,0 +1,4 @@
+audio.sources=mpd
+audio.pulse.source=0
+
+audio.stereo.enabled=false

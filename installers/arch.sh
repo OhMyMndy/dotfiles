@@ -141,7 +141,8 @@ sudo systemctl start sshd
 ###############
 # Music
 ###############
-install pulseaudio libmpdclient  mpd mpc ncmpcpp shntool mac alsa-utils
+install pulseaudio libmpdclient  mpd mpc ncmpcpp shntool mac alsa-utils alsamixer vis
+install pavucontrol
 
 cat <<'EOL' | sudo tee /etc/systemd/system/pulseaudio.service
 [Unit]
