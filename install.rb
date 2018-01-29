@@ -12,7 +12,7 @@ end
 
 $args = Hash[ ARGV.flat_map{|s| s.scan(/--?([^=\s]+)(?:=(\S+))?/) } ]
 
-$theme = 'default'
+$theme = 'Neon'
 if $args.key?('theme') && File.exists("themes/" + $args['theme'] + '.erb')
     $theme = $args['theme']
 end
@@ -26,6 +26,8 @@ require_relative "themes/#{$theme}.rb"
 $theme.ucfirst!
 
 $theme_instance = Object.const_get($theme).new $dpi
+$theme_instance.configuration
+$theme_instance.configuration_override
 
 $parameters = $theme_instance.get_binding
 puts "Parameters: "
@@ -53,7 +55,7 @@ Dir.chdir $root_dir
 
 Dir.glob ['*.erb', '.byobu/*.erb', '.config/**/*.erb'], File::FNM_DOTMATCH do |file|
     new_file_name = get_new_filename file
-    
+
 
     new_content = compile(file)
     puts new_file_name + " length " + new_content.length.to_s

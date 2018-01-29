@@ -366,46 +366,46 @@ sed -i -e's/\s*BUFFER=.*/BUFFER=$\(fc -l -n 1 |  eval $tac | awk "\!x\[\\$0\]++"
 
 installZshPlugin "https://github.com/skx/sysadmin-util.git" "sysadmin-util"
 
-installZshTheme "https://raw.githubusercontent.com/caiogondim/bullet-train-oh-my-zsh-theme/master/bullet-train.zsh-theme" "bullet-train.zsh-theme"
+# installZshTheme "https://raw.githubusercontent.com/caiogondim/bullet-train-oh-my-zsh-theme/master/bullet-train.zsh-theme" "bullet-train.zsh-theme"
 
 
-installFont "https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/patched-fonts/SourceCodePro/Regular/complete/Sauce%20Code%20Pro%20Nerd%20Font%20Complete.ttf" "Sauce Code Pro Nerd Font Complete.ttf"
-installFont "https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf" "Droid Sans Mono for Powerline Nerd Font Complete.otf"
-installFont "https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/AnonymousPro/complete/Anonymice%20Nerd%20Font%20Complete.ttf" "Anonymice Powerline Nerd Font Complete.ttf"
-installFont "https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/DejaVuSansMono/Regular/complete/DejaVu%20Sans%20Mono%20Nerd%20Font%20Complete.ttf" "DejaVu Sans Mono Nerd Font Complete.ttf"
-installFont "https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/DejaVuSansMono/Regular/complete/DejaVu%20Sans%20Mono%20Nerd%20Font%20Complete.ttf" "DejaVu Sans Mono Nerd Font Complete.ttf"
+# installFont "https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/patched-fonts/SourceCodePro/Regular/complete/Sauce%20Code%20Pro%20Nerd%20Font%20Complete.ttf" "Sauce Code Pro Nerd Font Complete.ttf"
+# installFont "https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf" "Droid Sans Mono for Powerline Nerd Font Complete.otf"
+# installFont "https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/AnonymousPro/complete/Anonymice%20Nerd%20Font%20Complete.ttf" "Anonymice Powerline Nerd Font Complete.ttf"
+# installFont "https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/DejaVuSansMono/Regular/complete/DejaVu%20Sans%20Mono%20Nerd%20Font%20Complete.ttf" "DejaVu Sans Mono Nerd Font Complete.ttf"
+# installFont "https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/DejaVuSansMono/Regular/complete/DejaVu%20Sans%20Mono%20Nerd%20Font%20Complete.ttf" "DejaVu Sans Mono Nerd Font Complete.ttf"
 
 
-installFontsFromZip "https://github.com/RedHatBrand/Overpass/releases/download/3.0.2/overpass-desktop-fonts.zip" "overpass"
-installFontsFromZip "https://github.com/AppleDesignResources/SanFranciscoFont/archive/master.zip" "sanfrancisco"
-installFontsFromZip "http://dl.1001fonts.com/alte-din-1451-mittelschrift.zip" "din-1451"
-installFontsFromZip "https://github.com/KDE/oxygen-fonts/archive/master.zip" "oxygen"
-installFontsFromZip "https://www.fontsquirrel.com/fonts/download/archivo-narrow" "archivo-narrow"
-installFontsFromZip "https://www.fontsquirrel.com/fonts/download/TeX-Gyre-Heros" "text-gyre-heros"
-installFontsFromZip "https://dl.dafont.com/dl/?f=liberation_sans" "liberation-sans"
-installFontsFromZip "https://www.fontsquirrel.com/fonts/download/montserrat" "montserrat"
+# installFontsFromZip "https://github.com/RedHatBrand/Overpass/releases/download/3.0.2/overpass-desktop-fonts.zip" "overpass"
+# installFontsFromZip "https://github.com/AppleDesignResources/SanFranciscoFont/archive/master.zip" "sanfrancisco"
+# installFontsFromZip "http://dl.1001fonts.com/alte-din-1451-mittelschrift.zip" "din-1451"
+# installFontsFromZip "https://github.com/KDE/oxygen-fonts/archive/master.zip" "oxygen"
+# installFontsFromZip "https://www.fontsquirrel.com/fonts/download/archivo-narrow" "archivo-narrow"
+# installFontsFromZip "https://www.fontsquirrel.com/fonts/download/TeX-Gyre-Heros" "text-gyre-heros"
+# installFontsFromZip "https://dl.dafont.com/dl/?f=liberation_sans" "liberation-sans"
+# installFontsFromZip "https://www.fontsquirrel.com/fonts/download/montserrat" "montserrat"
 
-installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/FiraMono.zip" "FiraMono"
-installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/DroidSansMono.zip" "DroidSansMono"
-installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/FantasqueSansMono.zip" "FantasqueSansMono"
-installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/Inconsolata.zip" "Inconsolata"
-installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/Meslo.zip" "Meslo"
-installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/RobotoMono.zip" "RobotoMono"
-installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/AnonymousPro.zip" "AnonymousPro"
-installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/SpaceMono.zip" "SpaceMono"
-installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/Terminus.zip" "Terminus"
-installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/Mononoki.zip" "Monoki"
-installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/ProFont.zip" "ProFont"
-installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/ProggyClean.zip" "ProggyClean"
+# installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/FiraMono.zip" "FiraMono"
+# installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/DroidSansMono.zip" "DroidSansMono"
+# installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/FantasqueSansMono.zip" "FantasqueSansMono"
+# installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/Inconsolata.zip" "Inconsolata"
+# installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/Meslo.zip" "Meslo"
+# installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/RobotoMono.zip" "RobotoMono"
+# installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/AnonymousPro.zip" "AnonymousPro"
+# installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/SpaceMono.zip" "SpaceMono"
+# installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/Terminus.zip" "Terminus"
+# installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/Mononoki.zip" "Monoki"
+# installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/ProFont.zip" "ProFont"
+# installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/ProggyClean.zip" "ProggyClean"
 installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/Hack.zip" "Hack"
-installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/Iosevka.zip" "Iosevka"
+# installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/Iosevka.zip" "Iosevka"
 
 
 
 
 fc-cache -f -v
 
-installGtkTheme "https://github.com/B00merang-Project/macOS-Sierra/archive/master.zip" "macOS-Sierra"
+# installGtkTheme "https://github.com/B00merang-Project/macOS-Sierra/archive/master.zip" "macOS-Sierra"
 
 installPeco
 
@@ -439,4 +439,3 @@ addToProfile 'GID' '$(id -g)'
 addToProfile 'DOCKER_GID' '$(getent group docker 2>/dev/null | cut -d: -f3 )'
 addToProfile 'QT_QPA_PLATFORMTHEME' 'gtk2'
 addToProfile 'QT_STYLE_OVERRIDE' 'GTK+'
-

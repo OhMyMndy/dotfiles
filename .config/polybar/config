@@ -41,13 +41,13 @@ height = 28px
 offset-x = 0
 offset-y = 0
 
-background = #1d1f21
+background = #1a1b21
 foreground = #eeeeee
 
 overline-size = 2
 overline-color = ${colors.foreground-alt}
 underline-size = 2
-underline-color = #1045ed
+underline-color = #184b98
 
 ;border-bottom-size = 2
 ;border-bottom-color = ${colors.accent-dark1}
@@ -68,7 +68,7 @@ modules-left = i3 mpd
 ; window
 ;modules-center = date
 ; xwindow
-modules-right = terminal monitor vpn filesystem cpu memory load eth date powermenu
+modules-right = terminal monitor vpn filesystem cpu load memory date powermenu
 
 tray-position = right
 tray-padding = 1
@@ -96,8 +96,8 @@ label-indicator-underline = ${colors.secondary}
 [module/vpn]
 type = custom/script
 exec = echo vpn
-exec-if = ip addr list tun0 || ip addr list tun1 || pgrep -x openvpn
-interval = 5
+exec-if = ip tuntap show | grep -iE 'tun[0-9]+'
+interval = 30
 format-underline = ${colors.accent-dark2}
 format-prefix = " "
 format-prefix-foreground = #5b
@@ -121,7 +121,7 @@ interval = 9000
 type=custom/script
 click-left = /usr/bin/xkill
 exec = df --output=pcent / -h | tail -1
-interval = 25
+interval = 60
 ;format-underline = ${colors.accent-light2}
 format-prefix = ""
 
@@ -137,7 +137,7 @@ format-underline = ${colors.accent-dark2}
 
 [module/redshift]
 type = custom/script
-interval = 5
+interval = 60
 
 exec = ~/.config/polybar/scripts/redshift.sh
 format-underline = ${colors.primary}
@@ -159,11 +159,11 @@ label-focused-foreground = #eeeeee
 label-focused-padding = 3
 
 label-unfocused = "%icon%"
-label-unfocused-foreground = #555555
+label-unfocused-foreground = #313b49
 label-unfocused-padding = 3
 
 label-urgent = "%icon%!"
-label-urgent-foreground = #fba922
+label-urgent-foreground = #eeec26
 label-urgent-padding = 3
 
 label-visible = "%icon%"
@@ -242,7 +242,7 @@ card = intel_backlight
 
 [module/cpu]
 type = internal/cpu
-interval = 2
+interval = 10
 ;format-prefix = " "
 format-prefix = "Cpu: "
 format-prefix-foreground = ${colors.foreground}
@@ -261,7 +261,7 @@ ramp-coreload-7 = █
 
 [module/memory]
 type = internal/memory
-interval = 3
+interval = 10
 format = <label> <bar-used>
 label = "Mem:"
 ; label = RAM %gb_used%/%gb_free%
@@ -280,7 +280,7 @@ bar-used-empty-foreground = #444444
 [module/swap]
 type=custom/script
 exec = bash ~/bin/swap-usage
-interval = 10
+interval = 20
 format-underline = ${colors.accent-light1}
 format-prefix = "Swap free: "
 
@@ -288,7 +288,7 @@ format-prefix = "Swap free: "
 
 [module/load]
 type=custom/script
-interval = 2
+interval = 10
 exec = cat /proc/loadavg | cut -f1-3 -d' '
 format-prefix = "Load: "
 
@@ -296,7 +296,7 @@ format-prefix = "Load: "
 [module/wlan]
 type = internal/network
 interface = net1
-interval = 3.0
+interval = 10
 
 format-connected = <ramp-signal> <label-connected>
 format-connected-underline = ${colors.accent-dark3}
@@ -317,7 +317,7 @@ ramp-signal-foreground = ${colors.foreground-alt}
 [module/eth]
 type = internal/network
 interface = ${xrdb:ethinterface:eth0}
-interval = 3 
+interval = 10
 ;   up - down icons
 ;format-connected-underline = ${colors.accent-light2}
 format-connected-prefix = " "
@@ -328,7 +328,7 @@ label-connected-alt = %local_ip%  %downspeed%  %upspeed%
 ;format-disconnected-underline = ${self.format-connected-underline}
 format-disconnected-prefix = " "
 label-disconnected = %ifname% disconnected
-label-disconnected-foreground = #555555
+label-disconnected-foreground = #313b49
 
 [module/date]
 type=custom/script

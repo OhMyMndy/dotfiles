@@ -264,13 +264,13 @@ exec_always --no-startup-id killall nm-applet; while pgrep -x nm-applet >/dev/nu
 exec_always --no-startup-id bash ~/bin/restart-polybar
 exec_always --no-startup-id killall dunst; while pgrep -x dunst >/dev/null; do sleep 1; done; dunst
 exec_always --no-startup-id bash -c "source ~/.functions; setRandomWallpaper"
-exec_always --no-startup-id killall compton; while pgrep -x compton >/dev/null; do sleep 1; done; compton --config ~/.config/compton.conf -b --dbe
+#exec_always --no-startup-id killall compton; while pgrep -x compton >/dev/null; do sleep 1; done; compton --config ~/.config/compton.conf -b --dbe
 exec_always --no-startup-id killall xbanish; while pgrep -x xbanish >/dev/null; do sleep 1; done; xbanish
 exec_always --no-startup-id killall volumeicon; while pgrep -x volumeicon >/dev/null; do sleep 1; done; volumeicon
 exec_always --no-startup-id killall synergys; while pgrep -x synergys >/dev/null; do sleep 1; done; synergys -c ~/.synergy.conf
 
-exec_always --no-startup-id bash "$HOME/.screenlayout/$(hostname).sh" 2>/dev/null
-exec_always --no-startup-id pkill -f restart-polybar; bash ~/bin/resolution-changed ~/bin/restart-polybar
+#exec_always --no-startup-id pkill -f resolution-changed; bash ~/bin/resolution-changed ~/bin/restart-polybar
+exec_always --no-startup-id bash "$HOME/.screenlayout/$(hostname).sh"
 
 # Custom bindsym
 bindsym $mod+Shift+greater move workspace to output right

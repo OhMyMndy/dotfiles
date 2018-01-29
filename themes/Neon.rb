@@ -1,37 +1,45 @@
+require_relative 'Default'
+
 class Neon < Default
 
     def initialize dpi
-        @dpi = dpi
         @colors = {
-            "COLOR0"         => "#1d1f21",
-            "COLOR8"         => "#969896",
+            "COLOR0"         => "#1a1b21",
+            "COLOR8"         => "#455160",
 
-            "COLOR1"         => "#cc342b",
-            "COLOR9"         => "#cc342b",
+            "COLOR1"         => "#cb271c",
+            "COLOR9"         => "#cb271c",
 
-            "COLOR2"         => "#198844",
-            "COLOR10"        => "#198844",
+            "COLOR2"         => "#17934c",
+            "COLOR10"        => "#17934c",
 
-            "COLOR3"         => "#fba922",
-            "COLOR11"        => "#fba922",
+            "COLOR3"         => "#eeec26",
+            "COLOR11"        => "#eeec26",
 
-            "COLOR4"         => "#3971ed",
-            "COLOR12"        => "#3971ed",
+            "COLOR4"         => "#39c2ed",
+            "COLOR12"        => "#39c2ed",
 
-            "COLOR5"         => "#a36ac7",
-            "COLOR13"        => "#a36ac7",
+            "COLOR5"         => "#a942af",
+            "COLOR13"        => "#a942af",
 
-            "COLOR6"         => "#1045ed",
-            "COLOR14"        => "#1045ed",
+            "COLOR6"         => "#184b98",
+            "COLOR14"        => "#184b98",
 
             "COLOR7"         => "#ffffff",
             "COLOR15"        => "#ffffff",
 
-            "COLOR16"        => "#555555",
+            "COLOR16"        => "#313b49",
 
-            "BACKGROUND"     => "#1d1f21",
+            "BACKGROUND"     => "#1a1b21",
             "FOREGROUND"     => "#eeeeee",
         }
+
+        dark_mode_file = Dir.home + '.dark-mode'
+        @dark_mode = File.read(dark_mode_file) if File.exists?(dark_mode_file)
+
+        @highlight_color = @colors['COLOR6']
+        @urgent_color = @colors['COLOR3']
+        @inactive_color = @colors['COLOR16']
     end
 
 end
