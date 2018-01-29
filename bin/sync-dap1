@@ -1,21 +1,38 @@
 #!/usr/bin/env ruby
 
-mount = %x[ diskutil info DAP1 | grep 'Mount Point' | grep -E -o '/Volumes/.*' | xargs echo -n ]
+require 'socket'
+require 'resolv-replace'
 
-if mount
-    remote_volume = "#{mount}/Music"
+ip = Socket.ip_address_list.detect{|intf| intf.ipv4_private?}
+mini_pc_ip = '192.168.10.120'
+
+mount = %x[ diskutil info DAP1 2>/dev/null | grep 'Mount Point' | grep -E -o '/Volumes/.*' | xargs echo -n ]
+mount.chomp!
+
+if mount.length > 0
+    remote_volume = "#{mount}"
 else
-    remote_volume = "/dev/disk/by-label/DAP1/Music"
+    remote_volume = %x[ findmnt -nr -o target -S /dev/disk/by-label/DAP1 ].to_str
 end
-
+remote_volume.strip!
 puts "Remote volume #{remote_volume}"
 
+if ip.ip_address ==  mini_pc_ip
+    hostname = ''
+    sudo = 'sudo '
+else
+    sudo = ''
+    hostname = "#{mini_pc_ip}:"
+end
 
-excludes="--exclude 'to_import' --exclude 'New Wave' --exclude '*.DS_Store' --exclude 'MpdPlaylists' --exclude 'Playlists/mpd' --exclude '.Trash-1000'"
-cmd="rsync -ahrt #{excludes} --progress 192.168.10.120:/tank/media/music/ #{remote_volume}"
+
+excludes="--exclude 'to_import' --exclude '*.bak' --exclude 'New Wave' --exclude '*.DS_Store' --exclude '.Trash-1000'"
+cmd="#{sudo} rsync -hrt #{excludes} --progress #{hostname}/tank/media/music/ #{remote_volume}"
+puts cmd
 system cmd
 
-Dir.chdir remote_volume + "/Playlists"
+puts "#{remote_volume}/Playlists"
+Dir.chdir("#{remote_volume}/Playlists")
 playlists = Dir.glob('**/*.m3u*')
 
 playlists.each do |playlist|
@@ -31,4 +48,3 @@ playlists.each do |playlist|
     new_content.gsub!(/\//, '\\')
     File.write playlist, new_content
 end
-

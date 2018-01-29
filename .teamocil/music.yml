@@ -1,0 +1,9 @@
+windows:
+  - name: Music
+    root: ~/MyMysic
+    layout: fcaf,238x60,0,0{119x60,0,0,11,118x60,120,0[118x7,120,0,17,118x29,120,8,18,118x22,120,38,19]}
+    panes:
+      - ' title "NCMXPP"; ncmpcpp'
+      - ' title "MPD"; sudo pkill -f mpd ; sudo mpd ~/.mpdconf '
+      - ' title "Visualiser"; vis'
+      - ' title "AlsaMixer"; alsamixer'
