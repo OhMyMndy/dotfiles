@@ -203,7 +203,10 @@ fi
 
 
 if [ ! -d ~/.oh-my-zsh ]; then
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+	wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh
+  sed -i.tmp 's:env zsh::g' install.sh
+  sed -i.tmp 's:chsh -s .*$::g' install.sh
+  sh install.sh
 fi
 
 mkdir -p ~/.oh-my-zsh/custom/themes
