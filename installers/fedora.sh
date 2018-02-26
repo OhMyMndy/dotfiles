@@ -1,15 +1,18 @@
 #!/usr/bin/env bash
 
 sudo dnf update -y
-sudo dnf install git i3 xterm zsh google-roboto-fonts redshift htop -y
-sudo dnf -y install gcc automake make kernel-headers kernel-devel perl
+sudo dnf install git i3 xterm zsh google-roboto-fonts redshift htop rofi -y
+sudo dnf install ruby dunst -y
 
-sudo dnf copr enable tomwishaupt/polybar -y
-sudo dnf install polybar -y
+sudo dnf install gcc automake make kernel-headers kernel-devel perl -y
+
+sudo dnf copr enable yaroslav/i3desktop
+sudo dnf install rofi -y
+
 
 
 # install polybar
-sudo dnf install -y cmake @development-tools gcc-c++ i3-ipc jsoncpp-devel alsa-lib-devel wireless-tools-devel libmpdclient-devel libcurl-devel cairo-devel xcb-proto xcb-util-devel xcb-util-wm-devel xcb-util-image-devel
+sudo dnf install -y cmake @development-tools gcc-c++ i3-ipc jsoncpp-devel pulseaudio-libs-devel alsa-lib-devel wireless-tools-devel libmpdclient-devel libcurl-devel cairo-devel xcb-proto xcb-util-devel xcb-util-wm-devel xcb-util-image-devel
 
 rm -rf /tmp/polybar
 git clone --recursive https://github.com/jaagr/polybar /tmp/polybar

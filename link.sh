@@ -6,6 +6,7 @@ echo "dark mode: $dark_mode"
 #set -e
 
 mkdir -p ~/.config
+mkdir -p ~/Screenshots
 
 rm -f ~/.vimrc
 ln -sf ${DIR}/.vimrc ~/.vimrc

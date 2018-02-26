@@ -19,6 +19,14 @@ randomWallpaper() {
     echo ${wallpaper}
 }
 
+setWallpaper() {
+  if [ -f $HOME/.wallpaper ]; then
+    feh --bg-scale $HOME/.wallpaper
+  else
+    setRandomWallpaper
+  fi
+}
+
 setRandomWallpaper() {
     # Without the echo $RANDOM, result is always the same...
     echo $RANDOM
@@ -113,9 +121,9 @@ setup_lsi() {
         run_vdir() {
             vdir-i --color=auto -w $(tput cols) "$@"
         }
-        alias ls="run_ls"
-        alias dir="run_dir"
-        alias vdir="run_vdir"/
+        #alias ls="run_ls"
+        #alias dir="run_dir"
+        #alias vdir="run_vdir"
     fi
 }
 

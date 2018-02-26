@@ -47,7 +47,7 @@ if [ -f $HOME/bin/commands-to-aliases ]; then
 fi
 
 
-export PATH=$HOME/.config/composer/vendor/bin:$HOME/.composer/vendor/bin:$HOME/.local/bin:/usr/share/doc/git/contrib/diff-highlight:/usr/local/go/bin:$HOME/.go/bin:$PATH:$HOME/bin
+export PATH=$HOME/.config/composer/vendor/bin:$HOME/.composer/vendor/bin:$HOME/.local/bin:/usr/share/doc/git/contrib/diff-highlight:/usr/local/go/bin:$HOME/.go/bin:$PATH:$HOME/bin:$HOME/bin/appimages
 PATH="`ruby -e 'puts Gem.user_dir'`/bin:$PATH"
 export LESS="-RS"
 export TERMINAL=termite
@@ -55,23 +55,12 @@ compctl -g '~/.teamocil/*(:t:r)' teamocil
 if exists dircolors; then
     eval "$(dircolors ~/.dircolors)";
 fi
-#zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 
 
 export HISTFILE="$HOME/.zhistory"
 HISTSIZE=1000000
 SAVEHIST=$HISTSIZE
 setopt EXTENDED_HISTORY
-# Allow autocompletion for dot files/folders
-#_comp_options+=(globdots)
-
-# Prevent Git from:
-# perl: warning: Setting locale failed.
-# perl: warning: Please check that your locale settings:
-#alias git='LC_ALL=C git'
-
-
-
 
 alias docker-ps-min='docker ps --format "table{{.Names}}\t{{.RunningFor}}\t{{.Status}}"'
 alias hl='grepc "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+"'
@@ -107,23 +96,16 @@ export CHEATCOLORS=true
 
 setup_lsi
 
-
-#alias fixssh='eval $(tmux show-env -s |grep "^SSH_")'
-
-#fixssh
-
 # Launch SSH agent if not running
 if ! ps aux |grep $(whoami) |grep ssh-agent |grep -v grep >/dev/null; then ssh-agent ; fi
 
 # Link the latest ssh-agent socket
+mkdir -p ~/.ssh
 ln -sf $(find /tmp -maxdepth 2 -type s -name "agent*" -user $USER -printf '%T@ %p\n' 2>/dev/null |sort -n|tail -1|cut -d' ' -f2) ~/.ssh/ssh_auth_sock
 
 export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock
 
 export IP_ADDRESS=$(ip_address)
 export GID=$(id -g)
-export LOCAL_PROJECT_DIR=/var/www/html/
-export LOCAL_DOCKER_DIR=/var/www/docker/
-export LOCAL_PHING_DIR=/var/www/phing/
 export UID
 export HOSTNAME=$(hostname)
