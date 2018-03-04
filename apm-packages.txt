@@ -1,0 +1,4 @@
+git-plus@7.10.0
+minimap@4.29.8
+pigments@0.40.2
+

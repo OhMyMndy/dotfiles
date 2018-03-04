@@ -248,3 +248,7 @@ webdev () {
 ip_address() {
     ip route get 1 | awk '{print $NF;exit}'
 }
+
+write_apm_to_file() {
+  apm list --installed --bare > ~/dotfiles/apm-packages.txt
+}
