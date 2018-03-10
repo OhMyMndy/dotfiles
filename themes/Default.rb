@@ -77,10 +77,25 @@ class Default
           "normal_alternative"  => Font.new(@normal_font_alternative, @normal_font_size_alternative, @normal_font_style_alternative)
       }
 
+      available_themes = %x(for i in $(ls /usr/share/themes/); do echo ${i%%/}; done)
+      available_themes = available_themes.split("\n")
+
+      available_icons = %x(for i in $(ls /usr/share/icons/); do echo ${i%%/}; done)
+      available_icons = available_icons.split("\n")
       @gtk = {
           "theme"           => "Arc-Darker",
           "icon_theme"      => "Papirus",
       }
+
+      available = available_themes.select {|e| e == @gtk['theme']}
+      if available.length == 0
+        @gtk['theme'] = 'Adwaita'
+      end
+
+      available = available_icons.select {|e| e == @gtk['icon_theme']}
+      if available.length == 0
+        @gtk['icon_theme'] = 'Adwaita'
+      end
 
       @dunst = {
           "global"          => {

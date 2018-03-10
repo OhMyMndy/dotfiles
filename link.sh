@@ -22,6 +22,9 @@ ln -sf ${DIR}/.config/redshift.conf ~/.config/redshift.conf
 rm -rf ~/.config/i3
 ln -sfn ${DIR}/.config/i3 ~/.config/i3
 
+rm -rf ~/.config/xfce4
+ln -sfn ${DIR}/.config/xfce4 ~/.config/xfce4
+
 ln -sf ${DIR}/.wallpaper.jpg ~/.wallpaper.jpg
 
 rm -rf ~/.config/gtk-3.0

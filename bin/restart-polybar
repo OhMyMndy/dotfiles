@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 pkill polybar -9
 
 while pgrep -x polybar >/dev/null
