@@ -128,6 +128,9 @@ class Default
           },
       }
 
+      %x(i3 --version | grep gaps)
+      i3gaps_enabled = $?.exitstatus === 0
+      puts i3gaps_enabled
       @i3 = {
           "font" => @fonts["normal"].to_gtk,
           "border" => 2,
@@ -139,7 +142,8 @@ class Default
           },
           "gaps" => {
               "inner" => 2,
-              "outer" => 0
+              "outer" => 0,
+              "enabled" => i3gaps_enabled
           },
       }
 
@@ -156,7 +160,7 @@ class Default
           "fonts"                => [
               @fonts["normal"].to_polybar(12, -2),
               @fonts["normal_alternative"].to_polybar(12, -2),
-              @fonts["monospace"].to_polybar(17, 0)
+              @fonts["monospace"].to_polybar(17, -1)
           ]
       }
 

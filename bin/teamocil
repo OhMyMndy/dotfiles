@@ -14,15 +14,22 @@ touch "$tmp_config"
 cat "$HOME/.teamocil/$config.yml" > "$tmp_config"
 
 
+# Execute all commands before
 set +e
 IFS=$'\n'
 before_commands=$(cat $tmp_config | grep '^#before' | cut -d' ' -f2-)
 for var in ${before_commands}; do
-    echo "Executing command before: $var"
+    echo -e "\e[34mExecuting command before: $var\e[39m"
     eval $var
 done
 
+# Execute script if available
+if [ -f "$HOME/.teamocil/$config.sh" ]; then
+	echo -e "\e[34mExecuting command $config.sh\e[39m"
+	eval "$HOME/.teamocil/$config.sh"
+fi
 
+# Replace all variables {{varname}} in the config file
 unset IFS
 args=() i=0
 for var in $(compgen -e); do
@@ -32,4 +39,41 @@ for var in $(compgen -e); do
     sed -i "$pattern" $tmp_config
 done
 
+# Show messages about unused variables
+IFS=$'\n'
+unused_variables=$(grep -E -o '\{\{[^}]+\}\}' $tmp_config)
+for var in ${unused_variables}; do
+    echo -e "\e[33mVariable not found: $var\e[39m"
+done
+
+# Remove all variables which cannot be replaced
+sed -i -e "s#{{[^}]*}}##g" $tmp_config
+
 /usr/local/bin/teamocil "_tmp_$config"
+
+
+######################
+## Example yml file ##
+######################
+
+# #before tmux list-panes -a -F "#I:#W" | grep "Cregoratool" | cut -d: -f1 | uniq | sed '/^\s*$/d' | xargs -I{} tmux kill-window -t {}
+# #before docker exec -it webdev_php_1 bash -c "killall bash; killall node; exit";
+#
+#
+# windows:
+#   - name: Cregoratool {{customer}} {{abc}}
+#     root: ~
+#     layout: 4812,238x68,0,0[238x22,0,0{59x22,0,0,227,59x22,60,0,237,59x22,120,0,232,58x22,180,0,233},238x23,0,23{59x23,0,23,228,59x23,60,23,236,59x23,120,23,234,58x23,180,23,235},238x21,0,47{59x21,0,47,229,59x21,60,47,238,59x21,120,47,230,58x21,180,47,231}]
+#     panes:
+#       - ' title "Bash www-data 1"; while true; do docker exec -it -u www-data webdev_php_1 bash -c "cd cregoratool; clear; bash ./menu.sh {{customer}}"; sleep 5; echo ""; done'
+#       - ' title "Bash www-data 2"; while true; do docker exec -it -u www-data webdev_php_1 bash -c "cd cregoratool; clear; bash"; sleep 5; echo ""; done'
+#       - ' title "Bash root 1"; cd /var/www/docker/webdev; while true; do docker exec -it webdev_php_1 bash -c "cd cregoratool; clear; bash"; sleep 5; echo ""; done'
+#       - ' title "Bash root 2"; cd /var/www/docker/webdev; while true; do docker exec -it webdev_php_1 bash -c "cd cregoratool; clear; bash"; sleep 5; echo ""; done'
+#       - ' title "Docker  1"; cd /var/www/docker/webdev; clear'
+#       - ' title "Docker  2"; cd /var/www/docker/webdev; clear'
+#       - ' title "Cregoratool host"; cd /var/www/html/cregoratool; clear'
+#       - ' title "Cregoratool host"; cd /var/www/html/cregoratool; clear'
+#       - ' title "MySQL"; while true; do clear; mycli -u root -pmy-secret-pw {{customer}}_dev_base; sleep 5; echo ""; done'
+#       - ' title "MySQL Application"; while true; do clear; mycli -u root -pmy-secret-pw {{customer}}_dev_application; sleep 5; echo ""; done'
+#       - ' title "MySQL Base"; while true; do clear; mycli -u root -pmy-secret-pw {{customer}}_dev_base; sleep 5; echo ""; done'
+#       - ' title "MySQL Base 2"; while true; do clear; mycli -u root -pmy-secret-pw {{customer}}_dev_base; sleep 5; echo ""; done'

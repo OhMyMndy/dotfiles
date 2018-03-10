@@ -18,3 +18,4 @@ sublime-text-3
 *node_modules*
 heidisql
 .oh-my-zsh
+.DS_Store

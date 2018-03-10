@@ -57,7 +57,7 @@ Dir.chdir $root_dir
 Dir.glob ['*.erb', '.byobu/*.erb', '.config/**/*.erb'], File::FNM_DOTMATCH do |file|
     new_file_name = get_new_filename file
 
-
+    puts new_file_name
     new_content = compile(file)
     puts new_file_name + " length " + new_content.length.to_s
     if new_content.empty? || new_content.length < 2
@@ -79,9 +79,9 @@ end
 
 Process.fork { system "bash \"#{$root_dir}/link.sh\" > /tmp/output-link.sh 2>&1 " }
 Process.fork { system "pkill dunst; dunst > /dev/null 2>&1 " }
-%x( notify-send -i status/dialog-information.png "Fortune" "$(fortune)" )
-%x( notify-send -i status/audio-volume-medium.png "Now playing" "STIGMATA - "СЕНТЯБРЬ" (LIVE @КАЗАНЬ 15.05.2015)" )
-%x( notify-send -i status/audio-volume-medium -u critical "Urgent Test" "Content... https://google.com" )
+# %x( notify-send -i status/dialog-information.png "Fortune" "$(fortune)" )
+# %x( notify-send -i status/audio-volume-medium.png "Now playing" "STIGMATA - "СЕНТЯБРЬ" (LIVE @КАЗАНЬ 15.05.2015)" )
+# %x( notify-send -i status/audio-volume-medium -u critical "Urgent Test" "Content... https://google.com" )
 Process.fork { system "xrandr --dpi #{$dpi} > /dev/null 2>&1 " }
 Process.fork { system "pkill polybar; polybar top >/dev/null 2>&1 " }
 Process.fork { system "i3 reload" }

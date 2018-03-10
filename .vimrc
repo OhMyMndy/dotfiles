@@ -1,7 +1,5 @@
 set nocompatible              " be iMproved, required
 filetype off                  " required
-colorscheme cobalt
-" colorscheme wal
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
@@ -34,6 +32,7 @@ Plugin 'scrooloose/syntastic'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'flazz/vim-colorschemes'
+Plugin 'felixhummel/setcolors.vim'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -48,7 +47,7 @@ filetype plugin indent on    " required
 "
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
-
+colorscheme DarkDefault
 set nu
 syntax on
 let g:colorizer_auto_color=1
@@ -64,9 +63,6 @@ autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 map <C-n> :NERDTreeToggle<CR>
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 set mouse=a
-
-
-colorscheme wellsokai
 
 filetype plugin indent on
 " show existing tab with 4 spaces width
