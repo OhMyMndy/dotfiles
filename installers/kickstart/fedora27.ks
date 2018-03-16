@@ -120,6 +120,7 @@ mpc
 mpd
 gnome-disk-utility
 docker-ce
+docker-compose
 gedit
 gedit-plugins
 lightdm
@@ -131,6 +132,7 @@ ffmpeg
 flacon
 shntool
 cuetools
+jq
 %end
 
 
@@ -150,7 +152,7 @@ cuetools
 exec < /dev/tty6 > /dev/tty6 2> /dev/tty6
 chvt 6
 
-gem install json
+gem install json >> /tmp/post.log
 git clone https://github.com/Mandy91/dotfiles.git /home/mandy/dotfiles >> /tmp/post.log
 ruby /home/mandy/dotfiles/install.rb >> /tmp/post.log
 bash /home/mandy/dotfiles/link.sh >> /tmp/post.log
@@ -170,8 +172,8 @@ rpm --import https://dl-ssl.google.com/linux/linux_signing_key.pub >> /home/mand
 rpm -ivh http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-27.noarch.rpm >> /home/mandy/post.log
 rpm -ivh http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-27.noarch.rpm >> /home/mandy/post.log
 
-dnf install https://github.com/atom/atom/releases/download/v1.24.0/atom.x86_64.rpm -y >> /home/mandy/post.log
-dnf install https://github.com/saenzramiro/rambox/releases/download/0.5.14/Rambox-0.5.14-x64.rpm -y >> /home/mandy/post.log
+dnf install $(curl -s https://api.github.com/repos/atom/atom/releases/latest | jq -r ".assets[] | select(.name) | select(.browser_download_url | test(\"rpm$\")) | .browser_download_url") -y >> /home/mandy/post.log
+dnf install $(curl -s https://api.github.com/repos/saenzramiro/rambox/releases/latest | jq -r ".assets[] | select(.name) | select(.browser_download_url | test(\"64.*rpm$\")) | .browser_download_url") -y >> /home/mandy/post.log
 
 systemctl enable lightdm >> /home/mandy/post.log
 systemctl enable docker >> /home/mandy/post.log
