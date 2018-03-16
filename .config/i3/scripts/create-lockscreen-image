@@ -1,0 +1,47 @@
+#!/bin/bash
+
+
+TMP_IMAGE=/tmp/i3_lock.png
+rm $TMP_IMAGE 2>/dev/null
+
+IMAGE=$(realpath $HOME/.wallpaper)
+
+getFont() {
+  default_font="$2"
+  font="$1"
+
+  convert -list font | grep -q "Font: $font"
+  font_exists=$?
+  if [ $font_exists -ne 0 ]; then
+    echo ${default_font}
+  else
+    echo $font
+  fi
+}
+
+default_font="$(xrdb -query | grep normal_font | cut -f2 | sed -E 's/ /-/g')"
+font=$(getFont "${default_font}" "Arial")
+
+default_monospace_font="$(xrdb -query | grep monospace_font | cut -f2 | sed -E 's/ /-/g')"
+monospace_font=$(getFont "${default_monospace_font}" "fixed")
+monospace_font=$(getFont "Hack-Regular-Nerd-Font-Complete-Mono" "$monospace_font")
+
+echo "monospace font: $monospace_font"
+echo "font: $font"
+
+convert $IMAGE -resize 1920x1080^ -gravity center -extent 1920x1080 -sepia-tone 90% $TMP_IMAGE
+text="Locked at $(date +'%a %d-%m-%Y %H:%M')"
+convert $TMP_IMAGE  -font $font -pointsize 13 \
+          -draw "gravity south \
+                 fill black  text 0,12 \"$text\" \
+                 fill white  text 1,11 \"$text\" " ${TMP_IMAGE}
+
+
+text="$(neofetch --off --stdout)"
+convert $TMP_IMAGE  -font $monospace_font -pointsize 13 \
+         -draw "gravity NorthWest \
+                fill black  text 12,12 \"$text\" \
+                fill white  text 13,13 \"$text\" " ${TMP_IMAGE}
+
+
+convert +append $TMP_IMAGE $TMP_IMAGE $TMP_IMAGE

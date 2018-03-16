@@ -8,6 +8,9 @@ echo "dark mode: $dark_mode"
 mkdir -p ~/.config
 mkdir -p ~/Screenshots
 
+rm -f ~/.startup.sh
+ln -sf ${DIR}/.startup.sh ~/.startup.sh
+
 rm -f ~/.vimrc
 ln -sf ${DIR}/.vimrc ~/.vimrc
 
@@ -22,6 +25,9 @@ ln -sf ${DIR}/.config/redshift.conf ~/.config/redshift.conf
 
 rm -rf ~/.config/i3
 ln -sfn ${DIR}/.config/i3 ~/.config/i3
+
+rm -rf ~/.config/xfce4
+ln -sfn ${DIR}/.config/xfce4 ~/.config/xfce4
 
 ln -sf ${DIR}/.wallpaper.jpg ~/.wallpaper.jpg
 
@@ -46,6 +52,9 @@ ln -sf ${DIR}/.config/terminator ~/.config/terminator
 
 rm -rf ~/.config/polybar
 ln -sf ${DIR}/.config/polybar ~/.config/polybar
+
+rm -rf ~/.config/byobu
+ln -sf ${DIR}/.byobu ~/.config/byobu
 
 rm -rf ~/.byobu
 ln -sf ${DIR}/.byobu ~/.byobu
@@ -103,7 +112,7 @@ ln -sf ${DIR}/.config/beets ~/.config/beets
 rm -rf ~/.config/ranger
 ln -sf ${DIR}/.config/ranger ~/.config/ranger
 
-mv -f ~/bin ~/bin_old 2>/dev/null || echo "1" > /dev/null
+mv -f ~/bin ~/bin_old 2>/dev/null || true > /dev/null
 rm -rf ~/bin
 ln -sf ${DIR}/bin ~/bin
 chmod +x -R ~/bin/
@@ -266,6 +275,7 @@ function installZshTheme()
 
 }
 
+fontsAdded=0
 function installFont()
 {
 	fontUrl="$1"
@@ -275,6 +285,7 @@ function installFont()
 
 	if [ ! -f "$fontName" ]; then
 		curl -fLo "$fontName" "$fontUrl"
+		fontsAdded=1
 	fi
 }
 
@@ -289,6 +300,7 @@ function installFontsFromZip()
 		rm -f "/tmp/$fontName.zip"
     	curl -fLo "/tmp/$fontName.zip" "$fontUrl"
 		unzip "/tmp/$fontName.zip" -d "$fontName"
+		fontsAdded=1
 	fi
 }
 
@@ -300,9 +312,14 @@ function installGtkTheme()
 		mkdir -p ~/.themes | true
 		cd ~/.themes
 		if [ ! -d "$themeName" ]; then
+			tmp_dir=$(mktemp -d)
 			rm -f "/tmp/$themeName.zip"
 			curl -fLo "/tmp/$themeName.zip" "$themeUrl"
-			unzip "/tmp/$themeName.zip" -d "$themeName"
+			cd "${tmp_dir}"
+			unzip "/tmp/$themeName.zip"
+			mkdir -p "$HOME/.themes/$themeName"
+			mv "${tmp_dir}"/*/** "$HOME/.themes/$themeName"
+			rm -rf "${tmp_dir}"
 		fi
 	fi
 }
@@ -381,6 +398,11 @@ sed -i -e's/\s*BUFFER=.*/BUFFER=$\(fc -l -n 1 |  eval $tac | awk "\!x\[\\$0\]++"
 
 installZshPlugin "https://github.com/skx/sysadmin-util.git" "sysadmin-util"
 
+if [ ! -d "$ZSH_CUSTOM/themes/spaceship-prompt"]; then
+	git clone https://github.com/denysdovhan/spaceship-prompt.git "$ZSH_CUSTOM/themes/spaceship-prompt"
+	ln -s "$ZSH_CUSTOM/themes/spaceship-prompt/spaceship.zsh-theme" "$ZSH_CUSTOM/themes/spaceship.zsh-theme"
+fi
+
 # installZshTheme "https://raw.githubusercontent.com/caiogondim/bullet-train-oh-my-zsh-theme/master/bullet-train.zsh-theme" "bullet-train.zsh-theme"
 
 
@@ -417,12 +439,21 @@ installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v
 
 
 
+if [ $fontsAdded -eq 1 ]; then
+	fc-cache -f -v
+fi
 
-fc-cache -f -v
-
-# installGtkTheme "https://github.com/B00merang-Project/macOS-Sierra/archive/master.zip" "macOS-Sierra"
+installGtkTheme "https://github.com/B00merang-Project/macOS-Sierra/archive/master.zip" "macOS-Sierra"
+installGtkTheme "https://github.com/B00merang-Project/Windows-10/archive/master.zip" "Windows-10"
+installGtkTheme "https://github.com/Elbullazul/Redmond-Themes/releases/download/2016%2F11%2F15/Windows.3.x.R4.zip" "Windows-3.x"
+installGtkTheme "https://github.com/B00merang-Project/Android/archive/master.zip" "Boomerang-Android"
+installGtkTheme "https://github.com/B00merang-Project/Fushia/archive/master.zip" "Boomerang-Android-Fushia"
+installGtkTheme "https://github.com/B00merang-Project/Chrome-OS/archive/master.zip" "Boomerang-Chrome-OS"
 
 installPeco
+
+# Execute executables in Thunar instead of editing them on double click: https://bbs.archlinux.org/viewtopic.php?id=194464
+xfconf-query --channel thunar --property /misc-exec-shell-scripts-by-default --create --type bool --set true
 
 crontab -l 2>/dev/null | grep -q "$HOME/bin/disk-usage-warning"
 inCrontab=$?
@@ -452,5 +483,21 @@ function addToProfile() {
 addToProfile 'IP_ADDRESS' '$(ip -4 route get 1 | head -1 | awk "{print \$7}" )'
 addToProfile 'GID' '$(id -g)'
 addToProfile 'DOCKER_GID' '$(getent group docker 2>/dev/null | cut -d: -f3 )'
-addToProfile 'QT_QPA_PLATFORMTHEME' 'gtk2'
-addToProfile 'QT_STYLE_OVERRIDE' 'GTK+'
+addToProfile 'XDG_CONFIG_HOME' '$HOME/.config'
+
+
+# remove arc border radius
+
+find /usr/share/themes/Arc -type f -name '*.rc' | sudo xargs -I {} sed -E -i 's/(radius\s*=)([^;]+)/\1 0/g' {}
+find /usr/share/themes/Arc -type f -name '*.css' | sudo xargs -I {} sed -E -i 's/(border.+radius:)([^;]+);/\1 0px;/g' {}
+
+
+which nvm
+nvm_exists=$?
+if [ $nvm_exists -ne 0 ]; then
+	curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash
+	export NVM_DIR="$HOME/.nvm"
+	[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+	sudo chown -R $USER:$(id -gn $USER) /home/mandy/.config
+	nvm install stable
+fi

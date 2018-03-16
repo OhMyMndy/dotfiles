@@ -22,8 +22,8 @@ class Neon < Default
             "COLOR5"         => "#a942af",
             "COLOR13"        => "#a942af",
 
-            "COLOR6"         => "#184b98",
-            "COLOR14"        => "#184b98",
+            "COLOR6"         => "#2163c6",
+            "COLOR14"        => "#2163c6",
 
             "COLOR7"         => "#ffffff",
             "COLOR15"        => "#ffffff",
@@ -35,11 +35,17 @@ class Neon < Default
         }
 
         dark_mode_file = Dir.home + '.dark-mode'
-        @dark_mode = File.read(dark_mode_file) if File.exists?(dark_mode_file)
+        @dark_mode = File.read(dark_mode_file) if File.exist?(dark_mode_file)
 
         @highlight_color = @colors['COLOR6']
         @urgent_color = @colors['COLOR3']
         @inactive_color = @colors['COLOR16']
     end
 
+    def configuration_override
+      @gtk = {
+          "theme"           => "Windows-10",
+          "icon_theme"      => "Arc-Icons",
+      }
+    end
 end

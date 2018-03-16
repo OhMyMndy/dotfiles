@@ -130,7 +130,7 @@ format-prefix = ""
 type=custom/script
 click-left=toggle-dark
 # exec = cat ~/.dark-mode 2>/dev/null
-exec = dark_mode=$(cat ~/.dark_mode 2>/dev/null); if [ "$dark_mode" = "1" ]; then echo "Dark"; else echo "Light"; fi 
+exec = dark_mode=$(cat ~/.dark_mode 2>/dev/null); if [ "$dark_mode" = "1" ]; then echo "Dark"; else echo "Light"; fi
 interval = 10
 format-underline = ${colors.accent-dark2}
 
@@ -170,16 +170,16 @@ label-visible = "%icon%"
 label-visible-foreground = <%= polybar['foreground'] %>
 label-visible-padding = <%= polybar['wm_padding'] %>
 
-ws-icon-0 = 1;
-ws-icon-1 = 2;
-ws-icon-2 = 3;
-ws-icon-3 = 4;
-ws-icon-4 = 5;
-ws-icon-5 = 6;
-ws-icon-6 = 7;
-ws-icon-7 = 8;
-ws-icon-8 = 9;
-ws-icon-9 = 10;
+ws-icon-0 = 1: ;
+ws-icon-1 = 2: ;
+ws-icon-2 = 3: ;
+ws-icon-3 = 4: ;
+ws-icon-4 = 5: ;
+ws-icon-5 = 6: ;
+ws-icon-6 = 7: ;
+ws-icon-7 = 8: ;
+ws-icon-8 = 9: ;
+ws-icon-9 = 10: ;
 
 [module/mpd]
 type = internal/mpd
@@ -361,7 +361,7 @@ bar-volume-foreground-4 = ${colors.accent-light1}
 bar-volume-foreground-5 = ${colors.accent-dark2}
 bar-volume-foreground-6 = ${colors.alert}
 bar-volume-gradient = false
-bar-volume-indicator = 
+bar-volume-indicator =
 bar-volume-indicator-font = 2
 bar-volume-indicator-foreground = #ff
 bar-volume-fill = ─
@@ -441,7 +441,7 @@ menu-0-0-exec = menu-open-1
 menu-0-1 = " power off"
 menu-0-1-exec = menu-open-2
 menu-0-2 = " lock"
-menu-0-2-exec = bash ~/.config/i3/scripts/lock 
+menu-0-2-exec = bash ~/.config/i3/scripts/lock
 menu-0-3 = " switch user"
 menu-0-3-exec = dm-tool switch-to-greeter
 

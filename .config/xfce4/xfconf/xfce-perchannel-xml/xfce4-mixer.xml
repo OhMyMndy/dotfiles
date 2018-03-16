@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<channel name="xfce4-mixer" version="1.0">
+  <property name="sound-card" type="string" value="Intel82801AAICHAlsamixer"/>
+  <property name="sound-cards" type="empty">
+    <property name="Intel82801AAICHAlsamixer" type="array">
+      <value type="string" value="Stereo Mic"/>
+      <value type="string" value="Spread Front to Surround and Center/LFE"/>
+      <value type="string" value="Exchange Front/Surround"/>
+      <value type="string" value="Mic Select"/>
+      <value type="string" value="Mic Boost (+20dB)"/>
+      <value type="string" value="Microphone Capture"/>
+      <value type="string" value="Microphone"/>
+      <value type="string" value="CD Capture"/>
+      <value type="string" value="CD"/>
+      <value type="string" value="Line Jack Sense"/>
+      <value type="string" value="Line-in Capture"/>
+      <value type="string" value="Line-in"/>
+      <value type="string" value="PCM Out Path &amp; Mute"/>
+      <value type="string" value="PCM"/>
+      <value type="string" value="Headphone Jack Sense"/>
+      <value type="string" value="Master Mono"/>
+      <value type="string" value="Master"/>
+    </property>
+  </property>
+  <property name="window-height" type="int" value="779"/>
+  <property name="window-width" type="int" value="700"/>
+</channel>

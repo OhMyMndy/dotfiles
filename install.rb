@@ -1,6 +1,7 @@
 require 'erb'
 require 'fileutils'
-require_relative 'functions.rb'
+$LOAD_PATH << File.join(File.dirname(__FILE__))
+require 'functions'
 
 class String
   def ucfirst!
@@ -96,13 +97,11 @@ Process.fork { system "i3 reload" }
 #############
 # Install even better ls
 #############
-%x( which ls-i )
-if $?.exitstatus != 0
-    %x( sh -c "$(curl -fsSL https://raw.githubusercontent.com/illinoisjackson/even-better-ls/master/install.sh)" )
-end
+# %x( which ls-i )
+# if $?.exitstatus != 0
+#    %x( sh -c "$(curl -fsSL https://raw.githubusercontent.com/illinoisjackson/even-better-ls/master/install.sh)" )
+# end
 
-
-exit
 
 #############
 ## Git settings
@@ -113,19 +112,3 @@ exit
 %x( git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit" )
 %x( git config --global user.name "Mandy Schoep" )
 # git config --global user.email
-
-
-#############
-## Copy all other files
-#############
-
-
-files = [
-    ".vimrc"
-]
-
-files.each do |file|
-    file_location = Dir.home + "/" + file
-
-    puts file_location
-end

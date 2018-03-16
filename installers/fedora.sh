@@ -2,13 +2,10 @@
 
 sudo dnf update -y
 sudo dnf install git i3 xterm zsh google-roboto-fonts redshift htop rofi -y
-sudo dnf install ruby dunst -y
-
-sudo dnf install gcc automake make kernel-headers kernel-devel perl -y
+sudo dnf install ruby dunst neofetch -y
 
 sudo dnf copr enable yaroslav/i3desktop
 sudo dnf install rofi -y
-
 
 
 # install polybar
@@ -22,7 +19,3 @@ pkill polybar
 
 ./build.sh -f
 # end install Polybar
-
-
-read "Insert guest addition CD, then press a key to continue..."
-sudo /run/media/user/VBox*/VBoxLinuxAdditions.run

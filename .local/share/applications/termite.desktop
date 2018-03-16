@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Termite
+Exec=bash -c "termite"
+StartupNotify=true
+Terminal=false
+Type=Application
+Icon=termite
+Categories=Utility;Terminal

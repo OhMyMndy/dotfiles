@@ -133,6 +133,7 @@ flacon
 shntool
 cuetools
 jq
+ImageMagick
 %end
 
 
