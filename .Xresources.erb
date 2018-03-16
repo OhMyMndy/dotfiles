@@ -43,12 +43,13 @@ Xft.lcdfilter: lcddefault
 ! Enable the extended coloring options
 rofi.modi: drun,run,window,ssh
 rofi.color-enabled: true
-!                  bg       border   separator
-rofi.color-window: BACKGROUND, COLOR1, FOREGROUND
-!                  bg       fg       bg-alt   hl-bg    hl-fg
-rofi.color-normal: COLOR0, COLOR15, COLOR0, BACKGROUND, COLOR3
-rofi.color-active: COLOR2, COLOR0, COLOR0, COLOR0, COLOR2
-rofi.color-urgent: COLOR0, COLOR5, COLOR0, COLOR0, COLOR5
+
+!                  bg           border     separator
+rofi.color-window: BACKGROUND,  COLOR1,    FOREGROUND
+!                  bg           fg         bg-alt     hl-bg        hl-fg
+rofi.color-normal: COLOR0,      COLOR15,   COLOR0,    BACKGROUND,  COLOR3
+rofi.color-active: COLOR0,      COLOR4,    COLOR0,    COLOR0,      COLOR2
+rofi.color-urgent: COLOR0,      COLOR5,    COLOR0,    COLOR0,      COLOR5
 rofi.separator-style: solid
 rofi.sidebar-mode: true
 rofi.bw: 1
@@ -59,7 +60,6 @@ rofi.yoffset: 0
 rofi.fake-transparency: false
 rofi.location: 0
 rofi.width: 50
-! rofi.font: DroidSansMonoForPowerline Nerd Font Book 9
 rofi.font: <%= fonts['normal'].to_rofi %>
 rofi.lines: 15
 rofi.fixed-num-lines: true

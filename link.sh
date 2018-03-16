@@ -112,7 +112,7 @@ ln -sf ${DIR}/.config/beets ~/.config/beets
 rm -rf ~/.config/ranger
 ln -sf ${DIR}/.config/ranger ~/.config/ranger
 
-mv -f ~/bin ~/bin_old 2>/dev/null || echo "1" > /dev/null
+mv -f ~/bin ~/bin_old 2>/dev/null || true > /dev/null
 rm -rf ~/bin
 ln -sf ${DIR}/bin ~/bin
 chmod +x -R ~/bin/

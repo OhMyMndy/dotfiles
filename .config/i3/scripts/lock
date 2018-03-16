@@ -1,45 +1,19 @@
 #!/bin/bash
 
-
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cd $DIR
 TMP_IMAGE=/tmp/i3_lock.png
-rm $TMP_IMAGE 2>/dev/null
-
-IMAGE=$(realpath $HOME/.wallpaper)
-
-notify-send "Locking screen..." "Creating image..."
-
-convert $IMAGE -resize 1920x1080^ -gravity center -extent 1920x1080 -sepia-tone 90% $TMP_IMAGE
-text="Locked at $(date +'%a %d-%m-%Y %H:%M')"
-convert $TMP_IMAGE  -font Arial -pointsize 13 \
-          -draw "gravity south \
-                 fill black  text 0,12 \"$text\" \
-                 fill white  text 1,11 \"$text\" " ${TMP_IMAGE}
-
-
-text="$(neofetch --off --stdout)"
-convert $TMP_IMAGE  -font Arial -pointsize 13 \
-         -draw "gravity NorthWest \
-                fill black  text 12,12 \"$text\" \
-                fill white  text 13,13 \"$text\" " ${TMP_IMAGE}
-
-
-convert +append $TMP_IMAGE $TMP_IMAGE $TMP_IMAGE
-
+# suspend message display
+pkill -u "$USER" -USR1 dunst
 
 if [ "$1" != '--test' ]; then
-  # suspend message display
-  pkill -u "$USER" -USR1 dunst
-
-  if [ ! -f $TMP_IMAGE ]; then
-    i3lock -c black -n
-  else
-    i3lock -n -i $TMP_IMAGE
-  fi
-
-  # resume message display
-  pkill -u "$USER" -USR2 dunst
-
-  rm $TMP_IMAGE
+  bash ./create-lockscreen-image && pkill -e -f i3lock && i3lock -n -i $TMP_IMAGE || i3lock -c 000000 &
+  i3lock -c 000000
 else
-  xdg-open $TMP_IMAGE
+  bash ./create-lockscreen-image && xdg-open $TMP_IMAGE
 fi
+
+# resume message display
+pkill -u "$USER" -USR2 dunst
+
+rm $TMP_IMAGE

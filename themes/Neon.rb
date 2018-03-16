@@ -44,7 +44,7 @@ class Neon < Default
 
     def configuration_override
       @gtk = {
-          "theme"           => "Numix",
+          "theme"           => "Windows-10",
           "icon_theme"      => "Arc-Icons",
       }
     end

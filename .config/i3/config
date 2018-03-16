@@ -260,14 +260,7 @@ exec --no-startup-id redshift
 exec --no-startup-id udiskie
 
 # Exec always
-<<<<<<< Updated upstream
-exec_always --no-startup-id killall imwheel; while pgrep -x imwheel >/dev/null; do sleep 1; done; imwheel
-exec_always --no-startup-id killall parcellite; while pgrep -x parcellite >/dev/null; do sleep 1; done; parcellite
-exec_always --no-startup-id killall nm-applet; while pgrep -x nm-applet >/dev/null; do sleep 1; done; nm-applet
 exec_always --no-startup-id bash ~/bin/restart-polybar || xfce4-panel
-=======
-exec_always --no-startup-id bash ~/bin/restart-polybar
->>>>>>> Stashed changes
 exec_always --no-startup-id killall dunst; while pgrep -x dunst >/dev/null; do sleep 1; done; dunst
 exec_always --no-startup-id bash -c "source ~/.functions; setWallpaper"
 exec_always --no-startup-id pgrep -x xbanish; [ $? -eq 1] && xbanish

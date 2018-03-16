@@ -131,6 +131,7 @@ ffmpeg
 flacon
 shntool
 cuetools
+ImageMagick
 %end
 
 
@@ -169,9 +170,6 @@ rpm --import https://dl-ssl.google.com/linux/linux_signing_key.pub >> /home/mand
 
 rpm -ivh http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-27.noarch.rpm >> /home/mandy/post.log
 rpm -ivh http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-27.noarch.rpm >> /home/mandy/post.log
-
-dnf install https://github.com/atom/atom/releases/download/v1.24.0/atom.x86_64.rpm -y >> /home/mandy/post.log
-dnf install https://github.com/saenzramiro/rambox/releases/download/0.5.14/Rambox-0.5.14-x64.rpm -y >> /home/mandy/post.log
 
 systemctl enable lightdm >> /home/mandy/post.log
 systemctl enable docker >> /home/mandy/post.log
