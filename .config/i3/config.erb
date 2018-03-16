@@ -92,6 +92,8 @@ bindsym $mod+a focus parent
 bindsym $mod+Escape exec "xterm -name floating -geometry 40x4 -e xkill"
 bindsym $mod+F1 exec "xterm -name floating -geometry 80x40 +ls -e '~/bin/get_commands'"
 bindsym $mod+F2 exec "xterm -name floating -geometry 120x40 +ls -e 'echo xprop; xprop; read a'"
+bindsym $mod+F3 exec "xterm -name floating -geometry 140x60 +ls -e 'bash'"
+bindsym $mod+F4 exec "xterm -name floating -geometry 140x60 +ls -e 'bash -c \\"htop\\"'"
 
 set $workspace1 "1: "
 set $workspace2 "2: "
@@ -213,6 +215,11 @@ client.urgent           <%= i3['client']['urgent'] %>
 # Default workspaces
 assign [class="Vmplayer"]                                                               $workspace8
 assign [class="TeamViewer"]                                                             $workspace8
+assign [class=".*phpstorm"]                                                             $workspace4
+assign [class="Rambox"]                                                                 $workspace6
+assign [class="Thunar"]                                                                 $workspace3
+assign [class="Atom"]                                                                   $workspace9
+assign [class="Termite"]                                                                $workspace2
 
 # For windows
 for_window [class=".*"]                                                                 title_format " %title"
@@ -245,25 +252,37 @@ for_window [class="(?i).*termite.*"]                                            
 for_window [class="(?i).*jetbrains.*"]                                                  border pixel <%= i3['border'] %>
 for_window [class="Rambox"]                                                             border pixel <%= i3['border'] %>
 
-
+#no focus for any window
+no_focus [class=".*phpstorm"]
 
 # Execs
 exec --no-startup-id redshift
 exec --no-startup-id udiskie
-exec --no-startup-id i3-msg 'workspace 6; exec rambox'; i3-msg 'workspace 1; exec google-chrome || chromium'; sleep 1; i3-msg 'workspace 2; exec ~/bin/i3-sensible-terminal'; i3-msg 'workspace 3; exec pcmanfm'
-exec --no-startup-id flameshot
 
 # Exec always
+<<<<<<< Updated upstream
 exec_always --no-startup-id killall imwheel; while pgrep -x imwheel >/dev/null; do sleep 1; done; imwheel
 exec_always --no-startup-id killall parcellite; while pgrep -x parcellite >/dev/null; do sleep 1; done; parcellite
 exec_always --no-startup-id killall nm-applet; while pgrep -x nm-applet >/dev/null; do sleep 1; done; nm-applet
 exec_always --no-startup-id bash ~/bin/restart-polybar || xfce4-panel
+=======
+exec_always --no-startup-id bash ~/bin/restart-polybar
+>>>>>>> Stashed changes
 exec_always --no-startup-id killall dunst; while pgrep -x dunst >/dev/null; do sleep 1; done; dunst
 exec_always --no-startup-id bash -c "source ~/.functions; setWallpaper"
-#exec_always --no-startup-id killall compton; while pgrep -x compton >/dev/null; do sleep 1; done; compton --config ~/.config/compton.conf -b --dbe
-exec_always --no-startup-id killall xbanish; while pgrep -x xbanish >/dev/null; do sleep 1; done; xbanish
-exec_always --no-startup-id killall volumeicon; while pgrep -x volumeicon >/dev/null; do sleep 1; done; volumeicon
+exec_always --no-startup-id pgrep -x xbanish; [ $? -eq 1] && xbanish
+exec_always --no-startup-id pgrep -x pasystray; [ $? -eq 1 ] && pasystray
+exec_always --no-startup-id pgrep -x flameshot; [ $? -eq 1 ] && flameshot
+exec_always --no-startup-id pgrep -x pb-for-desktop; [ $? -eq 1 ] && pb-for-desktop
+exec_always --no-startup-id pgrep -x nm-applet; [ $? -eq 1 ] && nm-applet
+exec_always --no-startup-id pgrep -x parcellite; [ $? -eq 1 ] && parcellite
+exec_always --no-startup-id pgrep -x imwheel; [ $? -eq 1 ] && imwheel
 exec_always --no-startup-id killall synergys; while pgrep -x synergys >/dev/null; do sleep 1; done; synergys -c ~/.synergy.conf
+exec_always --no-startup-id killall notify-server; while pgrep -x notify-server >/dev/null; do sleep 1; done; notify-server
+
+exec_always --no-startup-id pgrep -x rambox; [ $? -eq 1 ] && rambox
+exec_always --no-startup-id pgrep -f i3-sensible-terminal; [ $? -eq 1 ] && i3-sensible-terminal -e "byobu"
+exec_always --no-startup-id pgrep -x thunar; [ $? -eq 1 ] && thunar
 
 #exec_always --no-startup-id pkill -f resolution-changed; bash ~/bin/resolution-changed ~/bin/restart-polybar
 exec_always --no-startup-id bash "$HOME/.screenlayout/$(hostname).sh"

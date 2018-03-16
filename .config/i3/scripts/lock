@@ -1,41 +1,45 @@
 #!/bin/bash
 
-# i3lock blurred screen inspired by /u/patopop007 and the blog post
-# http://plankenau.com/blog/post-10/gaussianlock
-# see: https://gist.github.com/csivanich/10914698
-# Timings are on an Intel i7-2630QM @ 2.00GHz
 
-# Dependencies:
-# imagemagick
-# i3lock
-# scrot (optional but default)
+TMP_IMAGE=/tmp/i3_lock.png
+rm $TMP_IMAGE 2>/dev/null
 
-IMAGE=/tmp/i3lock.png
-SCREENSHOT="scrot $IMAGE" # 0.46s
+IMAGE=$(realpath $HOME/.wallpaper)
 
-# Alternate screenshot method with imagemagick. NOTE: it is much slower
-# SCREENSHOT="import -window root $IMAGE" # 1.35s
+notify-send "Locking screen..." "Creating image..."
 
-# Here are some imagemagick blur types
-# Uncomment one to use, if you have multiple, the last one will be used
+convert $IMAGE -resize 1920x1080^ -gravity center -extent 1920x1080 -sepia-tone 90% $TMP_IMAGE
+text="Locked at $(date +'%a %d-%m-%Y %H:%M')"
+convert $TMP_IMAGE  -font Arial -pointsize 13 \
+          -draw "gravity south \
+                 fill black  text 0,12 \"$text\" \
+                 fill white  text 1,11 \"$text\" " ${TMP_IMAGE}
 
-# All options are here: http://www.imagemagick.org/Usage/blur/#blur_args
-#BLURTYPE="0x5" # 7.52s
-#BLURTYPE="0x2" # 4.39s
-#BLURTYPE="5x2" # 3.80s
-BLURTYPE="2x8" # 2.90s
-#BLURTYPE="2x3" # 2.92s
 
-# Get the screenshot, add the blur and lock the screen with it
-$SCREENSHOT
-convert $IMAGE -blur $BLURTYPE $IMAGE
+text="$(neofetch --off --stdout)"
+convert $TMP_IMAGE  -font Arial -pointsize 13 \
+         -draw "gravity NorthWest \
+                fill black  text 12,12 \"$text\" \
+                fill white  text 13,13 \"$text\" " ${TMP_IMAGE}
 
-# suspend message display
-pkill -u "$USER" -USR1 dunst
 
-i3lock -n -i $IMAGE
+convert +append $TMP_IMAGE $TMP_IMAGE $TMP_IMAGE
 
-# resume message display
-pkill -u "$USER" -USR2 dunst
 
-rm $IMAGE
+if [ "$1" != '--test' ]; then
+  # suspend message display
+  pkill -u "$USER" -USR1 dunst
+
+  if [ ! -f $TMP_IMAGE ]; then
+    i3lock -c black -n
+  else
+    i3lock -n -i $TMP_IMAGE
+  fi
+
+  # resume message display
+  pkill -u "$USER" -USR2 dunst
+
+  rm $TMP_IMAGE
+else
+  xdg-open $TMP_IMAGE
+fi

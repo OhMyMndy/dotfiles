@@ -2,7 +2,9 @@ source $HOME/z.sh
 export ZSH=$HOME/.oh-my-zsh
 ZSH_THEME="mandy"
 
-zshaddhistory() { whence ${${(z)1}[1]} >| /dev/null || return 1 }
+# zshaddhistory() { whence ${${(z)1}[1]} >| /dev/null || return 1 }
+
+zstyle ':completion:*' use-cache yes
 
 source $HOME/.functions
 
@@ -47,7 +49,7 @@ if [ -f $HOME/bin/commands-to-aliases ]; then
 fi
 
 
-export PATH=$HOME/.config/composer/vendor/bin:$HOME/.composer/vendor/bin:$HOME/.local/bin:/usr/share/doc/git/contrib/diff-highlight:/usr/local/go/bin:$HOME/.go/bin:$PATH:$HOME/bin:$HOME/bin/appimages
+export PATH=$HOME/.config/composer/vendor/bin:$HOME/.composer/vendor/bin:$HOME/.local/bin:/usr/share/doc/git/contrib/diff-highlight:/usr/local/go/bin:$HOME/.go/bin:$HOME/bin:$HOME/bin/appimages:$PATH
 PATH="`ruby -e 'puts Gem.user_dir'`/bin:$PATH"
 export LESS="-RS"
 export TERMINAL=termite
@@ -61,6 +63,18 @@ export HISTFILE="$HOME/.zhistory"
 HISTSIZE=1000000
 SAVEHIST=$HISTSIZE
 setopt EXTENDED_HISTORY
+
+# precmd () {
+#     exec 2>&- >&-
+#     lastline=$(tail -1 ~/.command.out)
+#     sleep 0.1   # TODO: synchronize better
+#     exec > /dev/tty 2>&1
+# }
+#
+# preexec() {
+#     exec > >(tee ~/.command.out&)
+# }
+
 
 alias docker-ps-min='docker ps --format "table{{.Names}}\t{{.RunningFor}}\t{{.Status}}"'
 alias hl='grepc "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+"'
@@ -102,6 +116,7 @@ if ! ps aux | grep $(whoami) | grep ssh-agent | grep -v grep >/dev/null; then ss
 # Link the latest ssh-agent socket
 mkdir -p ~/.ssh/
 ln -sf $(find /tmp -maxdepth 2 -type s -name "agent*" -user $USER -printf '%T@ %p\n' 2>/dev/null |sort -n|tail -1|cut -d' ' -f2) ~/.ssh/ssh_auth_sock
+ssh-add -l > /dev/null || ssh-add
 
 export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock
 
@@ -109,3 +124,7 @@ export IP_ADDRESS=$(ip_address)
 export GID=$(id -g)
 export UID
 export HOSTNAME=$(hostname)
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

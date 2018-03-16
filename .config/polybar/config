@@ -47,7 +47,7 @@ foreground = #eeeeee
 overline-size = 2
 overline-color = ${colors.foreground-alt}
 underline-size = 2
-underline-color = #184b98
+underline-color = #2163c6
 
 ;border-bottom-size = 2
 ;border-bottom-color = ${colors.accent-dark1}

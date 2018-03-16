@@ -130,7 +130,6 @@ class Default
 
       %x(i3 --version | grep gaps)
       i3gaps_enabled = $?.exitstatus === 0
-      puts i3gaps_enabled
       @i3 = {
           "font" => @fonts["normal"].to_gtk,
           "border" => 2,
