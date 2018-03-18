@@ -13,7 +13,8 @@ title() {
 }
 
 randomWallpaper() {
-    wallpapers=($(ls -d ~/wallpapers/*))
+    cd ~/wallpapers
+    wallpapers=($(find $PWD/ -type f -exec file {} \; | awk -F: '{ if ($2 ~/[Ii]mage|EPS/) print $1}' ))
     index=$(($RANDOM % ${#wallpapers[@]} ))
     wallpaper=${wallpapers[$index]}
     echo ${wallpaper}
@@ -23,7 +24,7 @@ setWallpaper() {
   wallpaper_file="$1"
 
   if [ "$wallpaper_file" != '' ] && [ -f "$wallpaper_file" ]; then
-    rm ~/.wallpaper
+    rm ~/.wallpaper 2>/dev/null
     ln -s "$wallpaper_file" ~/.wallpaper
   fi
 
@@ -258,4 +259,43 @@ ip_address() {
 
 write_apm_to_file() {
   apm list --installed --bare > ~/dotfiles/apm-packages.txt
+}
+
+# make sure you pass absolute paths
+# encrypt_files "$(find $(pwd) -name '*.jpg')" # $(pwd) makes sure it is absolute
+encrypt_files() {
+  files="$@"
+  echo "Enter password:"
+  read -s password
+  echo "$files" | xargs -I {} sh -c "echo \"$password\" | gpg --passphrase-fd 0 --always-trust --compress-algo BZIP2 -z 9 --symmetric {}"
+}
+
+decrypt_if_necessary() {
+  files="$1"
+  unset password
+  IFS=$'\n'
+  echo "$files" | while read file; do
+  	original=$(echo "$file" | sed -E 's/\.gpg//g')
+  	if [ ! -f "$original" ]; then
+  		if [ ! "$password" ]; then
+  			echo "Enter password to decrypt GPG encrypted files"
+  			read -s password</dev/tty
+  		fi
+  		echo "$password" | gpg --passphrase-fd 0 -d -o "$original" "$file"
+  	fi
+  done
+  unset password
+}
+
+
+remove_wine_desktop_files() {
+  find /home/mandy/.local/share/applications/ | sort \
+    | grep wine-extension \
+    | grep -v application.desktop \
+    | grep -v appref-ms \
+    | grep -v vbs \
+    | grep -v msp \
+    | grep -v hlp \
+    | grep -v url \
+    | xargs -I {} rm {}
 }

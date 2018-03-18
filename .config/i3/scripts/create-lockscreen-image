@@ -1,10 +1,15 @@
 #!/bin/bash
 
+source ~/.functions
 
 TMP_IMAGE=/tmp/i3_lock.png
 rm $TMP_IMAGE 2>/dev/null
 
 IMAGE=$(realpath $HOME/.wallpaper)
+
+if [ ! -f "$IMAGE" ]; then
+  IMAGE="$(randomWallpaper)"
+fi
 
 getFont() {
   default_font="$2"
@@ -20,7 +25,8 @@ getFont() {
 }
 
 default_font="$(xrdb -query | grep normal_font | cut -f2 | sed -E 's/ /-/g')"
-font=$(getFont "${default_font}" "Arial")
+font=$(getFont "${default_font}" "FreeSans")
+font=$(getFont "${default_font}" "Liberation-Sans")
 
 default_monospace_font="$(xrdb -query | grep monospace_font | cut -f2 | sed -E 's/ /-/g')"
 monospace_font=$(getFont "${default_monospace_font}" "fixed")

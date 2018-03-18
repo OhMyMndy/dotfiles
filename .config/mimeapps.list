@@ -1,0 +1,13 @@
+[Added Associations]
+inode/directory=exo-file-manager.desktop
+x-scheme-handler/trash=exo-file-manager.desktop
+application/zip=org.gnome.FileRoller.desktop
+image/jpeg=shotwell-viewer.desktop;feh.desktop
+image/png=shotwell-viewer.desktop;feh.desktop
+
+[Default Applications]
+text/html=google-chrome.desktop
+x-scheme-handler/http=google-chrome.desktop
+x-scheme-handler/https=google-chrome.desktop
+x-scheme-handler/about=google-chrome.desktop
+x-scheme-handler/unknown=google-chrome.desktop

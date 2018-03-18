@@ -62,6 +62,8 @@ if [ "$OS" = "Ubuntu" ]; then
     LOGO=$(bash -c 'printf " \uf30c  \n"')
 elif [ "$OS" = "Arch Linux" ]; then
     LOGO=$(bash -c 'printf " \uf300  \n"')
+elif [ "$OS" = "Fedora" ]; then
+    LOGO=$(bash -c 'printf " \uf312  \n"')
 fi
 
 

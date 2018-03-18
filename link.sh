@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source $DIR/.functions
+source $DIR/.zshrc 2>/dev/null
+
 dark_mode=$(cat $HOME/.dark-mode 2>/dev/null)
 echo "dark mode: $dark_mode"
 #set -e
@@ -28,8 +31,6 @@ ln -sfn ${DIR}/.config/i3 ~/.config/i3
 
 mkdir -p ${DIR}/.config/xfce4/xfconf/xfce-perchannel-xml
 ln -sfn ${DIR}/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml ~/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml
-
-.config/xfce4/
 
 ln -sf ${DIR}/.wallpaper.jpg ~/.wallpaper.jpg
 
@@ -114,10 +115,14 @@ ln -sf ${DIR}/.config/beets ~/.config/beets
 rm -rf ~/.config/ranger
 ln -sf ${DIR}/.config/ranger ~/.config/ranger
 
-mv -f ~/bin ~/bin_old 2>/dev/null || true > /dev/null
+if [ ! -d ~/bin_bak ]; then
+	mv -f ~/bin ~/bin_bak
+fi
+
 rm -rf ~/bin
 ln -sf ${DIR}/bin ~/bin
 chmod +x -R ~/bin/
+rm -rf ~/bin/bin
 
 
 mkdir -p ~/.tmux
@@ -146,6 +151,22 @@ ln -sf ${DIR}/.config/peco ~/.config/peco
 
 rm -rf ~/.config/Trolltech.conf
 ln -sf ${DIR}/.config/Trolltech.conf ~/.config/Trolltech.conf
+
+
+if [ ! -f ~/.config/mimeapps.list_bak ]; then
+	cp ~/.config/mimeapps.list ~/.config/mimeapps.list_bak
+fi
+
+if [ ! -f ~/.local/share/applications/mimeapps.list_bak ]; then
+	cp ~/.local/share/applications/mimeapps.list ~/.local/share/applications/mimeapps.list_bak
+fi
+
+
+rm -rf ~/.config/mimeapps.list
+ln -sf ${DIR}/.config/mimeapps.list ~/.config/mimeapps.list
+
+rm -rf ~/.local/share/applications/mimeapps.list
+ln -s ~/.config/mimeapps.list ~/.local/share/applications/mimeapps.list
 
 rm -f ~/.fonts.conf
 ln -sf ${DIR}/.fonts.conf ~/.fonts.conf
@@ -400,7 +421,7 @@ sed -i -e's/\s*BUFFER=.*/BUFFER=$\(fc -l -n 1 |  eval $tac | awk "\!x\[\\$0\]++"
 
 installZshPlugin "https://github.com/skx/sysadmin-util.git" "sysadmin-util"
 
-if [ ! -d "$ZSH_CUSTOM/themes/spaceship-prompt"]; then
+if [ ! -d "$ZSH_CUSTOM/themes/spaceship-prompt" ]; then
 	git clone https://github.com/denysdovhan/spaceship-prompt.git "$ZSH_CUSTOM/themes/spaceship-prompt"
 	ln -s "$ZSH_CUSTOM/themes/spaceship-prompt/spaceship.zsh-theme" "$ZSH_CUSTOM/themes/spaceship.zsh-theme"
 fi
@@ -506,6 +527,9 @@ fi
 
 if ! grep -q '192.168.10.120/tank' /etc/fstab ; then
 	echo "Please enter password of 192.168.10.120/tank"
-	read password
+	read -s password
 	echo "//192.168.10.120/tank /mnt/tank cifs rw,_netdev,user=mandy,password=${password},uid=1000,gid=100 0 0" | sudo tee -a /etc/fstab
 fi
+
+
+remove_wine_desktop_files

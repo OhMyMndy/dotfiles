@@ -142,6 +142,14 @@ pop-icon-theme
 unclutter
 flameshot
 VirtualBox
+fuse
+shotwell
+gnupg
+openssl-devel
+gcc-c++
+make
+neofetch
+rhythmbox
 %end
 
 # Post-installation Script
@@ -186,7 +194,21 @@ chsh -s /bin/zsh mandy >> /home/mandy/post.log
 
 virt-what | grep -q -i virtualbox && dnf install VirtualBox-guest-additions -y >> /home/mandy/post.log
 
-dnf update -y
+rpm --import https://dl.tvcdn.de/download/linux/signature/TeamViewer2017.asc >> /home/mandy/post.log
+dnf install https://download.teamviewer.com/download/linux/teamviewer.x86_64.rpm -y >> /home/mandy/post.log
+
+dnf install http://download.nomachine.com/download/6.0/Linux/nomachine_6.0.78_1_x86_64.rpm -y >> /home/mandy/post.log
+
+dnf copr enable sergiomb/google-drive-ocamlfuse >> /home/mandy/post.log
+dnf install google-drive-ocamlfuse -y >> /home/mandy/post.log
+
+git clone https://github.com/AGWA/git-crypt.git /tmp/git-crypt >> /home/mandy/post.log
+cd /tmp/git-crypt >> /home/mandy/post.log
+make >> /home/mandy/post.log
+make install >> /home/mandy/post.log
+
+# enable when everything is stable
+# dnf update -y
 
 # Then switch back to Anaconda on the first console
 chvt 1

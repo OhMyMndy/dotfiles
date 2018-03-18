@@ -286,6 +286,7 @@ exec_always --no-startup-id bash "$HOME/.screenlayout/$(hostname).sh"
 bindsym $mod+Shift+greater move workspace to output right
 bindsym $mod+Shift+less move workspace to output left
 bindsym Scroll_Lock exec $Locker
+bindsym $mod+Shift+Escape exec $Locker
 bindsym Print exec flameshot gui -p ~/Screenshots/
 bindsym $mod+Print exec flameshot full -p ~/Screenshots/ -c
 

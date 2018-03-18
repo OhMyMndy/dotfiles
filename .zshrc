@@ -79,7 +79,7 @@ alias docker-ps-min='docker ps --format "table{{.Names}}\t{{.RunningFor}}\t{{.St
 alias hl='grepc "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+"'
 alias current-window-process='ps -o args= $(xprop -id $(xprop -root -f _NET_ACTIVE_WINDOW 0x " \$0\\n" _NET_ACTIVE_WINDOW | awk "{print \$2}") -f _NET_WM_PID 0c " \$0\\n" _NET_WM_PID | awk "{print \$2}")'
 alias disk-usage='sudo du -h -t200M -x / 2>/dev/null'
-
+alias xdg-open='exo-open'
 
 if exists thefuck; then eval $(thefuck --alias); fi
 
