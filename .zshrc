@@ -48,9 +48,8 @@ if [ -f $HOME/bin/commands-to-aliases ]; then
     source $HOME/.aliases
 fi
 
-
 export PATH=$HOME/.config/composer/vendor/bin:$HOME/.composer/vendor/bin:$HOME/.local/bin:/usr/share/doc/git/contrib/diff-highlight:/usr/local/go/bin:$HOME/.go/bin:$HOME/bin:$HOME/bin/appimages:$PATH
-PATH="`ruby -e 'puts Gem.user_dir'`/bin:$PATH"
+PATH="$HOME/.gem/bin:$PATH"
 export LESS="-RS"
 export TERMINAL=termite
 compctl -g '~/.teamocil/*(:t:r)' teamocil

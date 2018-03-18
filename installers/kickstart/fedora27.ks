@@ -105,7 +105,8 @@ xclip
 variety
 paper-icon-theme
 yad
-pcmanfm
+thunar
+file-roller
 evince
 git
 tig
@@ -134,15 +135,14 @@ shntool
 cuetools
 jq
 ImageMagick
+composer
+cifs-utils
+numix-gtk-theme
+pop-icon-theme
+unclutter
+flameshot
+VirtualBox
 %end
-
-
-#todo
-
-# rofi
-# xbanish
-# peco
-
 
 # Post-installation Script
 
@@ -157,6 +157,7 @@ gem install json >> /tmp/post.log
 git clone https://github.com/Mandy91/dotfiles.git /home/mandy/dotfiles >> /tmp/post.log
 ruby /home/mandy/dotfiles/install.rb >> /tmp/post.log
 bash /home/mandy/dotfiles/link.sh >> /tmp/post.log
+bash /home/mandy/dotfiles/installers/fedora.sh >> /tmp/post.log
 
 # Persist extra repos and import keys.
 cat << EOF > /etc/yum.repos.d/google-chrome.repo

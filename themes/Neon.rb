@@ -42,10 +42,4 @@ class Neon < Default
         @inactive_color = @colors['COLOR16']
     end
 
-    def configuration_override
-      @gtk = {
-          "theme"           => "Windows-10",
-          "icon_theme"      => "Arc-Icons",
-      }
-    end
 end

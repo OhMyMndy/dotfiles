@@ -253,7 +253,7 @@ webdev () {
 }
 
 ip_address() {
-    ip route get 1 | awk '{print $NF;exit}'
+    ip route get 1 | awk '{print $7;exit}'
 }
 
 write_apm_to_file() {

@@ -26,8 +26,10 @@ ln -sf ${DIR}/.config/redshift.conf ~/.config/redshift.conf
 rm -rf ~/.config/i3
 ln -sfn ${DIR}/.config/i3 ~/.config/i3
 
-rm -rf ~/.config/xfce4
-ln -sfn ${DIR}/.config/xfce4 ~/.config/xfce4
+mkdir -p ${DIR}/.config/xfce4/xfconf/xfce-perchannel-xml
+ln -sfn ${DIR}/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml ~/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml
+
+.config/xfce4/
 
 ln -sf ${DIR}/.wallpaper.jpg ~/.wallpaper.jpg
 
@@ -328,7 +330,7 @@ function installPeco()
 {
 	if [ ! -f "/usr/local/bin/peco" ]; then
 		echo "Installing Peco binary"
-		url="https://github.com/peco/peco/releases/download/v0.5.1/peco_"
+		url="https://github.com/peco/peco/releases/download/v0.5.3/peco_"
 
 		platform=$(uname -s | awk '{print tolower($0)}')
 		url+="$platform"
@@ -500,4 +502,10 @@ if [ $nvm_exists -ne 0 ]; then
 	[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 	sudo chown -R $USER:$(id -gn $USER) /home/mandy/.config
 	nvm install stable
+fi
+
+if ! grep -q '192.168.10.120/tank' /etc/fstab ; then
+	echo "Please enter password of 192.168.10.120/tank"
+	read password
+	echo "//192.168.10.120/tank /mnt/tank cifs rw,_netdev,user=mandy,password=${password},uid=1000,gid=100 0 0" | sudo tee -a /etc/fstab
 fi

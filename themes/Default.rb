@@ -82,9 +82,11 @@ class Default
 
       available_icons = %x(for i in $(ls /usr/share/icons/); do echo ${i%%/}; done)
       available_icons = available_icons.split("\n")
+
       @gtk = {
-          "theme"           => "Arc-Darker",
-          "icon_theme"      => "Papirus",
+          "theme"           => "Numix",
+          "icon_theme"      => "Pop",
+          "cursor_theme"    => "DMZ-White"
       }
 
       available = available_themes.select {|e| e == @gtk['theme']}
@@ -96,6 +98,20 @@ class Default
       if available.length == 0
         @gtk['icon_theme'] = 'Adwaita'
       end
+
+      available = available_icons.select {|e| e == @gtk['cursor_theme']}
+      if available.length == 0
+        available = available_icons.select {|e| e == 'dmz'}
+        if available.length == 1
+          @gtk['cursor_theme'] = 'dmz'
+        end
+        available = available_icons.select {|e| e == 'DMZ-White'}
+        if available.length == 1
+          @gtk['cursor_theme'] = 'DMZ-White'
+        end
+      end
+
+      puts @gtk.to_s
 
       @dunst = {
           "global"          => {
