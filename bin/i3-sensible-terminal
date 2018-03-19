@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-termite $@ || xterm $@ || uxterm $@
+xfce4-terminal $@ || termite $@ || xterm $@ || uxterm $@

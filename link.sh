@@ -27,15 +27,18 @@ rm -f ~/.config/redshift.conf
 ln -sf ${DIR}/.config/redshift.conf ~/.config/redshift.conf
 
 rm -rf ~/.config/i3
-ln -sfn ${DIR}/.config/i3 ~/.config/i3
+ln -sf ${DIR}/.config/i3 ~/.config/i3
 
 mkdir -p ${DIR}/.config/xfce4/xfconf/xfce-perchannel-xml
-ln -sfn ${DIR}/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml ~/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml
+ln -sf ${DIR}/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml ~/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml
+
+rm -rf ~/.config/xfce4/terminal
+ln -sfn ${DIR}/.config/xfce4/terminal ~/.config/xfce4/terminal
 
 ln -sf ${DIR}/.wallpaper.jpg ~/.wallpaper.jpg
 
 rm -rf ~/.config/gtk-3.0
-ln -sfn ${DIR}/.config/gtk-3.0 ~/.config/gtk-3.0
+ln -sf ${DIR}/.config/gtk-3.0 ~/.config/gtk-3.0
 
 
 rm -rf ~/.conkyrc

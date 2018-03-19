@@ -96,8 +96,15 @@ class Default
 
       available = available_icons.select {|e| e == @gtk['icon_theme']}
       if available.length == 0
-        @gtk['icon_theme'] = 'Adwaita'
+        available = available_icons.select {|e| e == 'Numix'}
+        if available.length == 1
+          @gtk['icon_theme'] = 'Numix'
+        else
+          @gtk['icon_theme'] = 'Adwaita'
+        end
       end
+
+
 
       available = available_icons.select {|e| e == @gtk['cursor_theme']}
       if available.length == 0

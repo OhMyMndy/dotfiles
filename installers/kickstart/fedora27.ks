@@ -150,6 +150,7 @@ gcc-c++
 make
 neofetch
 rhythmbox
+xfce4-terminal
 %end
 
 # Post-installation Script
