@@ -157,12 +157,8 @@ flatpak
 
 # Post-installation Script
 
-%post
+%post --log=/tmp/post.log
 
-# This is the trick — automatically switch to 6th console
-# and redirect all input/output
-exec < /dev/tty6 > /dev/tty6 2> /dev/tty6
-chvt 6
 
 gem install json 2>&1 | tee -a /home/mandy/post.log
 git clone https://github.com/Mandy91/dotfiles.git /home/mandy/dotfiles 2>&1 | tee -a /home/mandy/post.log
@@ -230,11 +226,6 @@ dnf install google-drive-ocamlfuse -y 2>&1 | tee -a /home/mandy/post.log
 
 # enable when everything is stable
 dnf update -y 2>&1 | tee -a /home/mandy/post.log
-
-# Then switch back to Anaconda on the first console
-chvt 1
-exec < /dev/tty1 > /dev/tty1 2> /dev/tty1
-
 %end
 
 
