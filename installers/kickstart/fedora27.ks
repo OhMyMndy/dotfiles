@@ -220,7 +220,7 @@ dnf install https://download.teamviewer.com/download/linux/teamviewer.x86_64.rpm
 
 dnf install http://download.nomachine.com/download/6.0/Linux/nomachine_6.0.78_1_x86_64.rpm -y 2>&1 | tee -a /home/mandy/post.log
 
-dnf copr enable sergiomb/google-drive-ocamlfuse 2>&1 | tee -a /home/mandy/post.log
+dnf copr enable sergiomb/google-drive-ocamlfuse -y 2>&1 | tee -a /home/mandy/post.log
 dnf install google-drive-ocamlfuse -y 2>&1 | tee -a /home/mandy/post.log
 
 

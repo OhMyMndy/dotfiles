@@ -6,3 +6,9 @@ curl https://raw.githubusercontent.com/Mandy91/dotfiles/master/installers/kickst
 sudo anaconda --kickstart /tmp/kickstart.ks
 
 ```
+
+### Show post log
+```
+sudo chroot /mnt/sysimage
+tail -f /home/mandy/post.log
+```
