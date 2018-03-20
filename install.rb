@@ -78,12 +78,10 @@ end
 
 
 Process.fork { system "bash \"#{$root_dir}/link.sh\" > /tmp/output-link.sh 2>&1 " }
-Process.fork { system "pkill dunst; dunst > /dev/null 2>&1 " }
 # %x( notify-send -i status/dialog-information.png "Fortune" "$(fortune)" )
 # %x( notify-send -i status/audio-volume-medium.png "Now playing" "STIGMATA - "СЕНТЯБРЬ" (LIVE @КАЗАНЬ 15.05.2015)" )
 # %x( notify-send -i status/audio-volume-medium -u critical "Urgent Test" "Content... https://google.com" )
 Process.fork { system "xrandr --dpi #{$dpi} > /dev/null 2>&1 " }
-Process.fork { system "pkill polybar; polybar top >/dev/null 2>&1 " }
 Process.fork { system "i3 reload" }
 # Process.fork { system "sudo hardcode-tray --theme Papirus --apply" }
 
