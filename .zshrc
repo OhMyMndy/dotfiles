@@ -83,7 +83,7 @@ alias xdg-open='exo-open'
 
 if exists thefuck; then eval $(thefuck --alias); fi
 
-if exists pbcopy;
+if ! exists pbcopy;
 then
     alias pbcopy='xsel --clipboard --input'
     alias pbpaste='xsel --clipboard --output'
@@ -96,8 +96,8 @@ title() {
 
 
 export GOPATH=$HOME/.go
-export LC_ALL=en_US.UTF-8
-export LANG=en_US.UTF-8
+#export LC_ALL=en_US.UTF-8
+#export LANG=en_US.UTF-8
 export VISUAL="vim"
 export EDITOR='vim'
 export TZ='Europe/Brussels'

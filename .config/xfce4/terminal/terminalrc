@@ -24,3 +24,4 @@ ColorForeground=#eeeeee
 ColorBackground=#000000
 ColorCursor=#17934c
 TabActivityColor=#cb271c
+ScrollingSingleLine=FALSE

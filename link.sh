@@ -5,7 +5,7 @@ source $DIR/.functions
 source $DIR/.zshrc 2>/dev/null
 
 dark_mode=$(cat $HOME/.dark-mode 2>/dev/null)
-echo "dark mode: $dark_mode"
+
 #set -e
 
 mkdir -p ~/.config
@@ -40,6 +40,8 @@ ln -sf ${DIR}/.wallpaper.jpg ~/.wallpaper.jpg
 rm -rf ~/.config/gtk-3.0
 ln -sf ${DIR}/.config/gtk-3.0 ~/.config/gtk-3.0
 
+rm -rf ~/.config/qt5ct
+ln -sf ${DIR}/.config/qt5ct ~/.config/qt5ct
 
 rm -rf ~/.conkyrc
 ln -sf ${DIR}/.conkyrc ~/.conkyrc
@@ -190,6 +192,8 @@ ln -sf ${DIR}/.config/vis ~/.config/vis
 
 ##### START DESKTOP FILES #####
 
+mkdir -p ~/.local/share/applications/icons
+
 rm -rf ~/.local/share/applications/icons
 ln -sf ${DIR}/.local/share/applications/icons ~/.local/share/applications/icons
 
@@ -266,7 +270,7 @@ if [ ! -d "$HOME/.vim/bundle/Vundle.vim" ]; then
 	git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 fi
 
-vim +PluginInstall +qall
+vim +PluginInstall +qall -u NONE
 
 
 
@@ -510,6 +514,30 @@ addToProfile 'IP_ADDRESS' '$(ip -4 route get 1 | head -1 | awk "{print \$7}" )'
 addToProfile 'GID' '$(id -g)'
 addToProfile 'DOCKER_GID' '$(getent group docker 2>/dev/null | cut -d: -f3 )'
 addToProfile 'XDG_CONFIG_HOME' '$HOME/.config'
+addToProfile 'QT_QPA_PLATFORMTHEME' "qt5ct"
+
+
+# sudo chown root:mandy /etc/default/locale
+# sudo chmod 664 /etc/default/locale
+#
+# cat <<'EOL' | tee /etc/default/locale
+# LANG=en_US.UTF-8
+# LANGUAGE="en_US.UTF-8"
+# LC_CTYPE="en_US.UTF-8"
+# LC_NUMERIC="nl_BE.UTF-8"
+# LC_TIME="nl_BE.UTF-8"
+# LC_COLLATE="en_US.UTF-8"
+# LC_MONETARY="nl_BE.UTF-8"
+# LC_MESSAGES="en_US.UTF-8"
+# LC_PAPER="nl_BE.UTF-8"
+# LC_NAME="nl_BE.UTF-8"
+# LC_ADDRESS="nl_BE.UTF-8"
+# LC_TELEPHONE="nl_BE.UTF-8"
+# LC_MEASUREMENT="nl_BE.UTF-8"
+# LC_IDENTIFICATION="nl_BE.UTF-8"
+#
+# EOL
+
 
 
 # remove arc border radius
@@ -517,22 +545,21 @@ addToProfile 'XDG_CONFIG_HOME' '$HOME/.config'
 find /usr/share/themes/Arc -type f -name '*.rc' | sudo xargs -I {} sed -E -i 's/(radius\s*=)([^;]+)/\1 0/g' {}
 find /usr/share/themes/Arc -type f -name '*.css' | sudo xargs -I {} sed -E -i 's/(border.+radius:)([^;]+);/\1 0px;/g' {}
 
-
-which nvm
-nvm_exists=$?
-if [ $nvm_exists -ne 0 ]; then
+if [ ! -d "$HOME/.nvm" ]; then
 	curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash
 	export NVM_DIR="$HOME/.nvm"
 	[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-	sudo chown -R $USER:$(id -gn $USER) /home/mandy/.config
+	sudo chown -R $USER:$(id -gn $USER) $HOME/.config
 	nvm install stable
 fi
 
-if ! grep -q '192.168.10.120/tank' /etc/fstab ; then
+if ! grep -q '192.168.10.120/tank' /etc/fstab; then
 	echo "Please enter password of 192.168.10.120/tank"
 	read -s password
-	echo "//192.168.10.120/tank /mnt/tank cifs rw,_netdev,user=mandy,password=${password},uid=1000,gid=100 0 0" | sudo tee -a /etc/fstab
+	echo "//192.168.10.120/tank /mnt/tank cifs rw,_netdev,user=mandy,password=${password},uid=$(id -u mandy),gid=$(id -g mandy) 0 0" | sudo tee -a /etc/fstab >/dev/null
 fi
 
 
 remove_wine_desktop_files
+
+create_remmina_desktop_files

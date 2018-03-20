@@ -37,7 +37,7 @@ accent-light2 = ${xrdb:color4}
 ;monitor = ${env:MONITOR:HDMI-1}
 dpi = ${xrdb:Xft.dpi:-1}
 width = 100%
-height = 28px
+height = 24px
 offset-x = 0
 offset-y = 0
 
@@ -60,9 +60,9 @@ module-margin-left = 1
 module-margin-right = 2
 
 
-font-0 = Roboto:style=Regular:pixelsize=12;-2
-font-1 = Roboto:style=Regular:pixelsize=12;-2
-font-2 = Hack Nerd Font Mono:style=Regular:pixelsize=17;-1
+font-0 = Roboto:style=Regular:pixelsize=10;2
+font-1 = Roboto:style=Regular:pixelsize=10;2
+font-2 = Hack Nerd Font Mono:style=Regular:pixelsize=14;2
 
 modules-left = i3 mpd
 ; window
@@ -72,7 +72,7 @@ modules-right = terminal monitor vpn filesystem cpu load memory date powermenu
 
 tray-position = right
 tray-padding = 1
-tray-maxsize = 18%
+tray-maxsize = 16
 ;tray-transparent = true
 
 
@@ -334,7 +334,7 @@ label-disconnected-foreground = #313b49
 type=custom/script
 #type = internal/date
 interval = 30
-exec = date +"%a %d-%m-%Y %H:%M"
+exec = date +"%a %x %R"
 ;format-prefix = " "
 ;format-prefix-foreground = ${colors.foreground}
 click-right = gsimplecal

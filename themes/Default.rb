@@ -176,13 +176,13 @@ class Default
           "highlight_color"      => @highlight_color,
           "urgent_color"         => @urgent_color,
           "inactive_color"       => @inactive_color,
-          "height"               => "28px",
+          "height"               => "24px",
           "padding"              => 1,
           "wm_padding"           => 3,
           "fonts"                => [
-              @fonts["normal"].to_polybar(12, -2),
-              @fonts["normal_alternative"].to_polybar(12, -2),
-              @fonts["monospace"].to_polybar(17, -1)
+              @fonts["normal"].to_polybar(@normal_font_size, 2),
+              @fonts["normal_alternative"].to_polybar(@normal_font_size, 2),
+              @fonts["monospace"].to_polybar(14, 2)
           ]
       }
 

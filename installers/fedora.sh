@@ -4,7 +4,7 @@ sudo dnf update -y
 sudo dnf install git i3 xterm zsh google-roboto-fonts redshift htop rofi -y
 sudo dnf install ruby dunst neofetch -y
 
-sudo dnf copr enable yaroslav/i3desktop
+sudo dnf copr enable yaroslav/i3desktop -y
 sudo dnf install rofi -y
 
 # install polybar

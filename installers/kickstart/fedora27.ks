@@ -151,6 +151,8 @@ make
 neofetch
 rhythmbox
 xfce4-terminal
+openbox
+flatpak
 %end
 
 # Post-installation Script
@@ -162,11 +164,12 @@ xfce4-terminal
 exec < /dev/tty6 > /dev/tty6 2> /dev/tty6
 chvt 6
 
-gem install json >> /tmp/post.log
-git clone https://github.com/Mandy91/dotfiles.git /home/mandy/dotfiles >> /tmp/post.log
-ruby /home/mandy/dotfiles/install.rb >> /tmp/post.log
-bash /home/mandy/dotfiles/link.sh >> /tmp/post.log
-bash /home/mandy/dotfiles/installers/fedora.sh >> /tmp/post.log
+gem install json 2>&1 | tee -a /home/mandy/post.log
+git clone https://github.com/Mandy91/dotfiles.git /home/mandy/dotfiles 2>&1 | tee -a /home/mandy/post.log
+ruby /home/mandy/dotfiles/install.rb 2>&1 | tee -a /home/mandy/post.log
+bash /home/mandy/dotfiles/link.sh 2>&1 | tee -a /home/mandy/post.log
+bash /home/mandy/dotfiles/installers/fedora.sh 2>&1 | tee -a /home/mandy/post.log
+chown -R mandy:mandy /home/mandy 2>&1 | tee -a /home/mandy/post.log
 
 # Persist extra repos and import keys.
 cat << EOF > /etc/yum.repos.d/google-chrome.repo
@@ -178,38 +181,55 @@ gpgcheck=1
 gpgkey=https://dl-ssl.google.com/linux/linux_signing_key.pub
 EOF
 
-rpm --import https://dl-ssl.google.com/linux/linux_signing_key.pub >> /home/mandy/post.log
+rpm --import https://dl-ssl.google.com/linux/linux_signing_key.pub 2>&1 | tee -a /home/mandy/post.log
 
-rpm -ivh http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-27.noarch.rpm >> /home/mandy/post.log
-rpm -ivh http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-27.noarch.rpm >> /home/mandy/post.log
+rpm -ivh http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-27.noarch.rpm 2>&1 | tee -a /home/mandy/post.log
+rpm -ivh http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-27.noarch.rpm 2>&1 | tee -a /home/mandy/post.log
 
-dnf install $(curl -s https://api.github.com/repos/atom/atom/releases/latest | jq -r ".assets[] | select(.name) | select(.browser_download_url | test(\"rpm$\")) | .browser_download_url") -y >> /home/mandy/post.log
-dnf install $(curl -s https://api.github.com/repos/saenzramiro/rambox/releases/latest | jq -r ".assets[] | select(.name) | select(.browser_download_url | test(\"64.*rpm$\")) | .browser_download_url") -y >> /home/mandy/post.log
+#dnf install $(curl -s https://api.github.com/repos/atom/atom/releases/latest | jq -r ".assets[] | select(.name) | select(.browser_download_url | test(\"rpm$\")) | .browser_download_url") -y 2>&1 | tee -a /home/mandy/post.log
+#dnf install $(curl -s https://api.github.com/repos/saenzramiro/rambox/releases/latest | jq -r ".assets[] | select(.name) | select(.browser_download_url | test(\"64.*rpm$\")) | .browser_download_url") -y 2>&1 | tee -a /home/mandy/post.log
 
-systemctl enable lightdm >> /home/mandy/post.log
-systemctl enable docker >> /home/mandy/post.log
-usermod -a -G docker mandy >> /home/mandy/post.log
-groupadd power >> /home/mandy/post.log
-usermod -a -G power mandy >> /home/mandy/post.log
-chsh -s /bin/zsh mandy >> /home/mandy/post.log
+#bash /home/mandy/dotfiles/installers/appimage.sh | tee -a /home/mandy/post.log
+#bash /home/mandy/dotfiles/installers/flatpak.sh | tee -a /home/mandy/post.log
 
-virt-what | grep -q -i virtualbox && dnf install VirtualBox-guest-additions -y >> /home/mandy/post.log
+systemctl enable lightdm 2>&1 | tee -a /home/mandy/post.log
+systemctl enable docker 2>&1 | tee -a /home/mandy/post.log
+usermod -a -G docker mandy 2>&1 | tee -a /home/mandy/post.log
+groupadd power 2>&1 | tee -a /home/mandy/post.log
+usermod -a -G power mandy 2>&1 | tee -a /home/mandy/post.log
+chsh -s /bin/zsh mandy 2>&1 | tee -a /home/mandy/post.log
 
-rpm --import https://dl.tvcdn.de/download/linux/signature/TeamViewer2017.asc >> /home/mandy/post.log
-dnf install https://download.teamviewer.com/download/linux/teamviewer.x86_64.rpm -y >> /home/mandy/post.log
 
-dnf install http://download.nomachine.com/download/6.0/Linux/nomachine_6.0.78_1_x86_64.rpm -y >> /home/mandy/post.log
+dnf copr enable yaroslav/i3desktop -y 2>&1 | tee -a /home/mandy/post.log
+dnf install rofi -y 2>&1 | tee -a /home/mandy/post.log
 
-dnf copr enable sergiomb/google-drive-ocamlfuse >> /home/mandy/post.log
-dnf install google-drive-ocamlfuse -y >> /home/mandy/post.log
+# install polybar
+dnf install -y cmake @development-tools gcc-c++ i3-ipc jsoncpp-devel pulseaudio-libs-devel alsa-lib-devel wireless-tools-devel libmpdclient-devel libcurl-devel cairo-devel xcb-proto xcb-util-devel xcb-util-wm-devel xcb-util-image-devel 2>&1 | tee -a /home/mandy/post.log
+dnf install -y pulseaudio-libs-devel xcb-util-xrm-devel 2>&1 | tee -a /home/mandy/post.log
 
-git clone https://github.com/AGWA/git-crypt.git /tmp/git-crypt >> /home/mandy/post.log
-cd /tmp/git-crypt >> /home/mandy/post.log
-make >> /home/mandy/post.log
-make install >> /home/mandy/post.log
+rm -rf /tmp/polybar 2>&1 | tee -a /home/mandy/post.log
+git clone --recursive https://github.com/jaagr/polybar /tmp/polybar 2>&1 | tee -a /home/mandy/post.log
+cd /tmp/polybar 2>&1 | tee -a /home/mandy/post.log
+mkdir build 2>&1 | tee -a /home/mandy/post.log
+cd build 2>&1 | tee -a /home/mandy/post.log
+cmake .. 2>&1 | tee -a /home/mandy/post.log
+sudo make install 2>&1 | tee -a /home/mandy/post.log
+# end install Polybar
+
+
+virt-what | grep -q -i virtualbox && dnf install VirtualBox-guest-additions -y 2>&1 | tee -a /home/mandy/post.log
+
+rpm --import https://dl.tvcdn.de/download/linux/signature/TeamViewer2017.asc 2>&1 | tee -a /home/mandy/post.log
+dnf install https://download.teamviewer.com/download/linux/teamviewer.x86_64.rpm -y 2>&1 | tee -a /home/mandy/post.log
+
+dnf install http://download.nomachine.com/download/6.0/Linux/nomachine_6.0.78_1_x86_64.rpm -y 2>&1 | tee -a /home/mandy/post.log
+
+dnf copr enable sergiomb/google-drive-ocamlfuse 2>&1 | tee -a /home/mandy/post.log
+dnf install google-drive-ocamlfuse -y 2>&1 | tee -a /home/mandy/post.log
+
 
 # enable when everything is stable
-# dnf update -y
+dnf update -y 2>&1 | tee -a /home/mandy/post.log
 
 # Then switch back to Anaconda on the first console
 chvt 1

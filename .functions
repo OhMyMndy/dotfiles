@@ -299,3 +299,58 @@ remove_wine_desktop_files() {
     | grep -v url \
     | xargs -I {} rm {}
 }
+
+create_remmina_desktop_files() {
+  rm ~/.local/share/applications/remmina-connection-*
+  find ~/.remmina -type f -name '*.remmina' | while read file; do
+    name="$(grep '^name=' $file | cut -d'=' -f2)"
+    name_formatted=$(echo "$name" | sed -E 's/[^a-zA-Z0-9]/_/g')
+    cat <<EOL | tee  ~/.local/share/applications/remmina-connection-$name_formatted.desktop >/dev/null
+[Desktop Entry]
+Name=Remmina - $name
+Exec=remmina -c $file
+Icon=appimagekit-remmina
+Type=Application
+Categories=GTK;GNOME;X-GNOME-NetworkSettings;Network;
+EOL
+  done
+}
+
+create_vm() {
+  type="$1"
+  name="$2"
+
+  vboxmanage showvminfo "$name" >/dev/null 2>&1
+  result=$?
+
+  if [ $result -eq 0 ]; then
+    echo "VM with name '$name' is already imported!"
+    return
+  fi
+
+
+  TPATH=$(VBoxManage list systemproperties | sed -n 's/Default machine folder: *//p')
+
+  VBoxManage createvm --name "$name" --ostype "$type" --register
+  if [ $? -ne 0 ]; then
+    echo "Possible os types:"
+    VBoxManage list ostypes | grep '^ID'
+    return
+  fi
+
+
+  echo "Creating harddisk..."
+  disk_file="$TPATH/$name/$name.vmdk"
+  VBoxManage createmedium disk --filename "$disk_file" --size 80000 --format VMDK --variant Split2G
+  #VBoxManage internalcommands sethduuid "$disk_file"
+
+  VBoxManage storagectl "$name" --name "SATA Controller" --add sata --controller IntelAHCI
+  VBoxManage storageattach "$name" --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium "$disk_file"
+
+  VBoxManage storagectl "$name" --name "IDE Controller" --add ide
+  VBoxManage storageattach "$name" --storagectl "IDE Controller" --type dvddrive --medium emptydrive  --port 0 --device 0
+  VBoxManage modifyvm "$name" --accelerate3d on --usb on --vram 128 --memory 2048 --clipboard bidirectional --draganddrop bidirectional
+  VBoxManage modifyvm "$name" --boot1 dvd --boot2 disk --boot3 none --boot4 none
+  VBoxManage modifyvm "$name" --ioapic on --cpus 2 --cpuexecutioncap 80
+  # $ VBoxManage modifyvm $VM --nic1 bridged --bridgeadapter1 e1000g0
+}
