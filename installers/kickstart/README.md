@@ -21,7 +21,7 @@ xfce4-terminal \
   -e 'bash -c "curl https://raw.githubusercontent.com/Mandy91/dotfiles/master/installers/kickstart/fedora27.ks > /tmp/kickstart.ks && sudo anaconda --kickstart /tmp/kickstart.ks"' \
   \
   --tab -T 'Anaconda log' -H \
-  -e 'touch /tmp/anaconda.log; tail -f /tmp/anaconda.log' \
+  -e 'touch /tmp/anaconda.log; sleep 10; tail -f /tmp/anaconda.log' \
   \
   --tab -T 'Post log' -H \
   -e 'bash -c "while true; do sudo chroot /mnt/sysimage bash -c \"which tail 2>/dev/null >/dev/null && touch /home/mandy/post.log && tail -f /home/mandy/post.log\"; sleep 10;done"'
