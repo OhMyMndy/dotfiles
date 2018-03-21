@@ -344,13 +344,13 @@ create_vm() {
   VBoxManage createmedium disk --filename "$disk_file" --size 80000 --format VMDK --variant Split2G
   #VBoxManage internalcommands sethduuid "$disk_file"
 
-  VBoxManage storagectl "$name" --name "SATA Controller" --add sata --controller IntelAHCI
+  VBoxManage storagectl "$name" --name "SATA Controller" --add sata --controller IntelAHCI --portcount 1 --hostiocache on
   VBoxManage storageattach "$name" --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium "$disk_file"
 
   VBoxManage storagectl "$name" --name "IDE Controller" --add ide
   VBoxManage storageattach "$name" --storagectl "IDE Controller" --type dvddrive --medium emptydrive  --port 0 --device 0
   VBoxManage modifyvm "$name" --accelerate3d on --usb on --vram 128 --memory 2048 --clipboard bidirectional --draganddrop bidirectional
-  VBoxManage modifyvm "$name" --boot1 dvd --boot2 disk --boot3 none --boot4 none
+  VBoxManage modifyvm "$name" --boot1 dvd --boot2 disk
   VBoxManage modifyvm "$name" --ioapic on --cpus 2 --cpuexecutioncap 80
   # $ VBoxManage modifyvm $VM --nic1 bridged --bridgeadapter1 e1000g0
 }
