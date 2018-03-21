@@ -344,7 +344,7 @@ create_vm() {
   VBoxManage createmedium disk --filename "$disk_file" --size 80000 --format VMDK --variant Split2G
   #VBoxManage internalcommands sethduuid "$disk_file"
 
-  VBoxManage storagectl "$name" --name "SATA Controller" --add sata --controller IntelAHCI --portcount 1 --hostiocache on
+  VBoxManage storagectl "$name" --name "SATA Controller" --add sata --controller IntelAHCI --portcount 1 --hostiocache off
   VBoxManage storageattach "$name" --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium "$disk_file"
 
   VBoxManage storagectl "$name" --name "IDE Controller" --add ide

@@ -160,10 +160,10 @@ glibc-locale-source
 
 # Post-installation Script
 
-%post --log=/home/mandy/post1.log
+%post
 
 
-localedef -i nl_BE -f UTF-8 nl_BE.UTF-8
+localedef -i nl_BE -f UTF-8 nl_BE.UTF-8  2>&1 | tee -a /home/mandy/post.log
 cat <<'EOL' | sudo tee /etc/locale.conf
 LANG=en_US.UTF-8
 LANGUAGE="en_US.UTF-8"
@@ -206,7 +206,7 @@ rpm --import https://dl-ssl.google.com/linux/linux_signing_key.pub 2>&1 | tee -a
 rpm -ivh http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-27.noarch.rpm 2>&1 | tee -a /home/mandy/post.log
 rpm -ivh http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-27.noarch.rpm 2>&1 | tee -a /home/mandy/post.log
 
-dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo  2>&1 | tee -a /home/mandy/post.log
 
 dnf install $(curl -s https://api.github.com/repos/atom/atom/releases/latest | jq -r ".assets[] | select(.name) | select(.browser_download_url | test(\"rpm$\")) | .browser_download_url") -y 2>&1 | tee -a /home/mandy/post.log
 dnf install $(curl -s https://api.github.com/repos/saenzramiro/rambox/releases/latest | jq -r ".assets[] | select(.name) | select(.browser_download_url | test(\"64.*rpm$\")) | .browser_download_url") -y 2>&1 | tee -a /home/mandy/post.log
