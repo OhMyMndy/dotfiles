@@ -301,7 +301,7 @@ remove_wine_desktop_files() {
 }
 
 create_remmina_desktop_files() {
-  rm ~/.local/share/applications/remmina-connection-*
+  rm ~/.local/share/applications/remmina-connection-* 2>/dev/null
   find ~/.remmina -type f -name '*.remmina' | while read file; do
     name="$(grep '^name=' $file | cut -d'=' -f2)"
     name_formatted=$(echo "$name" | sed -E 's/[^a-zA-Z0-9]/_/g')

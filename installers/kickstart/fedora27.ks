@@ -139,6 +139,7 @@ composer
 cifs-utils
 numix-gtk-theme
 pop-icon-theme
+dmz-cursor-themes
 unclutter
 flameshot
 VirtualBox
@@ -153,13 +154,36 @@ rhythmbox
 xfce4-terminal
 openbox
 flatpak
+pasystray
+glibc-locale-source
 %end
 
 # Post-installation Script
 
-%post --log=/tmp/post.log
+%post --log=/home/mandy/post1.log
 
 
+localedef -i nl_BE -f UTF-8 nl_BE.UTF-8
+cat <<'EOL' | sudo tee /etc/locale.conf
+LANG=en_US.UTF-8
+LANGUAGE="en_US.UTF-8"
+LC_CTYPE="en_US.UTF-8"
+LC_NUMERIC="nl_BE.UTF-8"
+LC_TIME="nl_BE.UTF-8"
+LC_COLLATE="en_US.UTF-8"
+LC_MONETARY="nl_BE.UTF-8"
+LC_MESSAGES="en_US.UTF-8"
+LC_PAPER="nl_BE.UTF-8"
+LC_NAME="nl_BE.UTF-8"
+LC_ADDRESS="nl_BE.UTF-8"
+LC_TELEPHONE="nl_BE.UTF-8"
+LC_MEASUREMENT="nl_BE.UTF-8"
+LC_IDENTIFICATION="nl_BE.UTF-8"
+
+EOL
+
+
+export HOME=/home/mandy/
 gem install json 2>&1 | tee -a /home/mandy/post.log
 git clone https://github.com/Mandy91/dotfiles.git /home/mandy/dotfiles 2>&1 | tee -a /home/mandy/post.log
 ruby /home/mandy/dotfiles/install.rb 2>&1 | tee -a /home/mandy/post.log
@@ -182,8 +206,10 @@ rpm --import https://dl-ssl.google.com/linux/linux_signing_key.pub 2>&1 | tee -a
 rpm -ivh http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-27.noarch.rpm 2>&1 | tee -a /home/mandy/post.log
 rpm -ivh http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-27.noarch.rpm 2>&1 | tee -a /home/mandy/post.log
 
-#dnf install $(curl -s https://api.github.com/repos/atom/atom/releases/latest | jq -r ".assets[] | select(.name) | select(.browser_download_url | test(\"rpm$\")) | .browser_download_url") -y 2>&1 | tee -a /home/mandy/post.log
-#dnf install $(curl -s https://api.github.com/repos/saenzramiro/rambox/releases/latest | jq -r ".assets[] | select(.name) | select(.browser_download_url | test(\"64.*rpm$\")) | .browser_download_url") -y 2>&1 | tee -a /home/mandy/post.log
+dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+
+dnf install $(curl -s https://api.github.com/repos/atom/atom/releases/latest | jq -r ".assets[] | select(.name) | select(.browser_download_url | test(\"rpm$\")) | .browser_download_url") -y 2>&1 | tee -a /home/mandy/post.log
+dnf install $(curl -s https://api.github.com/repos/saenzramiro/rambox/releases/latest | jq -r ".assets[] | select(.name) | select(.browser_download_url | test(\"64.*rpm$\")) | .browser_download_url") -y 2>&1 | tee -a /home/mandy/post.log
 
 #bash /home/mandy/dotfiles/installers/appimage.sh | tee -a /home/mandy/post.log
 #bash /home/mandy/dotfiles/installers/flatpak.sh | tee -a /home/mandy/post.log
@@ -227,8 +253,3 @@ dnf install google-drive-ocamlfuse -y 2>&1 | tee -a /home/mandy/post.log
 # enable when everything is stable
 dnf update -y 2>&1 | tee -a /home/mandy/post.log
 %end
-
-
-
-# Reboot After Installation
-reboot --eject

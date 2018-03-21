@@ -270,7 +270,7 @@ if [ ! -d "$HOME/.vim/bundle/Vundle.vim" ]; then
 	git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 fi
 
-vim +PluginInstall +qall -u NONE
+yes | vim +PluginInstall +qall
 
 
 
@@ -520,7 +520,7 @@ addToProfile 'QT_QPA_PLATFORMTHEME' "qt5ct"
 # sudo chown root:mandy /etc/default/locale
 # sudo chmod 664 /etc/default/locale
 #
-# cat <<'EOL' | tee /etc/default/locale
+# cat <<'EOL' | sudo tee /etc/locale.conf
 # LANG=en_US.UTF-8
 # LANGUAGE="en_US.UTF-8"
 # LC_CTYPE="en_US.UTF-8"
