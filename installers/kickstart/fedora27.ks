@@ -156,6 +156,7 @@ flatpak
 pasystray
 glibc-locale-source
 freetype-freeworld
+wget
 %end
 
 # Post-installation Script
