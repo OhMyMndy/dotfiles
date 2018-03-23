@@ -123,6 +123,7 @@ docker-ce
 docker-compose
 gedit
 gedit-plugins
+geany
 lightdm
 xfce4-panel
 xfce4-power-manager
@@ -152,6 +153,9 @@ neofetch
 rhythmbox
 xfce4-terminal
 openbox
+openbox-theme-mistral-thin
+openbox-theme-mistral-thin-dark
+obconf
 flatpak
 pasystray
 glibc-locale-source
@@ -220,7 +224,7 @@ git clone https://github.com/Mandy91/dotfiles.git /home/mandy/dotfiles &>> /home
 ruby /home/mandy/dotfiles/install.rb &>> /home/mandy/post.log
 bash /home/mandy/dotfiles/link.sh &>> /home/mandy/post.log
 #bash /home/mandy/dotfiles/installers/fedora.sh &>> /home/mandy/post.log
-chown -R mandy:mandy /home/mandy &>> /home/mandy/post.log
+
 
 # Persist extra repos and import keys.
 cat << EOF > /etc/yum.repos.d/google-chrome.repo &>> /home/mandy/post.log
@@ -242,6 +246,7 @@ dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce
 dnf install $(curl -s https://api.github.com/repos/saenzramiro/rambox/releases/latest | jq -r ".assets[] | select(.name) | select(.browser_download_url | test(\"64.*rpm$\")) | .browser_download_url") -y &>> /home/mandy/post.log
 
 bash /home/mandy/dotfiles/installers/flatpak.sh | tee -a /home/mandy/post.log
+bash /home/mandy/dotfiles/installers/jetbrains-toolbox.sh | tee -a /home/mandy/post.log
 
 systemctl enable lightdm &>> /home/mandy/post.log
 systemctl enable docker &>> /home/mandy/post.log
@@ -281,4 +286,9 @@ dnf install google-drive-ocamlfuse -y &>> /home/mandy/post.log
 
 # enable when everything is stable
 dnf update -y &>> /home/mandy/post.log
+
+chown -R mandy:mandy /home/mandy &>> /home/mandy/post.log
+
+echo "Done"
+
 %end

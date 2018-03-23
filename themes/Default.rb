@@ -153,7 +153,7 @@ class Default
 
       %x(i3 --version | grep gaps)
       i3gaps_enabled = $?.exitstatus === 0
-      puts "i3 gaps: " + i3gaps_enabled.to_s 
+      puts "i3 gaps: " + i3gaps_enabled.to_s
       @i3 = {
           "font" => @fonts["normal"].to_gtk,
           "border" => 2,
@@ -161,7 +161,7 @@ class Default
               "focused"           => I3Colors.new(@colors['COLOR16'], @colors['COLOR16'], @colors['FOREGROUND'], @colors['COLOR4']),
               "unfocused"         => I3Colors.new(@colors['COLOR0'], @colors['COLOR0'], @colors['FOREGROUND'], @colors['COLOR4']),
               "focused_inactive"  => I3Colors.new(@colors['COLOR0'], @colors['COLOR0'], @colors['FOREGROUND'], @colors['COLOR4']),
-              "urgent"            => I3Colors.new(@urgent_color, @urgent_color, @colors['COLOR7'], @colors['COLOR4']),
+              "urgent"            => I3Colors.new(@urgent_color, @urgent_color, @colors['COLOR0'], @colors['COLOR4']),
           },
           "gaps" => {
               "inner" => 2,

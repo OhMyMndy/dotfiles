@@ -210,7 +210,7 @@ set $Locker exec bash ~/.config/i3/scripts/lock
 client.focused          #313b49      #313b49      #eeeeee      #39c2ed
 client.unfocused        #1a1b21      #1a1b21      #eeeeee      #39c2ed
 client.focused_inactive #1a1b21      #1a1b21      #eeeeee      #39c2ed
-client.urgent           #eeec26      #eeec26      #ffffff      #39c2ed
+client.urgent           #eeec26      #eeec26      #1a1b21      #39c2ed
 
 # Default workspaces
 assign [class="Vmplayer"]                                                               $workspace8

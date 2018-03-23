@@ -29,6 +29,9 @@ ln -sf ${DIR}/.config/redshift.conf ~/.config/redshift.conf
 rm -rf ~/.config/i3
 ln -sf ${DIR}/.config/i3 ~/.config/i3
 
+rm -rf ~/.config/openbox
+ln -sf ${DIR}/.config/i3 ~/.config/openbox
+
 mkdir -p ${DIR}/.config/xfce4/xfconf/xfce-perchannel-xml
 ln -sf ${DIR}/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml ~/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml
 
