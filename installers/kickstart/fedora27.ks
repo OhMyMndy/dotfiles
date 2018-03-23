@@ -83,6 +83,9 @@ rpmconf
 strace
 ffmpeg
 system-config-printer
+openbox
+openbox-theme-mistral-thin
+openbox-theme-mistral-thin-dark
 i3
 i3lock
 xterm
@@ -152,9 +155,7 @@ make
 neofetch
 rhythmbox
 xfce4-terminal
-openbox
-openbox-theme-mistral-thin
-openbox-theme-mistral-thin-dark
+
 obconf
 flatpak
 pasystray
