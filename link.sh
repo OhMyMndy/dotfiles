@@ -242,16 +242,20 @@ else
 fi
 
 
-if [ ! -d ~/.oh-my-zsh ]; then
-	wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh
-  sed -i.tmp 's:env zsh::g' install.sh
-  sed -i.tmp 's:chsh -s .*$::g' install.sh
-  sh install.sh
+if [ ! -d ~/.oh-my-zsh/lib ]; then
+    rm -rf ~/.oh-my-zsh/
+    cd /tmp
+    wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh
+    sed -i.tmp 's:env zsh::g' install.sh
+    sed -i.tmp 's:chsh -s .*$::g' install.sh
+    sh install.sh
+    rm install.sh
 fi
 
-mkdir -p ~/.oh-my-zsh/custom/themes
-ln -sf ${DIR}/.oh-my-zsh/custom/themes/mandy.zsh-theme ~/.oh-my-zsh/custom/themes/mandy.zsh-theme
-
+if [ -d ~/.oh-my-zsh/custom ]; then
+    mkdir -p ~/.oh-my-zsh/custom/themes
+    ln -sf ${DIR}/.oh-my-zsh/custom/themes/mandy.zsh-theme ~/.oh-my-zsh/custom/themes/mandy.zsh-theme
+fi
 
 rm -f ~/.zshrc
 ln -sf ${DIR}/.zshrc ~/.zshrc

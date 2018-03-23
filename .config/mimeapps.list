@@ -4,6 +4,7 @@ x-scheme-handler/trash=exo-file-manager.desktop
 application/zip=org.gnome.FileRoller.desktop
 image/jpeg=shotwell-viewer.desktop;feh.desktop
 image/png=shotwell-viewer.desktop;feh.desktop
+application/pgp-encrypted=seahorse.desktop
 
 [Default Applications]
 text/html=google-chrome.desktop
