@@ -34,5 +34,5 @@ fi
 # AppImageD
 if [ ! -f ~/.local/bin/appimaged ]; then
   install_appimage https://github.com/AppImage/AppImageKit/releases/download/continuous/appimaged-x86_64.AppImage AppImageD
-  sudo AppImageD --install
+  sudo /usr/local/bin/AppImageD --install
 fi

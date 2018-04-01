@@ -1,12 +1,23 @@
 #!/usr/bin/env bash
 
-set -e
+set -u
 
-pkill polybar -9
+which polybar
+polybar_exists=$?
 
-while pgrep -x polybar >/dev/null
-    do sleep 1
-done
+if [ $polybar_exists -eq 0 ]; then
+  pkill polybar -9
+  pkill xfce4-panel -9
 
-sleep 1
-polybar -r top & >/dev/null 2>&1
+  while pgrep -x polybar >/dev/null
+      do sleep 1
+  done
+  polybar -r top & >/dev/null 2>&1
+else
+  pkill xfce4-panel -9
+
+  while pgrep -x xfce4-panel >/dev/null
+      do sleep 1
+  done
+  xfce4-panel & >/dev/null 2>&1
+fi

@@ -13,7 +13,8 @@ title() {
 }
 
 randomWallpaper() {
-    wallpapers=($(ls -d ~/wallpapers/*))
+    cd ~/wallpapers
+    wallpapers=($(find $PWD/ -type f -exec file {} \; | awk -F: '{ if ($2 ~/[Ii]mage|EPS/) print $1}' ))
     index=$(($RANDOM % ${#wallpapers[@]} ))
     wallpaper=${wallpapers[$index]}
     echo ${wallpaper}
@@ -23,7 +24,7 @@ setWallpaper() {
   wallpaper_file="$1"
 
   if [ "$wallpaper_file" != '' ] && [ -f "$wallpaper_file" ]; then
-    rm ~/.wallpaper
+    rm ~/.wallpaper 2>/dev/null
     ln -s "$wallpaper_file" ~/.wallpaper
   fi
 
@@ -253,7 +254,7 @@ webdev () {
 }
 
 ip_address() {
-    ip route get 1 | awk '{print $NF;exit}'
+    ip route get 1 | awk '{print $7;exit}'
 }
 
 write_apm_to_file() {
@@ -429,3 +430,96 @@ function installJetbrainsPlugin() {
     done
     set +x
 }
+
+# make sure you pass absolute paths
+# encrypt_files "$(find $(pwd) -name '*.jpg')" # $(pwd) makes sure it is absolute
+encrypt_files() {
+  files="$@"
+  echo "Enter password:"
+  read -s password
+  echo "$files" | xargs -I {} sh -c "echo \"$password\" | gpg --passphrase-fd 0 --always-trust --compress-algo BZIP2 -z 9 --symmetric {}"
+}
+
+decrypt_if_necessary() {
+  files="$1"
+  unset password
+  IFS=$'\n'
+  echo "$files" | while read file; do
+  	original=$(echo "$file" | sed -E 's/\.gpg//g')
+  	if [ ! -f "$original" ]; then
+  		if [ ! "$password" ]; then
+  			echo "Enter password to decrypt GPG encrypted files"
+  			read -s password</dev/tty
+  		fi
+  		echo "$password" | gpg --passphrase-fd 0 -d -o "$original" "$file"
+  	fi
+  done
+  unset password
+}
+
+
+remove_wine_desktop_files() {
+  find /home/mandy/.local/share/applications/ | sort \
+    | grep wine-extension \
+    | grep -v application.desktop \
+    | grep -v appref-ms \
+    | grep -v vbs \
+    | grep -v msp \
+    | grep -v hlp \
+    | grep -v url \
+    | xargs -I {} rm {}
+}
+
+create_remmina_desktop_files() {
+  rm ~/.local/share/applications/remmina-connection-* 2>/dev/null
+  find ~/.remmina -type f -name '*.remmina' | while read file; do
+    name="$(grep '^name=' $file | cut -d'=' -f2)"
+    name_formatted=$(echo "$name" | sed -E 's/[^a-zA-Z0-9]/_/g')
+    cat <<EOL | tee  ~/.local/share/applications/remmina-connection-$name_formatted.desktop >/dev/null
+[Desktop Entry]
+Name=Remmina - $name
+Exec=remmina -c $file
+Icon=appimagekit-remmina
+Type=Application
+Categories=GTK;GNOME;X-GNOME-NetworkSettings;Network;
+EOL
+  done
+}
+
+create_vm() {
+  type="$1"
+  name="$2"
+
+  vboxmanage showvminfo "$name" >/dev/null 2>&1
+  result=$?
+
+  if [ $result -eq 0 ]; then
+    echo "VM with name '$name' is already imported!"
+    return
+  fi
+
+
+  TPATH=$(VBoxManage list systemproperties | sed -n 's/Default machine folder: *//p')
+
+  VBoxManage createvm --name "$name" --ostype "$type" --register
+  if [ $? -ne 0 ]; then
+    echo "Possible os types:"
+    VBoxManage list ostypes | grep '^ID'
+    return
+  fi
+
+
+  echo "Creating harddisk..."
+  disk_file="$TPATH/$name/$name.vmdk"
+  VBoxManage createmedium disk --filename "$disk_file" --size 80000 --format VMDK --variant Split2G
+  #VBoxManage internalcommands sethduuid "$disk_file"
+
+  VBoxManage storagectl "$name" --name "SATA Controller" --add sata --controller IntelAHCI --portcount 1 --hostiocache off
+  VBoxManage storageattach "$name" --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium "$disk_file"
+
+  VBoxManage storagectl "$name" --name "IDE Controller" --add ide
+  VBoxManage storageattach "$name" --storagectl "IDE Controller" --type dvddrive --medium emptydrive  --port 0 --device 0
+  VBoxManage modifyvm "$name" --accelerate3d on --usb on --vram 128 --memory 2048 --clipboard bidirectional --draganddrop bidirectional
+  VBoxManage modifyvm "$name" --boot1 dvd --boot2 disk
+  VBoxManage modifyvm "$name" --ioapic on --cpus 2 --cpuexecutioncap 80
+  # $ VBoxManage modifyvm $VM --nic1 bridged --bridgeadapter1 e1000g0

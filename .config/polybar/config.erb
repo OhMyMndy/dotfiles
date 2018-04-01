@@ -72,7 +72,7 @@ modules-right = terminal monitor vpn filesystem cpu load memory date powermenu
 
 tray-position = right
 tray-padding = <%= polybar['padding'] %>
-tray-maxsize = 18%
+tray-maxsize = 16
 ;tray-transparent = true
 
 
@@ -334,7 +334,7 @@ label-disconnected-foreground = <%= polybar['inactive_color'] %>
 type=custom/script
 #type = internal/date
 interval = 30
-exec = date +"%a %d-%m-%Y %H:%M"
+exec = date +"%a %x %R"
 ;format-prefix = " "
 ;format-prefix-foreground = ${colors.foreground}
 click-right = gsimplecal

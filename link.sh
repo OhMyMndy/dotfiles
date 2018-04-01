@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source $DIR/.functions
+source $DIR/.zshrc 2>/dev/null
+
 dark_mode=$(cat $HOME/.dark-mode 2>/dev/null)
 
 source ~/.functions
@@ -24,16 +27,24 @@ rm -f ~/.config/redshift.conf
 ln -sf ${DIR}/.config/redshift.conf ~/.config/redshift.conf
 
 rm -rf ~/.config/i3
-ln -sfn ${DIR}/.config/i3 ~/.config/i3
+ln -sf ${DIR}/.config/i3 ~/.config/i3
 
-rm -rf ~/.config/xfce4
-ln -sfn ${DIR}/.config/xfce4 ~/.config/xfce4
+rm -rf ~/.config/openbox
+ln -sf ${DIR}/.config/openbox ~/.config/openbox
+
+mkdir -p ${DIR}/.config/xfce4/xfconf/xfce-perchannel-xml
+ln -sf ${DIR}/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml ~/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml
+
+rm -rf ~/.config/xfce4/terminal
+ln -sfn ${DIR}/.config/xfce4/terminal ~/.config/xfce4/terminal
 
 ln -sf ${DIR}/.wallpaper.jpg ~/.wallpaper.jpg
 
 rm -rf ~/.config/gtk-3.0
-ln -sfn ${DIR}/.config/gtk-3.0 ~/.config/gtk-3.0
+ln -sf ${DIR}/.config/gtk-3.0 ~/.config/gtk-3.0
 
+rm -rf ~/.config/qt5ct
+ln -sf ${DIR}/.config/qt5ct ~/.config/qt5ct
 
 rm -rf ~/.conkyrc
 ln -sf ${DIR}/.conkyrc ~/.conkyrc
@@ -112,10 +123,14 @@ ln -sf ${DIR}/.config/beets ~/.config/beets
 rm -rf ~/.config/ranger
 ln -sf ${DIR}/.config/ranger ~/.config/ranger
 
-mv -f ~/bin ~/bin_old 2>/dev/null || true > /dev/null
+if [ ! -d ~/bin_bak ]; then
+	mv -f ~/bin ~/bin_bak
+fi
+
 rm -rf ~/bin
 ln -sf ${DIR}/bin ~/bin
 chmod +x -R ~/bin/
+rm -rf ~/bin/bin
 
 
 mkdir -p ~/.tmux
@@ -145,6 +160,22 @@ ln -sf ${DIR}/.config/peco ~/.config/peco
 rm -rf ~/.config/Trolltech.conf
 ln -sf ${DIR}/.config/Trolltech.conf ~/.config/Trolltech.conf
 
+
+if [ ! -f ~/.config/mimeapps.list_bak ]; then
+	cp ~/.config/mimeapps.list ~/.config/mimeapps.list_bak
+fi
+
+if [ ! -f ~/.local/share/applications/mimeapps.list_bak ]; then
+	cp ~/.local/share/applications/mimeapps.list ~/.local/share/applications/mimeapps.list_bak
+fi
+
+
+rm -rf ~/.config/mimeapps.list
+ln -sf ${DIR}/.config/mimeapps.list ~/.config/mimeapps.list
+
+rm -rf ~/.local/share/applications/mimeapps.list
+ln -s ~/.config/mimeapps.list ~/.local/share/applications/mimeapps.list
+
 rm -f ~/.fonts.conf
 ln -sf ${DIR}/.fonts.conf ~/.fonts.conf
 
@@ -163,6 +194,8 @@ rm -rf ~/.config/vis
 ln -sf ${DIR}/.config/vis ~/.config/vis
 
 ##### START DESKTOP FILES #####
+
+mkdir -p ~/.local/share/applications/icons
 
 rm -rf ~/.local/share/applications/icons
 ln -sf ${DIR}/.local/share/applications/icons ~/.local/share/applications/icons
@@ -212,16 +245,20 @@ else
 fi
 
 
-if [ ! -d ~/.oh-my-zsh ]; then
-	wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh
-  sed -i.tmp 's:env zsh::g' install.sh
-  sed -i.tmp 's:chsh -s .*$::g' install.sh
-  sh install.sh
+if [ ! -d ~/.oh-my-zsh/lib ]; then
+    rm -rf ~/.oh-my-zsh/
+    cd /tmp
+    wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh
+    sed -i.tmp 's:env zsh::g' install.sh
+    sed -i.tmp 's:chsh -s .*$::g' install.sh
+    sh install.sh
+    rm install.sh
 fi
 
-mkdir -p ~/.oh-my-zsh/custom/themes
-ln -sf ${DIR}/.oh-my-zsh/custom/themes/mandy.zsh-theme ~/.oh-my-zsh/custom/themes/mandy.zsh-theme
-
+if [ -d ~/.oh-my-zsh/custom ]; then
+    mkdir -p ~/.oh-my-zsh/custom/themes
+    ln -sf ${DIR}/.oh-my-zsh/custom/themes/mandy.zsh-theme ~/.oh-my-zsh/custom/themes/mandy.zsh-theme
+fi
 
 rm -f ~/.zshrc
 ln -sf ${DIR}/.zshrc ~/.zshrc
@@ -240,10 +277,152 @@ if [ ! -d "$HOME/.vim/bundle/Vundle.vim" ]; then
 	git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 fi
 
-vim +PluginInstall +qall
+yes | vim +PluginInstall +qall
 
 
 
+function installZshPlugin()
+{
+	pluginUrl="$1"
+	pluginDir="$2"
+
+	if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/$pluginDir" ]; then
+		echo "Installing ZSH plugin '$pluginDir'"
+		git clone $pluginUrl ~/.oh-my-zsh/custom/plugins/$pluginDir
+	else
+		echo "ZSH plugin '$pluginDir' is already installed"
+	fi
+
+}
+
+
+function installZshTheme()
+{
+	pluginUrl="$1"
+	pluginDir="$2"
+
+	if [ ! -f "$HOME/.oh-my-zsh/custom/themes/$pluginDir" ]; then
+		echo "Installing ZSH theme '$pluginDir'"
+		mkdir -p  ~/.oh-my-zsh/custom/themes/
+		cd  ~/.oh-my-zsh/custom/themes/
+		curl -fLo "$pluginDir" "$pluginUrl"
+	else
+		echo "ZSH theme '$pluginDir' is already installed"
+	fi
+
+}
+
+fontsAdded=0
+function installFont()
+{
+	fontUrl="$1"
+	fontName="$2"
+ 	mkdir -p ~/.local/share/fonts
+	cd ~/.local/share/fonts
+
+	if [ ! -f "$fontName" ]; then
+		curl -fLo "$fontName" "$fontUrl"
+		fontsAdded=1
+	fi
+}
+
+function installFontsFromZip()
+{
+	fontUrl="$1"
+	fontName="$2"
+	mkdir -p ~/.local/share/fonts
+	cd ~/.local/share/fonts
+
+	if [ ! -d "$fontName" ]; then
+		rm -f "/tmp/$fontName.zip"
+    	curl -fLo "/tmp/$fontName.zip" "$fontUrl"
+		unzip "/tmp/$fontName.zip" -d "$fontName"
+		fontsAdded=1
+	fi
+}
+
+function installGtkTheme()
+{
+	if [[ "$(uname -s)" == *"Linux"* ]]; then
+		themeUrl="$1"
+		themeName="$2"
+		mkdir -p ~/.themes | true
+		cd ~/.themes
+		if [ ! -d "$themeName" ]; then
+			tmp_dir=$(mktemp -d)
+			rm -f "/tmp/$themeName.zip"
+			curl -fLo "/tmp/$themeName.zip" "$themeUrl"
+			cd "${tmp_dir}"
+			unzip "/tmp/$themeName.zip"
+			mkdir -p "$HOME/.themes/$themeName"
+			mv "${tmp_dir}"/*/** "$HOME/.themes/$themeName"
+			rm -rf "${tmp_dir}"
+		fi
+	fi
+}
+
+function installPeco()
+{
+	if [ ! -f "/usr/local/bin/peco" ]; then
+		echo "Installing Peco binary"
+		url="https://github.com/peco/peco/releases/download/v0.5.3/peco_"
+
+		platform=$(uname -s | awk '{print tolower($0)}')
+		url+="$platform"
+		url+="_amd64.tar.gz"
+		rm -f /tmp/peco.tar.gz
+		curl -fLo "/tmp/peco.tar.gz" "$url"
+		cd /tmp
+		tar -xzf "/tmp/peco.tar.gz" "peco_${platform}_amd64/peco"
+		sudo cp "/tmp/peco_${platform}_amd64/peco" /usr/local/bin/peco
+		rm -rf /tmp/peco*
+	else
+		echo "Peco binary already installed"
+	fi
+}
+
+function getJetbrainsPluginZipUrl() {
+    pluginName="$1"
+    pluginBaseUrl="https://plugins.jetbrains.com/"
+    requestUrl="${pluginBaseUrl}/plugin/${pluginName}"
+
+    newUrl=$(curl "${requestUrl}" | grep -E -o '/plugin/download\?updateId=[0-9]+')
+
+    echo "${pluginBaseUrl}${newUrl}"
+}
+
+function getJetbrainsPluginPaths() {
+    productName="$1"
+
+    echo $( find ~ -type d -name 'plugins' 2>/dev/null | grep "\.local.*${productName}")
+}
+
+
+function installJetbrainsPlugin() {
+    set -x
+    product="$1"
+    zipUrl="$2"
+    zipUrl=$(getJetbrainsPluginZipUrl "${zipUrl}")
+
+    pluginDirs=$(getJetbrainsPluginPaths "${product}")
+
+    echo "plugindirs: ${pluginDirs}"
+
+    tmpZipFileName="/tmp/jetbrainsPlugin.zip"
+    curl -L -o "${tmpZipFileName}" "${zipUrl}"
+#    echo $?
+
+    echo "after wget"
+    echo "${pluginDirs[@]}"
+    for pluginDir in ${pluginDirs}
+    do
+        echo "plugindir: ${pluginDir}"
+        cd "${pluginDir}"
+        unzip "${tmpZipFileName}"
+    done
+    set +x
+}
+set -e
 #installJetbrainsPlugin 'IDEA-C' '1293-ruby'
 
 
@@ -256,7 +435,7 @@ sed -i -e's/\s*BUFFER=.*/BUFFER=$\(fc -l -n 1 |  eval $tac | awk "\!x\[\\$0\]++"
 
 installZshPlugin "https://github.com/skx/sysadmin-util.git" "sysadmin-util"
 
-if [ ! -d "$ZSH_CUSTOM/themes/spaceship-prompt"]; then
+if [ ! -d "$ZSH_CUSTOM/themes/spaceship-prompt" ]; then
 	git clone https://github.com/denysdovhan/spaceship-prompt.git "$ZSH_CUSTOM/themes/spaceship-prompt"
 	ln -s "$ZSH_CUSTOM/themes/spaceship-prompt/spaceship.zsh-theme" "$ZSH_CUSTOM/themes/spaceship.zsh-theme"
 fi
@@ -344,6 +523,30 @@ addToProfile 'IP_ADDRESS' '$(ip -4 route get 1 | head -1 | awk "{print \$7}" )'
 addToProfile 'GID' '$(id -g)'
 addToProfile 'DOCKER_GID' '$(getent group docker 2>/dev/null | cut -d: -f3 )'
 addToProfile 'XDG_CONFIG_HOME' '$HOME/.config'
+addToProfile 'QT_QPA_PLATFORMTHEME' "qt5ct"
+
+
+# sudo chown root:mandy /etc/default/locale
+# sudo chmod 664 /etc/default/locale
+#
+# cat <<'EOL' | sudo tee /etc/locale.conf
+# LANG=en_US.UTF-8
+# LANGUAGE="en_US.UTF-8"
+# LC_CTYPE="en_US.UTF-8"
+# LC_NUMERIC="nl_BE.UTF-8"
+# LC_TIME="nl_BE.UTF-8"
+# LC_COLLATE="en_US.UTF-8"
+# LC_MONETARY="nl_BE.UTF-8"
+# LC_MESSAGES="en_US.UTF-8"
+# LC_PAPER="nl_BE.UTF-8"
+# LC_NAME="nl_BE.UTF-8"
+# LC_ADDRESS="nl_BE.UTF-8"
+# LC_TELEPHONE="nl_BE.UTF-8"
+# LC_MEASUREMENT="nl_BE.UTF-8"
+# LC_IDENTIFICATION="nl_BE.UTF-8"
+#
+# EOL
+
 
 
 # remove arc border radius
@@ -351,13 +554,21 @@ addToProfile 'XDG_CONFIG_HOME' '$HOME/.config'
 find /usr/share/themes/Arc -type f -name '*.rc' | sudo xargs -I {} sed -E -i 's/(radius\s*=)([^;]+)/\1 0/g' {}
 find /usr/share/themes/Arc -type f -name '*.css' | sudo xargs -I {} sed -E -i 's/(border.+radius:)([^;]+);/\1 0px;/g' {}
 
-
-which nvm
-nvm_exists=$?
-if [ $nvm_exists -ne 0 ]; then
+if [ ! -d "$HOME/.nvm" ]; then
 	curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash
 	export NVM_DIR="$HOME/.nvm"
 	[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-	sudo chown -R $USER:$(id -gn $USER) /home/mandy/.config
+	sudo chown -R $USER:$(id -gn $USER) $HOME/.config
 	nvm install stable
 fi
+
+if ! grep -q '192.168.10.120/tank' /etc/fstab; then
+	echo "Please enter password of 192.168.10.120/tank"
+	read -s password
+	echo "//192.168.10.120/tank /mnt/tank cifs rw,_netdev,user=mandy,password=${password},uid=$(id -u mandy),gid=$(id -g mandy) 0 0" | sudo tee -a /etc/fstab >/dev/null
+fi
+
+
+remove_wine_desktop_files
+
+create_remmina_desktop_files

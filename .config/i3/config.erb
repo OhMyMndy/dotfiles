@@ -226,6 +226,7 @@ for_window [class=".*"]                                                         
 for_window [class="Yad"]                                                                floating enable
 for_window [class="mpv"]                                                                floating enable
 for_window [instance=".*floating.*"]                                                    floating enable
+for_window [title=".*floating.*"]                                                       floating enable
 
 for_window [window_role="pop-up"]                                                       floating enable
 for_window [window_role="bubble"]                                                       floating enable
@@ -258,24 +259,25 @@ no_focus [class=".*phpstorm"]
 # Execs
 exec --no-startup-id redshift
 exec --no-startup-id udiskie
+#exec --no-startup-id i3-msg 'workspace 6; exec rambox'; i3-msg 'workspace 1; exec google-chrome || chromium'; sleep 1; i3-msg 'workspace 2; exec ~/bin/i3-sensible-terminal'; i3-msg 'workspace 3; exec pcmanfm'
 
 # Exec always
 exec_always --no-startup-id bash ~/bin/restart-polybar || xfce4-panel
 exec_always --no-startup-id killall dunst; while pgrep -x dunst >/dev/null; do sleep 1; done; dunst
 exec_always --no-startup-id bash -c "source ~/.functions; setWallpaper"
-exec_always --no-startup-id pgrep -x xbanish; [ $? -eq 1] && xbanish
-exec_always --no-startup-id pgrep -x pasystray; [ $? -eq 1 ] && pasystray
-exec_always --no-startup-id pgrep -x flameshot; [ $? -eq 1 ] && flameshot
-exec_always --no-startup-id pgrep -x pb-for-desktop; [ $? -eq 1 ] && pb-for-desktop
-exec_always --no-startup-id pgrep -x nm-applet; [ $? -eq 1 ] && nm-applet
-exec_always --no-startup-id pgrep -x parcellite; [ $? -eq 1 ] && parcellite
-exec_always --no-startup-id pgrep -x imwheel; [ $? -eq 1 ] && imwheel
+exec_always --no-startup-id sh -c "pgrep -x xbanish; [ \$? -eq 1] && xbanish"
+exec_always --no-startup-id sh -c "pgrep -x pasystray; [ \$? -eq 1 ] && pasystray"
+exec_always --no-startup-id sh -c "pgrep -x pb-for-desktop; [ \$? -eq 1 ] && pb-for-desktop"
+exec_always --no-startup-id sh -c "pgrep -x nm-applet; [ \$? -eq 1 ] && nm-applet"
+exec_always --no-startup-id sh -c "pgrep -x parcellite; [ \$? -eq 1 ] && parcellite"
+exec_always --no-startup-id sh -c "pgrep -x imwheel; [ \$? -eq 1 ] && imwheel"
 exec_always --no-startup-id killall synergys; while pgrep -x synergys >/dev/null; do sleep 1; done; synergys -c ~/.synergy.conf
 exec_always --no-startup-id killall notify-server; while pgrep -x notify-server >/dev/null; do sleep 1; done; notify-server
 
-exec_always --no-startup-id pgrep -x rambox; [ $? -eq 1 ] && rambox
-exec_always --no-startup-id pgrep -f i3-sensible-terminal; [ $? -eq 1 ] && i3-sensible-terminal -e "byobu"
-exec_always --no-startup-id pgrep -x thunar; [ $? -eq 1 ] && thunar
+exec_always --no-startup-id sh -c "pgrep -x rambox; [ \$? -eq 1 ] && rambox"
+exec_always --no-startup-id sh -c "pgrep -f i3-sensible-terminal; [ \$? -eq 1 ] && i3-sensible-terminal -e 'byobu'"
+exec_always --no-startup-id sh -c "pgrep -x thunar; [ \$? -eq 1 ] && thunar"
+exec_always --no-startup-id sh -c "pgrep -x shutter; [ \$? -eq 1 ] && shutter --min_at_startup"
 
 #exec_always --no-startup-id pkill -f resolution-changed; bash ~/bin/resolution-changed ~/bin/restart-polybar
 exec_always --no-startup-id bash "$HOME/.screenlayout/$(hostname).sh"
@@ -284,8 +286,9 @@ exec_always --no-startup-id bash "$HOME/.screenlayout/$(hostname).sh"
 bindsym $mod+Shift+greater move workspace to output right
 bindsym $mod+Shift+less move workspace to output left
 bindsym Scroll_Lock exec $Locker
-bindsym Print exec flameshot gui -p ~/Screenshots/
-bindsym $mod+Print exec flameshot full -p ~/Screenshots/ -c
+bindsym $mod+Shift+Escape exec $Locker
+bindsym Print exec shutter -f
+# bindsym $mod+Print exec flameshot full -p ~/Screenshots/ -c
 
 # Pulse Audio controls
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume $(pactl list short sinks | grep alsa_output | cut -f1) +2% #increase sound volume

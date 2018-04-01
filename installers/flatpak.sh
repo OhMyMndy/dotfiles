@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
 
-sudo flatpak install --from https://flathub.org/repo/appstream/io.atom.Atom.flatpakref -y
-sudo flatpak install --from https://flathub.org/repo/appstream/org.darktable.Darktable.flatpakref -y
+
+install() {
+  flatpak install --from -y $@
+}
+
+flatpak remote-add flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+
+install https://flathub.org/repo/appstream/io.atom.Atom.flatpakref
+install https://flathub.org/repo/appstream/org.darktable.Darktable.flatpakref
+install https://flathub.org/repo/appstream/org.gimp.GIMP.flatpakref

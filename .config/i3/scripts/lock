@@ -9,11 +9,10 @@ pkill -u "$USER" -USR1 dunst
 if [ "$1" != '--test' ]; then
   bash ./create-lockscreen-image && pkill -e -f i3lock && i3lock -n -i $TMP_IMAGE || i3lock -c 000000 &
   i3lock -c 000000
+  rm $TMP_IMAGE
 else
-  bash ./create-lockscreen-image && xdg-open $TMP_IMAGE
+  bash ./create-lockscreen-image && exo-open $TMP_IMAGE
 fi
 
 # resume message display
 pkill -u "$USER" -USR2 dunst
-
-rm $TMP_IMAGE
