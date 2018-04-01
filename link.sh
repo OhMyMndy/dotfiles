@@ -2,8 +2,8 @@
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 dark_mode=$(cat $HOME/.dark-mode 2>/dev/null)
-echo "dark mode: $dark_mode"
-#set -e
+
+source ~/.functions
 
 mkdir -p ~/.config
 mkdir -p ~/Screenshots
@@ -244,148 +244,6 @@ vim +PluginInstall +qall
 
 
 
-function installZshPlugin()
-{
-	pluginUrl="$1"
-	pluginDir="$2"
-
-	if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/$pluginDir" ]; then
-		echo "Installing ZSH plugin '$pluginDir'"
-		git clone $pluginUrl ~/.oh-my-zsh/custom/plugins/$pluginDir
-	else
-		echo "ZSH plugin '$pluginDir' is already installed"
-	fi
-
-}
-
-
-function installZshTheme()
-{
-	pluginUrl="$1"
-	pluginDir="$2"
-
-	if [ ! -f "$HOME/.oh-my-zsh/custom/themes/$pluginDir" ]; then
-		echo "Installing ZSH theme '$pluginDir'"
-		mkdir -p  ~/.oh-my-zsh/custom/themes/
-		cd  ~/.oh-my-zsh/custom/themes/
-		curl -fLo "$pluginDir" "$pluginUrl"
-	else
-		echo "ZSH theme '$pluginDir' is already installed"
-	fi
-
-}
-
-fontsAdded=0
-function installFont()
-{
-	fontUrl="$1"
-	fontName="$2"
- 	mkdir -p ~/.local/share/fonts
-	cd ~/.local/share/fonts
-
-	if [ ! -f "$fontName" ]; then
-		curl -fLo "$fontName" "$fontUrl"
-		fontsAdded=1
-	fi
-}
-
-function installFontsFromZip()
-{
-	fontUrl="$1"
-	fontName="$2"
-	mkdir -p ~/.local/share/fonts
-	cd ~/.local/share/fonts
-
-	if [ ! -d "$fontName" ]; then
-		rm -f "/tmp/$fontName.zip"
-    	curl -fLo "/tmp/$fontName.zip" "$fontUrl"
-		unzip "/tmp/$fontName.zip" -d "$fontName"
-		fontsAdded=1
-	fi
-}
-
-function installGtkTheme()
-{
-	if [[ "$(uname -s)" == *"Linux"* ]]; then
-		themeUrl="$1"
-		themeName="$2"
-		mkdir -p ~/.themes | true
-		cd ~/.themes
-		if [ ! -d "$themeName" ]; then
-			tmp_dir=$(mktemp -d)
-			rm -f "/tmp/$themeName.zip"
-			curl -fLo "/tmp/$themeName.zip" "$themeUrl"
-			cd "${tmp_dir}"
-			unzip "/tmp/$themeName.zip"
-			mkdir -p "$HOME/.themes/$themeName"
-			mv "${tmp_dir}"/*/** "$HOME/.themes/$themeName"
-			rm -rf "${tmp_dir}"
-		fi
-	fi
-}
-
-function installPeco()
-{
-	if [ ! -f "/usr/local/bin/peco" ]; then
-		echo "Installing Peco binary"
-		url="https://github.com/peco/peco/releases/download/v0.5.1/peco_"
-
-		platform=$(uname -s | awk '{print tolower($0)}')
-		url+="$platform"
-		url+="_amd64.tar.gz"
-		rm -f /tmp/peco.tar.gz
-		curl -fLo "/tmp/peco.tar.gz" "$url"
-		cd /tmp
-		tar -xzf "/tmp/peco.tar.gz" "peco_${platform}_amd64/peco"
-		sudo cp "/tmp/peco_${platform}_amd64/peco" /usr/local/bin/peco
-		rm -rf /tmp/peco*
-	else
-		echo "Peco binary already installed"
-	fi
-}
-
-function getJetbrainsPluginZipUrl() {
-    pluginName="$1"
-    pluginBaseUrl="https://plugins.jetbrains.com/"
-    requestUrl="${pluginBaseUrl}/plugin/${pluginName}"
-
-    newUrl=$(curl "${requestUrl}" | grep -E -o '/plugin/download\?updateId=[0-9]+')
-
-    echo "${pluginBaseUrl}${newUrl}"
-}
-
-function getJetbrainsPluginPaths() {
-    productName="$1"
-
-    echo $( find ~ -type d -name 'plugins' 2>/dev/null | grep "\.local.*${productName}")
-}
-
-
-function installJetbrainsPlugin() {
-    set -x
-    product="$1"
-    zipUrl="$2"
-    zipUrl=$(getJetbrainsPluginZipUrl "${zipUrl}")
-
-    pluginDirs=$(getJetbrainsPluginPaths "${product}")
-
-    echo "plugindirs: ${pluginDirs}"
-
-    tmpZipFileName="/tmp/jetbrainsPlugin.zip"
-    curl -L -o "${tmpZipFileName}" "${zipUrl}"
-#    echo $?
-
-    echo "after wget"
-    echo "${pluginDirs[@]}"
-    for pluginDir in ${pluginDirs}
-    do
-        echo "plugindir: ${pluginDir}"
-        cd "${pluginDir}"
-        unzip "${tmpZipFileName}"
-    done
-    set +x
-}
-set -e
 #installJetbrainsPlugin 'IDEA-C' '1293-ruby'
 
 
@@ -405,37 +263,39 @@ fi
 
 # installZshTheme "https://raw.githubusercontent.com/caiogondim/bullet-train-oh-my-zsh-theme/master/bullet-train.zsh-theme" "bullet-train.zsh-theme"
 
+# Regular fonts
+installFontsFromZip "https://www.wfonts.com/download/data/2016/05/11/gill-sans-std/gill-sans-std.zip" "GillSans"
 
-# installFont "https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/patched-fonts/SourceCodePro/Regular/complete/Sauce%20Code%20Pro%20Nerd%20Font%20Complete.ttf" "Sauce Code Pro Nerd Font Complete.ttf"
-# installFont "https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf" "Droid Sans Mono for Powerline Nerd Font Complete.otf"
-# installFont "https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/AnonymousPro/complete/Anonymice%20Nerd%20Font%20Complete.ttf" "Anonymice Powerline Nerd Font Complete.ttf"
-# installFont "https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/DejaVuSansMono/Regular/complete/DejaVu%20Sans%20Mono%20Nerd%20Font%20Complete.ttf" "DejaVu Sans Mono Nerd Font Complete.ttf"
-# installFont "https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/DejaVuSansMono/Regular/complete/DejaVu%20Sans%20Mono%20Nerd%20Font%20Complete.ttf" "DejaVu Sans Mono Nerd Font Complete.ttf"
-
-
-# installFontsFromZip "https://github.com/RedHatBrand/Overpass/releases/download/3.0.2/overpass-desktop-fonts.zip" "overpass"
-# installFontsFromZip "https://github.com/AppleDesignResources/SanFranciscoFont/archive/master.zip" "sanfrancisco"
-# installFontsFromZip "http://dl.1001fonts.com/alte-din-1451-mittelschrift.zip" "din-1451"
-# installFontsFromZip "https://github.com/KDE/oxygen-fonts/archive/master.zip" "oxygen"
+installFontsFromZip "https://github.com/RedHatBrand/Overpass/releases/download/3.0.2/overpass-desktop-fonts.zip" "overpass"
+if [ "$(uname)" != 'Darwin' ]; then
+	installFontsFromZip "https://github.com/AppleDesignResources/SanFranciscoFont/archive/master.zip" "sanfrancisco"
+fi
+installFontsFromZip "http://dl.1001fonts.com/alte-din-1451-mittelschrift.zip" "din-1451"
+installFontsFromZip "https://github.com/KDE/oxygen-fonts/archive/master.zip" "oxygen"
 # installFontsFromZip "https://www.fontsquirrel.com/fonts/download/archivo-narrow" "archivo-narrow"
 # installFontsFromZip "https://www.fontsquirrel.com/fonts/download/TeX-Gyre-Heros" "text-gyre-heros"
-# installFontsFromZip "https://dl.dafont.com/dl/?f=liberation_sans" "liberation-sans"
-# installFontsFromZip "https://www.fontsquirrel.com/fonts/download/montserrat" "montserrat"
+installFontsFromZip "https://dl.dafont.com/dl/?f=liberation_sans" "liberation-sans"
+installFontsFromZip "https://www.fontsquirrel.com/fonts/download/montserrat" "montserrat"
+installFontsFromZip "https://www.wfonts.com/download/data/2015/03/12/futura/futura.zip" "Futura"
+installFontsFromZip "https://www.wfonts.com/download/data/2015/06/23/frutiger/frutiger.zip" "Frutiger"
 
-# installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/FiraMono.zip" "FiraMono"
-# installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/DroidSansMono.zip" "DroidSansMono"
-# installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/FantasqueSansMono.zip" "FantasqueSansMono"
-# installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/Inconsolata.zip" "Inconsolata"
-# installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/Meslo.zip" "Meslo"
+# Monospaced fonts
+installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/FiraMono.zip" "FiraMono"
+installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/DroidSansMono.zip" "DroidSansMono"
+installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/FantasqueSansMono.zip" "FantasqueSansMono"
+installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/Inconsolata.zip" "Inconsolata"
+installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/Meslo.zip" "Meslo"
 # installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/RobotoMono.zip" "RobotoMono"
-# installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/AnonymousPro.zip" "AnonymousPro"
+installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/AnonymousPro.zip" "AnonymousPro"
 # installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/SpaceMono.zip" "SpaceMono"
 # installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/Terminus.zip" "Terminus"
 # installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/Mononoki.zip" "Monoki"
 # installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/ProFont.zip" "ProFont"
 # installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/ProggyClean.zip" "ProggyClean"
 installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/Hack.zip" "Hack"
-# installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/Iosevka.zip" "Iosevka"
+installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/Iosevka.zip" "Iosevka"
+installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/UbuntuMono.zip" "UbuntuMono"
+installFontsFromZip "http://www.fontspace.com/download/6269/e70447f0601e46ecbea2dc3bf9f59695/prismtone_ptf-nordic.zip" "PrismtoneNordic"
 
 
 
