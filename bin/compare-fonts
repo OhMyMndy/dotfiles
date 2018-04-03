@@ -1,0 +1,102 @@
+#!/usr/bin/env php
+
+<?php
+
+if (!empty($argv[1])) {
+    parse_str($argv[1], $_GET);
+}
+
+// php compare-fonts.php "font1=/Users/mandy/Library/Fonts/Futura/Futura Book font.ttf&font2=/Users/mandy/Library/Fonts/overpass/overpass/overpass-regular.otf"
+// Or
+// http://localhost:8080/imagemagick/compare-fonts.php?font1=/Users/mandy/Library/Fonts/Futura/Futura%20Book%20font.ttf&font2=/Users/mandy/Library/Fonts/overpass/overpass/overpass-regular.otf
+
+
+// http://localhost:8080/imagemagick/compare-fonts.php?font1=/Users/mandy/Library/Fonts/Futura/Futura%20Book%20font.ttf&font2=/Users/mandy/Library/Fonts/overpass/overpass/overpass-regular.otf&letters=ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890
+
+if (isset($_GET['font1'])) {
+    $font1 = $_GET['font1'];
+} else {
+    die("Please provide font1");
+}
+
+if (isset($_GET['font2'])) {
+    $font2 = $_GET['font2'];
+} else {
+    die("Please provide font2");
+}
+
+$height = 500;
+if (isset($_GET['height'])) {
+    $height = (int)$_GET['height'];
+}
+
+$width = 500;
+if (isset($_GET['width'])) {
+    $width = (int)$_GET['width'];
+}
+
+$fontSize = 600;
+if (isset($_GET['fontSize'])) {
+    $fontSize = (int)$_GET['fontSize'];
+}
+
+$letters = ['ABC'];
+if (isset($_GET['letters'])) {
+    $letters = str_split($_GET['letters']);
+}
+
+// How much letters next to each other?
+$rowWidth = ceil(sqrt(count($letters)));
+if (isset($_GET['rowWidth'])) {
+    $rowWidth = 6;
+}
+
+$lines = array_chunk($letters, $rowWidth);
+
+$colWidth = count($lines);
+
+$fullimage = new Imagick();
+$fullimage->newImage(($rowWidth) * $width, $colWidth * $height, new \ImagickPixel('black'));
+$fullimage->setGravity(\Imagick::GRAVITY_WEST);
+
+
+$j = 1;
+foreach ($lines as $line) {
+    $i = 1;
+    foreach ($line as $letter) {
+        $image1 = new \Imagick();
+        $image1->newImage($width, $height, new \ImagickPixel('black'));
+
+        $image2 = new \Imagick();
+        $image2->newImage($width, $height, new \ImagickPixel('black'));
+
+        $font1Draw = new \ImagickDraw();
+        $font1Draw->setFont($font1);
+        $font1Draw->setFontSize($fontSize);
+        $font1Draw->setFillColor(new \ImagickPixel('red'));
+        $font1Draw->setGravity(\Imagick::GRAVITY_CENTER);
+        $image1->annotateImage($font1Draw, 0, 0, 0, $letter);
+
+
+        $font2Draw = new \ImagickDraw();
+        $font2Draw->setFont($font2);
+        $font2Draw->setFontSize($fontSize);
+        $font2Draw->setFillColor(new \ImagickPixel('blue'));
+        $font2Draw->setGravity(\Imagick::GRAVITY_CENTER);
+        $image2->annotateImage($font2Draw, 0, 0, 0, $letter);
+        $image2->compositeImage($image1, \Imagick::COMPOSITE_BLEND, 0, 0, \Imagick::CHANNEL_ALL);
+
+
+        $fullimage->compositeImage($image2, Imagick::COMPOSITE_COPY, ($width * $i) - $width, ($height * $j) - $height);
+        $i++;
+    }
+    $j++;
+}
+
+$fullimage->setImageFormat('png');
+$fullimage->setImageUnits(\Imagick::RESOLUTION_PIXELSPERINCH);
+$fullimage->setImageResolution(300, 300);
+
+
+@header('Content-type: image/png');
+echo $fullimage;
