@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Remmina
+Exec=/usr/bin/remmina
+StartupNotify=true
+Terminal=false
+Type=Application
+Icon=remmina
+Categories=Utility;

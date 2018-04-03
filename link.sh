@@ -38,6 +38,12 @@ ln -sf ${DIR}/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml ~/.config
 rm -rf ~/.config/xfce4/terminal
 ln -sfn ${DIR}/.config/xfce4/terminal ~/.config/xfce4/terminal
 
+
+rm -rf ~/.config/parcellite/parcelliterc
+mkdir -p ~/.config/parcellite/
+ln -sfn ${DIR}/.config/parcellite/parcelliterc  ~/.config/parcellite/parcelliterc
+
+
 ln -sf ${DIR}/.wallpaper.jpg ~/.wallpaper.jpg
 
 rm -rf ~/.config/gtk-3.0
@@ -200,18 +206,10 @@ mkdir -p ~/.local/share/applications/icons
 rm -rf ~/.local/share/applications/icons
 ln -sf ${DIR}/.local/share/applications/icons ~/.local/share/applications/icons
 
-rm -rf ~/.local/share/applications/HeidiSQL.desktop
-ln -sf ${DIR}/.local/share/applications/HeidiSQL.desktop ~/.local/share/applications/HeidiSQL.desktop
-
-rm -rf ~/.local/share/applications/1Password.desktop
-ln -sf ${DIR}/.local/share/applications/1Password.desktop ~/.local/share/applications/1Password.desktop
-
-rm -rf ~/.local/share/applications/Wunderlist.desktop
-ln -sf ${DIR}/.local/share/applications/Wunderlist.desktop ~/.local/share/applications/Wunderlist.desktop
+ln -sf ${DIR}/.local/share/applications/*.desktop ~/.local/share/applications/
 
 mkdir -p ~/.local/share/icons/hicolor/48x48/apps/
-ln -s ${DIR}/.local/share/applications/icons/wunderlist.png ~/.local/share/icons/hicolor/48x48/apps/wunderlist.png 2>/dev/null
-ln -s ${DIR}/.local/share/applications/icons/1password.png ~/.local/share/icons/hicolor/48x48/apps/1password.png 2>/dev/null
+ln -s ${DIR}/.local/share/applications/icons/*.png ~/.local/share/icons/hicolor/48x48/apps/ 2>/dev/null
 
 
 ##### END DESKTOP FILES #####
@@ -394,7 +392,7 @@ function getJetbrainsPluginZipUrl() {
 function getJetbrainsPluginPaths() {
     productName="$1"
 
-    echo $( find ~ -type d -name 'plugins' 2>/dev/null | grep "\.local.*${productName}")
+    echo $(find ~ -type d -name 'plugins' 2>/dev/null | grep "\.local.*${productName}")
 }
 
 
@@ -435,10 +433,10 @@ sed -i -e's/\s*BUFFER=.*/BUFFER=$\(fc -l -n 1 |  eval $tac | awk "\!x\[\\$0\]++"
 
 installZshPlugin "https://github.com/skx/sysadmin-util.git" "sysadmin-util"
 
-if [ ! -d "$ZSH_CUSTOM/themes/spaceship-prompt" ]; then
-	git clone https://github.com/denysdovhan/spaceship-prompt.git "$ZSH_CUSTOM/themes/spaceship-prompt"
-	ln -s "$ZSH_CUSTOM/themes/spaceship-prompt/spaceship.zsh-theme" "$ZSH_CUSTOM/themes/spaceship.zsh-theme"
-fi
+# if [ ! -d "$ZSH_CUSTOM/themes/spaceship-prompt" ]; then
+	# git clone https://github.com/denysdovhan/spaceship-prompt.git "$ZSH_CUSTOM/themes/spaceship-prompt"
+	# ln -s "$ZSH_CUSTOM/themes/spaceship-prompt/spaceship.zsh-theme" "$ZSH_CUSTOM/themes/spaceship.zsh-theme"
+#fi
 
 # installZshTheme "https://raw.githubusercontent.com/caiogondim/bullet-train-oh-my-zsh-theme/master/bullet-train.zsh-theme" "bullet-train.zsh-theme"
 
@@ -487,19 +485,24 @@ installGtkTheme "https://github.com/B00merang-Project/Android/archive/master.zip
 installGtkTheme "https://github.com/B00merang-Project/Fushia/archive/master.zip" "Boomerang-Android-Fushia"
 installGtkTheme "https://github.com/B00merang-Project/Chrome-OS/archive/master.zip" "Boomerang-Chrome-OS"
 
-installPeco
+set +e
 
+installPeco
 # Execute executables in Thunar instead of editing them on double click: https://bbs.archlinux.org/viewtopic.php?id=194464
 xfconf-query --channel thunar --property /misc-exec-shell-scripts-by-default --create --type bool --set true
 
 crontab -l 2>/dev/null | grep -q "$HOME/bin/disk-usage-warning"
 inCrontab=$?
+
 if [ "${inCrontab}" == "1" ]; then
 	(crontab -l 2>/dev/null; echo "*/5 * * * * export DISPLAY=:0 && $HOME/bin/disk-usage-warning 2>&1 > /dev/null") | crontab -
 fi
 
 
 mkdir -p $HOME/.ssh/sockets
+sudo -A chown -R mandy:mandy $HOME/.ssh
+touch $HOME/.ssh/config
+chmod 600 $HOME/.ssh/config
 
 function sedeasy {
     sed -i "s/.*$(echo $1 | sed -e 's/\([[\/.*]\|\]\)/\\&/g').*$/$(echo $2 | sed -e 's/[\/&]/\\&/g')/g" $3
@@ -522,7 +525,7 @@ addToProfile 'GID' '$(id -g)'
 addToProfile 'DOCKER_GID' '$(getent group docker 2>/dev/null | cut -d: -f3 )'
 addToProfile 'XDG_CONFIG_HOME' '$HOME/.config'
 addToProfile 'QT_QPA_PLATFORMTHEME' "qt5ct"
-
+addToProfile '_JAVA_OPTIONS' "-Dawt.useSystemAAFontSettings=on"
 
 # sudo chown root:mandy /etc/default/locale
 # sudo chmod 664 /etc/default/locale
@@ -545,7 +548,10 @@ addToProfile 'QT_QPA_PLATFORMTHEME' "qt5ct"
 #
 # EOL
 
-
+pstorm="$(locate phpstorm.sh | tail -1)"
+if [ "$pstorm" != '' ]; then
+	sudo -A ln -sf "$pstorm" /usr/bin/pstorm
+fi
 
 # remove arc border radius
 
@@ -556,14 +562,14 @@ if [ ! -d "$HOME/.nvm" ]; then
 	curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash
 	export NVM_DIR="$HOME/.nvm"
 	[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-	sudo chown -R $USER:$(id -gn $USER) $HOME/.config
+	sudo -A chown -R $USER:$(id -gn $USER) $HOME/.config
 	nvm install stable
 fi
 
 if ! grep -q '192.168.10.120/tank' /etc/fstab; then
 	echo "Please enter password of 192.168.10.120/tank"
 	read -s password
-	echo "//192.168.10.120/tank /mnt/tank cifs rw,_netdev,user=mandy,password=${password},uid=$(id -u mandy),gid=$(id -g mandy) 0 0" | sudo tee -a /etc/fstab >/dev/null
+	echo "//192.168.10.120/tank /mnt/tank cifs rw,_netdev,user=mandy,password=${password},uid=$(id -u mandy),gid=$(id -g mandy) 0 0" | sudo -A tee -a /etc/fstab >/dev/null
 fi
 
 

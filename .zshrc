@@ -1,3 +1,5 @@
+#!/usr/bin/env zsh
+
 source $HOME/z.sh
 export ZSH=$HOME/.oh-my-zsh
 ZSH_THEME="mandy"
@@ -49,10 +51,14 @@ if [ -f $HOME/bin/commands-to-aliases ]; then
 fi
 
 export PATH=$HOME/.config/composer/vendor/bin:$HOME/.composer/vendor/bin:$HOME/.local/bin:/usr/share/doc/git/contrib/diff-highlight:/usr/local/go/bin:$HOME/.go/bin:$HOME/bin:$HOME/bin/appimages:$PATH
-PATH="$HOME/.gem/bin:$PATH"
+PATH="$PATH:$HOME/.gem/bin"
+
+export GEM_HOME=$HOME/.gem
+export GEM_PATH=$HOME/.gem
+
 export LESS="-RS"
 export TERMINAL=termite
-compctl -g '~/.teamocil/*(:t:r)' teamocil
+compctl -g "$HOME/.teamocil/*(:t:r)" teamocil
 if exists dircolors; then
     eval "$(dircolors ~/.dircolors)";
 fi
@@ -60,7 +66,7 @@ fi
 
 export HISTFILE="$HOME/.zhistory"
 HISTSIZE=1000000
-SAVEHIST=$HISTSIZE
+export SAVEHIST=$HISTSIZE
 setopt EXTENDED_HISTORY
 
 # precmd () {
@@ -77,11 +83,11 @@ setopt EXTENDED_HISTORY
 
 alias docker-ps-min='docker ps --format "table{{.Names}}\t{{.RunningFor}}\t{{.Status}}"'
 alias hl='grepc "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+"'
-alias current-window-process='ps -o args= $(xprop -id $(xprop -root -f _NET_ACTIVE_WINDOW 0x " \$0\\n" _NET_ACTIVE_WINDOW | awk "{print \$2}") -f _NET_WM_PID 0c " \$0\\n" _NET_WM_PID | awk "{print \$2}")'
+#alias current-window-process='ps -o args= $(xprop -id $(xprop -root -f _NET_ACTIVE_WINDOW 0x " \$0\\n" _NET_ACTIVE_WINDOW | awk "{print \$2}") -f _NET_WM_PID 0c " \$0\\n" _NET_WM_PID | awk "{print \$2}")'
 alias disk-usage='sudo du -h -t200M -x / 2>/dev/null'
 alias xdg-open='exo-open'
 
-if exists thefuck; then eval $(thefuck --alias); fi
+if exists thefuck; then eval "$(thefuck --alias)"; fi
 
 if ! exists pbcopy;
 then
@@ -104,17 +110,18 @@ export TZ='Europe/Brussels'
 export DISABLE_AUTO_TITLE=true
 export AUTO_TITLE=false
 export ARCH=$(uname -m | sed 's/x86_//;s/i[3-6]86/32/')
+export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on'
 
 export CHEATCOLORS=true
-
+export SUDO_ASKPASS=/usr/libexec/openssh/gnome-ssh-askpass
 setup_lsi
 
 # Launch SSH agent if not running
-if ! ps aux | grep $(whoami) | grep ssh-agent | grep -v grep >/dev/null; then ssh-agent ; fi
+if ! ps aux | grep "$(whoami)" | grep ssh-agent | grep -v grep >/dev/null; then ssh-agent ; fi
 
 # Link the latest ssh-agent socket
 mkdir -p ~/.ssh/
-ln -sf $(find /tmp -maxdepth 2 -type s -name "agent*" -user $USER -printf '%T@ %p\n' 2>/dev/null |sort -n|tail -1|cut -d' ' -f2) ~/.ssh/ssh_auth_sock
+ln -sf "$(find /tmp -maxdepth 2 -type s -name 'agent*' -user $USER -printf '%T@ %p\n' 2>/dev/null |sort -n|tail -1|cut -d' ' -f2)" ~/.ssh/ssh_auth_sock
 ssh-add -l > /dev/null || ssh-add
 
 export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock
@@ -122,7 +129,7 @@ export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock
 export IP_ADDRESS=$(ip_address)
 export GID=$(id -g)
 export UID
-export HOSTNAME=$(hostname)
+export HOSTNAME="$(hostname)"
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm

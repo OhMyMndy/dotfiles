@@ -13,7 +13,7 @@ title() {
 }
 
 randomWallpaper() {
-    cd ~/wallpapers
+    cd ~/wallpapers || exit 1
     wallpapers=($(find $PWD/ -type f -exec file {} \; | awk -F: '{ if ($2 ~/[Ii]mage|EPS/) print $1}' ))
     index=$(($RANDOM % ${#wallpapers[@]} ))
     wallpaper=${wallpapers[$index]}
@@ -43,30 +43,13 @@ setRandomWallpaper() {
     feh --bg-fill "${wallpaper}"
 }
 
-getInstalledPackages() {
-    packages=$(pacman -Qm; yaourt -Qm; yaourt -Qmd; yaourt -Qme; yaourt -Qmed)
-    echo ${packages} | sort | uniq
-
-}
-
-install() {
-    yaourt --needed -S $@
-}
-
-uninstall() {
-    yaourt -R $@
-}
-
-
 detect_os() {
-
     ## OS and Architecture
-
     if [ -f /etc/os-release ]; then
         # freedesktop.org and systemd
         . /etc/os-release
-        OS=$NAME
-        VER=$VERSION_ID
+        OS="$NAME"
+        VER="$VERSION_ID"
     elif type lsb_release >/dev/null 2>&1; then
         # linuxbase.org
         OS=$(lsb_release -si)
@@ -88,10 +71,11 @@ detect_os() {
         ...
     else
         # Fall back to uname, e.g. "Linux <version>", also works for BSD, etc.
-        OS=$(uname -s)
-        VER=$(uname -r)
+        OS="$(uname -s)"
+        VER="$(uname -r)"
     fi
-
+    export OS
+    export VER
 }
 
 
@@ -116,18 +100,18 @@ setup_lsi() {
 
     if exists ls-i;
     then
-        LS_COLORS=$(ls_colors_generator)
+        export LS_COLORS=$(ls_colors_generator)
 
         run_ls() {
-            ls-i --color=auto -w $(tput cols) "$@"
+            ls-i --color=auto -w "$(tput cols)" "$@"
         }
 
         run_dir() {
-            dir-i --color=auto -w $(tput cols) "$@"
+            dir-i --color=auto -w "$(tput cols)" "$@"
         }
 
         run_vdir() {
-            vdir-i --color=auto -w $(tput cols) "$@"
+            vdir-i --color=auto -w "$(tput cols)" "$@"
         }
         #alias ls="run_ls"
         #alias dir="run_dir"
@@ -155,6 +139,7 @@ histcmd() {
 
 
 r(){
+    # shellcheck source=.zshrc
     source $HOME/.zshrc
 }
 
@@ -192,7 +177,8 @@ current_tmux_window() {
     tmux display-message
     tmux set-option -g display-time $display_time
 
-    export TMUX_WINDOW=$(tmux show-messages | tail -1 | grep -o 'current pane \([0-9]\)' | grep -o '[0-9]*')
+    export TMUX_WINDOW
+    TMUX_WINDOW=$(tmux show-messages | tail -1 | grep -o 'current pane \([0-9]\)' | grep -o '[0-9]*')
     echo $TMUX_WINDOW
 }
 
@@ -218,47 +204,16 @@ notify-finished() {
     fi
 }
 
-webdev () {
-    action="$1"
-    version="$2"
-    service="$3"
-
-    if [ -z "$action" ]; then
-        echo "Please provide the action as the first parameter (up|stop|logs)"
-        exit 2
-    fi
-
-    if [ -z "$version" ] && [ "$action" != 'stop' ]; then
-        echo "Please provide the version as the second parameter (56|71|72)"
-        exit 3
-    fi
-
-    cd "$DOCKER_REPO_LOCATION"
-
-    if [ "$action" = "up" ]; then
-        echo "Stopping web[0-9]* containers"
-        docker ps -f "name=web[0-9]*" --format "{{.ID}}" | xargs docker kill
-        cd "$DOCKER_REPO_LOCATION/Web${version}"
-        echo "Upping ${version}..."
-        docker-compose -f minimal.yml up -d --force-recreate
-    elif [ "$action" = "stop" ]; then
-        echo "Stopping web[0-9]* containers"
-        docker ps -f "name=web[0-9]*" --format "{{.ID}}" | xargs docker kill
-    elif [ "$action" = "logs" ]; then
-        cd "$DOCKER_REPO_LOCATION/Web${version}"
-        docker-compose logs --tail 100 -f $service
-    else
-        echo "Action ${action} is not recognized..."
-        exit 4
-    fi
-}
-
 ip_address() {
     ip route get 1 | awk '{print $7;exit}'
 }
 
 write_apm_to_file() {
-  apm list --installed --bare > ~/dotfiles/apm-packages.txt
+  apm list --installed --bare | grep -o '.*@' | sed 's/@$//g'  > ~/dotfiles/apm-packages.txt
+}
+
+install_apm_packages() {
+  apm install --packages-file ~/dotfiles/apm-packages.txt
 }
 
 # make sure you pass absolute paths
@@ -309,7 +264,7 @@ create_remmina_desktop_files() {
 [Desktop Entry]
 Name=Remmina - $name
 Exec=remmina -c $file
-Icon=appimagekit-remmina
+Icon=remmina
 Type=Application
 Categories=GTK;GNOME;X-GNOME-NetworkSettings;Network;
 EOL

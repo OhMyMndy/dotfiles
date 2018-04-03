@@ -313,10 +313,6 @@ bindsym XF86MonBrightnessUp exec xbacklight -inc 20 # increase screen brightness
 bindsym XF86MonBrightnessDown exec xbacklight -dec 20 # decrease screen brightness
 
 
-# Gaps
-gaps inner 2
-gaps outer 0
-
 
 # for_window [class="^.*"] border pixel 2
 

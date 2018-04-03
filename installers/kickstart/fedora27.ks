@@ -17,7 +17,6 @@ repo --name=google-chrome --baseurl="http://dl.google.com/linux/chrome/rpm/stabl
 repo --name=docker-ce --baseurl="https://download.docker.com/linux/fedora/27/x86_64/stable/"
 
 # zerombr
-# zerombr
 
 # Configure Boot Loader
 # bootloader --location=mbr --driveorder=sda
@@ -116,6 +115,7 @@ ruby
 ruby-devel
 ncdu
 meld
+gimp
 synergy
 python3-udiskie
 pulseaudio
@@ -141,7 +141,7 @@ ImageMagick
 composer
 cifs-utils
 numix-gtk-theme
-pop-icon-theme
+arc-theme
 dmz-cursor-themes
 unclutter
 flameshot
@@ -155,20 +155,32 @@ make
 neofetch
 rhythmbox
 xfce4-terminal
-
 obconf
 flatpak
 pasystray
 glibc-locale-source
 freetype-freeworld
 wget
+vpnc
+gvfs-fuse
+dnfdragora
+seahorse
+gnome-keyring
+fuse-sshfs
+sqlite
+shellcheck
+openssh-askpass
+shutter
+hunspell-en
+hunspell-nl
+wine
+playonlinux
+gnome-python2-gconf
 %end
 
 # Post-installation Script
 
 %post
-
-set -x
 
 localedef -i nl_BE -f UTF-8 nl_BE.UTF-8  &>> /home/mandy/post.log
 cat <<'EOL' | sudo tee /etc/locale.conf &>> /home/mandy/post.log
@@ -221,6 +233,8 @@ EOL
 
 export HOME=/home/mandy &>> /home/mandy/post.log
 gem install json &>> /home/mandy/post.log
+gem instal rdoc &>> /home/mandy/post.log
+gem instal teamocil &>> /home/mandy/post.log
 git clone https://github.com/Mandy91/dotfiles.git /home/mandy/dotfiles &>> /home/mandy/post.log
 ruby /home/mandy/dotfiles/install.rb &>> /home/mandy/post.log
 bash /home/mandy/dotfiles/link.sh &>> /home/mandy/post.log
@@ -263,6 +277,14 @@ dnf install rofi -y &>> /home/mandy/post.log
 # install polybar
 dnf install -y cmake @development-tools gcc-c++ i3-ipc jsoncpp-devel pulseaudio-libs-devel alsa-lib-devel wireless-tools-devel libmpdclient-devel libcurl-devel cairo-devel xcb-proto xcb-util-devel xcb-util-wm-devel xcb-util-image-devel &>> /home/mandy/post.log
 dnf install -y pulseaudio-libs-devel xcb-util-xrm-devel &>> /home/mandy/post.log
+dnf install -y $(curl -sL "https://api.github.com/repos/atom/atom/releases/latest" | grep "https.*atom.x86_64.rpm" | cut -d '"' -f 4) &>> /home/mandy/post.log
+pip install mycli &>> /home/mandy/post.log
+
+
+# The fuck
+dnf install python3-devel -y  &>> /home/mandy/post.log
+pip3 install thefuck &>> /home/mandy/post.log
+
 
 rm -rf /tmp/polybar &>> /home/mandy/post.log
 git clone --recursive https://github.com/jaagr/polybar /tmp/polybar &>> /home/mandy/post.log
@@ -281,6 +303,17 @@ dnf install https://download.teamviewer.com/download/linux/teamviewer.x86_64.rpm
 
 dnf install http://download.nomachine.com/download/6.0/Linux/nomachine_6.0.78_1_x86_64.rpm -y &>> /home/mandy/post.log
 
+mkdir -p /etc/firewalld/services/ &>> /home/mandy/post.log
+cat << EOF >  /etc/firewalld/services/nomachine.xml &>> /home/mandy/post.log
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+        <short>NoMachine</short>
+        <description>NoMachine</description>
+        <port protocol="udp" port="4000"/>
+</service>
+EOF
+
+
 dnf copr enable sergiomb/google-drive-ocamlfuse -y &>> /home/mandy/post.log
 dnf install google-drive-ocamlfuse -y &>> /home/mandy/post.log
 
@@ -290,6 +323,14 @@ dnf update -y &>> /home/mandy/post.log
 
 chown -R mandy:mandy /home/mandy &>> /home/mandy/post.log
 
-echo "Done"
+systemctl start firewalld &>> /home/mandy/post.log
+
+firewall-cmd --zone=public --permanent --add-service=http &>> /home/mandy/post.log
+firewall-cmd --zone=public --permanent --add-service=https &>> /home/mandy/post.log
+firewall-cmd --zone=public --permanent --add-service=mysql &>> /home/mandy/post.log
+
+# http://trial.pulsesecure.net/clients/ps-pulse-linux-5.3r3.0-b1021-centos-rhel-64-bit-installer.rpm
+
+echo "Done" &>> /home/mandy/post.log
 
 %end

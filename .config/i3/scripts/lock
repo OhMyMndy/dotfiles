@@ -1,15 +1,25 @@
 #!/bin/bash
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-cd $DIR
+cd $DIR || exit 1
 TMP_IMAGE=/tmp/i3_lock.png
+TMP_IMAGE1=/tmp/i3_lock1.png
+
+if [ -f $TMP_IMAGE ]; then
+  cp $TMP_IMAGE $TMP_IMAGE1
+fi
+
 # suspend message display
 pkill -u "$USER" -USR1 dunst
 
 if [ "$1" != '--test' ]; then
-  bash ./create-lockscreen-image && pkill -e -f i3lock && i3lock -n -i $TMP_IMAGE || i3lock -c 000000 &
-  i3lock -c 000000
-  rm $TMP_IMAGE
+  bash ./create-lockscreen-image && pkill -e -f i3lock && i3lock -n -i $TMP_IMAGE &
+  if [ -f $TMP_IMAGE1 ]; then
+   i3lock -n -i $TMP_IMAGE1
+  else
+   i3lock -c 000000
+  fi
+  pkill -e -f create-lockscreen-image
 else
   bash ./create-lockscreen-image && exo-open $TMP_IMAGE
 fi

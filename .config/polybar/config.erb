@@ -68,7 +68,7 @@ modules-left = i3 mpd
 ; window
 ;modules-center = date
 ; xwindow
-modules-right = terminal monitor vpn filesystem cpu load memory date powermenu
+modules-right = terminal monitor vpn filesystem load memory date powermenu
 
 tray-position = right
 tray-padding = <%= polybar['padding'] %>
@@ -243,8 +243,8 @@ card = intel_backlight
 [module/cpu]
 type = internal/cpu
 interval = 10
-;format-prefix = " "
-format-prefix = "Cpu: "
+format-prefix = " "
+; format-prefix = "Cpu: "
 format-prefix-foreground = ${colors.foreground}
 ;format-underline = ${colors.accent-dark2}
 ;format = <label> <ramp-coreload>
@@ -262,9 +262,11 @@ ramp-coreload-7 = █
 [module/memory]
 type = internal/memory
 interval = 10
-format = <label> <bar-used>
-label = "Mem:"
-; label = RAM %gb_used%/%gb_free%
+format = <label>
+;format = <label> <bar-used>
+;label = "Mem:"
+;label = RAM %gb_used%/%gb_total%
+label = Mem: %percentage_used%%
 ; Only applies if <bar-used> is used
 bar-used-indicator =
 bar-used-width = 7
@@ -290,7 +292,7 @@ format-prefix = "Swap free: "
 type=custom/script
 interval = 10
 exec = cat /proc/loadavg | cut -f1-3 -d' '
-format-prefix = "Load: "
+format-prefix = " "
 
 
 [module/wlan]
