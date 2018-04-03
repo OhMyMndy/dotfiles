@@ -478,3 +478,4 @@ create_vm() {
   VBoxManage modifyvm "$name" --boot1 dvd --boot2 disk
   VBoxManage modifyvm "$name" --ioapic on --cpus 2 --cpuexecutioncap 80
   # $ VBoxManage modifyvm $VM --nic1 bridged --bridgeadapter1 e1000g0
+}

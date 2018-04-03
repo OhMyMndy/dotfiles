@@ -1,13 +1,14 @@
-#!/usr/bin/env zsh
 
+# shellcheck source=z.zsh
 source $HOME/z.sh
 export ZSH=$HOME/.oh-my-zsh
-ZSH_THEME="mandy"
+export ZSH_THEME="mandy"
 
 # zshaddhistory() { whence ${${(z)1}[1]} >| /dev/null || return 1 }
 
 zstyle ':completion:*' use-cache yes
 
+# shellcheck source=.functions
 source $HOME/.functions
 
 detect_os
@@ -20,6 +21,8 @@ if [ "$OS" = "Ubuntu" ]; then
     plugins+=(debian)
 elif [ "$OS" = "Arch Linux" ]; then
     plugins+=(archlinux)
+elif [ "$OS" = "Fedora" ]; then
+    plugins+=(fedora)
 fi
 
 
@@ -32,21 +35,25 @@ else
 fi
 
 if [ -f $HOME/.bash_aliases ]; then
+    # shellcheck source=.bash_aliases
     source $HOME/.bash_aliases
 fi
 
 if [ -f $HOME/.profile ]; then
+    # shellcheck source=.profile
     source $HOME/.profile
 fi
 
 
 if [ -f $HOME/.oh-my-zsh/oh-my-zsh.sh ]; then
+    # shellcheck source=.oh-my-zsh/oh-my-zsh.sh
     source $HOME/.oh-my-zsh/oh-my-zsh.sh
 fi
 
 
 if [ -f $HOME/bin/commands-to-aliases ]; then
     $HOME/bin/commands-to-aliases > $HOME/.aliases
+    # shellcheck source=.aliases
     source $HOME/.aliases
 fi
 
