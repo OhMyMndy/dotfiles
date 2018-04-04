@@ -222,9 +222,7 @@ install_apm_packages() {
 
 ### Functions used in link.sh
 
-
-function installZshPlugin()
-{
+function installZshPlugin() {
 	pluginUrl="$1"
 	pluginDir="$2"
 
@@ -238,8 +236,7 @@ function installZshPlugin()
 }
 
 
-function installZshTheme()
-{
+function installZshTheme() {
 	pluginUrl="$1"
 	pluginDir="$2"
 
@@ -255,8 +252,7 @@ function installZshTheme()
 }
 
 fontsAdded=0
-function installFont()
-{
+function installFont() {
 	fontUrl="$1"
 	fontName="$2"
 	if [ "$(uname)" = 'Darwin' ]; then
@@ -274,8 +270,7 @@ function installFont()
 	fi
 }
 
-function installFontsFromZip()
-{
+function installFontsFromZip() {
 	fontUrl="$1"
 	fontName="$2"
 	if [ "$(uname)" = 'Darwin' ]; then
@@ -304,18 +299,17 @@ function deleteWindowsFonts() {
   find $DIR -iname '*windows*' -delete
 }
 
-function installGtkTheme()
-{
+function installGtkTheme() {
 	if [[ "$(uname -s)" == *"Linux"* ]]; then
 		themeUrl="$1"
 		themeName="$2"
 		mkdir -p ~/.themes | true
-		cd ~/.themes
+		cd ~/.themes || exit 1
 		if [ ! -d "$themeName" ]; then
 			tmp_dir=$(mktemp -d)
 			rm -f "/tmp/$themeName.zip"
 			curl -fLo "/tmp/$themeName.zip" "$themeUrl"
-			cd "${tmp_dir}"
+			cd "${tmp_dir}" || exit 2
 			unzip "/tmp/$themeName.zip"
 			mkdir -p "$HOME/.themes/$themeName"
 			mv "${tmp_dir}"/*/** "$HOME/.themes/$themeName"
@@ -324,8 +318,7 @@ function installGtkTheme()
 	fi
 }
 
-function installPeco()
-{
+function installPeco() {
 	if [ ! -f "/usr/local/bin/peco" ]; then
 		echo "Installing Peco binary"
 		url="https://github.com/peco/peco/releases/download/v0.5.1/peco_"
@@ -335,7 +328,7 @@ function installPeco()
 		url+="_amd64.tar.gz"
 		rm -f /tmp/peco.tar.gz
 		curl -fLo "/tmp/peco.tar.gz" "$url"
-		cd /tmp
+		cd /tmp || exit 1
 		tar -xzf "/tmp/peco.tar.gz" "peco_${platform}_amd64/peco"
 		sudo cp "/tmp/peco_${platform}_amd64/peco" /usr/local/bin/peco
 		rm -rf /tmp/peco*
@@ -357,7 +350,7 @@ function getJetbrainsPluginZipUrl() {
 function getJetbrainsPluginPaths() {
     productName="$1"
 
-    echo $( find ~ -type d -name 'plugins' 2>/dev/null | grep "\.local.*${productName}")
+    echo "$(find ~ -type d -name 'plugins' 2>/dev/null | grep -i "\.local.*${productName}")"
 }
 
 
@@ -414,7 +407,7 @@ decrypt_if_necessary() {
 
 
 remove_wine_desktop_files() {
-  find /home/mandy/.local/share/applications/ | sort \
+  find "$HOME/.local/share/applications/" | sort \
     | grep wine-extension \
     | grep -v application.desktop \
     | grep -v appref-ms \
@@ -478,4 +471,13 @@ create_vm() {
   VBoxManage modifyvm "$name" --boot1 dvd --boot2 disk
   VBoxManage modifyvm "$name" --ioapic on --cpus 2 --cpuexecutioncap 80
   # $ VBoxManage modifyvm $VM --nic1 bridged --bridgeadapter1 e1000g0
+}
+
+function show_all_available_icons() {
+   find ~/.local/share/icons/ /usr/share/icons -name '*.png' | sed -E 's/[0-9]+x[0-9]+\///g' | sed -E 's/scalable\///g' | sed -E 's/.*\///g' | sort -h | uniq
+}
+
+get_font_file() {
+  # hack.*complete.*mono.*regular
+  fc-list | grep -i "$1" | sed 's/:.*//g' | tail -1
 }

@@ -1,0 +1,5 @@
+#!/bin/sh
+#Generated with love at wo apr. 4 08:32:58 2018 by JetBrains Toolbox 1.8.3678 (Mar 15 2018)
+
+"/home/mandy/.local/share/JetBrains/Toolbox/apps/PhpStorm/ch-0/181.4203.565/bin/phpstorm.sh" "$@"
+

@@ -85,7 +85,7 @@ class Default
 
       @gtk = {
           "theme"           => "Numix",
-          "icon_theme"      => "Pop",
+          "icon_theme"      => "Numix",
           "cursor_theme"    => "DMZ-White"
       }
 

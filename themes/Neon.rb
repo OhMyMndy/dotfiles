@@ -3,6 +3,7 @@ require_relative 'Default'
 class Neon < Default
 
     def initialize dpi
+        @dpi = dpi
         @colors = {
             "COLOR0"         => "#1a1b21",
             "COLOR8"         => "#455160",

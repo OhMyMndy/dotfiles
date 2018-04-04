@@ -1,7 +1,5 @@
-file:///home/mandy/Documents
-file:///home/mandy/Pictures
+sftp://mandy@192.168.0.118/
 file:///home/mandy/Downloads Downloads
 file:///var/www/html var www html
 file:///home/mandy/dotfiles dotfiles
 file:///var/www/docker docker
-file:///home/mandy/Wallpapers

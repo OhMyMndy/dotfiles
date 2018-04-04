@@ -54,7 +54,7 @@ $root_dir = File.dirname(__FILE__)
 Dir.chdir $root_dir
 
 
-Dir.glob ['*.erb', '.byobu/*.erb', '.config/**/*.erb'], File::FNM_DOTMATCH do |file|
+Dir.glob ['*.erb', '.byobu/*.erb', '.config/**/*.erb', '.icons/**/*.erb'], File::FNM_DOTMATCH do |file|
     new_file_name = get_new_filename file
 
     puts new_file_name

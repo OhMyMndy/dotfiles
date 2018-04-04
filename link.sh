@@ -38,6 +38,8 @@ ln -sf ${DIR}/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml ~/.config
 rm -rf ~/.config/xfce4/terminal
 ln -sfn ${DIR}/.config/xfce4/terminal ~/.config/xfce4/terminal
 
+rm -rf ~/.config/Thunar/uca.xml
+ln -sfn ${DIR}/.config/Thunar/uca.xml ~/.config/Thunar/uca.xml
 
 rm -rf ~/.config/parcellite/parcelliterc
 mkdir -p ~/.config/parcellite/
@@ -263,7 +265,7 @@ ln -sf ${DIR}/.zshrc ~/.zshrc
 
 
 mkdir -p ~/.tmux/plugins
-if [ ! -d "~/.tmux/plugins/tpm" ]; then
+if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
 	git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plugins/tpm/bin/install_plugins
 fi
 
@@ -277,149 +279,6 @@ fi
 
 yes | vim +PluginInstall +qall
 
-
-
-function installZshPlugin()
-{
-	pluginUrl="$1"
-	pluginDir="$2"
-
-	if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/$pluginDir" ]; then
-		echo "Installing ZSH plugin '$pluginDir'"
-		git clone $pluginUrl ~/.oh-my-zsh/custom/plugins/$pluginDir
-	else
-		echo "ZSH plugin '$pluginDir' is already installed"
-	fi
-
-}
-
-
-function installZshTheme()
-{
-	pluginUrl="$1"
-	pluginDir="$2"
-
-	if [ ! -f "$HOME/.oh-my-zsh/custom/themes/$pluginDir" ]; then
-		echo "Installing ZSH theme '$pluginDir'"
-		mkdir -p  ~/.oh-my-zsh/custom/themes/
-		cd  ~/.oh-my-zsh/custom/themes/
-		curl -fLo "$pluginDir" "$pluginUrl"
-	else
-		echo "ZSH theme '$pluginDir' is already installed"
-	fi
-
-}
-
-fontsAdded=0
-function installFont()
-{
-	fontUrl="$1"
-	fontName="$2"
- 	mkdir -p ~/.local/share/fonts
-	cd ~/.local/share/fonts
-
-	if [ ! -f "$fontName" ]; then
-		curl -fLo "$fontName" "$fontUrl"
-		fontsAdded=1
-	fi
-}
-
-function installFontsFromZip()
-{
-	fontUrl="$1"
-	fontName="$2"
-	mkdir -p ~/.local/share/fonts
-	cd ~/.local/share/fonts
-
-	if [ ! -d "$fontName" ]; then
-		rm -f "/tmp/$fontName.zip"
-    	curl -fLo "/tmp/$fontName.zip" "$fontUrl"
-		unzip "/tmp/$fontName.zip" -d "$fontName"
-		fontsAdded=1
-	fi
-}
-
-function installGtkTheme()
-{
-	if [[ "$(uname -s)" == *"Linux"* ]]; then
-		themeUrl="$1"
-		themeName="$2"
-		mkdir -p ~/.themes | true
-		cd ~/.themes
-		if [ ! -d "$themeName" ]; then
-			tmp_dir=$(mktemp -d)
-			rm -f "/tmp/$themeName.zip"
-			curl -fLo "/tmp/$themeName.zip" "$themeUrl"
-			cd "${tmp_dir}"
-			unzip "/tmp/$themeName.zip"
-			mkdir -p "$HOME/.themes/$themeName"
-			mv "${tmp_dir}"/*/** "$HOME/.themes/$themeName"
-			rm -rf "${tmp_dir}"
-		fi
-	fi
-}
-
-function installPeco()
-{
-	if [ ! -f "/usr/local/bin/peco" ]; then
-		echo "Installing Peco binary"
-		url="https://github.com/peco/peco/releases/download/v0.5.3/peco_"
-
-		platform=$(uname -s | awk '{print tolower($0)}')
-		url+="$platform"
-		url+="_amd64.tar.gz"
-		rm -f /tmp/peco.tar.gz
-		curl -fLo "/tmp/peco.tar.gz" "$url"
-		cd /tmp
-		tar -xzf "/tmp/peco.tar.gz" "peco_${platform}_amd64/peco"
-		sudo cp "/tmp/peco_${platform}_amd64/peco" /usr/local/bin/peco
-		rm -rf /tmp/peco*
-	else
-		echo "Peco binary already installed"
-	fi
-}
-
-function getJetbrainsPluginZipUrl() {
-    pluginName="$1"
-    pluginBaseUrl="https://plugins.jetbrains.com/"
-    requestUrl="${pluginBaseUrl}/plugin/${pluginName}"
-
-    newUrl=$(curl "${requestUrl}" | grep -E -o '/plugin/download\?updateId=[0-9]+')
-
-    echo "${pluginBaseUrl}${newUrl}"
-}
-
-function getJetbrainsPluginPaths() {
-    productName="$1"
-
-    echo $(find ~ -type d -name 'plugins' 2>/dev/null | grep "\.local.*${productName}")
-}
-
-
-function installJetbrainsPlugin() {
-    set -x
-    product="$1"
-    zipUrl="$2"
-    zipUrl=$(getJetbrainsPluginZipUrl "${zipUrl}")
-
-    pluginDirs=$(getJetbrainsPluginPaths "${product}")
-
-    echo "plugindirs: ${pluginDirs}"
-
-    tmpZipFileName="/tmp/jetbrainsPlugin.zip"
-    curl -L -o "${tmpZipFileName}" "${zipUrl}"
-#    echo $?
-
-    echo "after wget"
-    echo "${pluginDirs[@]}"
-    for pluginDir in ${pluginDirs}
-    do
-        echo "plugindir: ${pluginDir}"
-        cd "${pluginDir}"
-        unzip "${tmpZipFileName}"
-    done
-    set +x
-}
 set -e
 #installJetbrainsPlugin 'IDEA-C' '1293-ruby'
 
@@ -563,8 +422,8 @@ find /usr/share/themes/Arc -type f -name '*.css' | sudo xargs -I {} sed -E -i 's
 if [ ! -d "$HOME/.nvm" ]; then
 	curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash
 	export NVM_DIR="$HOME/.nvm"
-	[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-	sudo -A chown -R $USER:$(id -gn $USER) $HOME/.config
+	[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # This loads nvm
+	sudo -A chown -R $USER:"$(id -gn $USER)" $HOME/.config
 	nvm install stable
 fi
 
@@ -578,3 +437,6 @@ fi
 remove_wine_desktop_files
 
 create_remmina_desktop_files
+
+# Fix for Intellij platform editors on i3wm @see https://faq.i3wm.org/question/4071/modal-pop-up-in-idea-loses-focus-while-entering-text.1.html
+locate idea.properties | xargs -I {} sed -E -i 's/#?idea.popup.weight=.*$/idea.popup.weight=medium/g' "{}"

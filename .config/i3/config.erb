@@ -221,6 +221,9 @@ assign [class="Thunar"]                                                         
 assign [class="Atom"]                                                                   $workspace9
 assign [class="Termite"]                                                                $workspace2
 
+
+hide_edge_borders smart
+
 # For windows
 for_window [class=".*"]                                                                 title_format " %title"
 for_window [class="Yad"]                                                                floating enable
@@ -239,9 +242,11 @@ for_window [class=".*1password.com"]                                            
 for_window [class="wunderlist.com"]                                                     floating disable
 
 # Float IntelliJ update window
-for_window [class="sun-awt-X11-XDialogPeer"]                                            floating enable
-for_window [class="com-intellij-updater-Runner"]                                        floating enable
-for_window [class="Gloobus-preview"]                                                    floating enable, border none
+for_window [class="sun-awt-X11-XDialogPeer"]                                            floating enable, border pixel 0
+for_window [class="sun-awt-X11-XWindowPeer"]                                            floating enable, border pixel 0
+for_window [class="com-intellij-updater-Runner"]                                        floating enable, border pixel 0
+for_window [class="Gloobus-preview"]                                                    floating enable, border pixel 0
+for_window [class=".*phpstorm"]                                                         border pixel 0
 
 # source: https://github.com/Airblader/dotfiles-manjaro/blob/master/.i3/config
 #for_window [class="(?i)VirtualBox" title="(?i)Manager"]                                floating enable
@@ -254,30 +259,31 @@ for_window [class="(?i).*jetbrains.*"]                                          
 for_window [class="Rambox"]                                                             border pixel <%= i3['border'] %>
 
 #no focus for any window
-no_focus [class=".*phpstorm"]
+#no_focus [class=".*phpstorm"]
 
 # Execs
 exec --no-startup-id redshift
 exec --no-startup-id udiskie
-#exec --no-startup-id i3-msg 'workspace 6; exec rambox'; i3-msg 'workspace 1; exec google-chrome || chromium'; sleep 1; i3-msg 'workspace 2; exec ~/bin/i3-sensible-terminal'; i3-msg 'workspace 3; exec pcmanfm'
 
 # Exec always
-exec_always --no-startup-id bash ~/bin/restart-polybar || xfce4-panel
-exec_always --no-startup-id killall dunst; while pgrep -x dunst >/dev/null; do sleep 1; done; dunst
+exec_always --no-startup-id bash ~/bin/restart-polybar || xfce4-panel &
+exec_always --no-startup-id killall dunst; while pgrep -x dunst >/dev/null; do sleep 1; done; dunst &
 exec_always --no-startup-id bash -c "source ~/.functions; setWallpaper"
-exec_always --no-startup-id sh -c "pgrep -x xbanish; [ \$? -eq 1] && xbanish"
-exec_always --no-startup-id sh -c "pgrep -x pasystray; [ \$? -eq 1 ] && pasystray"
-exec_always --no-startup-id sh -c "pgrep -x pb-for-desktop; [ \$? -eq 1 ] && pb-for-desktop"
-exec_always --no-startup-id sh -c "pgrep -x nm-applet; [ \$? -eq 1 ] && nm-applet"
-exec_always --no-startup-id sh -c "pgrep -x parcellite; [ \$? -eq 1 ] && parcellite"
-exec_always --no-startup-id sh -c "pgrep -x imwheel; [ \$? -eq 1 ] && imwheel"
-exec_always --no-startup-id killall synergys; while pgrep -x synergys >/dev/null; do sleep 1; done; synergys -c ~/.synergy.conf
-exec_always --no-startup-id killall notify-server; while pgrep -x notify-server >/dev/null; do sleep 1; done; notify-server
+exec_always --no-startup-id sh -c "pgrep -x xbanish; [ \$? -eq 1 ] && xbanish &"
+exec_always --no-startup-id sh -c "pgrep -x pasystray; [ \$? -eq 1 ] && pasystray &"
+exec_always --no-startup-id sh -c "pgrep -x pb-for-desktop; [ \$? -eq 1 ] && pb-for-desktop &"
+exec_always --no-startup-id sh -c "pgrep -x nm-applet; [ \$? -eq 1 ] && nm-applet &"
+exec_always --no-startup-id sh -c "pgrep -x parcellite; [ \$? -eq 1 ] && parcellite &"
+exec_always --no-startup-id sh -c "pgrep -x imwheel; [ \$? -eq 1 ] && imwheel &"
+exec_always --no-startup-id killall synergys; while pgrep -x synergys >/dev/null; do sleep 1; done; synergys -c ~/.synergy.conf &
+exec_always --no-startup-id killall notify-server; while pgrep -x notify-server >/dev/null; do sleep 1; done; notify-server &
 
-exec_always --no-startup-id sh -c "pgrep -x rambox; [ \$? -eq 1 ] && rambox"
-exec_always --no-startup-id sh -c "pgrep -f i3-sensible-terminal; [ \$? -eq 1 ] && i3-sensible-terminal -e 'byobu'"
-exec_always --no-startup-id sh -c "pgrep -x thunar; [ \$? -eq 1 ] && thunar"
-exec_always --no-startup-id sh -c "pgrep -x shutter; [ \$? -eq 1 ] && shutter --min_at_startup"
+exec_always --no-startup-id sh -c "pgrep -x rambox; [ \$? -eq 1 ] && rambox &"
+exec_always --no-startup-id sh -c "pgrep -f i3-sensible-terminal; [ \$? -eq 1 ] && i3-sensible-terminal -e 'byobu' &"
+exec_always --no-startup-id sh -c "pgrep -x thunar; [ \$? -eq 1 ] && thunar &"
+exec_always --no-startup-id sh -c "pgrep -x shutter; [ \$? -eq 1 ] && shutter --min_at_startup &"
+exec_always --no-startup-id sh -c "pgrep -x jetbrains-toolbox ; [ \$? -eq 1 ] && jetbrains-toolbox &"
+exec_always --no-startup-id sh -c "pgrep -x unclutter ; [ \$? -eq 1 ] && unclutter -idle 2 -jitter 5 -noevents -root &"
 
 #exec_always --no-startup-id pkill -f resolution-changed; bash ~/bin/resolution-changed ~/bin/restart-polybar
 exec_always --no-startup-id bash "$HOME/.screenlayout/$(hostname).sh"

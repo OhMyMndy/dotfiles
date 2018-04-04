@@ -1,17 +1,32 @@
 #!/usr/bin/env php
-
 <?php
 
 if (!empty($argv[1])) {
     parse_str($argv[1], $_GET);
 }
 
-// php compare-fonts.php "font1=/Users/mandy/Library/Fonts/Futura/Futura Book font.ttf&font2=/Users/mandy/Library/Fonts/overpass/overpass/overpass-regular.otf"
-// Or
-// http://localhost:8080/imagemagick/compare-fonts.php?font1=/Users/mandy/Library/Fonts/Futura/Futura%20Book%20font.ttf&font2=/Users/mandy/Library/Fonts/overpass/overpass/overpass-regular.otf
+///////////////////
+// Bash function
+// get_font_file() {
+//     # hack.*complete.*mono.*regular
+//     fc-list | grep -i "$1" | sed 's/:.*//g' | tail -1
+// }
+
+/*
+
+font1="$(get_font_file 'hack.*complete.*mono.*regular')"
+font2="$(get_font_file 'meslo.*complete.*mono.*regular' )"
+compare-fonts "font1=$font1&font2=$font2&letters=ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890" > /tmp/output.png
+feh --geometry 1024x768 /tmp/output.png
+
+Or
+
+http://localhost:8080/imagemagick/compare-fonts.php?font1=/Users/mandy/Library/Fonts/Futura/Futura%20Book%20font.ttf&font2=/Users/mandy/Library/Fonts/overpass/overpass/overpass-regular.otf
 
 
-// http://localhost:8080/imagemagick/compare-fonts.php?font1=/Users/mandy/Library/Fonts/Futura/Futura%20Book%20font.ttf&font2=/Users/mandy/Library/Fonts/overpass/overpass/overpass-regular.otf&letters=ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890
+http://localhost:8080/imagemagick/compare-fonts.php?font1=/Users/mandy/Library/Fonts/Futura/Futura%20Book%20font.ttf&font2=/Users/mandy/Library/Fonts/overpass/overpass/overpass-regular.otf&letters=ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890
+
+*/
 
 if (isset($_GET['font1'])) {
     $font1 = $_GET['font1'];
@@ -97,6 +112,6 @@ $fullimage->setImageFormat('png');
 $fullimage->setImageUnits(\Imagick::RESOLUTION_PIXELSPERINCH);
 $fullimage->setImageResolution(300, 300);
 
-
+@ob_clean();
 @header('Content-type: image/png');
 echo $fullimage;

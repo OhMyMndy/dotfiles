@@ -108,6 +108,7 @@ paper-icon-theme
 yad
 thunar
 file-roller
+unrar
 evince
 git
 tig
@@ -131,7 +132,6 @@ lightdm
 xfce4-panel
 xfce4-power-manager
 virt-what
-clementine
 ffmpeg
 flacon
 shntool
@@ -176,6 +176,14 @@ hunspell-nl
 wine
 playonlinux
 gnome-python2-gconf
+qdirstat
+font-manager
+libXt-devel
+libXfixes-devel
+libXi-devel
+php-pecl-imagick
+filezilla
+keepassxc
 %end
 
 # Post-installation Script
@@ -256,12 +264,16 @@ rpm --import https://dl-ssl.google.com/linux/linux_signing_key.pub &>> /home/man
 rpm -ivh http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-27.noarch.rpm &>> /home/mandy/post.log
 rpm -ivh http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-27.noarch.rpm &>> /home/mandy/post.log
 
-dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo  &>> /home/mandy/post.log
-
+dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo &>> /home/mandy/post.log
+dnf install http://mirror.yandex.ru/fedora/russianfedora/russianfedora/free/fedora/releases/27/Everything/x86_64/os/russianfedora-free-release-27-1.noarch.rpm  -y &>> /home/mandy/post.log
 dnf install $(curl -s https://api.github.com/repos/saenzramiro/rambox/releases/latest | jq -r ".assets[] | select(.name) | select(.browser_download_url | test(\"64.*rpm$\")) | .browser_download_url") -y &>> /home/mandy/post.log
+dnf install https://www.rpmfind.net/linux/sourceforge/u/un/unitedrpms/27/x86_64/msttcorefonts-2.5-4.fc27.noarch.rpm -y &>> /home/mandy/post.log
+dnf install imwheel -y
 
 bash /home/mandy/dotfiles/installers/flatpak.sh | tee -a /home/mandy/post.log
 bash /home/mandy/dotfiles/installers/jetbrains-toolbox.sh | tee -a /home/mandy/post.log
+bash /home/mandy/dotfiles/installers/xbanish.sh | tee -a /home/mandy/post.log
+bash /home/mandy/dotfiles/installers/purevpn.sh | tee -a /home/mandy/post.log
 
 systemctl enable lightdm &>> /home/mandy/post.log
 systemctl enable docker &>> /home/mandy/post.log
