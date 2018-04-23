@@ -331,8 +331,13 @@ installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v
 installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/Hack.zip" "Hack"
 installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/Iosevka.zip" "Iosevka"
 installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/UbuntuMono.zip" "UbuntuMono"
-installFontsFromZip "http://www.fontspace.com/download/6269/e70447f0601e46ecbea2dc3bf9f59695/prismtone_ptf-nordic.zip" "PrismtoneNordic"
+# installFontsFromZip "http://www.fontspace.com/download/6269/e70447f0601e46ecbea2dc3bf9f59695/prismtone_ptf-nordic.zip" "PrismtoneNordic"
+installFontsFromZip "http://dl.1001fonts.com/ubuntu.zip" "Ubuntu"
 
+installFontsFromZip "https://dl.dafont.com/dl/?f=openlogos" "OpenLogos"
+installFontsFromZip "https://dl.dafont.com/dl/?f=pizzadude_bullets" "PizzaDude Bullets"
+installFontsFromZip "https://dl.dafont.com/dl/?f=style_bats" "StyleBats"
+installFont "https://fonts2u.com/download/pie-charts-for-maps.font" "Pie charts for maps"
 
 
 if [ $fontsAdded -eq 1 ]; then
@@ -439,4 +444,5 @@ remove_wine_desktop_files
 create_remmina_desktop_files
 
 # Fix for Intellij platform editors on i3wm @see https://faq.i3wm.org/question/4071/modal-pop-up-in-idea-loses-focus-while-entering-text.1.html
-locate idea.properties | xargs -I {} sed -E -i 's/#?idea.popup.weight=.*$/idea.popup.weight=medium/g' "{}"
+locate idea.properties | xargs -I {} sed -E -i 's/#?.*idea.popup.weight=.*$/idea.popup.weight=medium/g' "{}"
+

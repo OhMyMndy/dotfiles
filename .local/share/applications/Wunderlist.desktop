@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=Wunderlist
-Exec=chromium --app=https://wunderlist.com
+Exec=bash -c "chromium --app=https://wunderlist.com || google-chrome --app=https://wunderlist.com"
 StartupNotify=true
 Terminal=false
 Type=Application

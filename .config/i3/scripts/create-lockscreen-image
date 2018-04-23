@@ -11,6 +11,14 @@ if [ ! -f "$IMAGE" ]; then
   IMAGE="$(randomWallpaper)"
 fi
 
+WALLPAPER_PATH="/tmp/lockscreen_$(basename "$(realpath $HOME/.wallpaper)").png"
+
+if [ ! -f "$WALLPAPER_PATH" ]; then
+	echo "Converting..."
+	time convert "$IMAGE" -resize 1920x1080^ -gravity center -extent 1920x1080 -sepia-tone 90% "$WALLPAPER_PATH"
+	time convert +append "$WALLPAPER_PATH" "$WALLPAPER_PATH" "$WALLPAPER_PATH"
+fi
+
 getFont() {
   default_font="$2"
   font="$1"
@@ -35,19 +43,15 @@ monospace_font=$(getFont "Hack-Regular-Nerd-Font-Complete-Mono" "$monospace_font
 echo "monospace font: $monospace_font"
 echo "font: $font"
 
-convert $IMAGE -resize 1920x1080^ -gravity center -extent 1920x1080 -sepia-tone 90% $TMP_IMAGE
 text="Locked at $(date +'%a %d-%m-%Y %H:%M')"
-convert $TMP_IMAGE  -font $font -pointsize 13 \
-          -draw "gravity south \
-                 fill black  text 0,12 \"$text\" \
-                 fill white  text 1,11 \"$text\" " ${TMP_IMAGE}
+system_info="$(neofetch --off --stdout)"
 
+time convert "$WALLPAPER_PATH"  -font $font -pointsize 13 \
+        -draw "gravity SouthWest \
+                 fill black  text 12,12 \"$text\" \
+                 fill white  text 13,11 \"$text\" " \
+	-draw "gravity NorthWest \
+                fill black  text 12,12 \"$system_info\" \
+                fill white  text 13,13 \"$system_info\" " ${TMP_IMAGE}
 
-text="$(neofetch --off --stdout)"
-convert $TMP_IMAGE  -font $monospace_font -pointsize 13 \
-         -draw "gravity NorthWest \
-                fill black  text 12,12 \"$text\" \
-                fill white  text 13,13 \"$text\" " ${TMP_IMAGE}
-
-
-convert +append $TMP_IMAGE $TMP_IMAGE $TMP_IMAGE
+#time convert +append $TMP_IMAGE $TMP_IMAGE $TMP_IMAGE

@@ -15,6 +15,7 @@ detect_os
 
 # Compleat https://limpet.net/mbrubeck/2009/10/30/compleat.html``
 # sysadmin-util https://github.com/skx/sysadmin-util
+
 plugins=(git docker docker-compose zsh-completions z zsh-autosuggestions zsh-syntax-highlighting extract jira httpie zsh-peco-history wd colored-man-pages command-not-found cp)
 
 if [ "$OS" = "Ubuntu" ]; then
@@ -93,6 +94,16 @@ alias hl='grepc "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+"'
 #alias current-window-process='ps -o args= $(xprop -id $(xprop -root -f _NET_ACTIVE_WINDOW 0x " \$0\\n" _NET_ACTIVE_WINDOW | awk "{print \$2}") -f _NET_WM_PID 0c " \$0\\n" _NET_WM_PID | awk "{print \$2}")'
 alias disk-usage='sudo du -h -t200M -x / 2>/dev/null'
 alias xdg-open='exo-open'
+
+# exa aliases
+alias dir="exa -lag --git --time-style=long-iso --group-directories-first"
+alias dir-sort-size="dir -s=size"
+alias dir-sort-size-desc="dir -s=size -r"
+alias dir-sort-mod="dir -s=modified"
+alias dir-sort-mod-desc="dir -s=modified -r"
+alias dir-tree="dir -T -L=2"
+alias dir-tree-full="dir -T"
+
 
 if exists thefuck; then eval "$(thefuck --alias)"; fi
 

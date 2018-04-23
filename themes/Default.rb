@@ -53,20 +53,16 @@ class Default
 
     def configuration()
 
-      # @monospace_font = "FuraMono Nerd Font Mono"
-      #@monospace_font = "RobotoMono Nerd Font"
-      #@monospace_font = "ProFontIIx Nerd Font Mono"
-      #@monospace_font = "mononoki Nerd Font"
-      @monospace_font = "Hack Nerd Font Mono"
-      #@monospace_font = "SpaceMono Nerd Font Mono"
+      #@monospace_font = "Hack Nerd Font Mono"
+      @monospace_font = "Ubuntu Mono Nerd Font"
       @monospace_font_style = "Regular"
-      @monospace_font_size = 10;
+      @monospace_font_size = 11;
 
-      @normal_font = "Roboto"
+      @normal_font = "Ubuntu"
       @normal_font_style = "Regular"
       @normal_font_size = 10;
 
-      @normal_font_alternative = "Roboto"
+      @normal_font_alternative = @normal_font
       @normal_font_style_alternative = "Regular"
       @normal_font_size_alternative = 10;
 
@@ -183,7 +179,7 @@ class Default
           "fonts"                => [
               @fonts["normal"].to_polybar(@normal_font_size, 2),
               @fonts["normal_alternative"].to_polybar(@normal_font_size, 2),
-              @fonts["monospace"].to_polybar(14, 2)
+              @fonts["monospace"].to_polybar(11, 2)
           ]
       }
 

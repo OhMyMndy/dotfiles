@@ -1,28 +1,48 @@
 #!/bin/bash
 
+set -h
+
+getopt -o dt: --long nodunst,test -n 'parse-options' -- "$@"
+[ $? -ne 0 ] && { echo "Failed parsing options." >&2 ; exit 1; }
+
+kill_dunst=1
+test=0
+
+while true; do
+  case "$1" in
+    -d | --nodunst ) kill_dunst=0; shift ;;
+    -t | --test ) test=1; kill_dunst=0; shift ;;
+    -- ) shift; break ;;
+    * ) break ;;
+  esac
+done
+
+echo "Kill dunst? $kill_dunst"
+echo "Test?       $test"
+
+
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-cd $DIR || exit 1
+cd "$DIR" || exit 1
 TMP_IMAGE=/tmp/i3_lock.png
 TMP_IMAGE1=/tmp/i3_lock1.png
 
-if [ -f $TMP_IMAGE ]; then
-  cp $TMP_IMAGE $TMP_IMAGE1
-fi
 
-# suspend message display
-pkill -u "$USER" -USR1 dunst
+rm "$TMP_IMAGE1"
+cp "/tmp/lockscreen_$(basename "$(realpath "$HOME"/.wallpaper)").png" $TMP_IMAGE1
 
-if [ "$1" != '--test' ]; then
-  bash ./create-lockscreen-image && pkill -e -f i3lock && i3lock -n -i $TMP_IMAGE &
-  if [ -f $TMP_IMAGE1 ]; then
-   i3lock -n -i $TMP_IMAGE1
-  else
-   i3lock -c 000000
-  fi
-  pkill -e -f create-lockscreen-image
+[ -f $TMP_IMAGE ] && [ ! -f "$TMP_IMAGE1" ] && cp $TMP_IMAGE $TMP_IMAGE1
+
+[ $kill_dunst -eq 1 ] && pkill -u "$USER" -USR1 dunst
+
+if [ $test -eq 1 ]; then
+	bash ./create-lockscreen-image && exo-open $TMP_IMAGE
 else
-  bash ./create-lockscreen-image && exo-open $TMP_IMAGE
+	bash ./create-lockscreen-image && pkill -e -f i3lock && i3lock -n -i $TMP_IMAGE &
+	if [ -f $TMP_IMAGE1 ]; then
+		i3lock -n -i $TMP_IMAGE1
+	else
+		i3lock -c 000000
+	fi
 fi
-
-# resume message display
-pkill -u "$USER" -USR2 dunst
+pkill -e -f create-lockscreen-image
+[ $kill_dunst -eq 1 ] && pkill -u "$USER" -USR2 dunst

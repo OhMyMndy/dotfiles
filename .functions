@@ -41,6 +41,8 @@ setRandomWallpaper() {
     wallpaper=$(randomWallpaper)
     echo "Setting wallpaper to ${wallpaper}"
     feh --bg-fill "${wallpaper}"
+	rm ~/.wallpaper 2>/dev/null
+    ln -s "$wallpaper_file" ~/.wallpaper
 }
 
 detect_os() {
@@ -449,6 +451,13 @@ create_vm() {
 
   TPATH=$(VBoxManage list systemproperties | sed -n 's/Default machine folder: *//p')
 
+  if [ "$TPATH" = "$HOME/VirtualBox VMs" ]; then
+		echo "Please change Virtualbox machine folder with:";
+		# @see https://askubuntu.com/questions/800824/how-to-change-virtualbox-default-vm-location-in-command-line
+		echo "vboxmanage setproperty machinefolder /path/to/directory/";
+		return
+  fi
+
   VBoxManage createvm --name "$name" --ostype "$type" --register
   if [ $? -ne 0 ]; then
     echo "Possible os types:"
@@ -467,7 +476,7 @@ create_vm() {
 
   VBoxManage storagectl "$name" --name "IDE Controller" --add ide
   VBoxManage storageattach "$name" --storagectl "IDE Controller" --type dvddrive --medium emptydrive  --port 0 --device 0
-  VBoxManage modifyvm "$name" --accelerate3d on --usb on --vram 128 --memory 2048 --clipboard bidirectional --draganddrop bidirectional
+  VBoxManage modifyvm "$name" --accelerate3d on --usb on --vram 256 --memory 2048 --clipboard bidirectional --draganddrop bidirectional
   VBoxManage modifyvm "$name" --boot1 dvd --boot2 disk
   VBoxManage modifyvm "$name" --ioapic on --cpus 2 --cpuexecutioncap 80
   # $ VBoxManage modifyvm $VM --nic1 bridged --bridgeadapter1 e1000g0
@@ -480,4 +489,29 @@ function show_all_available_icons() {
 get_font_file() {
   # hack.*complete.*mono.*regular
   fc-list | grep -i "$1" | sed 's/:.*//g' | tail -1
+}
+
+
+# create_swap_file 4 /swapfile
+# echo "/swapfile none swap sw 0 0" | sudo tee -a /etc/fstab
+create_swap_file() {
+	size_in_gb="$1"
+	if [ ! "$1" ]; then
+		echo "Please provide anmount of GBs for the swapfile as first parameter"
+		exit 2
+	fi
+	
+	file="$2"
+	if [ -f "$file" ]; then
+		echo "File '$file' already exists!"
+		exit 3
+	fi
+
+	sudo dd if=/dev/zero of="$file" bs=1024 count=$(expr 1024 \* 1024 \* $size_in_gb) 
+	sudo chown root:root "$file"
+	sudo chmod 0600 "$file"
+	sudo mkswap "$file"
+	sudo swapon "$file"
+	echo "Add the following to /etc/fstab to make the swapfile persistent:"
+	echo "$file none swap sw 0 0"
 }

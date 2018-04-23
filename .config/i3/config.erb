@@ -225,7 +225,7 @@ assign [class="Termite"]                                                        
 hide_edge_borders smart
 
 # For windows
-for_window [class=".*"]                                                                 title_format " %title"
+for_window [class=".*"]                                                                 title_format " %title", border normal <%= i3['border'] %>
 for_window [class="Yad"]                                                                floating enable
 for_window [class="mpv"]                                                                floating enable
 for_window [instance=".*floating.*"]                                                    floating enable
@@ -241,29 +241,29 @@ for_window [class="TeamViewer"]                                                 
 for_window [class=".*1password.com"]                                                    floating disable
 for_window [class="wunderlist.com"]                                                     floating disable
 
-# Float IntelliJ update window
-for_window [class="sun-awt-X11-XDialogPeer"]                                            floating enable, border pixel 0
-for_window [class="sun-awt-X11-XWindowPeer"]                                            floating enable, border pixel 0
-for_window [class="com-intellij-updater-Runner"]                                        floating enable, border pixel 0
-for_window [class="Gloobus-preview"]                                                    floating enable, border pixel 0
-for_window [class=".*phpstorm"]                                                         border pixel 0
 
 # source: https://github.com/Airblader/dotfiles-manjaro/blob/master/.i3/config
 #for_window [class="(?i)VirtualBox" title="(?i)Manager"]                                floating enable
 #for_window [class="(?i)VirtualBox"]                                                    floating enable
-#for_window [class="(?i).*chrome.*"]                                                    border pixel <%= i3['border'] %>
-#for_window [class="(?i).*chromium.*"]                                                  border pixel <%= i3['border'] %>
-for_window [class="(?i).*xterm.*"]                                                      border pixel <%= i3['border'] %>
-for_window [class="(?i).*termite.*"]                                                    border pixel <%= i3['border'] %>
+
+for_window [class="(?i).*xterm.*"]                                                      border pixel 0
+for_window [class="(?i).*termite.*"]                                                    border pixel 0
 for_window [class="(?i).*jetbrains.*"]                                                  border pixel <%= i3['border'] %>
-for_window [class="Rambox"]                                                             border pixel <%= i3['border'] %>
+for_window [class="Rambox"]                                                             border pixel 0
+for_window [class="Gedit"]                                                              border pixel <%= i3['border'] %>
+for_window [class="Gnome-calculator"]                                                   border pixel 0
+for_window [class="Gnome-disk"]                                                         border pixel <%= i3['border'] %>
+for_window [class="File-roller"]                                                        border pixel 0
+for_window [class="Remmina"]                                                            border pixel 0
 
-#no focus for any window
-#no_focus [class=".*phpstorm"]
 
-# Execs
-exec --no-startup-id redshift
-exec --no-startup-id udiskie
+# Float IntelliJ update window
+for_window [class="sun-awt-X11-XDialogPeer"]                                            floating enable, border normal <%= i3['border'] %>
+for_window [class="sun-awt-X11-XWindowPeer"]                                            floating enable, border normal <%= i3['border'] %>
+for_window [class="com-intellij-updater-Runner"]                                        floating enable, border pixel 0
+for_window [class="Gloobus-preview"]                                                    floating enable, border pixel 0
+for_window [class="nxclient.bin"]                                                       floating enable, border pixel 0
+
 
 # Exec always
 exec_always --no-startup-id bash ~/bin/restart-polybar || xfce4-panel &
@@ -280,10 +280,13 @@ exec_always --no-startup-id killall notify-server; while pgrep -x notify-server 
 
 exec_always --no-startup-id sh -c "pgrep -x rambox; [ \$? -eq 1 ] && rambox &"
 exec_always --no-startup-id sh -c "pgrep -f i3-sensible-terminal; [ \$? -eq 1 ] && i3-sensible-terminal -e 'byobu' &"
-exec_always --no-startup-id sh -c "pgrep -x thunar; [ \$? -eq 1 ] && thunar &"
+exec_always --no-startup-id sh -c "pgrep -x Thunar; [ \$? -eq 1 ] && thunar &"
 exec_always --no-startup-id sh -c "pgrep -x shutter; [ \$? -eq 1 ] && shutter --min_at_startup &"
-exec_always --no-startup-id sh -c "pgrep -x jetbrains-toolbox ; [ \$? -eq 1 ] && jetbrains-toolbox &"
-exec_always --no-startup-id sh -c "pgrep -x unclutter ; [ \$? -eq 1 ] && unclutter -idle 2 -jitter 5 -noevents -root &"
+#exec_always --no-startup-id sh -c "pgrep -x jetbrains-toolbox ; [ \$? -eq 1 ] && jetbrains-toolbox &"
+#exec_always --no-startup-id sh -c "pgrep -x unclutter ; [ \$? -eq 1 ] && unclutter -idle 2 -jitter 5 -noevents -root &"
+exec_always --no-startup-id sh -c "pgrep -x redshift-gtk ; [ \$? -eq 1 ] && redshift-gtk &"
+exec_always --no-startup-id sh -c "pgrep -x udiskie ; [ \$? -eq 1 ] && udiskie --tray --use-udisks2 &"
+
 
 #exec_always --no-startup-id pkill -f resolution-changed; bash ~/bin/resolution-changed ~/bin/restart-polybar
 exec_always --no-startup-id bash "$HOME/.screenlayout/$(hostname).sh"
@@ -323,8 +326,6 @@ bindsym XF86MonBrightnessDown exec xbacklight -dec 20 # decrease screen brightne
 gaps inner <%= i3['gaps']['inner'] %>
 gaps outer <%= i3['gaps']['outer'] %>
 <% end %>
-
-# for_window [class="^.*"] border pixel <%= i3['border'] %>
 
 # new_float none
 

@@ -96,7 +96,6 @@ openssh
 arandr
 lxappearance
 parcellite
-dunst
 byobu
 tmux
 network-manager-applet
@@ -118,7 +117,6 @@ ncdu
 meld
 gimp
 synergy
-python3-udiskie
 pulseaudio
 mpc
 mpd
@@ -184,6 +182,12 @@ libXi-devel
 php-pecl-imagick
 filezilla
 keepassxc
+qt5ct
+qt-config
+qt5-qtstyleplugins
+exa
+compton
+dnf-automatic
 %end
 
 # Post-installation Script
@@ -239,6 +243,35 @@ cat <<'EOL' | sudo tee /etc/fonts/local.conf &>> /home/mandy/post.log
 </fontconfig>
 EOL
 
+cat <<'EOL' | sudo tee /etc/sysctl.conf &>> /home/mandy/post.log
+# sysctl settings are defined through files in
+# /usr/lib/sysctl.d/, /run/sysctl.d/, and /etc/sysctl.d/.
+#
+# Vendors settings live in /usr/lib/sysctl.d/.
+# To override a whole file, create a new file with the same in
+# /etc/sysctl.d/ and put new settings there. To override
+# only specific settings, add a file with a lexically later
+# name in /etc/sysctl.d/ and put new settings there.
+#
+# For more information, see sysctl.conf(5) and sysctl.d(5).
+
+# For IntelliJ products for example
+# See https://confluence.jetbrains.com/display/IDEADEV/Inotify+Watches+Limit
+fs.inotify.max_user_watches = 524288
+net.ipv4.ip_forward=1
+
+EOL
+
+
+cat <<'EOL' | sudo tee /etc/resolv.conf &>> /home/mandy/post.log
+nameserver 1.1.1.1
+nameserver 1.0.0.1
+EOL
+
+# Enable dnf-automatic
+sed -E -i 's#apply_updates.*$#apply_updates = yes#g' /etc/dnf/automatic.conf     
+systemctl enable dnf-automatic.timer && systemctl start dnf-automatic.timer
+
 export HOME=/home/mandy &>> /home/mandy/post.log
 gem install json &>> /home/mandy/post.log
 gem instal rdoc &>> /home/mandy/post.log
@@ -270,10 +303,10 @@ dnf install $(curl -s https://api.github.com/repos/saenzramiro/rambox/releases/l
 dnf install https://www.rpmfind.net/linux/sourceforge/u/un/unitedrpms/27/x86_64/msttcorefonts-2.5-4.fc27.noarch.rpm -y &>> /home/mandy/post.log
 dnf install imwheel -y
 
-bash /home/mandy/dotfiles/installers/flatpak.sh | tee -a /home/mandy/post.log
-bash /home/mandy/dotfiles/installers/jetbrains-toolbox.sh | tee -a /home/mandy/post.log
-bash /home/mandy/dotfiles/installers/xbanish.sh | tee -a /home/mandy/post.log
-bash /home/mandy/dotfiles/installers/purevpn.sh | tee -a /home/mandy/post.log
+# bash /home/mandy/dotfiles/installers/flatpak.sh | tee -a /home/mandy/post.log
+bash /home/mandy/dotfiles/installers/jetbrains-toolbox.sh &>> /home/mandy/post.log
+bash /home/mandy/dotfiles/installers/xbanish.sh &>> /home/mandy/post.log
+bash /home/mandy/dotfiles/installers/purevpn.sh &>> /home/mandy/post.log
 
 systemctl enable lightdm &>> /home/mandy/post.log
 systemctl enable docker &>> /home/mandy/post.log
@@ -290,8 +323,8 @@ dnf install rofi -y &>> /home/mandy/post.log
 dnf install -y cmake @development-tools gcc-c++ i3-ipc jsoncpp-devel pulseaudio-libs-devel alsa-lib-devel wireless-tools-devel libmpdclient-devel libcurl-devel cairo-devel xcb-proto xcb-util-devel xcb-util-wm-devel xcb-util-image-devel &>> /home/mandy/post.log
 dnf install -y pulseaudio-libs-devel xcb-util-xrm-devel &>> /home/mandy/post.log
 dnf install -y $(curl -sL "https://api.github.com/repos/atom/atom/releases/latest" | grep "https.*atom.x86_64.rpm" | cut -d '"' -f 4) &>> /home/mandy/post.log
-pip install mycli &>> /home/mandy/post.log
-
+pip3 install mycli &>> /home/mandy/post.log
+pip3 install httpie
 
 # The fuck
 dnf install python3-devel -y  &>> /home/mandy/post.log
@@ -307,6 +340,8 @@ cmake .. &>> /home/mandy/post.log
 sudo make install &>> /home/mandy/post.log
 # end install Polybar
 
+pip3 install udiskie &>> /home/mandy/post.log
+
 
 virt-what | grep -q -i virtualbox && dnf install VirtualBox-guest-additions -y &>> /home/mandy/post.log
 
@@ -314,6 +349,7 @@ rpm --import https://dl.tvcdn.de/download/linux/signature/TeamViewer2017.asc &>>
 dnf install https://download.teamviewer.com/download/linux/teamviewer.x86_64.rpm -y &>> /home/mandy/post.log
 
 dnf install http://download.nomachine.com/download/6.0/Linux/nomachine_6.0.78_1_x86_64.rpm -y &>> /home/mandy/post.log
+dnf install http://rpmfind.net/linux/mageia/distrib/cauldron/x86_64/media/core/release/dunst-1.3.1-1.mga7.x86_64.rpm -y &>> /home/mandy/post.log
 
 mkdir -p /etc/firewalld/services/ &>> /home/mandy/post.log
 cat << EOF >  /etc/firewalld/services/nomachine.xml &>> /home/mandy/post.log
@@ -330,6 +366,29 @@ dnf copr enable sergiomb/google-drive-ocamlfuse -y &>> /home/mandy/post.log
 dnf install google-drive-ocamlfuse -y &>> /home/mandy/post.log
 
 
+# Install Dry, 
+# dry is a terminal application to manage and monitor Docker containers.
+# See https://moncho.github.io/dry/
+curl -sSf https://moncho.github.io/dry/dryup.sh | sh &>> /home/mandy/post.log
+chmod 755 /usr/local/bin/dry &>> /home/mandy/post.log
+chmod +x /usr/local/bin/dry &>> /home/mandy/post.log
+
+
+# Sublime text
+rpm -v --import https://download.sublimetext.com/sublimehq-rpm-pub.gpg &>> /home/mandy/post.log
+dnf config-manager --add-repo https://download.sublimetext.com/rpm/stable/x86_64/sublime-text.repo &>> /home/mandy/post.log
+dnf install sublime-text -y &>> /home/mandy/post.log
+
+# Laravel AdminLTE
+su mandy bash -c 'composer global require "acacha/llum"' &>> /home/mandy/post.log
+su mandy bash -c 'composer global require "acacha/adminlte-laravel-installer"' &>> /home/mandy/post.log
+su mandy bash -c 'composer global require "symfony/console"' &>> /home/mandy/post.log
+su mandy bash -c 'composer global require "jolicode/jolinotif"' &>> /home/mandy/post.log
+
+# Create swap file
+# create_swap_file 4 /swapfile &>> /home/mandy/post.log
+# echo "/swapfile none swap sw 0 0" | sudo tee -a /etc/fstab &>> /home/mandy/post.log
+
 # enable when everything is stable
 dnf update -y &>> /home/mandy/post.log
 
@@ -340,8 +399,7 @@ systemctl start firewalld &>> /home/mandy/post.log
 firewall-cmd --zone=public --permanent --add-service=http &>> /home/mandy/post.log
 firewall-cmd --zone=public --permanent --add-service=https &>> /home/mandy/post.log
 firewall-cmd --zone=public --permanent --add-service=mysql &>> /home/mandy/post.log
-
-# http://trial.pulsesecure.net/clients/ps-pulse-linux-5.3r3.0-b1021-centos-rhel-64-bit-installer.rpm
+firewall-cmd --zone=public --permanent --add-service=nomachine &>> /home/mandy/post.log
 
 echo "Done" &>> /home/mandy/post.log
 

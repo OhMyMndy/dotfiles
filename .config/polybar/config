@@ -60,15 +60,15 @@ module-margin-left = 1
 module-margin-right = 2
 
 
-font-0 = Roboto:style=Regular:pixelsize=10;2
-font-1 = Roboto:style=Regular:pixelsize=10;2
-font-2 = Hack Nerd Font Mono:style=Regular:pixelsize=14;2
+font-0 = Ubuntu:style=Regular:pixelsize=10;2
+font-1 = Ubuntu:style=Regular:pixelsize=10;2
+font-2 = Ubuntu Mono Nerd Font:style=Regular:pixelsize=11;2
 
 modules-left = i3 mpd
 ; window
 ;modules-center = date
 ; xwindow
-modules-right = terminal monitor vpn filesystem load memory date powermenu
+modules-right = pomodoro terminal monitor vpn filesystem load memory date powermenu
 
 tray-position = right
 tray-padding = 1
@@ -101,6 +101,16 @@ interval = 30
 format-underline = ${colors.accent-dark2}
 format-prefix = " "
 format-prefix-foreground = #5b
+
+[module/pomodoro]
+type = custom/script
+exec =  [ -f /tmp/pomodoro_time ] && date -d@$(cat /tmp/pomodoro_time) -u +%M:%S 2>/dev/null || echo "Start" 
+interval = 5
+format-underline = ${colors.accent-dark2}
+format-prefix = " "
+format-prefix-foreground = #5b
+click-left = bash ~/bin/pomodoro.sh &
+click-right = pkill -e -f pomodoro.sh; rm /tmp/pomodoro_time
 
 [module/monitor]
 type = custom/script

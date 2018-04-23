@@ -57,9 +57,9 @@ Dir.chdir $root_dir
 Dir.glob ['*.erb', '.byobu/*.erb', '.config/**/*.erb', '.icons/**/*.erb'], File::FNM_DOTMATCH do |file|
     new_file_name = get_new_filename file
 
-    puts new_file_name
+    #puts new_file_name
     new_content = compile(file)
-    puts new_file_name + " length " + new_content.length.to_s
+    #puts new_file_name + " length " + new_content.length.to_s
     if new_content.empty? || new_content.length < 2
         puts "Content is empty"
         exit 2
