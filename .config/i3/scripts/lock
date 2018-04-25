@@ -24,25 +24,24 @@ echo "Test?       $test"
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd "$DIR" || exit 1
 TMP_IMAGE=/tmp/i3_lock.png
-TMP_IMAGE1=/tmp/i3_lock1.png
 
 
-rm "$TMP_IMAGE1"
-cp "/tmp/lockscreen_$(basename "$(realpath "$HOME"/.wallpaper)").png" $TMP_IMAGE1
+WALLPAPER_PATH="/tmp/lockscreen_$(basename "$(realpath $HOME/.wallpaper)").png"
 
-[ -f $TMP_IMAGE ] && [ ! -f "$TMP_IMAGE1" ] && cp $TMP_IMAGE $TMP_IMAGE1
+
+rm "$TMP_IMAGE"
 
 [ $kill_dunst -eq 1 ] && pkill -u "$USER" -USR1 dunst
 
 if [ $test -eq 1 ]; then
-	bash ./create-lockscreen-image && exo-open $TMP_IMAGE
+	bash ./create-lockscreen-image && exo-open "$TMP_IMAGE"
 else
-	bash ./create-lockscreen-image && pkill -e -f i3lock && i3lock -n -i $TMP_IMAGE &
-	if [ -f $TMP_IMAGE1 ]; then
-		i3lock -n -i $TMP_IMAGE1
+	bash ./create-lockscreen-image && pkill -e -f i3lock && i3lock -n -i "$TMP_IMAGE" &
+	if [ -f "$WALLPAPER_PATH" ]; then
+		i3lock -n -i "$WALLPAPER_PATH"
 	else
 		i3lock -c 000000
 	fi
 fi
-pkill -e -f create-lockscreen-image
+#pkill -e -f create-lockscreen-image
 [ $kill_dunst -eq 1 ] && pkill -u "$USER" -USR2 dunst

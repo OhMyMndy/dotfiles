@@ -2,21 +2,25 @@
 
 source ~/.functions
 
-TMP_IMAGE=/tmp/i3_lock.png
-rm $TMP_IMAGE 2>/dev/null
-
 IMAGE=$(realpath $HOME/.wallpaper)
 
 if [ ! -f "$IMAGE" ]; then
   IMAGE="$(randomWallpaper)"
 fi
+TMP_IMAGE=/tmp/i3_lock.png
+
+tmpfile=$(mktemp)
+function finish {
+  rm -f "$tmpfile"
+}
+trap finish EXIT
 
 WALLPAPER_PATH="/tmp/lockscreen_$(basename "$(realpath $HOME/.wallpaper)").png"
 
 if [ ! -f "$WALLPAPER_PATH" ]; then
 	echo "Converting..."
-	time convert "$IMAGE" -resize 1920x1080^ -gravity center -extent 1920x1080 -sepia-tone 90% "$WALLPAPER_PATH"
-	time convert +append "$WALLPAPER_PATH" "$WALLPAPER_PATH" "$WALLPAPER_PATH"
+	time convert "$IMAGE" -resize 1920x1080^ -gravity center -extent 1920x1080 -sepia-tone 90% "$tmpfile"
+	time convert +append "$tmpfile" "$tmpfile" "$WALLPAPER_PATH"
 fi
 
 getFont() {
@@ -52,6 +56,6 @@ time convert "$WALLPAPER_PATH"  -font $font -pointsize 13 \
                  fill white  text 13,11 \"$text\" " \
 	-draw "gravity NorthWest \
                 fill black  text 12,12 \"$system_info\" \
-                fill white  text 13,13 \"$system_info\" " ${TMP_IMAGE}
+                fill white  text 13,13 \"$system_info\" " "${TMP_IMAGE}"
 
 #time convert +append $TMP_IMAGE $TMP_IMAGE $TMP_IMAGE

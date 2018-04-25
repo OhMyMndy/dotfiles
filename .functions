@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+alias cls='clear && echo -en "\e[3J"'
 
 # Utility function to check if $1 command exists
 # Use example: if exists ls; then echo "Command exists."; else echo "Command does not exist."; fi
@@ -268,7 +269,7 @@ function installFont() {
 	if [ ! -f "$fontName" ]; then
 		curl -fLo "$fontName" "$fontUrl"
 		fontsAdded=1
-    deleteWindowsFonts
+        deleteWindowsFonts
 	fi
 }
 

@@ -188,6 +188,9 @@ qt5-qtstyleplugins
 exa
 compton
 dnf-automatic
+java-1.8.0-openjdk
+fuse-exfat
+exfat-util
 %end
 
 # Post-installation Script
@@ -296,12 +299,19 @@ rpm --import https://dl-ssl.google.com/linux/linux_signing_key.pub &>> /home/man
 
 rpm -ivh http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-27.noarch.rpm &>> /home/mandy/post.log
 rpm -ivh http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-27.noarch.rpm &>> /home/mandy/post.log
-
+rpm -ivh https://rpms.remirepo.net/fedora/remi-release-27.rpm &>> /home/mandy/post.log
 dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo &>> /home/mandy/post.log
 dnf install http://mirror.yandex.ru/fedora/russianfedora/russianfedora/free/fedora/releases/27/Everything/x86_64/os/russianfedora-free-release-27-1.noarch.rpm  -y &>> /home/mandy/post.log
 dnf install $(curl -s https://api.github.com/repos/saenzramiro/rambox/releases/latest | jq -r ".assets[] | select(.name) | select(.browser_download_url | test(\"64.*rpm$\")) | .browser_download_url") -y &>> /home/mandy/post.log
 dnf install https://www.rpmfind.net/linux/sourceforge/u/un/unitedrpms/27/x86_64/msttcorefonts-2.5-4.fc27.noarch.rpm -y &>> /home/mandy/post.log
 dnf install imwheel -y
+
+
+
+# PHP 7.2
+dnf config-manager --set-enabled remi-php72
+# update is done at the bottom
+
 
 # bash /home/mandy/dotfiles/installers/flatpak.sh | tee -a /home/mandy/post.log
 bash /home/mandy/dotfiles/installers/jetbrains-toolbox.sh &>> /home/mandy/post.log
@@ -313,6 +323,7 @@ systemctl enable docker &>> /home/mandy/post.log
 usermod -a -G docker mandy &>> /home/mandy/post.log
 groupadd power &>> /home/mandy/post.log
 usermod -a -G power mandy &>> /home/mandy/post.log
+usermod -a -G disk mandy &>> /home/mandy/post.log
 chsh -s /bin/zsh mandy &>> /home/mandy/post.log
 
 
@@ -379,18 +390,26 @@ rpm -v --import https://download.sublimetext.com/sublimehq-rpm-pub.gpg &>> /home
 dnf config-manager --add-repo https://download.sublimetext.com/rpm/stable/x86_64/sublime-text.repo &>> /home/mandy/post.log
 dnf install sublime-text -y &>> /home/mandy/post.log
 
+
+
+
+# enable when everything is stable (before composer so PHP is updated to 7.2)
+dnf update -y &>> /home/mandy/post.log
+
+
 # Laravel AdminLTE
 su mandy bash -c 'composer global require "acacha/llum"' &>> /home/mandy/post.log
 su mandy bash -c 'composer global require "acacha/adminlte-laravel-installer"' &>> /home/mandy/post.log
 su mandy bash -c 'composer global require "symfony/console"' &>> /home/mandy/post.log
 su mandy bash -c 'composer global require "jolicode/jolinotif"' &>> /home/mandy/post.log
 
+
+
+su mandy bash -c 'composer global require squizlabs/php_codesniffer' &>> /home/mandy/post.log
+
 # Create swap file
 # create_swap_file 4 /swapfile &>> /home/mandy/post.log
 # echo "/swapfile none swap sw 0 0" | sudo tee -a /etc/fstab &>> /home/mandy/post.log
-
-# enable when everything is stable
-dnf update -y &>> /home/mandy/post.log
 
 chown -R mandy:mandy /home/mandy &>> /home/mandy/post.log
 

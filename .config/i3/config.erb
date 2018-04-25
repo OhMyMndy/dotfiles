@@ -213,9 +213,12 @@ client.focused_inactive <%= i3['client']['focused_inactive'] %>
 client.urgent           <%= i3['client']['urgent'] %>
 
 # Default workspaces
+assign [class="Google-chrome"]                                                          $workspace1
+assign [class="Chromium"]                                                               $workspace1
 assign [class="Vmplayer"]                                                               $workspace8
 assign [class="TeamViewer"]                                                             $workspace8
 assign [class=".*phpstorm"]                                                             $workspace4
+assign [class="jetbrains-idea-ce"]                                                      $workspace9
 assign [class="Rambox"]                                                                 $workspace6
 assign [class="Thunar"]                                                                 $workspace3
 assign [class="Atom"]                                                                   $workspace9
@@ -255,6 +258,7 @@ for_window [class="Gnome-calculator"]                                           
 for_window [class="Gnome-disk"]                                                         border pixel <%= i3['border'] %>
 for_window [class="File-roller"]                                                        border pixel 0
 for_window [class="Remmina"]                                                            border pixel 0
+for_window [class="Xfce4-terminal"]                                                     border pixel <%= i3['border'] %>
 
 
 # Float IntelliJ update window
@@ -262,7 +266,8 @@ for_window [class="sun-awt-X11-XDialogPeer"]                                    
 for_window [class="sun-awt-X11-XWindowPeer"]                                            floating enable, border normal <%= i3['border'] %>
 for_window [class="com-intellij-updater-Runner"]                                        floating enable, border pixel 0
 for_window [class="Gloobus-preview"]                                                    floating enable, border pixel 0
-for_window [class="nxclient.bin"]                                                       floating enable, border pixel 0
+for_window [class="Nxclient.bin"]                                                       floating enable, border pixel <%= i3['border'] %>
+for_window [class="Nxplayer.bin"]                                                       floating enable, border pixel <%= i3['border'] %>
 
 
 # Exec always
@@ -279,13 +284,14 @@ exec_always --no-startup-id killall synergys; while pgrep -x synergys >/dev/null
 exec_always --no-startup-id killall notify-server; while pgrep -x notify-server >/dev/null; do sleep 1; done; notify-server &
 
 exec_always --no-startup-id sh -c "pgrep -x rambox; [ \$? -eq 1 ] && rambox &"
-exec_always --no-startup-id sh -c "pgrep -f i3-sensible-terminal; [ \$? -eq 1 ] && i3-sensible-terminal -e 'byobu' &"
-exec_always --no-startup-id sh -c "pgrep -x Thunar; [ \$? -eq 1 ] && thunar &"
+exec_always --no-startup-id sh -c "pgrep -x xfce4-terminal; [ \$? -eq 1 ] && xfce4-terminal -e byobu"
+exec_always --no-startup-id sh -c "pgrep -x thunar; [ \$? -eq 1 ] && thunar &"
 exec_always --no-startup-id sh -c "pgrep -x shutter; [ \$? -eq 1 ] && shutter --min_at_startup &"
 #exec_always --no-startup-id sh -c "pgrep -x jetbrains-toolbox ; [ \$? -eq 1 ] && jetbrains-toolbox &"
 #exec_always --no-startup-id sh -c "pgrep -x unclutter ; [ \$? -eq 1 ] && unclutter -idle 2 -jitter 5 -noevents -root &"
 exec_always --no-startup-id sh -c "pgrep -x redshift-gtk ; [ \$? -eq 1 ] && redshift-gtk &"
 exec_always --no-startup-id sh -c "pgrep -x udiskie ; [ \$? -eq 1 ] && udiskie --tray --use-udisks2 &"
+exec_always --no-startup-id sh -c "pgrep -x chrome ; [ \$? -eq 1 ] && google-chrome &"
 
 
 #exec_always --no-startup-id pkill -f resolution-changed; bash ~/bin/resolution-changed ~/bin/restart-polybar

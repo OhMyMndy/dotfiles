@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source $DIR/.functions
 source $DIR/.zshrc 2>/dev/null
