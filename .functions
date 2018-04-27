@@ -440,7 +440,7 @@ EOL
 create_vm() {
   type="$1"
   name="$2"
-
+  force="$3"
   vboxmanage showvminfo "$name" >/dev/null 2>&1
   result=$?
 
@@ -451,8 +451,7 @@ create_vm() {
 
 
   TPATH=$(VBoxManage list systemproperties | sed -n 's/Default machine folder: *//p')
-
-  if [ "$TPATH" = "$HOME/VirtualBox VMs" ]; then
+  if [ "$force" != 'force' ] && [ "$TPATH" = "$HOME/VirtualBox VMs" ]; then
 		echo "Please change Virtualbox machine folder with:";
 		# @see https://askubuntu.com/questions/800824/how-to-change-virtualbox-default-vm-location-in-command-line
 		echo "vboxmanage setproperty machinefolder /path/to/directory/";

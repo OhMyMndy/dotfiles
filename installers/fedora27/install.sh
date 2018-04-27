@@ -71,7 +71,7 @@ function echo_message(){
 function base {
     add_repositories
 
-
+    system_update
     cat <<'EOL' | sed '/^$/d'| xargs -I {} sudo dnf install -y {}
 @core
 @standard
