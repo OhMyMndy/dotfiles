@@ -82,4 +82,5 @@ bash /home/mandy/dotfiles/link.sh &>> /home/mandy/post.log
 
 
 chown -R mandy:mandy /home/mandy &>> /home/mandy/post.log
+dnf update -y --refresh &>> /home/mandy/post.log
 %end
