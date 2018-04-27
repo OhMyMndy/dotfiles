@@ -62,6 +62,8 @@ text
 @base-x
 curl
 git
+ruby
+ruby-devel
 %end
 
 # Post-installation Script
