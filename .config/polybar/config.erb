@@ -109,8 +109,8 @@ interval = 5
 format-underline = ${colors.accent-dark2}
 format-prefix = " "
 format-prefix-foreground = #5b
-click-left = bash ~/bin/pomodoro.sh &
-click-right = pkill -e -f pomodoro.sh; rm /tmp/pomodoro_time
+click-left = bash ~/bin/pomodoro-timer &
+click-right = pkill -e -f pomodoro-timer
 
 [module/monitor]
 type = custom/script
@@ -445,7 +445,7 @@ label-open = " "
 label-open-foreground = ${colors.foreground}
 label-close = cancel
 label-close-foreground = ${colors.alert}
-label-separator = |
+label-separator = " | "
 label-separator-foreground = ${colors.primary}
 
 menu-0-0 = " reboot"

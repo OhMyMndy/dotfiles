@@ -22,18 +22,24 @@ randomWallpaper() {
 }
 
 setWallpaper() {
-  wallpaper_file="$1"
+    wallpaper_file="$1"
+    wallpaper_file2="$2"
 
-  if [ "$wallpaper_file" != '' ] && [ -f "$wallpaper_file" ]; then
-    rm ~/.wallpaper 2>/dev/null
-    ln -s "$wallpaper_file" ~/.wallpaper
-  fi
+    if [ "$wallpaper_file" != '' ] && [ -f "$wallpaper_file" ]; then
+        rm ~/.wallpaper 2>/dev/null
+        ln -s "$wallpaper_file" ~/.wallpaper
+    fi
 
-  if [ -f $HOME/.wallpaper ]; then
-    feh --bg-fill $HOME/.wallpaper
-  else
-    setRandomWallpaper
-  fi
+    if [ "$wallpaper_file2" != '' ] && [ -f "$wallpaper_file2" ]; then
+      rm ~/.wallpaper2 2>/dev/null
+      ln -s "$wallpaper_file2" ~/.wallpaper2
+    fi
+
+    if [ -f $HOME/.wallpaper ]; then
+        feh --bg-fill ~/.wallpaper --bg-fill ~/.wallpaper2
+    else
+        setRandomWallpaper
+    fi
 }
 
 setRandomWallpaper() {

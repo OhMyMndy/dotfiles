@@ -25,8 +25,17 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd "$DIR" || exit 1
 TMP_IMAGE=/tmp/i3_lock.png
 
+IMAGE="$(realpath $HOME/.wallpaper)"
+IMAGE2="$(realpath $HOME/.wallpaper2)"
+WALLPAPER_PATH="/tmp/lockscreen_$(basename "${IMAGE}")__$(basename "${IMAGE2}").png"
 
-WALLPAPER_PATH="/tmp/lockscreen_$(basename "$(realpath $HOME/.wallpaper)").png"
+tmpfile=$(mktemp)
+cp "$WALLPAPER_PATH" $tmpfile 2>/dev/null
+
+function finish {
+  rm -f "$tmpfile"
+}
+trap finish EXIT
 
 
 rm "$TMP_IMAGE"

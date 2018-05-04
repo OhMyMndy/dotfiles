@@ -257,7 +257,7 @@ for_window [class="Gedit"]                                                      
 for_window [class="Gnome-calculator"]                                                   border pixel 0
 for_window [class="Gnome-disk"]                                                         border pixel 2
 for_window [class="File-roller"]                                                        border pixel 0
-for_window [class="Remmina"]                                                            border pixel 0
+#for_window [class="Remmina"]                                                            border pixel 0
 for_window [class="Xfce4-terminal"]                                                     border pixel 2
 
 
@@ -291,6 +291,7 @@ exec_always --no-startup-id sh -c "pgrep -x shutter; [ \$? -eq 1 ] && shutter --
 #exec_always --no-startup-id sh -c "pgrep -x unclutter ; [ \$? -eq 1 ] && unclutter -idle 2 -jitter 5 -noevents -root &"
 exec_always --no-startup-id sh -c "pgrep -x redshift-gtk ; [ \$? -eq 1 ] && redshift-gtk &"
 exec_always --no-startup-id sh -c "pgrep -x udiskie ; [ \$? -eq 1 ] && udiskie --tray --use-udisks2 &"
+exec_always --no-startup-id sh -c "pgrep -x chrome ; [ \$? -eq 1 ] && google-chrome &"
 
 
 #exec_always --no-startup-id pkill -f resolution-changed; bash ~/bin/resolution-changed ~/bin/restart-polybar

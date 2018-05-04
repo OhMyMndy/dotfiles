@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
-
+if [ $UID -eq 0 ]; then
+    echo "Run this script as non root user please..."
+    exit 99
+fi
 
 # tab width
 tabs 4
@@ -24,6 +27,8 @@ function main {
 		'multimedia'		    'Install multimedia packages' \
 		'virtualization'        'Install virtualization packages' \
 		'wine'                  'Install wine packages' \
+		'developer_tools'       'Install developer tools packages' \
+		'development'           'Install development packages' \
 		3>&1 1>&2 2>&3)
 	# check exit status
 	if [ $? = 0 ]; then
@@ -92,7 +97,7 @@ rpmconf
 htop
 
 google-chrome-stable
-calc
+mate-calc
 gitflow
 
 strace
@@ -119,9 +124,10 @@ variety
 paper-icon-theme
 yad
 thunar
-file-roller
+tumbler
+nemo
 unrar
-evince
+engrampa
 git
 tig
 ruby
@@ -133,8 +139,7 @@ pulseaudio
 
 gnome-disk-utility
 
-gedit
-gedit-plugins
+pluma
 lightdm
 xfce4-panel
 xfce4-power-manager
@@ -197,10 +202,15 @@ fuse-exfat
 fuse-sshfs
 exfat-util
 
+atril
 rofi
 
 vlc
+
+gnuplot
 EOL
+
+sudo dnf remove gnome-calculator evince file-roller gedit gedit-plugins -y
 
     sudo localedef -i nl_BE -f UTF-8 nl_BE.UTF-8
     cat <<'EOL' | sudo tee /etc/locale.conf
@@ -326,6 +336,13 @@ function setup_firewall {
     sudo firewall-cmd --zone=public --permanent --add-service=http
     sudo firewall-cmd --zone=public --permanent --add-service=https
     sudo firewall-cmd --zone=public --permanent --add-service=mysql
+
+    sudo firewall-cmd --permanent --new-service=xdebug
+    sudo firewall-cmd --zone=public --permanent --add-service=xdebug
+
+    sudo firewall-cmd --permanent --service=xdebug --add-port=9000/tcp
+    sudo firewall-cmd --permanent --service=xdebug --add-port=9000/udp
+    sudo firewall-cmd --reload
 }
 
 function add_repositories {
@@ -354,6 +371,7 @@ EOF
 }
 
 function system_update {
+    sudo package-cleanup -y --oldkernels --count=2
     sudo dnf update -y --refresh
 }
 
@@ -376,12 +394,15 @@ function multimedia {
     sudo dnf install -y ffmpeg flacon shntool cuetools
     sudo dnf install -y mpc mpd rhythmbox
     # Photo
-    sudo dnf install -y gimp darktable
+#    sudo dnf install -y gimp darktable
 
     # Video
     sudo dnf install -y vlc
 
     sudo dnf install -y @multimedia
+
+    # Uninstall previously installed packages
+    sudo dnf remove -y gimp darktable
 }
 
 function virtualization {
@@ -426,17 +447,19 @@ function development {
     # Install Dry, 
     # dry is a terminal application to manage and monitor Docker containers.
     # See https://moncho.github.io/dry/
-    sudo curl -sSf https://moncho.github.io/dry/dryup.sh | sh
-    sudo chmod 755 /usr/local/bin/dry
-    sudo chmod +x /usr/local/bin/dry
+    if [ ! -f /usr/local/bin/dry ]; then
+        sudo curl -sSf https://moncho.github.io/dry/dryup.sh | sh
+        sudo chmod 755 /usr/local/bin/dry
+        sudo chmod +x /usr/local/bin/dry
+    fi
     
     
 
 
     # Sublime text
-    # sudo rpm -v --import https://download.sublimetext.com/sublimehq-rpm-pub.gpg
-    # sudo dnf config-manager --add-repo https://download.sublimetext.com/rpm/stable/x86_64/sublime-text.repo
-    # sudo dnf install sublime-text -y
+    sudo rpm -v --import https://download.sublimetext.com/sublimehq-rpm-pub.gpg
+    sudo dnf config-manager --add-repo https://download.sublimetext.com/rpm/stable/x86_64/sublime-text.repo
+    sudo dnf install sublime-text -y
 
     
     composer global require "acacha/llum"
@@ -450,11 +473,23 @@ function development {
 #    sudo dnf install -y $(curl -sL "https://api.github.com/repos/atom/atom/releases/latest" | grep "https.*atom.x86_64.rpm" | cut -d '"' -f 4)
 
 }
+
+function developer_tools {
+    sudo dnf install -y fedora-packager @development-tools rpmlint
+    sudo usermod -a -G mock $USER
+
+    rpmdev-setuptree
+    cd ~/rpmbuild/SOURCES
+    wget http://ftp.gnu.org/gnu/hello/hello-2.10.tar.gz
+}
+
 # Welcome message
 echo_message welcome "$TITLE"
 
 if [ "$1" != '' ]; then
+    echo_message header "Starting '$1' function from cli parameter"
     $1
+    exit 0
 fi
 # main
 while :

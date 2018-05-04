@@ -2,25 +2,34 @@
 
 source ~/.functions
 
-IMAGE=$(realpath $HOME/.wallpaper)
+IMAGE="$(realpath $HOME/.wallpaper)"
+IMAGE2="$(realpath $HOME/.wallpaper2)"
 
 if [ ! -f "$IMAGE" ]; then
   IMAGE="$(randomWallpaper)"
 fi
+
+if [ ! -f "$IMAGE2" ]; then
+  IMAGE2="$(randomWallpaper)"
+fi
+
 TMP_IMAGE=/tmp/i3_lock.png
 
 tmpfile=$(mktemp)
+tmpfile2=$(mktemp)
 function finish {
   rm -f "$tmpfile"
+  rm -f "$tmpfile2"
 }
 trap finish EXIT
 
-WALLPAPER_PATH="/tmp/lockscreen_$(basename "$(realpath $HOME/.wallpaper)").png"
+WALLPAPER_PATH="/tmp/lockscreen_$(basename "${IMAGE}")__$(basename "${IMAGE2}").png"
 
 if [ ! -f "$WALLPAPER_PATH" ]; then
 	echo "Converting..."
 	time convert "$IMAGE" -resize 1920x1080^ -gravity center -extent 1920x1080 -sepia-tone 90% "$tmpfile"
-	time convert +append "$tmpfile" "$tmpfile" "$WALLPAPER_PATH"
+    time convert "$IMAGE2" -resize 1920x1080^ -gravity center -extent 1920x1080 -sepia-tone 90% "$tmpfile2"
+	time convert +append "$tmpfile" "$tmpfile2" "$WALLPAPER_PATH"
 fi
 
 getFont() {
@@ -53,9 +62,11 @@ system_info="$(neofetch --off --stdout)"
 time convert "$WALLPAPER_PATH"  -font $font -pointsize 13 \
         -draw "gravity SouthWest \
                  fill black  text 12,12 \"$text\" \
+                 fill black  text 12,11 \"$text\" \
                  fill white  text 13,11 \"$text\" " \
 	-draw "gravity NorthWest \
-                fill black  text 12,12 \"$system_info\" \
+                fill black  text 12,14 \"$system_info\" \
+                fill black  text 12,13 \"$system_info\" \
                 fill white  text 13,13 \"$system_info\" " "${TMP_IMAGE}"
 
 #time convert +append $TMP_IMAGE $TMP_IMAGE $TMP_IMAGE
