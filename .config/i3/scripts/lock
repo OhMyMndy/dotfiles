@@ -42,9 +42,15 @@ rm "$TMP_IMAGE"
 
 [ $kill_dunst -eq 1 ] && pkill -u "$USER" -USR1 dunst
 
+
+mpc --format '' | grep -q '\[playing\]'
+mpd_is_playing=$?
+mpc pause
+
 if [ $test -eq 1 ]; then
 	bash ./create-lockscreen-image && exo-open "$TMP_IMAGE"
 else
+
 	bash ./create-lockscreen-image && pkill -e -f i3lock && i3lock -n -i "$TMP_IMAGE" &
 	if [ -f "$WALLPAPER_PATH" ]; then
 		i3lock -n -i "$WALLPAPER_PATH"
@@ -54,3 +60,7 @@ else
 fi
 #pkill -e -f create-lockscreen-image
 [ $kill_dunst -eq 1 ] && pkill -u "$USER" -USR2 dunst
+
+if [ $mpd_is_playing -eq 0 ]; then
+    mpc play
+fi

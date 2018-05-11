@@ -56,8 +56,8 @@ padding-left = 1
 padding-right = 1
 
 
-module-margin-left = 1
-module-margin-right = 2
+module-margin-left = 4
+module-margin-right = 4
 
 
 font-0 = Ubuntu:style=Regular:pixelsize=10;2
@@ -68,8 +68,8 @@ modules-left = i3 mpd
 ; window
 ;modules-center = date
 ; xwindow
-modules-right = pomodoro terminal monitor vpn filesystem load memory date powermenu
-
+modules-right = pomodoro terminal monitor vpn filesystem load memory date logout
+separator = "|"
 tray-position = right
 tray-padding = 1
 tray-maxsize = 16
@@ -107,7 +107,7 @@ type = custom/script
 exec =  [ -f /tmp/pomodoro_time ] && date -d@$(cat /tmp/pomodoro_time) -u +%M:%S 2>/dev/null || echo "Start" 
 interval = 5
 format-underline = ${colors.accent-dark2}
-format-prefix = " "
+format-prefix = "  "
 format-prefix-foreground = #5b
 click-left = bash ~/bin/pomodoro-timer &
 click-right = pkill -e -f pomodoro-timer
@@ -115,15 +115,18 @@ click-right = pkill -e -f pomodoro-timer
 [module/monitor]
 type = custom/script
 click-left = bash ~/.config/polybar/scripts/display-resolution.sh &
-exec = echo " "
+exec = echo ' '
 interval = 9000
-; format-underline = ${colors.accent-dark2}
-;format-prefix = " "
+format-underline = ${colors.accent-dark1}
+format-prefix = "  "
 
 [module/terminal]
 type=custom/script
 click-left = termite &
-exec = echo " "
+exec = echo ' '
+format-underline = ${colors.accent-light2}
+format-prefix = "  "
+
 interval = 9000
 
 
@@ -132,17 +135,8 @@ type=custom/script
 click-left = /usr/bin/xkill
 exec = df --output=pcent / -h | tail -1
 interval = 60
-;format-underline = ${colors.accent-light2}
-format-prefix = ""
-
-
-[module/dark-mode]
-type=custom/script
-click-left=toggle-dark
-# exec = cat ~/.dark-mode 2>/dev/null
-exec = dark_mode=$(cat ~/.dark_mode 2>/dev/null); if [ "$dark_mode" = "1" ]; then echo "Dark"; else echo "Light"; fi
-interval = 10
-format-underline = ${colors.accent-dark2}
+format-underline = ${colors.accent-light1}
+format-prefix = "   "
 
 
 [module/redshift]
@@ -276,7 +270,7 @@ format = <label>
 ;format = <label> <bar-used>
 ;label = "Mem:"
 ;label = RAM %gb_used%/%gb_total%
-label = Mem: %percentage_used%%
+label = %percentage_used%%
 ; Only applies if <bar-used> is used
 bar-used-indicator =
 bar-used-width = 7
@@ -287,7 +281,8 @@ bar-used-foreground-3 = #ff5555
 bar-used-fill =▮
 bar-used-empty =▮
 bar-used-empty-foreground = #444444
-
+format-underline = ${colors.accent-light1}
+format-prefix = "   "
 
 [module/swap]
 type=custom/script
@@ -301,8 +296,9 @@ format-prefix = "Swap free: "
 [module/load]
 type=custom/script
 interval = 10
-exec = cat /proc/loadavg | cut -f1-3 -d' '
-format-prefix = " "
+exec = cat /proc/loadavg | cut -f1 -d' '
+format-prefix = "   "
+format-underline = ${colors.accent-dark2}
 
 
 [module/wlan]
@@ -347,7 +343,8 @@ type=custom/script
 #type = internal/date
 interval = 30
 exec = date +"%a %x %R"
-;format-prefix = " "
+format-prefix = "   "
+format-underline = ${colors.accent-light2}
 ;format-prefix-foreground = ${colors.foreground}
 click-right = gsimplecal
 
@@ -435,6 +432,16 @@ ramp-3 = 
 ramp-4 = 
 
 ramp-foreground = ${colors.foreground}
+
+
+
+[module/logout]
+type = custom/script
+exec = echo " "
+interval = 20
+click-left = ~/bin/logout-dialog
+
+
 
 [module/powermenu]
 type = custom/menu

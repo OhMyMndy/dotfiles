@@ -64,6 +64,8 @@ PATH="$PATH:$HOME/.gem/bin"
 export GEM_HOME=$HOME/.gem
 export GEM_PATH=$HOME/.gem
 
+export GOPATH=$HOME/go
+
 export LESS="-RS"
 export TERMINAL=termite
 compctl -g "$HOME/.teamocil/*(:t:r)" teamocil

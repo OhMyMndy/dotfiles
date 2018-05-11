@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-if [ $UID -eq 0 ]; then
-    echo "Run this script as non root user please..."
+if [ $UID -ne 0 ]; then
+    echo "Run this script as root user please..."
     exit 99
 fi
 
@@ -76,14 +76,18 @@ function echo_message(){
 function base {
     add_repositories
 
+    setup_custom_services
+
     system_update
-    cat <<'EOL' | sed '/^$/d'| xargs -I {} sudo dnf install -y {}
+    cat <<'EOL' | sed '/^$/d'| xargs -I {} dnf install -y {}
+    -bluez
 @core
 @standard
 @hardware-support
 @base-x
 @firefox
 @fonts
+terminus-fonts-console
 @multimedia
 @networkmanager-submodules
 @printing
@@ -93,8 +97,10 @@ NetworkManager-openvpn-gnome
 dnf-plugins-core
 
 redhat-rpm-config
+dnf-plugin-system-upgrade
 rpmconf
 htop
+iotop
 
 google-chrome-stable
 mate-calc
@@ -105,6 +111,7 @@ system-config-printer
 
 i3
 i3lock
+wmctrl
 xterm
 zsh
 google-roboto-fonts
@@ -208,12 +215,13 @@ rofi
 vlc
 
 gnuplot
+ncmpcpp
 EOL
 
-sudo dnf remove gnome-calculator evince file-roller gedit gedit-plugins -y
+    dnf remove gnome-calculator evince file-roller gedit gedit-plugins gnucash -y
 
-    sudo localedef -i nl_BE -f UTF-8 nl_BE.UTF-8
-    cat <<'EOL' | sudo tee /etc/locale.conf
+    localedef -i nl_BE -f UTF-8 nl_BE.UTF-8
+    cat <<'EOL' | tee /etc/locale.conf
 LANG=en_US.UTF-8
 LANGUAGE="en_US.UTF-8"
 LC_CTYPE="en_US.UTF-8"
@@ -231,7 +239,7 @@ LC_IDENTIFICATION="nl_BE.UTF-8"
 
 EOL
 
-    cat <<'EOL' | sudo tee /etc/fonts/local.conf
+    cat <<'EOL' | tee /etc/fonts/local.conf
 <?xml version='1.0'?>
 <!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
 <fontconfig>
@@ -261,7 +269,7 @@ EOL
 </fontconfig>
 EOL
 
-    cat <<'EOL' | sudo tee /etc/sysctl.conf
+    cat <<'EOL' | tee /etc/sysctl.conf
 # sysctl settings are defined through files in
 # /usr/lib/sysctl.d/, /run/sysctl.d/, and /etc/sysctl.d/.
 #
@@ -281,73 +289,132 @@ net.ipv4.ip_forward=1
 EOL
 
 # @todo https://coderwall.com/p/66kbaw/adding-entries-to-resolv-conf-on-fedora
-    cat <<'EOL' | sudo tee /etc/resolvconf/resolv.conf.d/base
+    cat <<'EOL' | tee /etc/resolvconf/resolv.conf.d/base
 nameserver 1.1.1.1
 nameserver 1.0.0.1
 EOL
 
 
+    cat <<'EOL' | tee /etc/vconsole.conf
+KEYMAP="us"
+FONT="ter-v16n"
+EOL
 
-    sudo gem install json
-    sudo gem install rdoc
-    sudo gem install teamocil
 
-    sudo pip3 install udiskie
+    gem install json
+    gem install rdoc
+    gem install teamocil
 
+    pip3 install udiskie
+
+
+    # Fixes for pulseaudio
+    sed -E -i 's#.*autospawn.*#autospawn = yes#g' /etc/pulse/client.conf
+    pulseaudio -D
     # install polybar
-    sudo dnf install -y cmake @development-tools gcc-c++ i3-ipc jsoncpp-devel pulseaudio-libs-devel alsa-lib-devel wireless-tools-devel libmpdclient-devel libcurl-devel cairo-devel xcb-proto xcb-util-devel xcb-util-wm-devel xcb-util-image-devel
-    sudo dnf install -y pulseaudio-libs-devel xcb-util-xrm-devel
-    rm -rf /tmp/polybar
-    git clone --recursive https://github.com/jaagr/polybar /tmp/polybar
-    cd /tmp/polybar
-    mkdir build
-    cd build
-    cmake ..
-    sudo make install
+    which polybar >/dev/null 2>&1
+    if [ $? -ne 0 ]; then
+        dnf install -y cmake @development-tools gcc-c++ i3-ipc jsoncpp-devel pulseaudio-libs-devel alsa-lib-devel wireless-tools-devel libmpdclient-devel libcurl-devel cairo-devel xcb-proto xcb-util-devel xcb-util-wm-devel xcb-util-image-devel
+        dnf install -y pulseaudio-libs-devel xcb-util-xrm-devel
+        rm -rf /tmp/polybar
+        git clone --recursive https://github.com/jaagr/polybar /tmp/polybar
+        cd /tmp/polybar
+        mkdir build
+        cd build
+        cmake ..
+        make install
+    fi
     # end install Polybar
 
+    # install cli-visualizer
+    cd /tmp
+    dnf install -y fftw-devel ncurses-devel pulseaudio-libs-devel
+    rm -rf /tmp/cli-visualizer
+    git clone --recursive https://github.com/dpayne/cli-visualizer.git /tmp/cli-visualizer
+    cd /tmp/cli-visualizer
+    ./install.sh
+    # end install cli-visualizer
 
-    sudo usermod -a -G docker mandy
-    sudo groupadd power
-    sudo usermod -a -G power mandy
-    sudo usermod -a -G disk mandy
-    sudo chsh -s /bin/zsh mandy
-
-
-    sudo bash ~/dotfiles/installers/jetbrains-toolbox.sh
-    sudo bash ~/dotfiles/installers/xbanish.sh
-    sudo bash ~/dotfiles/installers/purevpn.sh
-
-    sudo systemctl enable lightdm
-    sudo systemctl start firewalld
-    virt-what | grep -q -i virtualbox && sudo dnf install -y VirtualBox-guest-additions
-
-    sudo dnf install -y https://download.teamviewer.com/download/linux/teamviewer.x86_64.rpm
-    sudo dnf install -y http://download.nomachine.com/download/6.0/Linux/nomachine_6.0.78_1_x86_64.rpm
-    sudo dnf install -y http://rpmfind.net/linux/mageia/distrib/cauldron/x86_64/media/core/release/dunst-1.3.1-1.mga7.x86_64.rpm
+    usermod -a -G docker mandy
+    groupadd power
+    usermod -a -G power mandy
+    usermod -a -G disk mandy
+    chsh -s /bin/zsh mandy
 
 
+    which jetbrains-toolbox >/dev/null 2>&1
+    if [ $? -ne 0 ]; then
+        bash ~/dotfiles/installers/jetbrains-toolbox.sh
+    fi
+
+    which xbanish >/dev/null 2>&1
+    if [ $? -ne 0 ]; then
+        bash ~/dotfiles/installers/xbanish.sh
+    fi
+
+    which purevpn >/dev/null 2>&1
+    if [ $? -ne 0 ]; then
+        bash ~/dotfiles/installers/purevpn.sh
+    fi
+
+    systemctl enable lightdm
+    systemctl start firewalld
+    virt-what | grep -q -i virtualbox && dnf install -y VirtualBox-guest-additions
+
+    dnf install -y https://download.teamviewer.com/download/linux/teamviewer.x86_64.rpm
+    dnf install -y http://download.nomachine.com/download/6.1/Linux/nomachine_6.1.6_9_x86_64.rpm
+    dnf install -y http://rpmfind.net/linux/mageia/distrib/cauldron/x86_64/media/core/release/dunst-1.3.1-1.mga7.x86_64.rpm
+    dnf install $(curl -s https://api.github.com/repos/saenzramiro/rambox/releases/latest | jq -r ".assets[] | select(.name) | select(.browser_download_url | test(\"64.*rpm$\")) | .browser_download_url") -y
+
+
+    mkdir -p ~/.config/mpd
+    touch ~/.config/mpd/database
     # Create swap file
     # create_swap_file 4 /swapfile
-    # echo "/swapfile none swap sw 0 0" | sudo tee -a /etc/fstab
+    # echo "/swapfile none swap sw 0 0" | tee -a /etc/fstab
+}
+
+
+function setup_custom_services {
+
+cat << EOF | tee /etc/systemd/system/wakelock.service
+# file /etc/systemd/system/wakelock.service
+
+[Unit]
+Description=Lock the screen on resume from suspend
+
+[Service]
+User=victor
+Type=forking
+Environment=DISPLAY=:0
+ExecStart=/usr/bin/i3lock
+
+[Install]
+WantedBy=sleep.target
+WantedBy=suspend.target
+EOF
+
+systemctl enable wakelock
+systemctl start wakelock
+
 }
 
 function setup_firewall {
-    sudo firewall-cmd --zone=public --permanent --add-service=http
-    sudo firewall-cmd --zone=public --permanent --add-service=https
-    sudo firewall-cmd --zone=public --permanent --add-service=mysql
+    firewall-cmd --zone=public --permanent --add-service=http
+    firewall-cmd --zone=public --permanent --add-service=https
+    firewall-cmd --zone=public --permanent --add-service=mysql
 
-    sudo firewall-cmd --permanent --new-service=xdebug
-    sudo firewall-cmd --zone=public --permanent --add-service=xdebug
+    firewall-cmd --permanent --new-service=xdebug
+    firewall-cmd --zone=public --permanent --add-service=xdebug
 
-    sudo firewall-cmd --permanent --service=xdebug --add-port=9000/tcp
-    sudo firewall-cmd --permanent --service=xdebug --add-port=9000/udp
-    sudo firewall-cmd --reload
+    firewall-cmd --permanent --service=xdebug --add-port=9000/tcp
+    firewall-cmd --permanent --service=xdebug --add-port=9000/udp
+    firewall-cmd --reload
 }
 
 function add_repositories {
     # Persist extra repos and import keys.
-    cat << EOF | sudo tee /etc/yum.repos.d/google-chrome.repo
+    cat << EOF | tee /etc/yum.repos.d/google-chrome.repo
 [google-chrome]
 name=google-chrome
 baseurl=http://dl.google.com/linux/chrome/rpm/stable/x86_64
@@ -356,23 +423,22 @@ gpgcheck=1
 gpgkey=https://dl-ssl.google.com/linux/linux_signing_key.pub
 EOF
 
-    sudo rpm --import https://dl-ssl.google.com/linux/linux_signing_key.pub
+    rpm --import https://dl-ssl.google.com/linux/linux_signing_key.pub
 
-    sudo rpm -ivh http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-27.noarch.rpm
-    sudo rpm -ivh http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-27.noarch.rpm
-    sudo rpm -ivh https://rpms.remirepo.net/fedora/remi-release-27.rpm
-    sudo dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
-    sudo dnf install http://mirror.yandex.ru/fedora/russianfedora/russianfedora/free/fedora/releases/27/Everything/x86_64/os/russianfedora-free-release-27-1.noarch.rpm  -y
-    sudo dnf install $(curl -s https://api.github.com/repos/saenzramiro/rambox/releases/latest | jq -r ".assets[] | select(.name) | select(.browser_download_url | test(\"64.*rpm$\")) | .browser_download_url") -y
-    sudo dnf install https://www.rpmfind.net/linux/sourceforge/u/un/unitedrpms/27/x86_64/msttcorefonts-2.5-4.fc27.noarch.rpm -y
-    sudo dnf config-manager --set-enabled remi-php72
-    sudo dnf copr enable yaroslav/i3desktop -y
-    sudo rpm --import https://dl.tvcdn.de/download/linux/signature/TeamViewer2017.asc
+    rpm -ivh http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-27.noarch.rpm
+    rpm -ivh http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-27.noarch.rpm
+    rpm -ivh https://rpms.remirepo.net/fedora/remi-release-27.rpm
+    dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+    dnf install http://mirror.yandex.ru/fedora/russianfedora/russianfedora/free/fedora/releases/27/Everything/x86_64/os/russianfedora-free-release-27-1.noarch.rpm  -y
+    dnf install https://www.rpmfind.net/linux/sourceforge/u/un/unitedrpms/27/x86_64/msttcorefonts-2.5-4.fc27.noarch.rpm -y
+    dnf config-manager --set-enabled remi-php72
+    dnf copr enable yaroslav/i3desktop -y
+    rpm --import https://dl.tvcdn.de/download/linux/signature/TeamViewer2017.asc
 }
 
 function system_update {
-    sudo package-cleanup -y --oldkernels --count=2
-    sudo dnf update -y --refresh
+    package-cleanup -y --oldkernels --count=2
+    dnf update -y --refresh
 }
 
 
@@ -391,56 +457,56 @@ function all {
 
 function multimedia {
     # Audio
-    sudo dnf install -y ffmpeg flacon shntool cuetools
-    sudo dnf install -y mpc mpd rhythmbox
+    dnf install -y ffmpeg flacon shntool cuetools
+    dnf install -y mpc mpd mpv rhythmbox
     # Photo
-#    sudo dnf install -y gimp darktable
+#    dnf install -y gimp darktable
 
     # Video
-    sudo dnf install -y vlc
+    dnf install -y vlc
 
-    sudo dnf install -y @multimedia
+    dnf install -y @multimedia
 
     # Uninstall previously installed packages
-    sudo dnf remove -y gimp darktable
+    dnf remove -y gimp darktable
 }
 
 function virtualization {
-    sudo dnf install -y VirtualBox
+    dnf install -y VirtualBox
 }
 
 function wine {
-    sudo dnf install -y wine playonlinux
+    dnf install -y wine playonlinux
 }
 
 
 function openbox {
-    sudo dnf install -y openbox openbox-theme-mistral-thin openbox-theme-mistral-thin-dark obconf
+    dnf install -y openbox openbox-theme-mistral-thin openbox-theme-mistral-thin-dark obconf
 }
 
 function cinnamon {
-    sudo dnf install -y cinnamon-desktop
+    dnf install -y cinnamon-desktop
 }
 
 function networkutilities {
-    sudo dnf install -y nmap tcpdump ncdu
+    dnf install -y nmap tcpdump ncdu
 
 }
 
 function development {
-    sudo dnf install -y docker-ce docker-compose
-    sudo systemctl enable docker
+    dnf install -y docker-ce docker-compose
+    systemctl enable docker
 
-    sudo dnf install -y meld filezilla shellcheck
+    dnf install -y meld filezilla ShellCheck
     # PHP
-    sudo dnf install -y composer php-pecl-imagick
+    dnf install -y composer php-pecl-imagick
     
-    sudo pip3 install mycli
-    sudo pip3 install httpie
+    pip3 install mycli
+    pip3 install httpie
     
     # The fuck
-    sudo dnf install -y python3-devel
-    sudo pip3 install thefuck
+    dnf install -y python3-devel
+    pip3 install thefuck
     
     
         
@@ -448,39 +514,42 @@ function development {
     # dry is a terminal application to manage and monitor Docker containers.
     # See https://moncho.github.io/dry/
     if [ ! -f /usr/local/bin/dry ]; then
-        sudo curl -sSf https://moncho.github.io/dry/dryup.sh | sh
-        sudo chmod 755 /usr/local/bin/dry
-        sudo chmod +x /usr/local/bin/dry
+        curl -sSf https://moncho.github.io/dry/dryup.sh | sh
+        chmod 755 /usr/local/bin/dry
+        chmod +x /usr/local/bin/dry
     fi
     
     
 
 
     # Sublime text
-    sudo rpm -v --import https://download.sublimetext.com/sublimehq-rpm-pub.gpg
-    sudo dnf config-manager --add-repo https://download.sublimetext.com/rpm/stable/x86_64/sublime-text.repo
-    sudo dnf install sublime-text -y
+    rpm -v --import https://download.sublimetext.com/sublimehq-rpm-pub.gpg
+    dnf config-manager --add-repo https://download.sublimetext.com/rpm/stable/x86_64/sublime-text.repo
+    dnf install sublime-text -y
 
     
-    composer global require "acacha/llum"
-    composer global require "acacha/adminlte-laravel-installer"
-    composer global require "symfony/console"
-    composer global require "jolicode/jolinotif"
-    composer global require "squizlabs/php_codesniffer"
+    su mandy bash -c 'composer global require "acacha/llum"'
+    su mandy bash -c 'composer global require "acacha/adminlte-laravel-installer"'
+    su mandy bash -c 'composer global require "symfony/console"'
+    su mandy bash -c 'composer global require "jolicode/jolinotif"'
+    su mandy bash -c 'composer global require "squizlabs/php_codesniffer"'
     
-    
+
+
+    mkdir -p $HOME/go
     # Atom
-#    sudo dnf install -y $(curl -sL "https://api.github.com/repos/atom/atom/releases/latest" | grep "https.*atom.x86_64.rpm" | cut -d '"' -f 4)
+#    dnf install -y $(curl -sL "https://api.github.com/repos/atom/atom/releases/latest" | grep "https.*atom.x86_64.rpm" | cut -d '"' -f 4)
 
 }
 
 function developer_tools {
-    sudo dnf install -y fedora-packager @development-tools rpmlint
-    sudo usermod -a -G mock $USER
+    dnf install -y fedora-packager @development-tools rpmlint
+    usermod -a -G mock $USER
 
     rpmdev-setuptree
     cd ~/rpmbuild/SOURCES
     wget http://ftp.gnu.org/gnu/hello/hello-2.10.tar.gz
+
 }
 
 # Welcome message

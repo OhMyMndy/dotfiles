@@ -3,25 +3,6 @@
 # Configure installation method
 install
 
-url --mirrorlist="https://mirrors.fedoraproject.org/mirrorlist?repo=fedora-27&arch=x86_64"
-
-repo --name=fedora-updates --mirrorlist="https://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-f27&arch=x86_64" --cost=100
-
-repo --name=rpmfusion-free --mirrorlist="https://mirrors.rpmfusion.org/mirrorlist?repo=free-fedora-27&arch=x86_64" --includepkgs=rpmfusion-free-release
-
-repo --name=rpmfusion-free-updates --mirrorlist="https://mirrors.rpmfusion.org/mirrorlist?repo=free-fedora-updates-released-27&arch=x86_64" --includepkgs=rpmfusion-free-release
-
-
-repo --name=google-chrome --baseurl="http://dl.google.com/linux/chrome/rpm/stable/x86_64"
-
-repo --name=docker-ce --baseurl="https://download.docker.com/linux/fedora/27/x86_64/stable/"
-
-# zerombr
-
-# Configure Boot Loader
-# bootloader --location=mbr --driveorder=sda
-
-
 # Configure Firewall
 firewall --enabled --ssh
 
@@ -55,15 +36,6 @@ text
 
 # Package Selection
 %packages
--bluez
-@core
-@standard
-@hardware-support
-@base-x
-curl
-git
-ruby
-ruby-devel
 %end
 
 # Post-installation Script
