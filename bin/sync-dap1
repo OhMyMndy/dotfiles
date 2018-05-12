@@ -27,11 +27,13 @@ end
 
 
 excludes="--exclude 'to_import' --exclude '*.bak' --exclude 'New Wave' --exclude '*.DS_Store' --exclude '.Trash-1000'"
-cmd="#{sudo} rsync -hrt #{excludes} --progress #{hostname}/tank/media/music/ #{remote_volume}"
+cmd="#{sudo} rsync -hrt --delete #{excludes} --progress #{hostname}/tank/media/music/ #{remote_volume}"
+
 puts cmd
+cmd = cmd + " | awk '/^(Mpd)?Playlists/ {getline; next} {print}'"
+
 system cmd
 
-puts "#{remote_volume}/Playlists"
 Dir.chdir("#{remote_volume}/Playlists")
 playlists = Dir.glob('**/*.m3u*')
 

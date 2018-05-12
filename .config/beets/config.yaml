@@ -31,4 +31,4 @@ smartplaylist:
           query: ['album:"punk goes pop"', 'punkgoespop:1']
 
         - name: playlists/guitar/$tuning.m3u8
-          que: ['guitar:1']
+          query: ['guitar:1']

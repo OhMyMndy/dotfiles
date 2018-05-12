@@ -2,8 +2,8 @@
 
 set -e
 
-cueFile=$1
-flacFile=$2
+cueFile="$1"
+flacFile="$2"
 
 
 if [ $(echo $cueFile | grep -c -o '\.cue$') == '0' ]; then
@@ -12,8 +12,11 @@ if [ $(echo $cueFile | grep -c -o '\.cue$') == '0' ]; then
 
 fi
 
-if [ $(echo $flacFile | grep -c -o '\.flac$') == '0' ]; then
-    echo "First argument should be a flac file"
+if [ $(echo $flacFile | grep -q '\.flac$' ; echo $?) != '0' ] && [ $(echo $flacFile | grep -q '\.ape$'; echo $?) != '0' ]; then
+    echo $(echo $flacFile | grep -c -o '\.ape$')
+    echo $?
+    echo $flacFile
+    echo "Second argument should be a flac or an ape file"
     exit 3
 
 fi
@@ -24,6 +27,6 @@ cd "$dir"
 
 shnsplit -f "$cueFile" -o flac "$flacFile"
 mkdir -p flac; rm -f flac/split*.flac; mv split*.flac flac
-set -x
-iconv -f WINDOWS-1251 -t UTF-8 "$cueFile" > "$cueFile.new.cue"
-cuetag.sh "$cueFile.new.cue" flac/split-*.flac
+#iconv -f WINDOWS-1251 -t UTF-8 "$cueFile" > "$cueFile.new.cue"
+#cuetag.sh "$cueFile.new.cue" flac/split-*.flac
+cuetag.sh "$cueFile" flac/split-*.flac
