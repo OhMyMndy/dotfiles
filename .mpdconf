@@ -14,8 +14,8 @@ sticker_file       "/home/mandy/.config/mpd/sticker.sql"
 
 
 audio_output {
-    type		"alsa"
-    name		"Alsa"
+    type            "pulse"
+    name            "pulse audio"
 }
 
 audio_output {

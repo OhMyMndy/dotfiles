@@ -27,6 +27,5 @@ cd "$dir"
 
 shnsplit -f "$cueFile" -o flac "$flacFile"
 mkdir -p flac; rm -f flac/split*.flac; mv split*.flac flac
-#iconv -f WINDOWS-1251 -t UTF-8 "$cueFile" > "$cueFile.new.cue"
-#cuetag.sh "$cueFile.new.cue" flac/split-*.flac
-cuetag.sh "$cueFile" flac/split-*.flac
+iconv -f WINDOWS-1251 -t UTF-8 "$cueFile" > "$cueFile.new.cue"
+cuetag.sh "$cueFile.new.cue" flac/split-*.flac

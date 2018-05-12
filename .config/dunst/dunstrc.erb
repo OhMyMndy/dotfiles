@@ -1,6 +1,6 @@
 [global]
     font = "<%= dunst['global']['font'] %>"
-    allow_markup = yes
+    markup = yes
     format = "<%= dunst['global']['format'] %>"
     sort = yes
     indicate_hidden = yes
@@ -23,15 +23,13 @@
     startup_notification = false
     # https://github.com/knopwob/dunst/issues/26#issuecomment-36159395
     icon_position = left
-    icon_folders = /usr/share/icons/gnome/256x256/
+    icon_path = /usr/share/icons/gnome/256x256/
     max_icon_size = 32
 
     # Browser for opening urls in context menu.
     browser = /usr/bin/chromium
-
-[frame]
-    width = <%= dunst['frame']['width'] %>
-    color = "<%= dunst['frame']['color'] %>"
+    frame_width = <%= dunst['frame']['width'] %>
+    frame_color = "<%= dunst['frame']['color'] %>"
 
 [shortcuts]
     close = ctrl+space

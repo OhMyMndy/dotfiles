@@ -1,10 +1,20 @@
 #!/bin/bash
-CURRENT=$(df / | grep / | awk '{ print $5}' | sed 's/%//g')
-THRESHOLD=93
+partitions=$(df)
+threshold=93
 
-echo "Current:  ${CURRENT}"
-echo "Treshold: ${THRESHOLD}"
+set -e
 
-if [ "$CURRENT" -gt "$THRESHOLD" ] ; then
-    notify-send -i /usr/share/icons/gnome/256x256/status/dialog-warning.png 'Disk Space Alert' "Your root partition remaining free space is critically low. Used: $CURRENT%"
-fi
+echo "Treshold: ${threshold}"
+
+IFS=$'\n'
+for partition in $partitions; do
+	mount_point=$(echo $partition | awk '{print $1}')
+	percentage=$(echo $partition | awk '{print $5}' | sed 's/%//g')
+	partition=$(echo $partition | awk '{print $6}')
+	echo "percentage $percentage partition $partition mount point $mount_point"
+
+	if [ $percentage -gt $threshold ] ; then
+	    notify-send -i /usr/share/icons/gnome/256x256/status/dialog-warning.png 'Disk Space Alert' "Partition $partition at $mount_point remaining free space is critically low. Used: $percentage%"
+	fi
+done
+

@@ -25,14 +25,14 @@ font pango: <%= i3['font'] %>
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec termite
+bindsym $mod+Return exec bash ~/bin/i3-sensible-terminal
 
 # kill focused window
 bindsym $mod+Shift+q kill
 bindsym ctrl+Shift+q kill
 
 # start dmenu (a program launcher)
-bindsym $mod+d exec "rofi -show"
+bindsym $mod+d exec "rofi -show || dmenu_run"
 bindsym $alt+Tab exec "rofi -show"
 
 # change focus
@@ -91,17 +91,21 @@ bindsym $mod+a focus parent
 # Execute xkill
 bindsym $mod+Escape exec "xterm -name floating -geometry 40x4 -e xkill"
 bindsym $mod+F1 exec "xterm -name floating -geometry 80x40 +ls -e '~/bin/get_commands'"
+bindsym $mod+F2 exec "xterm -name floating -geometry 120x40 +ls -e 'echo xprop; xprop; read a'"
+bindsym $mod+F3 exec "xterm -name floating -geometry 140x60 +ls -e 'bash'"
+bindsym $mod+F4 exec "xterm -name floating -geometry 140x60 +ls -e 'bash -c \\"htop\\"'"
 
-set $workspace1 "1"
-set $workspace2 "2"
-set $workspace3 "3"
-set $workspace4 "4"
-set $workspace5 "5"
-set $workspace6 "6"
-set $workspace7 "7"
-set $workspace8 "8"
-set $workspace9 "9"
-set $workspace10 "10"
+set $workspace1 "1: "
+set $workspace2 "2: "
+set $workspace3 "3: "
+set $workspace4 "4: "
+set $workspace5 "5: "
+set $workspace6 "6: "
+set $workspace7 "7: "
+set $workspace8 "8: "
+set $workspace9 "9: "
+set $workspace10 "10: "
+
 
 # move focused container to workspace
 bindsym $mod+Shift+1 move container to workspace $workspace1
@@ -162,7 +166,8 @@ bindsym $mod+Shift+i exec "tmp=$(mktemp);tmp1=$(mktemp);ruby ~/dotfiles/install.
 bindsym $mod+Shift+p exec bash ~/bin/restart-polybar
 
 # exit i3 (logs you out of your X session)
-bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+bindsym $mod+Shift+e exec ~/bin/logout-dialog
+#"i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -184,9 +189,9 @@ mode "resize" {
         bindsym Right resize grow width 10 px
 
         bindsym Shift+Left resize shrink width 50 px
-        bindsym Shift+Down resize grow height 50 px 
-        bindsym Shift+Up resize shrink height 50 px 
-        bindsym Shift+Right resize grow width 50 px 
+        bindsym Shift+Down resize grow height 50 px
+        bindsym Shift+Up resize shrink height 50 px
+        bindsym Shift+Right resize grow width 50 px
 
 
         # back to normal: Enter or Escape
@@ -197,6 +202,10 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 
+# Variables
+set $Locker exec bash ~/.config/i3/scripts/lock
+
+
 # window colors
 #                       border       background   text         indicator
 client.focused          <%= i3['client']['focused'] %>
@@ -205,30 +214,27 @@ client.focused_inactive <%= i3['client']['focused_inactive'] %>
 client.urgent           <%= i3['client']['urgent'] %>
 
 # Default workspaces
-assign [class=".*Slack$"]                                                               $workspace6
-assign [class="Rambox"]                                                                 $workspace6
-assign [class="Thunderbird"]                                                            $workspace6
-#assign [class="Google-chrome"]                                                         $workspace1
-#assign [class="Chromium"]                                                              $workspace1
-assign [class="Gnome-terminal"]                                                         $workspace2
-assign [class="jetbrains-phpstorm"]                                                     $workspace4
+assign [class="Google-chrome"]                                                          $workspace1
+assign [class="Chromium"]                                                               $workspace1
 assign [class="Vmplayer"]                                                               $workspace8
-assign [class=".*Wunderlist$"]                                                          $workspace7
-assign [class=".*1password"]                                                            $workspace7
-assign [class="Thunar"]                                                                 $workspace3
-assign [class="KeePass2"]                                                               $workspace5
-assign [class="KeeWeb"]                                                                 $workspace5
 assign [class="TeamViewer"]                                                             $workspace8
+assign [class=".*phpstorm"]                                                             $workspace4
+assign [class="jetbrains-idea-ce"]                                                      $workspace9
+assign [class="Rambox"]                                                                 $workspace6
+assign [class="Thunar"]                                                                 $workspace3
+assign [class="Atom"]                                                                   $workspace9
+assign [class="Termite"]                                                                $workspace2
 
+
+hide_edge_borders smart
 
 # For windows
-for_window [class=".*"]                                                                 title_format " %title"
+for_window [class=".*"]                                                                 title_format " %title", border normal <%= i3['border'] %>
 for_window [class="Yad"]                                                                floating enable
 for_window [class="mpv"]                                                                floating enable
 for_window [instance=".*floating.*"]                                                    floating enable
-for_window [title=".*Wunderlist$"]                                                      move container to workspace $workspace7
-for_window [title=".*Slack$"]                                                           move container to workspace $workspace6
-for_window [class="Rambox"]                                                             move container to workspace $workspace6
+for_window [title=".*floating.*"]                                                       floating enable
+
 for_window [window_role="pop-up"]                                                       floating enable
 for_window [window_role="bubble"]                                                       floating enable
 for_window [window_role="task_dialog"]                                                  floating enable
@@ -236,38 +242,58 @@ for_window [window_role="Preferences"]                                          
 for_window [window_type="dialog"]                                                       floating enable
 for_window [window_type="menu"]                                                         floating enable
 for_window [class="TeamViewer"]                                                         floating enable
-# Float IntelliJ update window
-for_window [class="sun-awt-X11-XDialogPeer"]                                            floating enable
-for_window [class="com-intellij-updater-Runner"]                                        floating enable
-for_window [class="Gloobus-preview"]                                                    floating enable, border none
+for_window [class=".*1password.com"]                                                    floating disable
+for_window [class="wunderlist.com"]                                                     floating disable
+
+
 # source: https://github.com/Airblader/dotfiles-manjaro/blob/master/.i3/config
 #for_window [class="(?i)VirtualBox" title="(?i)Manager"]                                floating enable
 #for_window [class="(?i)VirtualBox"]                                                    floating enable
-for_window [class="(?i).*chrome.*"]                                                     border pixel <%= i3['border'] %>
-for_window [class="(?i).*chromium.*"]                                                   border pixel <%= i3['border'] %>
-for_window [class="(?i).*xterm.*"]                                                      border pixel <%= i3['border'] %>
-for_window [class="(?i).*termite.*"]                                                    border pixel <%= i3['border'] %>
+
+for_window [class="(?i).*xterm.*"]                                                      border pixel 0
+for_window [class="(?i).*termite.*"]                                                    border pixel 0
 for_window [class="(?i).*jetbrains.*"]                                                  border pixel <%= i3['border'] %>
+for_window [class="Rambox"]                                                             border pixel 0
+for_window [class="Gedit"]                                                              border pixel <%= i3['border'] %>
+for_window [class="Gnome-calculator"]                                                   border pixel 0
+for_window [class="Gnome-disk"]                                                         border pixel <%= i3['border'] %>
+for_window [class="File-roller"]                                                        border pixel 0
+#for_window [class="Remmina"]                                                            border pixel 0
+for_window [class="Xfce4-terminal"]                                                     border pixel <%= i3['border'] %>
 
 
+# Float IntelliJ update window
+for_window [class="sun-awt-X11-XDialogPeer"]                                            floating enable, border normal <%= i3['border'] %>
+for_window [class="sun-awt-X11-XWindowPeer"]                                            floating enable, border normal <%= i3['border'] %>
+for_window [class="com-intellij-updater-Runner"]                                        floating enable, border pixel 0
+for_window [class="Gloobus-preview"]                                                    floating enable, border pixel 0
+for_window [class="Nxclient.bin"]                                                       floating enable, border pixel <%= i3['border'] %>
+for_window [class="Nxplayer.bin"]                                                       floating enable, border pixel <%= i3['border'] %>
 
-# Execs
-exec --no-startup-id redshift
-exec --no-startup-id udiskie
-exec --no-startup-id rambox
-exec --no-startup-id flameshot
 
 # Exec always
-exec_always --no-startup-id killall imwheel; while pgrep -x imwheel >/dev/null; do sleep 1; done; imwheel
-exec_always --no-startup-id killall parcellite; while pgrep -x parcellite >/dev/null; do sleep 1; done; parcellite
-exec_always --no-startup-id killall nm-applet; while pgrep -x nm-applet >/dev/null; do sleep 1; done; nm-applet
-exec_always --no-startup-id bash ~/bin/restart-polybar
-exec_always --no-startup-id killall dunst; while pgrep -x dunst >/dev/null; do sleep 1; done; dunst
-exec_always --no-startup-id bash -c "source ~/.functions; setRandomWallpaper"
-#exec_always --no-startup-id killall compton; while pgrep -x compton >/dev/null; do sleep 1; done; compton --config ~/.config/compton.conf -b --dbe
-exec_always --no-startup-id killall xbanish; while pgrep -x xbanish >/dev/null; do sleep 1; done; xbanish
-exec_always --no-startup-id killall volumeicon; while pgrep -x volumeicon >/dev/null; do sleep 1; done; volumeicon
-exec_always --no-startup-id killall synergys; while pgrep -x synergys >/dev/null; do sleep 1; done; synergys -c ~/.synergy.conf
+exec_always --no-startup-id bash ~/bin/restart-polybar || xfce4-panel &
+exec_always --no-startup-id killall dunst; while pgrep -x dunst >/dev/null; do sleep 1; done; dunst &
+exec_always --no-startup-id bash -c "source ~/.functions; setWallpaper"
+exec_always --no-startup-id sh -c "pgrep -x xbanish; [ \$? -eq 1 ] && xbanish &"
+exec_always --no-startup-id sh -c "pgrep -x pasystray; [ \$? -eq 1 ] && pasystray &"
+exec_always --no-startup-id sh -c "pgrep -x pb-for-desktop; [ \$? -eq 1 ] && pb-for-desktop &"
+exec_always --no-startup-id sh -c "pgrep -x nm-applet; [ \$? -eq 1 ] && nm-applet &"
+exec_always --no-startup-id sh -c "pgrep -x parcellite; [ \$? -eq 1 ] && parcellite &"
+exec_always --no-startup-id sh -c "pgrep -x imwheel; [ \$? -eq 1 ] && imwheel &"
+exec_always --no-startup-id killall synergys; while pgrep -x synergys >/dev/null; do sleep 1; done; synergys -c ~/.synergy.conf &
+exec_always --no-startup-id killall notify-server; while pgrep -x notify-server >/dev/null; do sleep 1; done; notify-server &
+
+exec_always --no-startup-id sh -c "pgrep -x rambox; [ \$? -eq 1 ] && rambox &"
+exec_always --no-startup-id sh -c "pgrep -x xfce4-terminal; [ \$? -eq 1 ] && xfce4-terminal -e byobu"
+exec_always --no-startup-id sh -c "pgrep -x thunar; [ \$? -eq 1 ] && thunar &"
+exec_always --no-startup-id sh -c "pgrep -x shutter; [ \$? -eq 1 ] && shutter --min_at_startup &"
+#exec_always --no-startup-id sh -c "pgrep -x jetbrains-toolbox ; [ \$? -eq 1 ] && jetbrains-toolbox &"
+#exec_always --no-startup-id sh -c "pgrep -x unclutter ; [ \$? -eq 1 ] && unclutter -idle 2 -jitter 5 -noevents -root &"
+exec_always --no-startup-id sh -c "pgrep -x redshift-gtk ; [ \$? -eq 1 ] && redshift-gtk &"
+exec_always --no-startup-id sh -c "pgrep -x udiskie ; [ \$? -eq 1 ] && udiskie --tray --use-udisks2 &"
+exec_always --no-startup-id sh -c "pgrep -x chrome ; [ \$? -eq 1 ] && google-chrome &"
+
 
 #exec_always --no-startup-id pkill -f resolution-changed; bash ~/bin/resolution-changed ~/bin/restart-polybar
 exec_always --no-startup-id bash "$HOME/.screenlayout/$(hostname).sh"
@@ -275,10 +301,10 @@ exec_always --no-startup-id bash "$HOME/.screenlayout/$(hostname).sh"
 # Custom bindsym
 bindsym $mod+Shift+greater move workspace to output right
 bindsym $mod+Shift+less move workspace to output left
-bindsym Scroll_Lock exec bash ~/.config/i3/scripts/lock
-bindsym $mod+Shift+o exec ruby ~/bin/copy-tmux-sidebar-command.rb
-bindsym Print exec flameshot gui
-bindsym $mod+Print exec flameshot full -p ~/Pictures/ -c
+bindsym Scroll_Lock exec $Locker
+bindsym $mod+Shift+Escape exec $Locker
+bindsym Print exec shutter -f
+# bindsym $mod+Print exec flameshot full -p ~/Screenshots/ -c
 
 # Pulse Audio controls
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume $(pactl list short sinks | grep alsa_output | cut -f1) +2% #increase sound volume
@@ -302,11 +328,11 @@ bindsym $mod+ctrl+p exec mpc next
 bindsym XF86MonBrightnessUp exec xbacklight -inc 20 # increase screen brightness
 bindsym XF86MonBrightnessDown exec xbacklight -dec 20 # decrease screen brightness
 
+<% if i3['gaps']['enabled'] %>
 # Gaps
 gaps inner <%= i3['gaps']['inner'] %>
 gaps outer <%= i3['gaps']['outer'] %>
-
-# for_window [class="^.*"] border pixel <%= i3['border'] %>
+<% end %>
 
 # new_float none
 

@@ -53,20 +53,16 @@ class Default
 
     def configuration()
 
-      # @monospace_font = "FuraMono Nerd Font Mono"
-      #@monospace_font = "RobotoMono Nerd Font"
-      #@monospace_font = "ProFontIIx Nerd Font Mono"
-      #@monospace_font = "mononoki Nerd Font"
-      @monospace_font = "Hack Nerd Font Mono"
-      #@monospace_font = "SpaceMono Nerd Font Mono"
+      #@monospace_font = "Hack Nerd Font Mono"
+      @monospace_font = "Ubuntu Mono Nerd Font"
       @monospace_font_style = "Regular"
-      @monospace_font_size = 10;
+      @monospace_font_size = 11;
 
-      @normal_font = "Roboto"
+      @normal_font = "Ubuntu"
       @normal_font_style = "Regular"
       @normal_font_size = 10;
 
-      @normal_font_alternative = "Roboto"
+      @normal_font_alternative = @normal_font
       @normal_font_style_alternative = "Regular"
       @normal_font_size_alternative = 10;
 
@@ -77,10 +73,48 @@ class Default
           "normal_alternative"  => Font.new(@normal_font_alternative, @normal_font_size_alternative, @normal_font_style_alternative)
       }
 
+      available_themes = %x(for i in $(ls /usr/share/themes/); do echo ${i%%/}; done)
+      available_themes = available_themes.split("\n")
+
+      available_icons = %x(for i in $(ls /usr/share/icons/); do echo ${i%%/}; done)
+      available_icons = available_icons.split("\n")
+
       @gtk = {
-          "theme"           => "Arc-Darker",
-          "icon_theme"      => "Papirus",
+          "theme"           => "Numix",
+          "icon_theme"      => "Numix",
+          "cursor_theme"    => "DMZ-White"
       }
+
+      available = available_themes.select {|e| e == @gtk['theme']}
+      if available.length == 0
+        @gtk['theme'] = 'Adwaita'
+      end
+
+      available = available_icons.select {|e| e == @gtk['icon_theme']}
+      if available.length == 0
+        available = available_icons.select {|e| e == 'Numix'}
+        if available.length == 1
+          @gtk['icon_theme'] = 'Numix'
+        else
+          @gtk['icon_theme'] = 'Adwaita'
+        end
+      end
+
+
+
+      available = available_icons.select {|e| e == @gtk['cursor_theme']}
+      if available.length == 0
+        available = available_icons.select {|e| e == 'dmz'}
+        if available.length == 1
+          @gtk['cursor_theme'] = 'dmz'
+        end
+        available = available_icons.select {|e| e == 'DMZ-White'}
+        if available.length == 1
+          @gtk['cursor_theme'] = 'DMZ-White'
+        end
+      end
+
+      puts @gtk.to_s
 
       @dunst = {
           "global"          => {
@@ -113,6 +147,9 @@ class Default
           },
       }
 
+      %x(i3 --version | grep gaps)
+      i3gaps_enabled = $?.exitstatus === 0
+      puts "i3 gaps: " + i3gaps_enabled.to_s
       @i3 = {
           "font" => @fonts["normal"].to_gtk,
           "border" => 2,
@@ -120,11 +157,12 @@ class Default
               "focused"           => I3Colors.new(@colors['COLOR16'], @colors['COLOR16'], @colors['FOREGROUND'], @colors['COLOR4']),
               "unfocused"         => I3Colors.new(@colors['COLOR0'], @colors['COLOR0'], @colors['FOREGROUND'], @colors['COLOR4']),
               "focused_inactive"  => I3Colors.new(@colors['COLOR0'], @colors['COLOR0'], @colors['FOREGROUND'], @colors['COLOR4']),
-              "urgent"            => I3Colors.new(@urgent_color, @urgent_color, @colors['COLOR7'], @colors['COLOR4']),
+              "urgent"            => I3Colors.new(@urgent_color, @urgent_color, @colors['COLOR0'], @colors['COLOR4']),
           },
           "gaps" => {
               "inner" => 2,
-              "outer" => 0
+              "outer" => 0,
+              "enabled" => i3gaps_enabled
           },
       }
 
@@ -135,13 +173,13 @@ class Default
           "highlight_color"      => @highlight_color,
           "urgent_color"         => @urgent_color,
           "inactive_color"       => @inactive_color,
-          "height"               => "28px",
+          "height"               => "24px",
           "padding"              => 1,
           "wm_padding"           => 3,
           "fonts"                => [
-              @fonts["normal"].to_polybar(12, -2),
-              @fonts["normal_alternative"].to_polybar(12, -2),
-              @fonts["monospace"].to_polybar(17, 0)
+              @fonts["normal"].to_polybar(@normal_font_size, 2),
+              @fonts["normal_alternative"].to_polybar(@normal_font_size, 2),
+              @fonts["monospace"].to_polybar(11, 2)
           ]
       }
 

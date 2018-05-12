@@ -1,21 +1,29 @@
+
+# shellcheck source=z.zsh
 source $HOME/z.sh
 export ZSH=$HOME/.oh-my-zsh
-ZSH_THEME="mandy"
+export ZSH_THEME="mandy"
 
-zshaddhistory() { whence ${${(z)1}[1]} >| /dev/null || return 1 }
+# zshaddhistory() { whence ${${(z)1}[1]} >| /dev/null || return 1 }
 
+zstyle ':completion:*' use-cache yes
+
+# shellcheck source=.functions
 source $HOME/.functions
 
 detect_os
 
 # Compleat https://limpet.net/mbrubeck/2009/10/30/compleat.html``
 # sysadmin-util https://github.com/skx/sysadmin-util
-plugins=(git docker docker-compose zsh-completions z zsh-autosuggestions zsh-syntax-highlighting extract jira httpie zsh-peco-history wd)
+
+plugins=(git docker docker-compose zsh-completions z zsh-autosuggestions zsh-syntax-highlighting extract jira httpie zsh-peco-history wd colored-man-pages command-not-found cp)
 
 if [ "$OS" = "Ubuntu" ]; then
     plugins+=(debian)
 elif [ "$OS" = "Arch Linux" ]; then
     plugins+=(archlinux)
+elif [ "$OS" = "Fedora" ]; then
+    plugins+=(fedora)
 fi
 
 
@@ -28,60 +36,80 @@ else
 fi
 
 if [ -f $HOME/.bash_aliases ]; then
+    # shellcheck source=.bash_aliases
     source $HOME/.bash_aliases
 fi
 
 if [ -f $HOME/.profile ]; then
+    # shellcheck source=.profile
     source $HOME/.profile
 fi
 
 
 if [ -f $HOME/.oh-my-zsh/oh-my-zsh.sh ]; then
+    # shellcheck source=.oh-my-zsh/oh-my-zsh.sh
     source $HOME/.oh-my-zsh/oh-my-zsh.sh
 fi
 
 
 if [ -f $HOME/bin/commands-to-aliases ]; then
     $HOME/bin/commands-to-aliases > $HOME/.aliases
+    # shellcheck source=.aliases
     source $HOME/.aliases
 fi
 
+export PATH=$HOME/.config/composer/vendor/bin:$HOME/.composer/vendor/bin:$HOME/.local/bin:/usr/share/doc/git/contrib/diff-highlight:/usr/local/go/bin:$HOME/.go/bin:$HOME/bin:$HOME/bin/appimages:$PATH
+PATH="$PATH:$HOME/.gem/bin"
 
-export PATH=$HOME/.config/composer/vendor/bin:$HOME/.composer/vendor/bin:$HOME/.local/bin:/usr/share/doc/git/contrib/diff-highlight:/usr/local/go/bin:$HOME/.go/bin:$PATH:$HOME/bin
-PATH="`ruby -e 'puts Gem.user_dir'`/bin:$PATH"
+export GEM_HOME=$HOME/.gem
+export GEM_PATH=$HOME/.gem
+
+export GOPATH=$HOME/go
+
 export LESS="-RS"
 export TERMINAL=termite
-compctl -g '~/.teamocil/*(:t:r)' teamocil
+compctl -g "$HOME/.teamocil/*(:t:r)" teamocil
 if exists dircolors; then
     eval "$(dircolors ~/.dircolors)";
 fi
-#zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 
 
 export HISTFILE="$HOME/.zhistory"
 HISTSIZE=1000000
-SAVEHIST=$HISTSIZE
+export SAVEHIST=$HISTSIZE
 setopt EXTENDED_HISTORY
-# Allow autocompletion for dot files/folders
-#_comp_options+=(globdots)
 
-# Prevent Git from:
-# perl: warning: Setting locale failed.
-# perl: warning: Please check that your locale settings:
-#alias git='LC_ALL=C git'
-
-
+# precmd () {
+#     exec 2>&- >&-
+#     lastline=$(tail -1 ~/.command.out)
+#     sleep 0.1   # TODO: synchronize better
+#     exec > /dev/tty 2>&1
+# }
+#
+# preexec() {
+#     exec > >(tee ~/.command.out&)
+# }
 
 
 alias docker-ps-min='docker ps --format "table{{.Names}}\t{{.RunningFor}}\t{{.Status}}"'
 alias hl='grepc "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+"'
-alias current-window-process='ps -o args= $(xprop -id $(xprop -root -f _NET_ACTIVE_WINDOW 0x " \$0\\n" _NET_ACTIVE_WINDOW | awk "{print \$2}") -f _NET_WM_PID 0c " \$0\\n" _NET_WM_PID | awk "{print \$2}")'
+#alias current-window-process='ps -o args= $(xprop -id $(xprop -root -f _NET_ACTIVE_WINDOW 0x " \$0\\n" _NET_ACTIVE_WINDOW | awk "{print \$2}") -f _NET_WM_PID 0c " \$0\\n" _NET_WM_PID | awk "{print \$2}")'
 alias disk-usage='sudo du -h -t200M -x / 2>/dev/null'
+alias xdg-open='exo-open'
+
+# exa aliases
+alias dir="exa -lag --git --time-style=long-iso --group-directories-first"
+alias dir-sort-size="dir -s=size"
+alias dir-sort-size-desc="dir -s=size -r"
+alias dir-sort-mod="dir -s=modified"
+alias dir-sort-mod-desc="dir -s=modified -r"
+alias dir-tree="dir -T -L=2"
+alias dir-tree-full="dir -T"
 
 
-if exists thefuck; then eval $(thefuck --alias); fi
+if exists thefuck; then eval "$(thefuck --alias)"; fi
 
-if exists pbcopy;
+if ! exists pbcopy;
 then
     alias pbcopy='xsel --clipboard --input'
     alias pbpaste='xsel --clipboard --output'
@@ -94,36 +122,35 @@ title() {
 
 
 export GOPATH=$HOME/.go
-export LC_ALL=en_US.UTF-8
-export LANG=en_US.UTF-8
+#export LC_ALL=en_US.UTF-8
+#export LANG=en_US.UTF-8
 export VISUAL="vim"
 export EDITOR='vim'
 export TZ='Europe/Brussels'
 export DISABLE_AUTO_TITLE=true
 export AUTO_TITLE=false
 export ARCH=$(uname -m | sed 's/x86_//;s/i[3-6]86/32/')
+export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on'
 
 export CHEATCOLORS=true
-
+export SUDO_ASKPASS=/usr/libexec/openssh/gnome-ssh-askpass
 setup_lsi
 
-
-#alias fixssh='eval $(tmux show-env -s |grep "^SSH_")'
-
-#fixssh
-
 # Launch SSH agent if not running
-if ! ps aux |grep $(whoami) |grep ssh-agent |grep -v grep >/dev/null; then ssh-agent ; fi
+if ! ps aux | grep "$(whoami)" | grep ssh-agent | grep -v grep >/dev/null; then ssh-agent ; fi
 
 # Link the latest ssh-agent socket
-ln -sf $(find /tmp -maxdepth 2 -type s -name "agent*" -user $USER -printf '%T@ %p\n' 2>/dev/null |sort -n|tail -1|cut -d' ' -f2) ~/.ssh/ssh_auth_sock
+mkdir -p ~/.ssh/
+ln -sf "$(find /tmp -maxdepth 2 -type s -name 'agent*' -user $USER -printf '%T@ %p\n' 2>/dev/null |sort -n|tail -1|cut -d' ' -f2)" ~/.ssh/ssh_auth_sock
+ssh-add -l > /dev/null || ssh-add
 
 export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock
 
 export IP_ADDRESS=$(ip_address)
 export GID=$(id -g)
-export LOCAL_PROJECT_DIR=/var/www/html/
-export LOCAL_DOCKER_DIR=/var/www/docker/
-export LOCAL_PHING_DIR=/var/www/phing/
 export UID
-export HOSTNAME=$(hostname)
+export HOSTNAME="$(hostname)"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

@@ -1,6 +1,7 @@
 require 'erb'
 require 'fileutils'
-require_relative 'functions.rb'
+$LOAD_PATH << File.join(File.dirname(__FILE__))
+require 'functions'
 
 class String
   def ucfirst!
@@ -53,12 +54,12 @@ $root_dir = File.dirname(__FILE__)
 Dir.chdir $root_dir
 
 
-Dir.glob ['*.erb', '.byobu/*.erb', '.config/**/*.erb'], File::FNM_DOTMATCH do |file|
+Dir.glob ['*.erb', '.byobu/*.erb', '.config/**/*.erb', '.icons/**/*.erb'], File::FNM_DOTMATCH do |file|
     new_file_name = get_new_filename file
 
-
+    #puts new_file_name
     new_content = compile(file)
-    puts new_file_name + " length " + new_content.length.to_s
+    #puts new_file_name + " length " + new_content.length.to_s
     if new_content.empty? || new_content.length < 2
         puts "Content is empty"
         exit 2
@@ -77,12 +78,10 @@ end
 
 
 Process.fork { system "bash \"#{$root_dir}/link.sh\" > /tmp/output-link.sh 2>&1 " }
-Process.fork { system "pkill dunst; dunst > /dev/null 2>&1 " }
-%x( notify-send -i status/dialog-information.png "Fortune" "$(fortune)" )
-%x( notify-send -i status/audio-volume-medium.png "Now playing" "STIGMATA - "СЕНТЯБРЬ" (LIVE @КАЗАНЬ 15.05.2015)" )
-%x( notify-send -i status/audio-volume-medium -u critical "Urgent Test" "Content... https://google.com" )
+# %x( notify-send -i status/dialog-information.png "Fortune" "$(fortune)" )
+# %x( notify-send -i status/audio-volume-medium.png "Now playing" "STIGMATA - "СЕНТЯБРЬ" (LIVE @КАЗАНЬ 15.05.2015)" )
+# %x( notify-send -i status/audio-volume-medium -u critical "Urgent Test" "Content... https://google.com" )
 Process.fork { system "xrandr --dpi #{$dpi} > /dev/null 2>&1 " }
-Process.fork { system "pkill polybar; polybar top >/dev/null 2>&1 " }
 Process.fork { system "i3 reload" }
 # Process.fork { system "sudo hardcode-tray --theme Papirus --apply" }
 
@@ -96,13 +95,11 @@ Process.fork { system "i3 reload" }
 #############
 # Install even better ls
 #############
-%x( which ls-i )
-if $?.exitstatus != 0
-    %x( sh -c "$(curl -fsSL https://raw.githubusercontent.com/illinoisjackson/even-better-ls/master/install.sh)" )
-end
+# %x( which ls-i )
+# if $?.exitstatus != 0
+#    %x( sh -c "$(curl -fsSL https://raw.githubusercontent.com/illinoisjackson/even-better-ls/master/install.sh)" )
+# end
 
-
-exit
 
 #############
 ## Git settings
@@ -113,19 +110,3 @@ exit
 %x( git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit" )
 %x( git config --global user.name "Mandy Schoep" )
 # git config --global user.email
-
-
-#############
-## Copy all other files
-#############
-
-
-files = [
-    ".vimrc"
-]
-
-files.each do |file|
-    file_location = Dir.home + "/" + file
-
-    puts file_location
-end

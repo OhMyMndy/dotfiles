@@ -37,7 +37,7 @@ accent-light2 = ${xrdb:color4}
 ;monitor = ${env:MONITOR:HDMI-1}
 dpi = ${xrdb:Xft.dpi:-1}
 width = 100%
-height = 28px
+height = 24px
 offset-x = 0
 offset-y = 0
 
@@ -47,7 +47,7 @@ foreground = #eeeeee
 overline-size = 2
 overline-color = ${colors.foreground-alt}
 underline-size = 2
-underline-color = #184b98
+underline-color = #2163c6
 
 ;border-bottom-size = 2
 ;border-bottom-color = ${colors.accent-dark1}
@@ -56,23 +56,23 @@ padding-left = 1
 padding-right = 1
 
 
-module-margin-left = 1
-module-margin-right = 2
+module-margin-left = 4
+module-margin-right = 4
 
 
-font-0 = Roboto:style=Regular:pixelsize=11;3
-font-1 = Roboto:style=Regular:pixelsize=11;3
-font-2 = Hack Nerd Font Mono:style=Regular:pixelsize=17;4
+font-0 = Ubuntu:style=Regular:pixelsize=10;2
+font-1 = Ubuntu:style=Regular:pixelsize=10;2
+font-2 = Ubuntu Mono Nerd Font:style=Regular:pixelsize=11;2
 
 modules-left = i3 mpd
 ; window
 ;modules-center = date
 ; xwindow
-modules-right = terminal monitor vpn filesystem cpu load memory date powermenu
-
+modules-right = pomodoro terminal monitor vpn filesystem load memory date logout
+separator = "|"
 tray-position = right
 tray-padding = 1
-tray-maxsize = 18%
+tray-maxsize = 16
 ;tray-transparent = true
 
 
@@ -102,18 +102,31 @@ format-underline = ${colors.accent-dark2}
 format-prefix = " "
 format-prefix-foreground = #5b
 
+[module/pomodoro]
+type = custom/script
+exec =  [ -f /tmp/pomodoro_time ] && date -d@$(cat /tmp/pomodoro_time) -u +%M:%S 2>/dev/null || echo "Start" 
+interval = 5
+format-underline = ${colors.accent-dark2}
+format-prefix = "  "
+format-prefix-foreground = #5b
+click-left = bash ~/bin/pomodoro-timer &
+click-right = pkill -e -f pomodoro-timer
+
 [module/monitor]
 type = custom/script
 click-left = bash ~/.config/polybar/scripts/display-resolution.sh &
-exec = echo " "
+exec = echo ' '
 interval = 9000
-; format-underline = ${colors.accent-dark2}
-;format-prefix = " "
+format-underline = ${colors.accent-dark1}
+format-prefix = "  "
 
 [module/terminal]
 type=custom/script
 click-left = termite &
-exec = echo " "
+exec = echo ' '
+format-underline = ${colors.accent-light2}
+format-prefix = "  "
+
 interval = 9000
 
 
@@ -122,17 +135,8 @@ type=custom/script
 click-left = /usr/bin/xkill
 exec = df --output=pcent / -h | tail -1
 interval = 60
-;format-underline = ${colors.accent-light2}
-format-prefix = ""
-
-
-[module/dark-mode]
-type=custom/script
-click-left=toggle-dark
-# exec = cat ~/.dark-mode 2>/dev/null
-exec = dark_mode=$(cat ~/.dark_mode 2>/dev/null); if [ "$dark_mode" = "1" ]; then echo "Dark"; else echo "Light"; fi 
-interval = 10
-format-underline = ${colors.accent-dark2}
+format-underline = ${colors.accent-light1}
+format-prefix = "   "
 
 
 [module/redshift]
@@ -170,16 +174,16 @@ label-visible = "%icon%"
 label-visible-foreground = #eeeeee
 label-visible-padding = 3
 
-ws-icon-0 = 1;
-ws-icon-1 = 2;
-ws-icon-2 = 3;
-ws-icon-3 = 4;
-ws-icon-4 = 5;
-ws-icon-5 = 6;
-ws-icon-6 = 7;
-ws-icon-7 = 8;
-ws-icon-8 = 9;
-ws-icon-9 = 10;
+ws-icon-0 = 1: ;
+ws-icon-1 = 2: ;
+ws-icon-2 = 3: ;
+ws-icon-3 = 4: ;
+ws-icon-4 = 5: ;
+ws-icon-5 = 6: ;
+ws-icon-6 = 7: ;
+ws-icon-7 = 8: ;
+ws-icon-8 = 9: ;
+ws-icon-9 = 10: ;
 
 [module/mpd]
 type = internal/mpd
@@ -243,8 +247,8 @@ card = intel_backlight
 [module/cpu]
 type = internal/cpu
 interval = 10
-;format-prefix = " "
-format-prefix = "Cpu: "
+format-prefix = " "
+; format-prefix = "Cpu: "
 format-prefix-foreground = ${colors.foreground}
 ;format-underline = ${colors.accent-dark2}
 ;format = <label> <ramp-coreload>
@@ -262,9 +266,11 @@ ramp-coreload-7 = █
 [module/memory]
 type = internal/memory
 interval = 10
-format = <label> <bar-used>
-label = "Mem:"
-; label = RAM %gb_used%/%gb_free%
+format = <label>
+;format = <label> <bar-used>
+;label = "Mem:"
+;label = RAM %gb_used%/%gb_total%
+label = %percentage_used%%
 ; Only applies if <bar-used> is used
 bar-used-indicator =
 bar-used-width = 7
@@ -275,7 +281,8 @@ bar-used-foreground-3 = #ff5555
 bar-used-fill =▮
 bar-used-empty =▮
 bar-used-empty-foreground = #444444
-
+format-underline = ${colors.accent-light1}
+format-prefix = "   "
 
 [module/swap]
 type=custom/script
@@ -289,8 +296,9 @@ format-prefix = "Swap free: "
 [module/load]
 type=custom/script
 interval = 10
-exec = cat /proc/loadavg | cut -f1-3 -d' '
-format-prefix = "Load: "
+exec = cat /proc/loadavg | cut -f1 -d' '
+format-prefix = "   "
+format-underline = ${colors.accent-dark2}
 
 
 [module/wlan]
@@ -334,8 +342,9 @@ label-disconnected-foreground = #313b49
 type=custom/script
 #type = internal/date
 interval = 30
-exec = date +"%a %d-%m-%Y %H:%M"
-;format-prefix = " "
+exec = date +"%a %x %R"
+format-prefix = "   "
+format-underline = ${colors.accent-light2}
 ;format-prefix-foreground = ${colors.foreground}
 click-right = gsimplecal
 
@@ -361,7 +370,7 @@ bar-volume-foreground-4 = ${colors.accent-light1}
 bar-volume-foreground-5 = ${colors.accent-dark2}
 bar-volume-foreground-6 = ${colors.alert}
 bar-volume-gradient = false
-bar-volume-indicator = 
+bar-volume-indicator =
 bar-volume-indicator-font = 2
 bar-volume-indicator-foreground = #ff
 bar-volume-fill = ─
@@ -424,6 +433,16 @@ ramp-4 = 
 
 ramp-foreground = ${colors.foreground}
 
+
+
+[module/logout]
+type = custom/script
+exec = echo " "
+interval = 20
+click-left = ~/bin/logout-dialog
+
+
+
 [module/powermenu]
 type = custom/menu
 
@@ -433,7 +452,7 @@ label-open = " "
 label-open-foreground = ${colors.foreground}
 label-close = cancel
 label-close-foreground = ${colors.alert}
-label-separator = |
+label-separator = " | "
 label-separator-foreground = ${colors.primary}
 
 menu-0-0 = " reboot"
@@ -441,7 +460,7 @@ menu-0-0-exec = menu-open-1
 menu-0-1 = " power off"
 menu-0-1-exec = menu-open-2
 menu-0-2 = " lock"
-menu-0-2-exec = bash ~/.config/i3/scripts/lock 
+menu-0-2-exec = bash ~/.config/i3/scripts/lock
 menu-0-3 = " switch user"
 menu-0-3-exec = dm-tool switch-to-greeter
 

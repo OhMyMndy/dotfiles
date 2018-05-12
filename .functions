@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 
+alias cls='clear && echo -en "\e[3J"'
 
 # Utility function to check if $1 command exists
 # Use example: if exists ls; then echo "Command exists."; else echo "Command does not exist."; fi
-function exists() {
+exists() {
     cmnd=${1:?"Please supply a command to look for."}
     command -v $cmnd >/dev/null 2>&1 && { return 0; } || { return 1; }
 }
@@ -13,10 +14,32 @@ title() {
 }
 
 randomWallpaper() {
-    wallpapers=($(ls -d ~/wallpapers/*))
+    cd ~/wallpapers || exit 1
+    wallpapers=($(find $PWD/ -type f -exec file {} \; | awk -F: '{ if ($2 ~/[Ii]mage|EPS/) print $1}' ))
     index=$(($RANDOM % ${#wallpapers[@]} ))
     wallpaper=${wallpapers[$index]}
     echo ${wallpaper}
+}
+
+setWallpaper() {
+    wallpaper_file="$1"
+    wallpaper_file2="$2"
+
+    if [ "$wallpaper_file" != '' ] && [ -f "$wallpaper_file" ]; then
+        rm ~/.wallpaper 2>/dev/null
+        ln -s "$wallpaper_file" ~/.wallpaper
+    fi
+
+    if [ "$wallpaper_file2" != '' ] && [ -f "$wallpaper_file2" ]; then
+      rm ~/.wallpaper2 2>/dev/null
+      ln -s "$wallpaper_file2" ~/.wallpaper2
+    fi
+
+    if [ -f $HOME/.wallpaper ]; then
+        feh --bg-fill ~/.wallpaper --bg-fill ~/.wallpaper2
+    else
+        setRandomWallpaper
+    fi
 }
 
 setRandomWallpaper() {
@@ -24,33 +47,18 @@ setRandomWallpaper() {
     echo $RANDOM
     wallpaper=$(randomWallpaper)
     echo "Setting wallpaper to ${wallpaper}"
-    feh --bg-scale "${wallpaper}"
+    feh --bg-fill "${wallpaper}"
+	rm ~/.wallpaper 2>/dev/null
+    ln -s "$wallpaper_file" ~/.wallpaper
 }
-
-getInstalledPackages() {
-    packages=$(pacman -Qm; yaourt -Qm; yaourt -Qmd; yaourt -Qme; yaourt -Qmed)
-    echo ${packages} | sort | uniq
-
-}
-
-install() {
-    yaourt --needed -S $@
-}
-
-uninstall() {
-    yaourt -R $@
-}
-
 
 detect_os() {
-
     ## OS and Architecture
-
     if [ -f /etc/os-release ]; then
         # freedesktop.org and systemd
         . /etc/os-release
-        OS=$NAME
-        VER=$VERSION_ID
+        OS="$NAME"
+        VER="$VERSION_ID"
     elif type lsb_release >/dev/null 2>&1; then
         # linuxbase.org
         OS=$(lsb_release -si)
@@ -72,10 +80,11 @@ detect_os() {
         ...
     else
         # Fall back to uname, e.g. "Linux <version>", also works for BSD, etc.
-        OS=$(uname -s)
-        VER=$(uname -r)
+        OS="$(uname -s)"
+        VER="$(uname -r)"
     fi
-
+    export OS
+    export VER
 }
 
 
@@ -100,22 +109,22 @@ setup_lsi() {
 
     if exists ls-i;
     then
-        LS_COLORS=$(ls_colors_generator)
+        export LS_COLORS=$(ls_colors_generator)
 
         run_ls() {
-            ls-i --color=auto -w $(tput cols) "$@"
+            ls-i --color=auto -w "$(tput cols)" "$@"
         }
 
         run_dir() {
-            dir-i --color=auto -w $(tput cols) "$@"
+            dir-i --color=auto -w "$(tput cols)" "$@"
         }
 
         run_vdir() {
-            vdir-i --color=auto -w $(tput cols) "$@"
+            vdir-i --color=auto -w "$(tput cols)" "$@"
         }
-        alias ls="run_ls"
-        alias dir="run_dir"
-        alias vdir="run_vdir"/
+        #alias ls="run_ls"
+        #alias dir="run_dir"
+        #alias vdir="run_vdir"
     fi
 }
 
@@ -139,6 +148,7 @@ histcmd() {
 
 
 r(){
+    # shellcheck source=.zshrc
     source $HOME/.zshrc
 }
 
@@ -176,7 +186,8 @@ current_tmux_window() {
     tmux display-message
     tmux set-option -g display-time $display_time
 
-    export TMUX_WINDOW=$(tmux show-messages | tail -1 | grep -o 'current pane \([0-9]\)' | grep -o '[0-9]*')
+    export TMUX_WINDOW
+    TMUX_WINDOW=$(tmux show-messages | tail -1 | grep -o 'current pane \([0-9]\)' | grep -o '[0-9]*')
     echo $TMUX_WINDOW
 }
 
@@ -202,41 +213,311 @@ notify-finished() {
     fi
 }
 
-webdev () {
-    action="$1"
-    version="$2"
-    service="$3"
-
-    if [ -z "$action" ]; then
-        echo "Please provide the action as the first parameter (up|stop|logs)"
-        exit 2
-    fi
-
-    if [ -z "$version" ] && [ "$action" != 'stop' ]; then
-        echo "Please provide the version as the second parameter (56|71|72)"
-        exit 3
-    fi
-
-    cd "$DOCKER_REPO_LOCATION"
-
-    if [ "$action" = "up" ]; then
-        echo "Stopping web[0-9]* containers"
-        docker ps -f "name=web[0-9]*" --format "{{.ID}}" | xargs docker kill
-        cd "$DOCKER_REPO_LOCATION/Web${version}"
-        echo "Upping ${version}..."
-        docker-compose -f minimal.yml up -d --force-recreate
-    elif [ "$action" = "stop" ]; then
-        echo "Stopping web[0-9]* containers"
-        docker ps -f "name=web[0-9]*" --format "{{.ID}}" | xargs docker kill
-    elif [ "$action" = "logs" ]; then
-        cd "$DOCKER_REPO_LOCATION/Web${version}"
-        docker-compose logs --tail 100 -f $service
-    else
-        echo "Action ${action} is not recognized..."
-        exit 4
-    fi
+ip_address() {
+    ip route get 1 | awk '{print $7;exit}'
 }
 
-ip_address() {
-    ip route get 1 | awk '{print $NF;exit}'
+write_apm_to_file() {
+  apm list --installed --bare | grep -o '.*@' | sed 's/@$//g'  > ~/dotfiles/apm-packages.txt
+}
+
+install_apm_packages() {
+  apm install --packages-file ~/dotfiles/apm-packages.txt
+}
+
+
+
+
+
+### Functions used in link.sh
+
+function installZshPlugin() {
+	pluginUrl="$1"
+	pluginDir="$2"
+
+	if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/$pluginDir" ]; then
+		echo "Installing ZSH plugin '$pluginDir'"
+		git clone $pluginUrl ~/.oh-my-zsh/custom/plugins/$pluginDir
+	else
+		echo "ZSH plugin '$pluginDir' is already installed"
+	fi
+
+}
+
+
+function installZshTheme() {
+	pluginUrl="$1"
+	pluginDir="$2"
+
+	if [ ! -f "$HOME/.oh-my-zsh/custom/themes/$pluginDir" ]; then
+		echo "Installing ZSH theme '$pluginDir'"
+		mkdir -p  ~/.oh-my-zsh/custom/themes/
+		cd  ~/.oh-my-zsh/custom/themes/
+		curl -fLo "$pluginDir" "$pluginUrl"
+	else
+		echo "ZSH theme '$pluginDir' is already installed"
+	fi
+
+}
+
+fontsAdded=0
+function installFont() {
+	fontUrl="$1"
+	fontName="$2"
+	if [ "$(uname)" = 'Darwin' ]; then
+		mkdir -p ~/Library/Fonts
+		cd ~/Library/Fonts
+	else
+		mkdir -p ~/.local/share/fonts
+		cd ~/.local/share/fonts
+	fi
+
+	if [ ! -f "$fontName" ]; then
+		curl -fLo "$fontName" "$fontUrl"
+		fontsAdded=1
+        deleteWindowsFonts
+	fi
+}
+
+function installFontsFromZip() {
+	fontUrl="$1"
+	fontName="$2"
+	if [ "$(uname)" = 'Darwin' ]; then
+		mkdir -p ~/Library/Fonts
+		cd ~/Library/Fonts
+	else
+		mkdir -p ~/.local/share/fonts
+		cd ~/.local/share/fonts
+	fi
+
+	if [ ! -d "$fontName" ]; then
+		rm -f "/tmp/$fontName.zip"
+    	curl -fLo "/tmp/$fontName.zip" "$fontUrl"
+		unzip "/tmp/$fontName.zip" -d "$fontName"
+		fontsAdded=1
+    deleteWindowsFonts
+	fi
+}
+
+function deleteWindowsFonts() {
+  if [ "$(uname)" = 'Darwin' ]; then
+		DIR=~/Library/Fonts
+	else
+		DIR=~/.local/share/fonts
+	fi
+  find $DIR -iname '*windows*' -delete
+}
+
+function installGtkTheme() {
+	if [[ "$(uname -s)" == *"Linux"* ]]; then
+		themeUrl="$1"
+		themeName="$2"
+		mkdir -p ~/.themes | true
+		cd ~/.themes || exit 1
+		if [ ! -d "$themeName" ]; then
+			tmp_dir=$(mktemp -d)
+			rm -f "/tmp/$themeName.zip"
+			curl -fLo "/tmp/$themeName.zip" "$themeUrl"
+			cd "${tmp_dir}" || exit 2
+			unzip "/tmp/$themeName.zip"
+			mkdir -p "$HOME/.themes/$themeName"
+			mv "${tmp_dir}"/*/** "$HOME/.themes/$themeName"
+			rm -rf "${tmp_dir}"
+		fi
+	fi
+}
+
+function installPeco() {
+	if [ ! -f "/usr/local/bin/peco" ]; then
+		echo "Installing Peco binary"
+		url="https://github.com/peco/peco/releases/download/v0.5.1/peco_"
+
+		platform=$(uname -s | awk '{print tolower($0)}')
+		url+="$platform"
+		url+="_amd64.tar.gz"
+		rm -f /tmp/peco.tar.gz
+		curl -fLo "/tmp/peco.tar.gz" "$url"
+		cd /tmp || exit 1
+		tar -xzf "/tmp/peco.tar.gz" "peco_${platform}_amd64/peco"
+		sudo cp "/tmp/peco_${platform}_amd64/peco" /usr/local/bin/peco
+		rm -rf /tmp/peco*
+	else
+		echo "Peco binary already installed"
+	fi
+}
+
+function getJetbrainsPluginZipUrl() {
+    pluginName="$1"
+    pluginBaseUrl="https://plugins.jetbrains.com/"
+    requestUrl="${pluginBaseUrl}/plugin/${pluginName}"
+
+    newUrl=$(curl "${requestUrl}" | grep -E -o '/plugin/download\?updateId=[0-9]+')
+
+    echo "${pluginBaseUrl}${newUrl}"
+}
+
+function getJetbrainsPluginPaths() {
+    productName="$1"
+
+    echo "$(find ~ -type d -name 'plugins' 2>/dev/null | grep -i "\.local.*${productName}")"
+}
+
+
+function installJetbrainsPlugin() {
+    set -x
+    product="$1"
+    zipUrl="$2"
+    zipUrl=$(getJetbrainsPluginZipUrl "${zipUrl}")
+
+    pluginDirs=$(getJetbrainsPluginPaths "${product}")
+
+    echo "plugindirs: ${pluginDirs}"
+
+    tmpZipFileName="/tmp/jetbrainsPlugin.zip"
+    curl -L -o "${tmpZipFileName}" "${zipUrl}"
+#    echo $?
+
+    echo "after wget"
+    echo "${pluginDirs[@]}"
+    for pluginDir in ${pluginDirs}
+    do
+        echo "plugindir: ${pluginDir}"
+        cd "${pluginDir}"
+        unzip "${tmpZipFileName}"
+    done
+    set +x
+}
+
+# make sure you pass absolute paths
+# encrypt_files "$(find $(pwd) -name '*.jpg')" # $(pwd) makes sure it is absolute
+encrypt_files() {
+  files="$@"
+  echo "Enter password:"
+  read -s password
+  echo "$files" | xargs -I {} sh -c "echo \"$password\" | gpg --passphrase-fd 0 --always-trust --compress-algo BZIP2 -z 9 --symmetric {}"
+}
+
+decrypt_if_necessary() {
+  files="$1"
+  unset password
+  IFS=$'\n'
+  echo "$files" | while read file; do
+  	original=$(echo "$file" | sed -E 's/\.gpg//g')
+  	if [ ! -f "$original" ]; then
+  		if [ ! "$password" ]; then
+  			echo "Enter password to decrypt GPG encrypted files"
+  			read -s password</dev/tty
+  		fi
+  		echo "$password" | gpg --passphrase-fd 0 -d -o "$original" "$file"
+  	fi
+  done
+  unset password
+}
+
+
+remove_wine_desktop_files() {
+  find "$HOME/.local/share/applications/" | sort \
+    | grep wine-extension \
+    | grep -v application.desktop \
+    | grep -v appref-ms \
+    | grep -v vbs \
+    | grep -v msp \
+    | grep -v hlp \
+    | grep -v url \
+    | xargs -I {} rm {}
+}
+
+create_remmina_desktop_files() {
+  rm ~/.local/share/applications/remmina-connection-* 2>/dev/null
+  find ~/.remmina -type f -name '*.remmina' | while read file; do
+    name="$(grep '^name=' $file | cut -d'=' -f2)"
+    name_formatted=$(echo "$name" | sed -E 's/[^a-zA-Z0-9]/_/g')
+    cat <<EOL | tee  ~/.local/share/applications/remmina-connection-$name_formatted.desktop >/dev/null
+[Desktop Entry]
+Name=Remmina - $name
+Exec=remmina -c $file
+Icon=remmina
+Type=Application
+Categories=GTK;GNOME;X-GNOME-NetworkSettings;Network;
+EOL
+  done
+}
+
+create_vm() {
+  type="$1"
+  name="$2"
+  force="$3"
+  vboxmanage showvminfo "$name" >/dev/null 2>&1
+  result=$?
+
+  if [ $result -eq 0 ]; then
+    echo "VM with name '$name' is already imported!"
+    return
+  fi
+
+
+  TPATH=$(VBoxManage list systemproperties | sed -n 's/Default machine folder: *//p')
+  if [ "$force" != 'force' ] && [ "$TPATH" = "$HOME/VirtualBox VMs" ]; then
+		echo "Please change Virtualbox machine folder with:";
+		# @see https://askubuntu.com/questions/800824/how-to-change-virtualbox-default-vm-location-in-command-line
+		echo "vboxmanage setproperty machinefolder /path/to/directory/";
+		return
+  fi
+
+  VBoxManage createvm --name "$name" --ostype "$type" --register
+  if [ $? -ne 0 ]; then
+    echo "Possible os types:"
+    VBoxManage list ostypes | grep '^ID'
+    return
+  fi
+
+
+  echo "Creating harddisk..."
+  disk_file="$TPATH/$name/$name.vmdk"
+  VBoxManage createmedium disk --filename "$disk_file" --size 80000 --format VMDK --variant Split2G
+  #VBoxManage internalcommands sethduuid "$disk_file"
+
+  VBoxManage storagectl "$name" --name "SATA Controller" --add sata --controller IntelAHCI --portcount 1 --hostiocache off
+  VBoxManage storageattach "$name" --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium "$disk_file"
+
+  VBoxManage storagectl "$name" --name "IDE Controller" --add ide
+  VBoxManage storageattach "$name" --storagectl "IDE Controller" --type dvddrive --medium emptydrive  --port 0 --device 0
+  VBoxManage modifyvm "$name" --accelerate3d on --usb on --vram 256 --memory 2048 --clipboard bidirectional --draganddrop bidirectional
+  VBoxManage modifyvm "$name" --boot1 dvd --boot2 disk
+  VBoxManage modifyvm "$name" --ioapic on --cpus 2 --cpuexecutioncap 80
+  # $ VBoxManage modifyvm $VM --nic1 bridged --bridgeadapter1 e1000g0
+}
+
+function show_all_available_icons() {
+   find ~/.local/share/icons/ /usr/share/icons -name '*.png' | sed -E 's/[0-9]+x[0-9]+\///g' | sed -E 's/scalable\///g' | sed -E 's/.*\///g' | sort -h | uniq
+}
+
+get_font_file() {
+  # hack.*complete.*mono.*regular
+  fc-list | grep -i "$1" | sed 's/:.*//g' | tail -1
+}
+
+
+# create_swap_file 4 /swapfile
+# echo "/swapfile none swap sw 0 0" | sudo tee -a /etc/fstab
+create_swap_file() {
+	size_in_gb="$1"
+	if [ ! "$1" ]; then
+		echo "Please provide anmount of GBs for the swapfile as first parameter"
+		exit 2
+	fi
+	
+	file="$2"
+	if [ -f "$file" ]; then
+		echo "File '$file' already exists!"
+		exit 3
+	fi
+
+	sudo dd if=/dev/zero of="$file" bs=1024 count=$(expr 1024 \* 1024 \* $size_in_gb) 
+	sudo chown root:root "$file"
+	sudo chmod 0600 "$file"
+	sudo mkswap "$file"
+	sudo swapon "$file"
+	echo "Add the following to /etc/fstab to make the swapfile persistent:"
+	echo "$file none swap sw 0 0"
 }

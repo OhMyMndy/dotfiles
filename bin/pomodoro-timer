@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+pomodoro_time=/tmp/pomodoro_time
+
+
+if [ -f "$pomodoro_time" ]; then
+	echo "Pomodoro is already running"
+	exit 2
+fi
+
+echo 0 > "$pomodoro_time"
+
+function finish {
+	rm "$pomodoro_time"
+}
+trap finish EXIT
+
+minutes=25
+notification=1
+
+total_seconds=$(($minutes * 60))
+
+while true; do
+	echo $total_seconds > /tmp/pomodoro_time
+	
+	if [ $total_seconds -eq $(($notification * 60)) ]; then
+		notify-send "Almost time to take a break!" "Break in $notification minutes"
+	fi
+
+	if [ $total_seconds -le 0 ]; then
+		break
+	fi
+
+	sleep 5
+	total_seconds=$(($total_seconds -5))
+done
+
+notify-send "Time to take a break!" "Break time!"
+
+$HOME/.config/i3/scripts/lock >> /tmp/lock.log 2>&1

@@ -1,41 +1,66 @@
 #!/bin/bash
 
-# i3lock blurred screen inspired by /u/patopop007 and the blog post
-# http://plankenau.com/blog/post-10/gaussianlock
-# see: https://gist.github.com/csivanich/10914698
-# Timings are on an Intel i7-2630QM @ 2.00GHz
+set -h
 
-# Dependencies:
-# imagemagick
-# i3lock
-# scrot (optional but default)
+getopt -o dt: --long nodunst,test -n 'parse-options' -- "$@"
+[ $? -ne 0 ] && { echo "Failed parsing options." >&2 ; exit 1; }
 
-IMAGE=/tmp/i3lock.png
-SCREENSHOT="scrot $IMAGE" # 0.46s
+kill_dunst=1
+test=0
 
-# Alternate screenshot method with imagemagick. NOTE: it is much slower
-# SCREENSHOT="import -window root $IMAGE" # 1.35s
+while true; do
+  case "$1" in
+    -d | --nodunst ) kill_dunst=0; shift ;;
+    -t | --test ) test=1; kill_dunst=0; shift ;;
+    -- ) shift; break ;;
+    * ) break ;;
+  esac
+done
 
-# Here are some imagemagick blur types
-# Uncomment one to use, if you have multiple, the last one will be used
+echo "Kill dunst? $kill_dunst"
+echo "Test?       $test"
 
-# All options are here: http://www.imagemagick.org/Usage/blur/#blur_args
-#BLURTYPE="0x5" # 7.52s
-#BLURTYPE="0x2" # 4.39s
-#BLURTYPE="5x2" # 3.80s
-BLURTYPE="2x8" # 2.90s
-#BLURTYPE="2x3" # 2.92s
 
-# Get the screenshot, add the blur and lock the screen with it
-$SCREENSHOT
-convert $IMAGE -blur $BLURTYPE $IMAGE
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cd "$DIR" || exit 1
+TMP_IMAGE=/tmp/i3_lock.png
 
-# suspend message display
-pkill -u "$USER" -USR1 dunst
+IMAGE="$(realpath $HOME/.wallpaper)"
+IMAGE2="$(realpath $HOME/.wallpaper2)"
+WALLPAPER_PATH="/tmp/lockscreen_$(basename "${IMAGE}")__$(basename "${IMAGE2}").png"
 
-i3lock -n -i $IMAGE
+tmpfile=$(mktemp)
+cp "$WALLPAPER_PATH" $tmpfile 2>/dev/null
 
-# resume message display
-pkill -u "$USER" -USR2 dunst
+function finish {
+  rm -f "$tmpfile"
+}
+trap finish EXIT
 
-rm $IMAGE
+
+rm "$TMP_IMAGE"
+
+[ $kill_dunst -eq 1 ] && pkill -u "$USER" -USR1 dunst
+
+
+mpc --format '' | grep -q '\[playing\]'
+mpd_is_playing=$?
+mpc pause
+
+if [ $test -eq 1 ]; then
+	bash ./create-lockscreen-image && exo-open "$TMP_IMAGE"
+else
+
+	bash ./create-lockscreen-image && pkill -e -f i3lock && i3lock -n -i "$TMP_IMAGE" &
+	if [ -f "$WALLPAPER_PATH" ]; then
+		i3lock -n -i "$WALLPAPER_PATH"
+	else
+		i3lock -c 000000
+	fi
+fi
+#pkill -e -f create-lockscreen-image
+[ $kill_dunst -eq 1 ] && pkill -u "$USER" -USR2 dunst
+
+if [ $mpd_is_playing -eq 0 ]; then
+    mpc play
+fi

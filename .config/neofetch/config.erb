@@ -20,27 +20,31 @@ print_info() {
     info "WM Theme" wm_theme
     info "Theme" theme
     info "Icons" icons
+    info "Font" font
     info "Terminal" term
     info "Terminal Font" term_font
     info "CPU" cpu
     info "GPU" gpu
+    info "GPU Driver" gpu_driver  # Linux only
     info "Memory" memory
 
-    # info "GPU Driver" gpu_driver  # Linux only
+
     # info "CPU Usage" cpu_usage
     # info "Disk" disk
     # info "Battery" battery
-    # info "Font" font
     # info "Song" song
     # info "Local IP" local_ip
     # info "Public IP" public_ip
     # info "Users" users
     # info "Install Date" install_date
-    # info "Locale" locale  # This only works on glibc systems.
+    info "Locale" locale  # This only works on glibc systems.
+    #prin "Weather" "$(curl wttr.in/?0?q?T | awk '/°(C|F)/ {printf $(NF-1) $(NF) " ("a")"} /,/ {a=$0}')" &
 
     info line_break
     info cols
     info line_break
+
+    wait
 }
 
 
@@ -558,7 +562,7 @@ image_backend="w3m"
 # NOTE: 'auto' will pick the best image source for whatever image backend is used.
 #       In ascii mode, distro ascii art will be used and in an image mode, your
 #       wallpaper will be used.
-image_source="/home/mandy/.distro-logos/Arch Linux.png"
+image_source="ascii"
 
 
 # Ascii Options

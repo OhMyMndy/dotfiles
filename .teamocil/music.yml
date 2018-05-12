@@ -1,9 +1,11 @@
 windows:
   - name: Music
     root: ~/MyMysic
-    layout: fcaf,238x60,0,0{119x60,0,0,11,118x60,120,0[118x7,120,0,17,118x29,120,8,18,118x22,120,38,19]}
+    layout: b2e4,274x64,0,0{137x64,0,0,94,136x64,138,0[136x23,138,0{68x23,138,0,95,67x23,207,0[67x11,207,0,100,67x11,207,12,146]},136x21,138,24,96,136x18,138,46,97]}
     panes:
-      - ' title "NCMXPP"; ncmpcpp'
-      - ' title "MPD"; sudo pkill -f mpd ; sudo mpd ~/.mpdconf '
+      - ' title "NCMPCPP"; ncmpcpp'
+      - ' title "MPD"; sudo pkill -f mpd ; sudo mpd ~/.mpdconf'
+      - ' title "Stats"; watch -n 30 mpc stats'
+      - ' title "Stats"; clear; # mpv http://localhost:8002 '
       - ' title "Visualiser"; vis'
-      - ' title "AlsaMixer"; alsamixer'
+      - ' title "AlsaMixer"; alsamixer -c 0'

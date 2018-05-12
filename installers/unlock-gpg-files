@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source $DIR/../.functions
+
+
+# decrypt FILES
+
+cd ${DIR}/../wallpapers/cat;
+decrypt_if_necessary "$(find ${PWD} -name '*.jpg.gpg')"

@@ -1,0 +1,10 @@
+busy-signal
+git-plus
+github
+intellij-idea-keymap
+intentions
+linter
+linter-shellcheck
+linter-ui-default
+minimap
+pigments

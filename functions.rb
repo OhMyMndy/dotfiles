@@ -59,6 +59,10 @@ class Font
         end
     end
 
+    def to_ls
+        "#{@name} #{@style}"
+    end
+
 end
 
 
@@ -85,7 +89,7 @@ def set_slack_theme
     puts file_name
     colors = '{"column_bg":"#073642","menu_bg":"#002B36","active_item":"#B58900","active_item_text":"#FDF6E3","hover_item":"#CB4B16","text_color":"#FDF6E3","active_presence":"#2AA198","badge":"#DC322F"}'
 
-    File.open(file_name, 'r+') { |f| 
+    File.open(file_name, 'r+') { |f|
         json = f.read
         puts json
         json = JSON.parse(json) if json && json.length >= 2
@@ -96,7 +100,7 @@ def set_slack_theme
             end
         end
     }
-    
+
 end
 
 #set_slack_theme
