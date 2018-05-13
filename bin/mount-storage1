@@ -1,0 +1,86 @@
+#!/usr/bin/env bash
+
+# Mount ext4 luks disk on Mac OS
+
+tabs 4
+clear
+
+ip_address='192.168.56.111'
+
+vboxmanage showvminfo "Alpine mount" | grep -q -c "running (since"
+running=$?
+
+if [ $running -ne 0 ]; then
+	vboxmanage startvm --type headless "Alpine mount"
+	started=$?
+	if [ $running -ne 0 ]; then
+		echo "Cannot start vm..."
+		exit 1
+	fi
+
+fi
+# vboxmanage controlvm "Alpine mount" usbattach 9dc7b780-9ec0-11d4-a54f-000a27052861
+
+
+tries=0
+while :
+do
+	if [ $tries -gt 2 ]; then
+		echo "SSH not started..."
+		exit 4
+	fi
+	nmap $ip_address -p 22 | grep -q open
+	# ping -c 2 -t 2 192.168.56.111
+	if [ $? -eq 0 ] ; then
+		break;
+	fi
+	tries=$((tries + 1))
+	echo "Retrying SSH connection..."
+	sleep 1
+done
+
+clear
+
+echo "Enter Storage1 luks password"
+# read -s password
+password='Stigmata2018Storage1'
+
+
+ssh root@$ip_address /bin/ash << EOF
+	set -x
+
+	disk=\$(blkid | grep 11a09dc4-e7b9-42ba-8cc5-faefa59246c7 | cut -f 1 -d :)
+
+	echo "Disk: \$disk"
+
+	umount -l /mnt/storage1
+
+	ls /dev/mapper/storage1 >/dev/null 2>/dev/null
+	mapper_available=$?
+
+	if [ $mapper -ne 0 ]; then
+		echo -e "$password\n" | cryptsetup luksOpen "\$disk" storage1
+		result=\$?
+		if [ \$result -ne 0 ]; then
+			echo "Unlocking disk failed"
+			exit 2
+		fi
+		echo "LUKS unlocked"
+	fi
+
+	rm -rf /mnt/storage1 2>/dev/null
+	mkdir -p /mnt/storage1
+
+	echo "Mounting disk in VM..."
+	mount /dev/mapper/storage1 /mnt/storage1
+	echo "Disk mounted to /mnt/storage1"
+
+	echo "Restarting SMB"
+	rc-service samba restart
+EOF
+
+exitcode=$?
+
+if [ $exitcode -eq 0 ]; then
+	open "smb://root:123@$ip_address/storage1"
+fi

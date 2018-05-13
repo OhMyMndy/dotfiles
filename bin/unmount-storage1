@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+# Unmount ext4 luks disk on Mac OS
+
+tabs 4
+clear
+
+ssh root@192.168.56.111 /bin/ash << EOF
+rc-service samba stop
+umount /mnt/storage1
+cryptsetup luksClose /dev/mapper/storage1
+rc-service samba start
+EOF
