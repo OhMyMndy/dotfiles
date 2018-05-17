@@ -18,7 +18,10 @@ if $args.key?('theme') && File.exists("themes/" + $args['theme'] + '.erb')
     $theme = $args['theme']
 end
 
-$dpi = $args.key?('dpi') && $args['dpi'].to_i > 0 ? $args['dpi'].to_i : 96
+calculated_dpi = %x(bash ~/bin/calculate-dpi | tail -1)
+calculated_dpi.chomp!
+# calculated_dpi = 96
+$dpi = $args.key?('dpi') && $args['dpi'].to_i > 0 ? $args['dpi'].to_i : calculated_dpi
 
 
 puts "Using theme '#{$theme}'"

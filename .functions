@@ -25,14 +25,21 @@ setWallpaper() {
     wallpaper_file="$1"
     wallpaper_file2="$2"
 
-    if [ "$wallpaper_file" != '' ] && [ -f "$wallpaper_file" ]; then
+    if [ "$wallpaper_file" != '' ] && [ ! -f "$wallpaper_file" ]; then
+        echo "wallpaper '$wallpaper_file' does not exists!"
+        return
+    elif [ "$wallpaper_file" != '' ] && [ -f "$wallpaper_file" ]; then
         rm ~/.wallpaper 2>/dev/null
         ln -s "$wallpaper_file" ~/.wallpaper
     fi
 
-    if [ "$wallpaper_file2" != '' ] && [ -f "$wallpaper_file2" ]; then
-      rm ~/.wallpaper2 2>/dev/null
-      ln -s "$wallpaper_file2" ~/.wallpaper2
+
+    if [ "$wallpaper_file2" != '' ] && [ ! -f "$wallpaper_file2" ]; then
+        echo "wallpaper_file2 '$wallpaper_file2' does not exists!"
+        return
+    elif [ "$wallpaper_file2" != '' ] && [ -f "$wallpaper_file2" ]; then
+        rm ~/.wallpaper2 2>/dev/null
+        ln -s "$wallpaper_file2" ~/.wallpaper2
     fi
 
     if [ -f $HOME/.wallpaper ]; then

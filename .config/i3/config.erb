@@ -223,7 +223,7 @@ assign [class="jetbrains-idea-ce"]                                              
 assign [class="Rambox"]                                                                 $workspace6
 assign [class="Thunar"]                                                                 $workspace3
 assign [class="Atom"]                                                                   $workspace9
-assign [class="Termite"]                                                                $workspace2
+assign [class="Xfce4-terminal"]                                                         $workspace2
 
 
 hide_edge_borders smart
@@ -271,8 +271,11 @@ for_window [class="Nxclient.bin"]                                               
 for_window [class="Nxplayer.bin"]                                                       floating enable, border pixel <%= i3['border'] %>
 
 
+exec "xrandr --dpi $(xrdb -query | grep dpi | head -1 | grep -E -o '[0-9]+')"
+
 # Exec always
 exec_always --no-startup-id bash ~/bin/restart-polybar || xfce4-panel &
+exec_always --no-startup-id compton &
 exec_always --no-startup-id killall dunst; while pgrep -x dunst >/dev/null; do sleep 1; done; dunst &
 exec_always --no-startup-id bash -c "source ~/.functions; setWallpaper"
 exec_always --no-startup-id sh -c "pgrep -x xbanish; [ \$? -eq 1 ] && xbanish &"
@@ -284,7 +287,7 @@ exec_always --no-startup-id sh -c "pgrep -x imwheel; [ \$? -eq 1 ] && imwheel &"
 exec_always --no-startup-id killall synergys; while pgrep -x synergys >/dev/null; do sleep 1; done; synergys -c ~/.synergy.conf &
 exec_always --no-startup-id killall notify-server; while pgrep -x notify-server >/dev/null; do sleep 1; done; notify-server &
 
-exec_always --no-startup-id sh -c "pgrep -x rambox; [ \$? -eq 1 ] && rambox &"
+exec_always --no-startup-id sh -c "pgrep -x rambox; [ \$? -eq 1 ] && /opt/Rambox/rambox &"
 exec_always --no-startup-id sh -c "pgrep -x xfce4-terminal; [ \$? -eq 1 ] && xfce4-terminal -e byobu"
 exec_always --no-startup-id sh -c "pgrep -x thunar; [ \$? -eq 1 ] && thunar &"
 exec_always --no-startup-id sh -c "pgrep -x shutter; [ \$? -eq 1 ] && shutter --min_at_startup &"

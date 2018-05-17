@@ -367,7 +367,7 @@ fi
 
 
 mkdir -p $HOME/.ssh/sockets
-sudo -A chown -R mandy:mandy $HOME/.ssh
+#sudo -A chown -R mandy:mandy $HOME/.ssh
 touch $HOME/.ssh/config
 chmod 600 $HOME/.ssh/config
 
@@ -416,14 +416,14 @@ addToProfile '_JAVA_OPTIONS' "-Dawt.useSystemAAFontSettings=on"
 # EOL
 
 pstorm="$(locate phpstorm.sh | tail -1)"
-if [ "$pstorm" != '' ]; then
-	sudo -A ln -sf "$pstorm" /usr/bin/pstorm
-fi
+#if [ "$pstorm" != '' ]; then
+#	sudo -A ln -sf "$pstorm" /usr/bin/pstorm
+#fi
 
 # remove arc border radius
 
-find /usr/share/themes/Arc -type f -name '*.rc' | sudo xargs -I {} sed -E -i 's/(radius\s*=)([^;]+)/\1 0/g' {}
-find /usr/share/themes/Arc -type f -name '*.css' | sudo xargs -I {} sed -E -i 's/(border.+radius:)([^;]+);/\1 0px;/g' {}
+#find /usr/share/themes/Arc -type f -name '*.rc' | sudo xargs -I {} sed -E -i 's/(radius\s*=)([^;]+)/\1 0/g' {}
+#find /usr/share/themes/Arc -type f -name '*.css' | sudo xargs -I {} sed -E -i 's/(border.+radius:)([^;]+);/\1 0px;/g' {}
 
 if [ ! -d "$HOME/.nvm" ]; then
 	curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash
