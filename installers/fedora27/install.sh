@@ -86,12 +86,17 @@ function base {
 @hardware-support
 @base-x
 @firefox
+
 @fonts
 terminus-fonts-console
+fontconfig-enhanced-defaults
+fontconfig-font-replacements
+
 @multimedia
 @networkmanager-submodules
 @printing
 @development-tools
+byzanz
 vim
 NetworkManager-openvpn-gnome
 dnf-plugins-core
@@ -220,6 +225,91 @@ EOL
 
     dnf remove gnome-calculator evince file-roller gedit gedit-plugins gnucash -y
 
+
+    gem install json
+    gem install rdoc
+    gem install teamocil
+
+    pip3 install udiskie
+
+
+    # Fixes for pulseaudio
+    sed -E -i 's#.*autospawn.*#autospawn = yes#g' /etc/pulse/client.conf
+    pulseaudio -D
+    # install polybar
+    which polybar >/dev/null 2>&1
+    if [ $? -ne 0 ]; then
+        dnf install -y cmake @development-tools gcc-c++ i3-ipc jsoncpp-devel pulseaudio-libs-devel alsa-lib-devel wireless-tools-devel libmpdclient-devel libcurl-devel cairo-devel xcb-proto xcb-util-devel xcb-util-wm-devel xcb-util-image-devel
+        dnf install -y pulseaudio-libs-devel xcb-util-xrm-devel
+        rm -rf /tmp/polybar
+        git clone --recursive https://github.com/jaagr/polybar /tmp/polybar
+        cd /tmp/polybar
+        mkdir build
+        cd build
+        cmake ..
+        make install
+    fi
+    # end install Polybar
+
+    # install cli-visualizer
+    cd /tmp
+    dnf install -y fftw-devel ncurses-devel pulseaudio-libs-devel
+    rm -rf /tmp/cli-visualizer
+    git clone --recursive https://github.com/dpayne/cli-visualizer.git /tmp/cli-visualizer
+    cd /tmp/cli-visualizer
+    ./install.sh
+    # end install cli-visualizer
+
+
+    # install xrectsel
+    which xrectsel >/dev/null 2>&1
+    if [ $? -ne 0 ]; then
+        dnf install autoconf automake -y
+        bash ~/dotfiles/installers/install-xrectsel.sh
+    fi
+
+
+    usermod -a -G docker mandy
+    groupadd power
+    usermod -a -G power mandy
+    usermod -a -G disk mandy
+    chsh -s /bin/zsh mandy
+
+
+    which jetbrains-toolbox >/dev/null 2>&1
+    if [ $? -ne 0 ]; then
+        bash ~/dotfiles/installers/jetbrains-toolbox.sh
+    fi
+
+    which xbanish >/dev/null 2>&1
+    if [ $? -ne 0 ]; then
+        bash ~/dotfiles/installers/xbanish.sh
+    fi
+
+    which purevpn >/dev/null 2>&1
+    if [ $? -ne 0 ]; then
+        bash ~/dotfiles/installers/purevpn.sh
+    fi
+
+    systemctl enable lightdm
+    systemctl start firewalld
+    virt-what | grep -q -i virtualbox && dnf install -y VirtualBox-guest-additions
+
+    dnf install -y https://download.teamviewer.com/download/linux/teamviewer.x86_64.rpm
+    dnf install -y http://download.nomachine.com/download/6.1/Linux/nomachine_6.1.6_9_x86_64.rpm
+    dnf install -y http://rpmfind.net/linux/mageia/distrib/cauldron/x86_64/media/core/release/dunst-1.3.1-1.mga7.x86_64.rpm
+    dnf install $(curl -s https://api.github.com/repos/saenzramiro/rambox/releases/latest | jq -r ".assets[] | select(.name) | select(.browser_download_url | test(\"64.*rpm$\")) | .browser_download_url") -y
+
+
+    mkdir -p $HOME/.config/mpd
+    touch $HOME/.config/mpd/database
+    # Create swap file
+    # create_swap_file 4 /swapfile
+    # echo "/swapfile none swap sw 0 0" | tee -a /etc/fstab
+}
+
+
+function sys_config {
     localedef -i nl_BE -f UTF-8 nl_BE.UTF-8
     cat <<'EOL' | tee /etc/locale.conf
 LANG=en_US.UTF-8
@@ -248,7 +338,7 @@ EOL
         <bool>true</bool>
     </edit>
     <edit name="autohint" mode="assign">
-        <bool>false</bool>
+        <bool>true</bool>
     </edit>
     <edit name="hinting" mode="assign">
         <bool>true</bool>
@@ -289,7 +379,7 @@ net.ipv4.ip_forward=1
 EOL
 
 # @todo https://coderwall.com/p/66kbaw/adding-entries-to-resolv-conf-on-fedora
-    cat <<'EOL' | tee /etc/resolvconf/resolv.conf.d/base
+    cat <<'EOL' | tee /etc/resolv.conf
 nameserver 1.1.1.1
 nameserver 1.0.0.1
 EOL
@@ -299,79 +389,6 @@ EOL
 KEYMAP="us"
 FONT="ter-v16n"
 EOL
-
-
-    gem install json
-    gem install rdoc
-    gem install teamocil
-
-    pip3 install udiskie
-
-
-    # Fixes for pulseaudio
-    sed -E -i 's#.*autospawn.*#autospawn = yes#g' /etc/pulse/client.conf
-    pulseaudio -D
-    # install polybar
-    which polybar >/dev/null 2>&1
-    if [ $? -ne 0 ]; then
-        dnf install -y cmake @development-tools gcc-c++ i3-ipc jsoncpp-devel pulseaudio-libs-devel alsa-lib-devel wireless-tools-devel libmpdclient-devel libcurl-devel cairo-devel xcb-proto xcb-util-devel xcb-util-wm-devel xcb-util-image-devel
-        dnf install -y pulseaudio-libs-devel xcb-util-xrm-devel
-        rm -rf /tmp/polybar
-        git clone --recursive https://github.com/jaagr/polybar /tmp/polybar
-        cd /tmp/polybar
-        mkdir build
-        cd build
-        cmake ..
-        make install
-    fi
-    # end install Polybar
-
-    # install cli-visualizer
-    cd /tmp
-    dnf install -y fftw-devel ncurses-devel pulseaudio-libs-devel
-    rm -rf /tmp/cli-visualizer
-    git clone --recursive https://github.com/dpayne/cli-visualizer.git /tmp/cli-visualizer
-    cd /tmp/cli-visualizer
-    ./install.sh
-    # end install cli-visualizer
-
-    usermod -a -G docker mandy
-    groupadd power
-    usermod -a -G power mandy
-    usermod -a -G disk mandy
-    chsh -s /bin/zsh mandy
-
-
-    which jetbrains-toolbox >/dev/null 2>&1
-    if [ $? -ne 0 ]; then
-        bash ~/dotfiles/installers/jetbrains-toolbox.sh
-    fi
-
-    which xbanish >/dev/null 2>&1
-    if [ $? -ne 0 ]; then
-        bash ~/dotfiles/installers/xbanish.sh
-    fi
-
-    which purevpn >/dev/null 2>&1
-    if [ $? -ne 0 ]; then
-        bash ~/dotfiles/installers/purevpn.sh
-    fi
-
-    systemctl enable lightdm
-    systemctl start firewalld
-    virt-what | grep -q -i virtualbox && dnf install -y VirtualBox-guest-additions
-
-    dnf install -y https://download.teamviewer.com/download/linux/teamviewer.x86_64.rpm
-    dnf install -y http://download.nomachine.com/download/6.1/Linux/nomachine_6.1.6_9_x86_64.rpm
-    dnf install -y http://rpmfind.net/linux/mageia/distrib/cauldron/x86_64/media/core/release/dunst-1.3.1-1.mga7.x86_64.rpm
-    dnf install $(curl -s https://api.github.com/repos/saenzramiro/rambox/releases/latest | jq -r ".assets[] | select(.name) | select(.browser_download_url | test(\"64.*rpm$\")) | .browser_download_url") -y
-
-
-    mkdir -p ~/.config/mpd
-    touch ~/.config/mpd/database
-    # Create swap file
-    # create_swap_file 4 /swapfile
-    # echo "/swapfile none swap sw 0 0" | tee -a /etc/fstab
 }
 
 
@@ -384,7 +401,7 @@ cat << EOF | tee /etc/systemd/system/wakelock.service
 Description=Lock the screen on resume from suspend
 
 [Service]
-User=victor
+User=mandy
 Type=forking
 Environment=DISPLAY=:0
 ExecStart=/usr/bin/i3lock
@@ -430,7 +447,9 @@ EOF
     rpm -ivh https://rpms.remirepo.net/fedora/remi-release-27.rpm
     dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
     dnf install http://mirror.yandex.ru/fedora/russianfedora/russianfedora/free/fedora/releases/27/Everything/x86_64/os/russianfedora-free-release-27-1.noarch.rpm  -y
-    dnf install https://www.rpmfind.net/linux/sourceforge/u/un/unitedrpms/27/x86_64/msttcorefonts-2.5-4.fc27.noarch.rpm -y
+#    dnf install https://www.rpmfind.net/linux/sourceforge/u/un/unitedrpms/27/x86_64/msttcorefonts-2.5-4.fc27.noarch.rpm -y
+
+    dnf copr enable dawid/better_fonts
     dnf config-manager --set-enabled remi-php72
     dnf copr enable yaroslav/i3desktop -y
     rpm --import https://dl.tvcdn.de/download/linux/signature/TeamViewer2017.asc
@@ -449,7 +468,7 @@ function all {
     virtualization
     wine
     openbox
-    cinnamon
+#    cinnamon
     networkutilities
     development
     system_update
@@ -460,15 +479,12 @@ function multimedia {
     dnf install -y ffmpeg flacon shntool cuetools
     dnf install -y mpc mpd mpv rhythmbox
     # Photo
-#    dnf install -y gimp darktable
+    dnf install -y gimp darktable
 
     # Video
     dnf install -y vlc
 
     dnf install -y @multimedia
-
-    # Uninstall previously installed packages
-    dnf remove -y gimp darktable
 }
 
 function virtualization {
@@ -482,6 +498,10 @@ function wine {
 
 function openbox {
     dnf install -y openbox openbox-theme-mistral-thin openbox-theme-mistral-thin-dark obconf
+}
+
+function gnome {
+    dnf install -y gnome-desktop
 }
 
 function cinnamon {

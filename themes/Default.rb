@@ -56,15 +56,15 @@ class Default
       #@monospace_font = "Hack Nerd Font Mono"
       @monospace_font = "Ubuntu Mono Nerd Font"
       @monospace_font_style = "Regular"
-      @monospace_font_size = 11;
+      @monospace_font_size = 13;
 
       @normal_font = "Ubuntu"
       @normal_font_style = "Regular"
-      @normal_font_size = 10;
+      @normal_font_size = 12;
 
       @normal_font_alternative = @normal_font
       @normal_font_style_alternative = "Regular"
-      @normal_font_size_alternative = 10;
+      @normal_font_size_alternative = 12;
 
       @fonts = {
           "monospace"           => Font.new(@monospace_font, @monospace_font_size, @monospace_font_style),
