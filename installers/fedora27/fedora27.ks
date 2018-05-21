@@ -47,10 +47,12 @@ gem install json &>> /home/mandy/post.log
 git clone https://github.com/Mandy91/dotfiles.git /home/mandy/dotfiles &>> /home/mandy/post.log
 
 bash /home/mandy/dotfiles/installers/fedora27/install.sh base &>> /home/mandy/post.log
+bash /home/mandy/dotfiles/installers/setup-nomachine.sh &>> /home/mandy/post.log
 
 ruby /home/mandy/dotfiles/install.rb &>> /home/mandy/post.log
 
 bash /home/mandy/dotfiles/link.sh &>> /home/mandy/post.log
+
 
 
 chown -R mandy:mandy /home/mandy &>> /home/mandy/post.log

@@ -6,7 +6,7 @@ action=$(yad --width 300 --entry --title "System Logout" \
     --button="gtk-ok:0" --button="gtk-close:1" \
     --text "Choose action:" \
     --entry-text \
-    "Power Off" "Reboot" "Suspend" "Lock" "Logout")
+    "Logout" "Lock" "Reboot" "Suspend" "Power Off" )
 ret=$?
 
 [[ $ret -eq 1 ]] && exit 0

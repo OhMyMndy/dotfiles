@@ -58,7 +58,7 @@ if [ -f $HOME/bin/commands-to-aliases ]; then
     source $HOME/.aliases
 fi
 
-export PATH=$HOME/.config/composer/vendor/bin:$HOME/.composer/vendor/bin:$HOME/.local/bin:/usr/share/doc/git/contrib/diff-highlight:/usr/local/go/bin:$HOME/.go/bin:$HOME/bin:$HOME/bin/appimages:$PATH
+export PATH=$HOME/.config/composer/vendor/bin:$HOME/.composer/vendor/bin:$HOME/.local/bin:/usr/share/doc/git/contrib/diff-highlight:/usr/local/go/bin:$HOME/.go/bin:$HOME/bin:$HOME/bin/appimages:/usr/bin/local:$PATH
 PATH="$PATH:$HOME/.gem/bin"
 
 export GEM_HOME=$HOME/.gem
@@ -133,18 +133,22 @@ export ARCH=$(uname -m | sed 's/x86_//;s/i[3-6]86/32/')
 export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on'
 
 export CHEATCOLORS=true
-export SUDO_ASKPASS=/usr/libexec/openssh/gnome-ssh-askpass
+
 setup_lsi
 
-# Launch SSH agent if not running
-if ! ps aux | grep "$(whoami)" | grep ssh-agent | grep -v grep >/dev/null; then ssh-agent ; fi
+if [ "$(uname -s)" != 'Darwin' ]; then
+    export SUDO_ASKPASS=/usr/libexec/openssh/gnome-ssh-askpass
 
-# Link the latest ssh-agent socket
-mkdir -p ~/.ssh/
-ln -sf "$(find /tmp -maxdepth 2 -type s -name 'agent*' -user $USER -printf '%T@ %p\n' 2>/dev/null |sort -n|tail -1|cut -d' ' -f2)" ~/.ssh/ssh_auth_sock
-ssh-add -l > /dev/null || ssh-add
+    # Launch SSH agent if not running
+    if ! ps aux | grep "$(whoami)" | grep ssh-agent | grep -v grep >/dev/null; then ssh-agent ; fi
 
-export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock
+    # Link the latest ssh-agent socket
+    mkdir -p ~/.ssh/
+    ln -sf "$(find /tmp -maxdepth 2 -type s -name 'agent*' -user $USER -printf '%T@ %p\n' 2>/dev/null |sort -n|tail -1|cut -d' ' -f2)" ~/.ssh/ssh_auth_sock
+    ssh-add -l > /dev/null || ssh-add
+
+    export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock
+fi
 
 export IP_ADDRESS=$(ip_address)
 export GID=$(id -g)

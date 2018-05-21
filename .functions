@@ -461,6 +461,8 @@ create_vm() {
 		echo "Please change Virtualbox machine folder with:";
 		# @see https://askubuntu.com/questions/800824/how-to-change-virtualbox-default-vm-location-in-command-line
 		echo "vboxmanage setproperty machinefolder /path/to/directory/";
+    echo -e "Current value:" 
+    VBoxManage list systemproperties | grep "Default machine folder:"
 		return
   fi
 
@@ -520,4 +522,37 @@ create_swap_file() {
 	sudo swapon "$file"
 	echo "Add the following to /etc/fstab to make the swapfile persistent:"
 	echo "$file none swap sw 0 0"
+}
+
+
+bi () {
+    if [ "$(hostname)" != "arch-mini-pc" ]; then
+       ssh -T 192.168.10.120 bi "$1"
+    fi
+
+    folder="$1"
+    beet import "$folder"
+    result=$?
+    echo "Result $result"
+    if [ $result -eq 0 ]; then
+        count=$(find "$folder" -name '*.flac' -o -name '*.mp3' | wc -l)
+
+        if [ $count -eq 0 ]; then
+            echo "Removing '$folder'"
+            rm -rf "$folder"
+        fi
+    fi
+}
+
+
+
+import_music() {
+    rsync -ah --info progress2 "$1" 192.168.10.120:/tank/media/music/to_import
+
+    ssh -T 192.168.10.120 /usr/bin/bash <<EOF
+source ~/.functions
+bi "/tank/media/music/to_import/$1"
+
+EOF
+
 }
