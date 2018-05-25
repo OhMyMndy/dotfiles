@@ -468,7 +468,7 @@ create_vm() {
 		echo "Please change Virtualbox machine folder with:";
 		# @see https://askubuntu.com/questions/800824/how-to-change-virtualbox-default-vm-location-in-command-line
 		echo "vboxmanage setproperty machinefolder /path/to/directory/";
-    echo -e "Current value:" 
+    echo -e "Current value:"
     VBoxManage list systemproperties | grep "Default machine folder:"
 		return
   fi
@@ -531,6 +531,9 @@ create_swap_file() {
 	echo "$file none swap sw 0 0"
 }
 
+add-to-file() {
+    grep -q -F "$1" "$2" || echo "$1" | tee -a "$2"
+}
 
 bi () {
     if [ "$(hostname)" != "arch-mini-pc" ]; then

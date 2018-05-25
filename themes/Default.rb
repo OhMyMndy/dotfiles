@@ -53,18 +53,18 @@ class Default
 
     def configuration()
 
-      #@monospace_font = "Hack Nerd Font Mono"
-      @monospace_font = "Ubuntu Mono Nerd Font"
+      @monospace_font = "Hack Nerd Font Mono"
+      #@monospace_font = "Ubuntu Mono Nerd Font"
       @monospace_font_style = "Regular"
-      @monospace_font_size = 13;
+      @monospace_font_size = 11;
 
-      @normal_font = "Ubuntu"
+      @normal_font = "Noto Sans"
       @normal_font_style = "Regular"
-      @normal_font_size = 12;
+      @normal_font_size = 10;
 
       @normal_font_alternative = @normal_font
       @normal_font_style_alternative = "Regular"
-      @normal_font_size_alternative = 12;
+      @normal_font_size_alternative = 11;
 
       @fonts = {
           "monospace"           => Font.new(@monospace_font, @monospace_font_size, @monospace_font_style),
@@ -173,13 +173,13 @@ class Default
           "highlight_color"      => @highlight_color,
           "urgent_color"         => @urgent_color,
           "inactive_color"       => @inactive_color,
-          "height"               => "24px",
+          "height"               => (@normal_font_size * 2).to_s + "px",
           "padding"              => 1,
           "wm_padding"           => 3,
           "fonts"                => [
               @fonts["normal"].to_polybar(@normal_font_size, 2),
               @fonts["normal_alternative"].to_polybar(@normal_font_size, 2),
-              @fonts["monospace"].to_polybar(11, 2)
+              @fonts["monospace"].to_polybar(15, 3)
           ]
       }
 

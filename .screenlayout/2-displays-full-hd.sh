@@ -2,7 +2,7 @@
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd $DIR
-source .functions.sh
+source "$DIR/.functions.sh"
 
 disabledMonitors=$(disableMonitors "${allButFirstTwoMonitors}")
 

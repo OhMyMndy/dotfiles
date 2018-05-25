@@ -107,6 +107,9 @@ alias dir-tree="dir -T -L=2"
 alias dir-tree-full="dir -T"
 
 
+alias rcp='rsync -ah --info progress2'
+alias rmv='rsync -ah --info progress2 --remove-sent-files'
+
 if exists thefuck; then eval "$(thefuck --alias)"; fi
 
 if ! exists pbcopy;

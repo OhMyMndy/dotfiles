@@ -221,6 +221,12 @@ vlc
 
 gnuplot
 ncmpcpp
+
+system-config-kickstart
+mediawriter
+xss-lock
+libvirt
+sysstat
 EOL
 
     dnf remove gnome-calculator evince file-roller gedit gedit-plugins gnucash -y
@@ -299,6 +305,7 @@ EOL
     dnf install -y http://download.nomachine.com/download/6.1/Linux/nomachine_6.1.6_9_x86_64.rpm
     dnf install -y http://rpmfind.net/linux/mageia/distrib/cauldron/x86_64/media/core/release/dunst-1.3.1-1.mga7.x86_64.rpm
     dnf install $(curl -s https://api.github.com/repos/saenzramiro/rambox/releases/latest | jq -r ".assets[] | select(.name) | select(.browser_download_url | test(\"64.*rpm$\")) | .browser_download_url") -y
+    dnf install $( curl -s https://api.github.com/repos/mbusb/multibootusb/releases/latest | jq -r ".assets[] | select(.name) | select(.browser_download_url | test(\".*rpm$\")) | .browser_download_url" | head -1 ) -y
 
 
     mkdir -p $HOME/.config/mpd
@@ -338,7 +345,7 @@ EOL
         <bool>true</bool>
     </edit>
     <edit name="autohint" mode="assign">
-        <bool>true</bool>
+        <bool>false</bool>
     </edit>
     <edit name="hinting" mode="assign">
         <bool>true</bool>
@@ -527,8 +534,14 @@ function development {
     # The fuck
     dnf install -y python3-devel
     pip3 install thefuck
-    
-    
+
+    # Vagrant
+    cd /tmp
+    curl https://releases.hashicorp.com/vagrant/2.1.1/vagrant_2.1.1_linux_amd64.zip -o vagrant.zip
+    unzip vagrant.zip
+    rm -rf /usr/bin/vagrant
+    mv vagrant /usr/bin/vagrant
+
         
     # Install Dry, 
     # dry is a terminal application to manage and monitor Docker containers.
@@ -554,6 +567,19 @@ function development {
     su mandy bash -c 'composer global require "jolicode/jolinotif"'
     su mandy bash -c 'composer global require "squizlabs/php_codesniffer"'
     
+
+    cd /tmp
+    rm -rf libui 2>/dev/null
+    git clone https://github.com/andlabs/libui.git
+    cd libui
+    mkdir build
+    cd build
+    cmake ..
+    make
+
+    dnf install -y php-pecl php-devel re2c
+    pecl channel-update pecl.php.net
+    pecl install "channel://pecl.php.net/ui-2.0.0"
 
 
     mkdir -p $HOME/go

@@ -1,6 +1,12 @@
 #!/bin/bash
-partitions=$(df)
-threshold=93
+
+threshold="$1"
+
+if [ ! "$threshold" ]; then
+    threshold=93
+fi
+
+partitions=$(df | awk "NR > 1 && \$5 > $threshold  { print \$1, \$5, \$6 }")
 
 set -e
 
@@ -9,12 +15,10 @@ echo "Treshold: ${threshold}"
 IFS=$'\n'
 for partition in $partitions; do
 	mount_point=$(echo $partition | awk '{print $1}')
-	percentage=$(echo $partition | awk '{print $5}' | sed 's/%//g')
-	partition=$(echo $partition | awk '{print $6}')
+	percentage=$(echo $partition | awk '{print $2}')
+	partition=$(echo $partition | awk '{print $3}')
 	echo "percentage $percentage partition $partition mount point $mount_point"
 
-	if [ $percentage -gt $threshold ] ; then
-	    notify-send -i /usr/share/icons/gnome/256x256/status/dialog-warning.png 'Disk Space Alert' "Partition $partition at $mount_point remaining free space is critically low. Used: $percentage%"
-	fi
+    notify-send -i /usr/share/icons/gnome/256x256/status/dialog-warning.png 'Disk Space Alert' "Partition $partition at $mount_point remaining free space is critically low. Used: $percentage%"
 done
 

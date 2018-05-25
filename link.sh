@@ -365,6 +365,12 @@ if [ "${inCrontab}" == "1" ]; then
 	(crontab -l 2>/dev/null; echo "*/5 * * * * export DISPLAY=:0 && $HOME/bin/disk-usage-warning 2>&1 > /dev/null") | crontab -
 fi
 
+crontab -l 2>/dev/null | grep -q "$HOME/bin/disk-io-warning"
+inCrontab=$?
+if [ "${inCrontab}" == "1" ]; then
+	(crontab -l 2>/dev/null; echo "*/5 * * * * export DISPLAY=:0 && $HOME/bin/disk-io-warning 2>&1 > /dev/null") | crontab -
+fi
+
 
 mkdir -p $HOME/.ssh/sockets
 #sudo -A chown -R mandy:mandy $HOME/.ssh
@@ -416,9 +422,9 @@ addToProfile '_JAVA_OPTIONS' "-Dawt.useSystemAAFontSettings=on"
 # EOL
 
 pstorm="$(locate phpstorm.sh | tail -1)"
-#if [ "$pstorm" != '' ]; then
-#	sudo -A ln -sf "$pstorm" /usr/bin/pstorm
-#fi
+if [ "$pstorm" != '' ]; then
+	sudo -A ln -sf "$pstorm" /usr/bin/pstorm
+fi
 
 # remove arc border radius
 
@@ -447,3 +453,10 @@ create_remmina_desktop_files
 # Fix for Intellij platform editors on i3wm @see https://faq.i3wm.org/question/4071/modal-pop-up-in-idea-loses-focus-while-entering-text.1.html
 locate idea.properties | xargs -I {} sed -E -i 's/#?.*idea.popup.weight=.*$/idea.popup.weight=medium/g' "{}"
 
+
+# Chrome scaling factor
+# sudo sed -Eri 's#(Exec=[a-zA-Z0-9/-]+)#\1 --force-device-scale-factor=0.9#g' $(locate google-chrome.desktop | head -1)
+# sudo sed -Eri 's# --force-device-scale-factor=[0-9.]+##g' $(locate google-chrome.desktop | head -1)
+
+add-to-file "xinput --set-prop 'PixArt USB Optical Mouse' 'libinput Accel Speed' 0.3" "$HOME/.profile"
+add-to-file "xset s 300 360" "$HOME/.profile"
