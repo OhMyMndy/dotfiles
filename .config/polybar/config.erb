@@ -56,19 +56,21 @@ padding-left = <%= polybar['padding'] %>
 padding-right = <%= polybar['padding'] %>
 
 
-module-margin-left = 4
-module-margin-right = 4
+module-margin-left = 3
+module-margin-right = 3
 
 
 font-0 = <%= polybar['fonts'][0] %>
 font-1 = <%= polybar['fonts'][1] %>
 font-2 = <%= polybar['fonts'][2] %>
+font-3 = <%= polybar['fonts'][3] %>
+
 
 modules-left = i3 mpd
 ; window
-;modules-center = date
+modules-center = weather
 ; xwindow
-modules-right = pomodoro terminal monitor vpn filesystem load memory date logout
+modules-right = pomodoro terminal monitor vpn filesystem load memory eth date logout
 separator = "|"
 tray-position = right
 tray-padding = <%= polybar['padding'] %>
@@ -118,14 +120,14 @@ click-left = bash ~/.config/polybar/scripts/display-resolution.sh &
 exec = echo ' '
 interval = 9000
 format-underline = ${colors.accent-dark1}
-format-prefix = "  "
+format-prefix = " "
 
 [module/terminal]
 type=custom/script
-click-left = termite &
+click-left = ~/bin/i3-sensible-terminal &
 exec = echo ' '
 format-underline = ${colors.accent-light2}
-format-prefix = "  "
+format-prefix = " "
 
 interval = 9000
 
@@ -163,6 +165,7 @@ label-focused-foreground = <%= polybar['foreground'] %>
 label-focused-padding = <%= polybar['wm_padding'] %>
 
 label-unfocused = "%icon%"
+#label-unfocused =
 label-unfocused-foreground = <%= polybar['inactive_color'] %>
 label-unfocused-padding = <%= polybar['wm_padding'] %>
 
@@ -297,7 +300,7 @@ format-prefix = "Swap free: "
 type=custom/script
 interval = 10
 exec = cat /proc/loadavg | cut -f1 -d' '
-format-prefix = "   "
+format-prefix = "  "
 format-underline = ${colors.accent-dark2}
 
 
@@ -324,7 +327,7 @@ ramp-signal-foreground = ${colors.foreground-alt}
 
 [module/eth]
 type = internal/network
-interface = ${xrdb:ethinterface:eth0}
+interface = ${xrdb:ethinterface}
 interval = 10
 ;   up - down icons
 ;format-connected-underline = ${colors.accent-light2}
@@ -343,7 +346,7 @@ type=custom/script
 #type = internal/date
 interval = 30
 exec = date +"%a %x %R"
-format-prefix = "   "
+format-prefix = "  "
 format-underline = ${colors.accent-light2}
 ;format-prefix-foreground = ${colors.foreground}
 click-right = gsimplecal
@@ -441,6 +444,13 @@ exec = echo " "
 interval = 20
 click-left = ~/bin/logout-dialog
 
+
+[module/weather]
+type = custom/script
+exec = ~/bin/openweathermap-fullfeatured
+interval = 300
+label = "%{T4}%output%%{T-}"
+click-left = ~/bin/openweathermap-browser
 
 
 [module/powermenu]

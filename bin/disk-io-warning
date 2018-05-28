@@ -7,7 +7,7 @@ if [ ! "$threshold" ]; then
 fi
 
 
-disks=$(iostat -dx | awk "NR > 3 && \$NF > $threshold  { print \$1, \$NF }")
+disks=$(iostat -dx | sed 's#,#.#g' | awk "NR > 3 && \$NF > $threshold  { print \$1, \$NF }")
 
 set -e
 

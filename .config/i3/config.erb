@@ -33,6 +33,7 @@ bindsym ctrl+Shift+q kill
 
 # start dmenu (a program launcher)
 bindsym $mod+d exec "rofi -show || dmenu_run"
+bindsym $mod+space exec --no-startup-id "albert show || dmenu run"
 bindsym $alt+Tab exec "rofi -show"
 
 # change focus
@@ -77,7 +78,7 @@ bindsym $mod+e layout toggle split
 bindsym $mod+Shift+space floating toggle
 
 # change focus between tiling / floating windows
-bindsym $mod+space focus mode_toggle
+#bindsym $mod+space focus mode_toggle
 
 # toggle sticky
 bindsym $mod+Shift+s sticky toggle
@@ -267,6 +268,7 @@ for_window [class="sun-awt-X11-XDialogPeer"]                                    
 for_window [class="sun-awt-X11-XWindowPeer"]                                            floating enable, border normal <%= i3['border'] %>
 for_window [class="com-intellij-updater-Runner"]                                        floating enable, border pixel 0
 for_window [class="Gloobus-preview"]                                                    floating enable, border pixel 0
+for_window [class="albert"]                                                             floating enable, border pixel 0
 for_window [class="Nxclient.bin"]                                                       floating enable, border pixel <%= i3['border'] %>
 for_window [class="Nxplayer.bin"]                                                       floating enable, border pixel <%= i3['border'] %>
 
@@ -275,7 +277,8 @@ exec "xrandr --dpi $(xrdb -query | grep dpi | head -1 | grep -E -o '[0-9]+')"
 
 # Exec always
 exec_always --no-startup-id bash ~/bin/restart-polybar || xfce4-panel &
-exec_always --no-startup-id killall compton; compton &
+exec_always --no-startup-id compton &
+exec_always --no-startup-id albert &
 exec_always --no-startup-id killall dunst; while pgrep -x dunst >/dev/null; do sleep 1; done; dunst
 exec_always --no-startup-id bash -c "source ~/.functions; setWallpaper"
 exec_always --no-startup-id sh -c "pgrep -x xbanish; [ \$? -eq 1 ] && xbanish &"

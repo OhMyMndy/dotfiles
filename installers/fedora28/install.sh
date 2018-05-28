@@ -5,6 +5,11 @@ if [ $UID -ne 0 ]; then
     exit 99
 fi
 
+if [ $HOME != 'mandy' ]; then
+    echo '$HOME is not /home/mandy'
+    exit 100
+fi
+
 # tab width
 tabs 4
 clear
@@ -79,8 +84,7 @@ function base {
     setup_custom_services
 
     system_update
-    cat <<'EOL' | sed '/^$/d'| xargs -I {} dnf install -y {}
-    -bluez
+    cat <<'EOL' | sed '/^$/d'| tr '\n' ' ' | xargs -I {} dnf install -y {}
 @core
 @standard
 @hardware-support
@@ -227,6 +231,7 @@ mediawriter
 xss-lock
 libvirt
 sysstat
+albert
 EOL
 
     dnf remove gnome-calculator evince file-roller gedit gedit-plugins gnucash -y
@@ -284,17 +289,17 @@ EOL
 
     which jetbrains-toolbox >/dev/null 2>&1
     if [ $? -ne 0 ]; then
-        bash ~/dotfiles/installers/jetbrains-toolbox.sh
+        bash $HOME/dotfiles/installers/jetbrains-toolbox.sh
     fi
 
     which xbanish >/dev/null 2>&1
     if [ $? -ne 0 ]; then
-        bash ~/dotfiles/installers/xbanish.sh
+        bash $HOME/dotfiles/installers/xbanish.sh
     fi
 
     which purevpn >/dev/null 2>&1
     if [ $? -ne 0 ]; then
-        bash ~/dotfiles/installers/purevpn.sh
+        bash $HOME/dotfiles/installers/purevpn.sh
     fi
 
     systemctl enable lightdm
@@ -411,7 +416,7 @@ Description=Lock the screen on resume from suspend
 User=mandy
 Type=forking
 Environment=DISPLAY=:0
-ExecStart=/usr/bin/i3lock
+ExecStart=/home/mandy/.config/i3/scripts/lock
 
 [Install]
 WantedBy=sleep.target
@@ -419,7 +424,6 @@ WantedBy=suspend.target
 EOF
 
 systemctl enable wakelock
-systemctl start wakelock
 
 }
 
@@ -449,17 +453,21 @@ EOF
 
     rpm --import https://dl-ssl.google.com/linux/linux_signing_key.pub
 
-    rpm -ivh http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-27.noarch.rpm
-    rpm -ivh http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-27.noarch.rpm
-    rpm -ivh https://rpms.remirepo.net/fedora/remi-release-27.rpm
+    rpm -ivh http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-28.noarch.rpm
+    rpm -ivh http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-28.noarch.rpm
+    rpm -ivh https://rpms.remirepo.net/fedora/remi-release-28.rpm
     dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
-    dnf install http://mirror.yandex.ru/fedora/russianfedora/russianfedora/free/fedora/releases/27/Everything/x86_64/os/russianfedora-free-release-27-1.noarch.rpm  -y
+    dnf install -y http://mirror.yandex.ru/fedora/russianfedora/russianfedora/free/fedora/releases/27/Everything/x86_64/os/russianfedora-free-release-28-1.noarch.rpm
 #    dnf install https://www.rpmfind.net/linux/sourceforge/u/un/unitedrpms/27/x86_64/msttcorefonts-2.5-4.fc27.noarch.rpm -y
 
-    dnf copr enable dawid/better_fonts
+    dnf copr enable dawid/better_fonts -y
     dnf config-manager --set-enabled remi-php72
     dnf copr enable yaroslav/i3desktop -y
     rpm --import https://dl.tvcdn.de/download/linux/signature/TeamViewer2017.asc
+
+    rpm --import https://build.opensuse.org/projects/home:manuelschneid3r/public_key
+    dnf config-manager --add-repo https://download.opensuse.org/repositories/home:manuelschneid3r/Fedora_28/home:manuelschneid3r.repo
+
 }
 
 function system_update {

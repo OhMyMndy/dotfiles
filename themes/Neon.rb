@@ -29,7 +29,7 @@ class Neon < Default
             "COLOR7"         => "#ffffff",
             "COLOR15"        => "#ffffff",
 
-            "COLOR16"        => "#313b49",
+            "COLOR16"        => "#738fb7",
 
             "BACKGROUND"     => "#1a1b21",
             "FOREGROUND"     => "#eeeeee",

@@ -302,6 +302,7 @@ installZshPlugin "https://github.com/skx/sysadmin-util.git" "sysadmin-util"
 
 # Regular fonts
 installFontsFromZip "https://www.wfonts.com/download/data/2016/05/11/gill-sans-std/gill-sans-std.zip" "GillSans"
+installFontsFromZip "https://github.com/erikflowers/weather-icons/archive/2.0.10.zip" "Weather-Icons"
 
 installFontsFromZip "https://github.com/RedHatBrand/Overpass/releases/download/3.0.2/overpass-desktop-fonts.zip" "overpass"
 if [ "$(uname)" != 'Darwin' ]; then
@@ -423,7 +424,7 @@ addToProfile '_JAVA_OPTIONS' "-Dawt.useSystemAAFontSettings=on"
 
 pstorm="$(locate phpstorm.sh | tail -1)"
 if [ "$pstorm" != '' ]; then
-	sudo -A ln -sf "$pstorm" /usr/bin/pstorm
+	#sudo -A ln -sf "$pstorm" /usr/bin/pstorm
 fi
 
 # remove arc border radius
@@ -460,3 +461,8 @@ locate idea.properties | xargs -I {} sed -E -i 's/#?.*idea.popup.weight=.*$/idea
 
 add-to-file "xinput --set-prop 'PixArt USB Optical Mouse' 'libinput Accel Speed' 0.3" "$HOME/.profile"
 add-to-file "xset s 300 360" "$HOME/.profile"
+
+
+if [ ! -d "$HOME/polybar-scripts" ]; then
+    cd "$HOME"; git clone https://github.com/x70b1/polybar-scripts.git
+fi

@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+source ~/.profile
+source ~/.bash_aliases
+
 set -u
 
 which polybar

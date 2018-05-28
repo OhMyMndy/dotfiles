@@ -15,7 +15,7 @@ class Default
         @dpi = dpi
         @colors = {
             "COLOR0"         => "#1d1f21",
-            "COLOR8"         => "#969896",
+            "COLOR8"         => "#8e93a5",
 
             "COLOR1"         => "#cc342b",
             "COLOR9"         => "#cc342b",
@@ -38,7 +38,7 @@ class Default
             "COLOR7"         => "#ffffff",
             "COLOR15"        => "#ffffff",
 
-            "COLOR16"        => "#555555",
+            "COLOR16"        => "#6b86ad",
 
             "BACKGROUND"     => "#1d1f21",
             "FOREGROUND"     => "#eeeeee",
@@ -66,11 +66,16 @@ class Default
       @normal_font_style_alternative = "Regular"
       @normal_font_size_alternative = 11;
 
+      @weather_font = "Weather Icons"
+      @weather_font_style = "Regular"
+      @weather_font_size = 12;
+
       @fonts = {
           "monospace"           => Font.new(@monospace_font, @monospace_font_size, @monospace_font_style),
           "normal"              => Font.new(@normal_font, @normal_font_size, @normal_font_style),
            # Fall back to Roboto for Cyrillic in Polybar
-          "normal_alternative"  => Font.new(@normal_font_alternative, @normal_font_size_alternative, @normal_font_style_alternative)
+          "normal_alternative"  => Font.new(@normal_font_alternative, @normal_font_size_alternative, @normal_font_style_alternative),
+          "weather"  => Font.new(@weather_font, @weather_font_size, @weather_font_style)
       }
 
       available_themes = %x(for i in $(ls /usr/share/themes/); do echo ${i%%/}; done)
@@ -154,7 +159,7 @@ class Default
           "font" => @fonts["normal"].to_gtk,
           "border" => 2,
           "client" => {
-              "focused"           => I3Colors.new(@colors['COLOR16'], @colors['COLOR16'], @colors['FOREGROUND'], @colors['COLOR4']),
+              "focused"           => I3Colors.new(@colors['COLOR8'], @colors['COLOR8'], @colors['FOREGROUND'], @colors['COLOR4']),
               "unfocused"         => I3Colors.new(@colors['COLOR0'], @colors['COLOR0'], @colors['FOREGROUND'], @colors['COLOR4']),
               "focused_inactive"  => I3Colors.new(@colors['COLOR0'], @colors['COLOR0'], @colors['FOREGROUND'], @colors['COLOR4']),
               "urgent"            => I3Colors.new(@urgent_color, @urgent_color, @colors['COLOR0'], @colors['COLOR4']),
@@ -179,7 +184,8 @@ class Default
           "fonts"                => [
               @fonts["normal"].to_polybar(@normal_font_size, 2),
               @fonts["normal_alternative"].to_polybar(@normal_font_size, 2),
-              @fonts["monospace"].to_polybar(15, 3)
+              @fonts["monospace"].to_polybar(14, 3),
+              @fonts["weather"].to_polybar(12, 2)
           ]
       }
 

@@ -40,7 +40,10 @@ trap finish EXIT
 
 rm "$TMP_IMAGE"
 
-[ $kill_dunst -eq 1 ] && pkill -u "$USER" -USR1 dunst
+if [ $kill_dunst -eq 1 ]; then
+    pkill -u "$USER" -USR1 dunst
+    pkill -stop polybar
+fi
 
 
 mpc --format '' | grep -q '\[playing\]'
@@ -59,7 +62,10 @@ else
 	fi
 fi
 #pkill -e -f create-lockscreen-image
-[ $kill_dunst -eq 1 ] && pkill -u "$USER" -USR2 dunst
+if [ $kill_dunst -eq 1 ]; then
+    pkill -u "$USER" -USR2 dunst
+    pkill -cont polybar
+fi
 
 if [ $mpd_is_playing -eq 0 ]; then
     mpc play
