@@ -34,7 +34,16 @@ cp "$WALLPAPER_PATH" $tmpfile 2>/dev/null
 
 function finish {
   rm -f "$tmpfile"
+
+  #pkill -e -f create-lockscreen-image
+    if [ $kill_dunst -eq 1 ]; then
+        pkill -u "$USER" -USR2 dunst
+        pkill -cont polybar
+        pkill -cont rambox
+        pkill -cont java
+    fi
 }
+
 trap finish EXIT
 
 
@@ -43,6 +52,8 @@ rm "$TMP_IMAGE"
 if [ $kill_dunst -eq 1 ]; then
     pkill -u "$USER" -USR1 dunst
     pkill -stop polybar
+    pkill -stop rambox
+    pkill -stop java
 fi
 
 
@@ -61,11 +72,9 @@ else
 		i3lock -c 000000
 	fi
 fi
-#pkill -e -f create-lockscreen-image
-if [ $kill_dunst -eq 1 ]; then
-    pkill -u "$USER" -USR2 dunst
-    pkill -cont polybar
-fi
+
+
+
 
 if [ $mpd_is_playing -eq 0 ]; then
     mpc play

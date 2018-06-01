@@ -26,3 +26,12 @@ xfce4-terminal \
   --tab -T 'Post log' -H \
   -e 'bash -c "while true; do sudo chroot /mnt/sysimage bash -c \"which tail 2>/dev/null >/dev/null && touch /home/mandy/post.log && tail -f /home/mandy/post.log\"; sleep 10;done"'
 ```
+
+
+## Show all post installation
+
+```
+xfce4-terminal \
+  -T ' Anaconda post installation logs' -H \
+  -e 'bash -c "while true; do sudo chroot /mnt/sysimage bash -c \"which tail 2>/dev/null >/dev/null && touch /home/mandy/post.log && tail -f /home/mandy/post.log\"; sleep 10;done"'
+```

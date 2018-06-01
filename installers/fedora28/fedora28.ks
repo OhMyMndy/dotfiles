@@ -22,7 +22,7 @@ xconfig --startxonboot
 timezone Europe/Brussels
 
 # Configure Authentication
-auth --passalgo=sha512
+authselect --passalgo=sha512
 
 # Create User Account
 user --name=mandy --password=123 --plaintext --groups=wheel

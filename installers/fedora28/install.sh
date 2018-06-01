@@ -5,10 +5,15 @@ if [ $UID -ne 0 ]; then
     exit 99
 fi
 
-if [ $HOME != 'mandy' ]; then
-    echo '$HOME is not /home/mandy'
+HOME=/home/mandy
+USER=mandy
+
+if [ $HOME != '/home/mandy' ]; then
+    echo "\$HOME is not '/home/mandy' ($HOME)"
     exit 100
 fi
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # tab width
 tabs 4
@@ -156,6 +161,7 @@ pulseaudio
 gnome-disk-utility
 
 pluma
+gedit
 lightdm
 xfce4-panel
 xfce4-power-manager
@@ -232,6 +238,10 @@ xss-lock
 libvirt
 sysstat
 albert
+
+openvpn
+pykickstart
+tint2
 EOL
 
     dnf remove gnome-calculator evince file-roller gedit gedit-plugins gnucash -y
@@ -512,7 +522,7 @@ function wine {
 
 
 function openbox {
-    dnf install -y openbox openbox-theme-mistral-thin openbox-theme-mistral-thin-dark obconf
+    dnf install -y openbox openbox-theme-mistral-thin openbox-theme-mistral-thin-dark obconf obmenu
 }
 
 function gnome {
@@ -603,6 +613,13 @@ function developer_tools {
     rpmdev-setuptree
     cd ~/rpmbuild/SOURCES
     wget http://ftp.gnu.org/gnu/hello/hello-2.10.tar.gz
+
+}
+
+
+function idea_configs() {
+    su mandy bash -c "find ~ -maxdepth 1 -type d -name '.PhpStorm*' | xargs -I {} mkdir -p '{}/config/colors'"
+    su mandy bash -c "find ~ -maxdepth 1 -type d -name '.PhpStorm*' | xargs -I {} cp $DIR/../../.config/.PhpStorm/config/colors/Xresources.icls '{}/config/colors'"
 
 }
 

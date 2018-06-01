@@ -215,6 +215,8 @@ client.focused_inactive <%= i3['client']['focused_inactive'] %>
 client.urgent           <%= i3['client']['urgent'] %>
 
 # Default workspaces
+assign [class="wunderlist.com"]                                                         $workspace5
+assign [class=".*1password.com"]                                                        $workspace5
 assign [class="Google-chrome"]                                                          $workspace1
 assign [class="Chromium"]                                                               $workspace1
 assign [class="Vmplayer"]                                                               $workspace8
@@ -243,8 +245,7 @@ for_window [window_role="Preferences"]                                          
 for_window [window_type="dialog"]                                                       floating enable
 for_window [window_type="menu"]                                                         floating enable
 for_window [class="TeamViewer"]                                                         floating enable
-for_window [class=".*1password.com"]                                                    floating disable
-for_window [class="wunderlist.com"]                                                     floating disable
+
 
 
 # source: https://github.com/Airblader/dotfiles-manjaro/blob/master/.i3/config
@@ -269,6 +270,7 @@ for_window [class="sun-awt-X11-XWindowPeer"]                                    
 for_window [class="com-intellij-updater-Runner"]                                        floating enable, border pixel 0
 for_window [class="Gloobus-preview"]                                                    floating enable, border pixel 0
 for_window [class="albert"]                                                             floating enable, border pixel 0
+for_window [class="Unetinbootin"]                                                       floating enable, border pixel <%= i3['border'] %>
 for_window [class="Nxclient.bin"]                                                       floating enable, border pixel <%= i3['border'] %>
 for_window [class="Nxplayer.bin"]                                                       floating enable, border pixel <%= i3['border'] %>
 
