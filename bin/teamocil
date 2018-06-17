@@ -49,7 +49,7 @@ done
 # Remove all variables which cannot be replaced
 sed -i -e "s#{{[^}]*}}##g" $tmp_config
 
-/usr/local/bin/teamocil "_tmp_$config"
+~/.gem/bin/teamocil "_tmp_$config"
 
 exit
 

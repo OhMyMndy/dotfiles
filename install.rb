@@ -21,7 +21,7 @@ end
 calculated_dpi = %x(bash ~/bin/calculate-dpi | tail -1)
 calculated_dpi.chomp!
 calculated_dpi = calculated_dpi.to_i + 2
-# calculated_dpi = 96
+calculated_dpi = 96
 $dpi = $args.key?('dpi') && $args['dpi'].to_i > 0 ? $args['dpi'].to_i : calculated_dpi
 
 

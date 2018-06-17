@@ -87,15 +87,14 @@ function base {
     add_repositories
 
     setup_custom_services
-
-    system_update
-    cat <<'EOL' | sed '/^$/d'| tr '\n' ' ' | xargs -I {} dnf install -y {}
+set -e
+    cat <<'EOL' | sed '/^$/d' | xargs -I {} sh -c 'echo "installing: {}"; dnf install -y >/dev/null {}'
 @core
 @standard
 @hardware-support
 @base-x
 @firefox
-
+@xfce
 @fonts
 terminus-fonts-console
 fontconfig-enhanced-defaults
@@ -174,7 +173,7 @@ numix-gtk-theme
 arc-theme
 dmz-cursor-themes
 
-shotwell
+ristretto
 gnupg
 openssl-devel
 gcc-c++
@@ -222,7 +221,7 @@ cifs-utils
 gvfs-fuse
 fuse-exfat
 fuse-sshfs
-exfat-util
+exfat-utils
 
 atril
 rofi
@@ -241,36 +240,29 @@ albert
 
 openvpn
 pykickstart
-tint2
-EOL
 
+sublime-text
+xbacklight
+xfce4-notifyd
+grsync
+EOL
+    status=$?
+    if [ $status -ne 0 ]; then
+        echo "Install exited with status ${status}"
+        exit 2
+    fi
     dnf remove gnome-calculator evince file-roller gedit gedit-plugins gnucash -y
 
+    su mandy bash -c "rm -rf ~/.gemrc; ln -sf ${DIR}/../../.gemrc ~/.gemrc"
 
-    gem install json
-    gem install rdoc
-    gem install teamocil
+    su mandy bash -c 'gem install json'
+    su mandy bash -c 'gem install teamocil'
 
     pip3 install udiskie
-
 
     # Fixes for pulseaudio
     sed -E -i 's#.*autospawn.*#autospawn = yes#g' /etc/pulse/client.conf
     pulseaudio -D
-    # install polybar
-    which polybar >/dev/null 2>&1
-    if [ $? -ne 0 ]; then
-        dnf install -y cmake @development-tools gcc-c++ i3-ipc jsoncpp-devel pulseaudio-libs-devel alsa-lib-devel wireless-tools-devel libmpdclient-devel libcurl-devel cairo-devel xcb-proto xcb-util-devel xcb-util-wm-devel xcb-util-image-devel
-        dnf install -y pulseaudio-libs-devel xcb-util-xrm-devel
-        rm -rf /tmp/polybar
-        git clone --recursive https://github.com/jaagr/polybar /tmp/polybar
-        cd /tmp/polybar
-        mkdir build
-        cd build
-        cmake ..
-        make install
-    fi
-    # end install Polybar
 
     # install cli-visualizer
     cd /tmp
@@ -318,7 +310,7 @@ EOL
 
     dnf install -y https://download.teamviewer.com/download/linux/teamviewer.x86_64.rpm
     dnf install -y http://download.nomachine.com/download/6.1/Linux/nomachine_6.1.6_9_x86_64.rpm
-    dnf install -y http://rpmfind.net/linux/mageia/distrib/cauldron/x86_64/media/core/release/dunst-1.3.1-1.mga7.x86_64.rpm
+    #dnf install -y http://rpmfind.net/linux/mageia/distrib/cauldron/x86_64/media/core/release/dunst-1.3.1-1.mga7.x86_64.rpm
     dnf install $(curl -s https://api.github.com/repos/saenzramiro/rambox/releases/latest | jq -r ".assets[] | select(.name) | select(.browser_download_url | test(\"64.*rpm$\")) | .browser_download_url") -y
     dnf install $( curl -s https://api.github.com/repos/mbusb/multibootusb/releases/latest | jq -r ".assets[] | select(.name) | select(.browser_download_url | test(\".*rpm$\")) | .browser_download_url" | head -1 ) -y
 
@@ -351,35 +343,35 @@ LC_IDENTIFICATION="nl_BE.UTF-8"
 
 EOL
 
-    cat <<'EOL' | tee /etc/fonts/local.conf
-<?xml version='1.0'?>
-<!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
-<fontconfig>
-<match target="font">
-    <edit name="antialias" mode="assign">
-        <bool>true</bool>
-    </edit>
-    <edit name="autohint" mode="assign">
-        <bool>false</bool>
-    </edit>
-    <edit name="hinting" mode="assign">
-        <bool>true</bool>
-    </edit>
-    <edit name="hintstyle" mode="assign">
-        <const>hintslight</const>
-    </edit>
-    <edit name="lcdfilter" mode="assign">
-        <const>lcddefault</const>
-    </edit>
-    <edit name="rgba" mode="assign">
-        <const>rgb</const>
-    </edit>
-    <edit name="embeddedbitmap" mode="assign">
-        <bool>false</bool>
-    </edit>
-</match>
-</fontconfig>
-EOL
+#     cat <<'EOL' | tee /etc/fonts/local.conf
+# <?xml version='1.0'?>
+# <!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
+# <fontconfig>
+# <match target="font">
+#     <edit name="antialias" mode="assign">
+#         <bool>true</bool>
+#     </edit>
+#     <edit name="autohint" mode="assign">
+#         <bool>false</bool>
+#     </edit>
+#     <edit name="hinting" mode="assign">
+#         <bool>true</bool>
+#     </edit>
+#     <edit name="hintstyle" mode="assign">
+#         <const>hintslight</const>
+#     </edit>
+#     <edit name="lcdfilter" mode="assign">
+#         <const>lcddefault</const>
+#     </edit>
+#     <edit name="rgba" mode="assign">
+#         <const>rgb</const>
+#     </edit>
+#     <edit name="embeddedbitmap" mode="assign">
+#         <bool>false</bool>
+#     </edit>
+# </match>
+# </fontconfig>
+# EOL
 
     cat <<'EOL' | tee /etc/sysctl.conf
 # sysctl settings are defined through files in
@@ -467,16 +459,20 @@ EOF
     rpm -ivh http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-28.noarch.rpm
     rpm -ivh https://rpms.remirepo.net/fedora/remi-release-28.rpm
     dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
-    dnf install -y http://mirror.yandex.ru/fedora/russianfedora/russianfedora/free/fedora/releases/27/Everything/x86_64/os/russianfedora-free-release-28-1.noarch.rpm
+    dnf install -y http://mirror.yandex.ru/fedora/russianfedora/russianfedora/free/fedora/releases/28/Everything/x86_64/os/russianfedora-free-release-28-1.noarch.rpm
 #    dnf install https://www.rpmfind.net/linux/sourceforge/u/un/unitedrpms/27/x86_64/msttcorefonts-2.5-4.fc27.noarch.rpm -y
 
     dnf copr enable dawid/better_fonts -y
-    dnf config-manager --set-enabled remi-php72
+    #dnf config-manager --set-enabled remi-php72
     dnf copr enable yaroslav/i3desktop -y
     rpm --import https://dl.tvcdn.de/download/linux/signature/TeamViewer2017.asc
 
     rpm --import https://build.opensuse.org/projects/home:manuelschneid3r/public_key
     dnf config-manager --add-repo https://download.opensuse.org/repositories/home:manuelschneid3r/Fedora_28/home:manuelschneid3r.repo
+
+    # Sublime text
+    rpm -v --import https://download.sublimetext.com/sublimehq-rpm-pub.gpg
+    dnf config-manager --add-repo https://download.sublimetext.com/rpm/stable/x86_64/sublime-text.repo
 
 }
 
@@ -543,8 +539,6 @@ function development {
     systemctl enable docker
 
     dnf install -y meld filezilla ShellCheck
-    # PHP
-    dnf install -y composer php-pecl-imagick
     
     pip3 install mycli
     pip3 install httpie
@@ -573,36 +567,24 @@ function development {
     
 
 
-    # Sublime text
-    rpm -v --import https://download.sublimetext.com/sublimehq-rpm-pub.gpg
-    dnf config-manager --add-repo https://download.sublimetext.com/rpm/stable/x86_64/sublime-text.repo
-    dnf install sublime-text -y
+    php_tools
 
-    
+
+    mkdir -p $HOME/go
+}
+
+function php_tools {
+        # PHP
+    dnf install -y composer php-pecl-imagick
     su mandy bash -c 'composer global require "acacha/llum"'
     su mandy bash -c 'composer global require "acacha/adminlte-laravel-installer"'
     su mandy bash -c 'composer global require "symfony/console"'
     su mandy bash -c 'composer global require "jolicode/jolinotif"'
     su mandy bash -c 'composer global require "squizlabs/php_codesniffer"'
     
-
-    cd /tmp
-    rm -rf libui 2>/dev/null
-    git clone https://github.com/andlabs/libui.git
-    cd libui
-    mkdir build
-    cd build
-    cmake ..
-    make
-
-    dnf install -y php-pecl php-devel re2c
+    dnf install -y php-pear php-devel re2c
     pecl channel-update pecl.php.net
     pecl install "channel://pecl.php.net/ui-2.0.0"
-
-
-    mkdir -p $HOME/go
-    # Atom
-#    dnf install -y $(curl -sL "https://api.github.com/repos/atom/atom/releases/latest" | grep "https.*atom.x86_64.rpm" | cut -d '"' -f 4)
 
 }
 

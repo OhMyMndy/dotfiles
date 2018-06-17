@@ -125,8 +125,6 @@ title() {
 
 
 export GOPATH=$HOME/.go
-#export LC_ALL=en_US.UTF-8
-#export LANG=en_US.UTF-8
 export VISUAL="vim"
 export EDITOR='vim'
 export TZ='Europe/Brussels'
@@ -134,7 +132,6 @@ export DISABLE_AUTO_TITLE=true
 export AUTO_TITLE=false
 export ARCH=$(uname -m | sed 's/x86_//;s/i[3-6]86/32/')
 export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on'
-
 export CHEATCOLORS=true
 
 setup_lsi

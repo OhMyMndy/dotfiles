@@ -154,6 +154,7 @@ bindsym KP_Up workspace $workspace8
 bindsym KP_Prior workspace $workspace9
 bindsym KP_Insert workspace $workspace10
 
+
 # reload the configuration file
 bindsym $mod+Shift+c reload
 
@@ -299,9 +300,16 @@ exec_always --no-startup-id sh -c "pgrep -x shutter; [ \$? -eq 1 ] && shutter --
 #exec_always --no-startup-id sh -c "pgrep -x jetbrains-toolbox ; [ \$? -eq 1 ] && jetbrains-toolbox &"
 #exec_always --no-startup-id sh -c "pgrep -x unclutter ; [ \$? -eq 1 ] && unclutter -idle 2 -jitter 5 -noevents -root &"
 exec_always --no-startup-id sh -c "pgrep -x redshift-gtk ; [ \$? -eq 1 ] && redshift-gtk &"
-exec_always --no-startup-id sh -c "pgrep -x udiskie ; [ \$? -eq 1 ] && udiskie --tray --use-udisks2 &"
+#exec_always --no-startup-id sh -c "pgrep -x udiskie ; [ \$? -eq 1 ] && udiskie --tray --use-udisks2 &"
 exec_always --no-startup-id sh -c "pgrep -x chrome ; [ \$? -eq 1 ] && google-chrome &"
 exec_always --no-startup-id pkill xss-lock; xss-lock -- ~/.config/i3/scripts/lock &
+
+exec_always --no-startup-id sh -c "pgrep -x xfce4-notifyd; [ \$? -eq 1 ] && /usr/lib64/xfce4/notifyd/xfce4-notifyd &"
+exec_always --no-startup-id sh -c "pgrep -x xfconfd; [ \$? -eq 1 ] && /usr/lib64/xfce4/xfconf/xfconfd &"
+exec_always --no-startup-id sh -c "pgrep -x xfce4-power-manager; [ \$? -eq 1 ] && xfce4-power-manager &"
+ 
+
+
 
 
 #exec_always --no-startup-id pkill -f resolution-changed; bash ~/bin/resolution-changed ~/bin/restart-polybar
@@ -336,6 +344,10 @@ bindsym $mod+ctrl+p exec mpc next
 # Screen brightness controls
 bindsym XF86MonBrightnessUp exec xbacklight -inc 20 # increase screen brightness
 bindsym XF86MonBrightnessDown exec xbacklight -dec 20 # decrease screen brightness
+
+# increase/decrease keyboard brightness
+bindsym XF86KbdBrightnessUp exec kbdbacklight up
+bindsym XF86KbdBrightnessDown exec kbdbacklight down 
 
 <% if i3['gaps']['enabled'] %>
 # Gaps

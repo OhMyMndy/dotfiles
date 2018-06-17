@@ -334,24 +334,6 @@ function installGtkTheme() {
 	fi
 }
 
-function installPeco() {
-	if [ ! -f "/usr/local/bin/peco" ]; then
-		echo "Installing Peco binary"
-		url="https://github.com/peco/peco/releases/download/v0.5.1/peco_"
-
-		platform=$(uname -s | awk '{print tolower($0)}')
-		url+="$platform"
-		url+="_amd64.tar.gz"
-		rm -f /tmp/peco.tar.gz
-		curl -fLo "/tmp/peco.tar.gz" "$url"
-		cd /tmp || exit 1
-		tar -xzf "/tmp/peco.tar.gz" "peco_${platform}_amd64/peco"
-		sudo cp "/tmp/peco_${platform}_amd64/peco" /usr/local/bin/peco
-		rm -rf /tmp/peco*
-	else
-		echo "Peco binary already installed"
-	fi
-}
 
 function getJetbrainsPluginZipUrl() {
     pluginName="$1"
@@ -436,6 +418,9 @@ remove_wine_desktop_files() {
 
 create_remmina_desktop_files() {
   rm ~/.local/share/applications/remmina-connection-* 2>/dev/null
+  if [ ! -d ~/.remmina ]; then
+    return
+  fi
   find ~/.remmina -type f -name '*.remmina' | while read file; do
     name="$(grep '^name=' $file | cut -d'=' -f2)"
     name_formatted=$(echo "$name" | sed -E 's/[^a-zA-Z0-9]/_/g')

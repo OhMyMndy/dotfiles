@@ -115,6 +115,10 @@ ln -sf ${DIR}/.mpdconf ~/.mpdconf
 rm -rf ~/.myclirc
 ln -sf ${DIR}/.myclirc ~/.myclirc
 
+rm -rf ~/.gemrc
+ln -sf ${DIR}/.gemrc ~/.gemrc
+
+
 touch ~/.z
 
 
@@ -355,7 +359,6 @@ installGtkTheme "https://github.com/B00merang-Project/Chrome-OS/archive/master.z
 
 set +e
 
-installPeco
 # Execute executables in Thunar instead of editing them on double click: https://bbs.archlinux.org/viewtopic.php?id=194464
 xfconf-query --channel thunar --property /misc-exec-shell-scripts-by-default --create --type bool --set true
 
@@ -423,9 +426,9 @@ addToProfile '_JAVA_OPTIONS' "-Dawt.useSystemAAFontSettings=on"
 # EOL
 
 pstorm="$(locate phpstorm.sh | tail -1)"
-if [ "$pstorm" != '' ]; then
+#if [ "$pstorm" != '' ]; then
 	#sudo -A ln -sf "$pstorm" /usr/bin/pstorm
-fi
+#fi
 
 # remove arc border radius
 
@@ -459,7 +462,7 @@ locate idea.properties | xargs -I {} sed -E -i 's/#?.*idea.popup.weight=.*$/idea
 # sudo sed -Eri 's#(Exec=[a-zA-Z0-9/-]+)#\1 --force-device-scale-factor=0.9#g' $(locate google-chrome.desktop | head -1)
 # sudo sed -Eri 's# --force-device-scale-factor=[0-9.]+##g' $(locate google-chrome.desktop | head -1)
 
-add-to-file "xinput --set-prop 'PixArt USB Optical Mouse' 'libinput Accel Speed' 0.3" "$HOME/.profile"
+add-to-file "xinput --set-prop 'PixArt USB Optical Mouse' 'libinput Accel Speed' 0.3 2>/dev/null" "$HOME/.profile"
 add-to-file "xset s 300 360" "$HOME/.profile"
 
 
