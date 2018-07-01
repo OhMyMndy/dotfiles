@@ -16,6 +16,10 @@ if [ $polybar_exists -eq 0 ]; then
       do sleep 1
   done
   polybar -r top & >/dev/null 2>&1
+  sleep 2
+  if ! pgrep -x polybar >/dev/null; then
+    xfce4-panel & >/dev/null 2>&1
+  fi
 else
   pkill xfce4-panel -9
 

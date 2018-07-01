@@ -344,6 +344,11 @@
 			</action>
 		</keybind>
 
+		<keybind key="W-Shift-X">
+			<action name="Execute">
+				<command>~/bin/default-displays</command>
+			</action>
+		</keybind>
 
   </keyboard>
   <mouse>

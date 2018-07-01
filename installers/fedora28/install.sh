@@ -15,6 +15,8 @@ fi
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
+source ~/.functions
+
 # tab width
 tabs 4
 clear
@@ -88,133 +90,96 @@ function base {
 
     setup_custom_services
 set -e
-    cat <<'EOL' | sed '/^$/d' | xargs -I {} sh -c 'echo "installing: {}"; dnf install -y >/dev/null {}'
+    cat <<'EOL' | sed '/^#/ d' | sed 's/#.*$//g' |  sed '/^$/d'  | tr '\n' ' ' | xargs -I {} sh -c 'dnf install -y {}'
 @core
 @standard
 @hardware-support
 @base-x
 @firefox
-@xfce
 @fonts
 terminus-fonts-console
-fontconfig-enhanced-defaults
-fontconfig-font-replacements
-
+# fontconfig-enhanced-defaults
+# fontconfig-font-replacements
+@kde
+plasma-sdk
+ark
 @multimedia
-@networkmanager-submodules
 @printing
 @development-tools
-byzanz
+byzanz # record gif
 vim
-NetworkManager-openvpn-gnome
-dnf-plugins-core
 
+dnf-plugins-core
 redhat-rpm-config
 dnf-plugin-system-upgrade
 rpmconf
+
 htop
 iotop
 
-google-chrome-stable
-mate-calc
+git
+tig
 gitflow
 
 strace
 system-config-printer
 
-i3
-i3lock
-wmctrl
-xterm
+# i3
+# i3lock
+# wmctrl
+# xterm
 zsh
 google-roboto-fonts
 redshift
+
 unzip
+unrar
+
 openssh
 arandr
-lxappearance
-parcellite
+
 byobu
 tmux
-network-manager-applet
-feh
+
 xsel
 xclip
-variety
-paper-icon-theme
 yad
-thunar
-tumbler
-nemo
-unrar
-engrampa
-git
-tig
+
 ruby
 ruby-devel
 
-
 synergy
-pulseaudio
 
-gnome-disk-utility
-
-pluma
-gedit
-lightdm
-xfce4-panel
-xfce4-power-manager
 virt-what
 
 jq
 ImageMagick
 
-numix-gtk-theme
-arc-theme
-dmz-cursor-themes
-
-ristretto
 gnupg
 openssl-devel
 gcc-c++
 make
 neofetch
-xfce4-terminal
 
-pasystray
 glibc-locale-source
-freetype-freeworld
+
 wget
 vpnc
 
-dnfdragora
-seahorse
-gnome-keyring
 curl
 sqlite
 
 openssh-askpass
-shutter
-hunspell-en
-hunspell-nl
 
-gnome-python2-gconf
 qdirstat
-font-manager
-libXt-devel
-libXfixes-devel
-libXi-devel
-
 
 keepassxc
-qt5ct
+
 qt-config
 qt5-qtstyleplugins
 exa
-compton
 java-1.8.0-openjdk
 
-imwheel
 
 fuse
 cifs-utils
@@ -223,19 +188,14 @@ fuse-exfat
 fuse-sshfs
 exfat-utils
 
-atril
-rofi
-
 vlc
 
 gnuplot
-ncmpcpp
 
 system-config-kickstart
 mediawriter
 xss-lock
 libvirt
-sysstat
 albert
 
 openvpn
@@ -243,36 +203,25 @@ pykickstart
 
 sublime-text
 xbacklight
-xfce4-notifyd
-grsync
+mesa-dri-drivers
+
+okular
+console-setup
 EOL
     status=$?
     if [ $status -ne 0 ]; then
         echo "Install exited with status ${status}"
         exit 2
     fi
-    dnf remove gnome-calculator evince file-roller gedit gedit-plugins gnucash -y
+    set -x
+    dnf remove gnome-calculator evince file-roller gedit gedit-plugins gnucash parcellite engrampa xarchiver -y || true
 
-    su mandy bash -c "rm -rf ~/.gemrc; ln -sf ${DIR}/../../.gemrc ~/.gemrc"
-
-    su mandy bash -c 'gem install json'
-    su mandy bash -c 'gem install teamocil'
-
-    pip3 install udiskie
+    gem install json --no-ri --no-rdoc
+    gem install teamocil --no-ri --no-rdoc
 
     # Fixes for pulseaudio
     sed -E -i 's#.*autospawn.*#autospawn = yes#g' /etc/pulse/client.conf
-    pulseaudio -D
-
-    # install cli-visualizer
-    cd /tmp
-    dnf install -y fftw-devel ncurses-devel pulseaudio-libs-devel
-    rm -rf /tmp/cli-visualizer
-    git clone --recursive https://github.com/dpayne/cli-visualizer.git /tmp/cli-visualizer
-    cd /tmp/cli-visualizer
-    ./install.sh
-    # end install cli-visualizer
-
+    pulseaudio -k || true
 
     # install xrectsel
     which xrectsel >/dev/null 2>&1
@@ -282,29 +231,24 @@ EOL
     fi
 
 
-    usermod -a -G docker mandy
-    groupadd power
-    usermod -a -G power mandy
-    usermod -a -G disk mandy
-    chsh -s /bin/zsh mandy
+    usermod -a -G docker mandy || true
+    groupadd power || true
+    usermod -a -G power mandy || true
+    usermod -a -G disk mandy || true
+    chsh -s /bin/zsh mandy || true
 
 
-    which jetbrains-toolbox >/dev/null 2>&1
-    if [ $? -ne 0 ]; then
-        bash $HOME/dotfiles/installers/jetbrains-toolbox.sh
-    fi
+    dnf install -y $DIR/rpms/jetbrains-toolbox*.rpm
 
+    set +e
     which xbanish >/dev/null 2>&1
     if [ $? -ne 0 ]; then
         bash $HOME/dotfiles/installers/xbanish.sh
     fi
+    set -e
 
-    which purevpn >/dev/null 2>&1
-    if [ $? -ne 0 ]; then
-        bash $HOME/dotfiles/installers/purevpn.sh
-    fi
+    dnf install https://s3.amazonaws.com/purevpn-dialer-assets/linux/app/purevpn-1.0.0-1.amd64.rpm
 
-    systemctl enable lightdm
     systemctl start firewalld
     virt-what | grep -q -i virtualbox && dnf install -y VirtualBox-guest-additions
 
@@ -320,12 +264,13 @@ EOL
     # Create swap file
     # create_swap_file 4 /swapfile
     # echo "/swapfile none swap sw 0 0" | tee -a /etc/fstab
+    set +x
 }
 
 
 function sys_config {
     localedef -i nl_BE -f UTF-8 nl_BE.UTF-8
-    cat <<'EOL' | tee /etc/locale.conf
+    cat <<'EOL' > /etc/locale.conf
 LANG=en_US.UTF-8
 LANGUAGE="en_US.UTF-8"
 LC_CTYPE="en_US.UTF-8"
@@ -343,37 +288,37 @@ LC_IDENTIFICATION="nl_BE.UTF-8"
 
 EOL
 
-#     cat <<'EOL' | tee /etc/fonts/local.conf
-# <?xml version='1.0'?>
-# <!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
-# <fontconfig>
-# <match target="font">
-#     <edit name="antialias" mode="assign">
-#         <bool>true</bool>
-#     </edit>
-#     <edit name="autohint" mode="assign">
-#         <bool>false</bool>
-#     </edit>
-#     <edit name="hinting" mode="assign">
-#         <bool>true</bool>
-#     </edit>
-#     <edit name="hintstyle" mode="assign">
-#         <const>hintslight</const>
-#     </edit>
-#     <edit name="lcdfilter" mode="assign">
-#         <const>lcddefault</const>
-#     </edit>
-#     <edit name="rgba" mode="assign">
-#         <const>rgb</const>
-#     </edit>
-#     <edit name="embeddedbitmap" mode="assign">
-#         <bool>false</bool>
-#     </edit>
-# </match>
-# </fontconfig>
-# EOL
+    cat <<'EOL' > /etc/fonts/local.conf
+<?xml version='1.0'?>
+<!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
+<fontconfig>
+<match target="font">
+     <edit name="antialias" mode="assign">
+         <bool>true</bool>
+     </edit>
+     <edit name="autohint" mode="assign">
+         <bool>false</bool>
+     </edit>
+     <edit name="hinting" mode="assign">
+         <bool>true</bool>
+     </edit>
+     <edit name="hintstyle" mode="assign">
+         <const>hintslight</const>
+     </edit>
+     <edit name="lcdfilter" mode="assign">
+         <const>lcddefault</const>
+     </edit>
+     <edit name="rgba" mode="assign">
+         <const>rgb</const>
+     </edit>
+     <edit name="embeddedbitmap" mode="assign">
+         <bool>false</bool>
+     </edit>
+</match>
+</fontconfig>
+EOL
 
-    cat <<'EOL' | tee /etc/sysctl.conf
+    cat <<'EOL' > /etc/sysctl.conf
 # sysctl settings are defined through files in
 # /usr/lib/sysctl.d/, /run/sysctl.d/, and /etc/sysctl.d/.
 #
@@ -389,47 +334,71 @@ EOL
 # See https://confluence.jetbrains.com/display/IDEADEV/Inotify+Watches+Limit
 fs.inotify.max_user_watches = 524288
 net.ipv4.ip_forward=1
-
+# https://superuser.com/questions/351387/how-to-stop-kernel-messages-from-flooding-my-console default 4417
+kernel.printk = 2 4 1 7
 EOL
 
 # @todo https://coderwall.com/p/66kbaw/adding-entries-to-resolv-conf-on-fedora
-    cat <<'EOL' | tee /etc/resolv.conf
+    cat <<'EOL' > /etc/resolv.conf
 nameserver 1.1.1.1
 nameserver 1.0.0.1
 EOL
 
 
-    cat <<'EOL' | tee /etc/vconsole.conf
+    cat <<'EOL' > /etc/vconsole.conf
 KEYMAP="us"
-FONT="ter-v16n"
+FONT="ter-v32n"
 EOL
 }
 
 
 function setup_custom_services {
+    set -x
+    cp $DIR/../..//services/tty-switching.service /etc/systemd/system/
+    systemctl daemon-reload
 
-cat << EOF | tee /etc/systemd/system/wakelock.service
-# file /etc/systemd/system/wakelock.service
+    systemctl enable tty-switching
+    systemctl start tty-switching
+    set +x
+}
 
-[Unit]
-Description=Lock the screen on resume from suspend
 
-[Service]
-User=mandy
-Type=forking
-Environment=DISPLAY=:0
-ExecStart=/home/mandy/.config/i3/scripts/lock
+function macbook {
+    cp $DIR/../..//services/macbook-keyboard.service /etc/systemd/system/
+    systemctl daemon-reload
+    systemctl enable macbook-keyboard
+    systemctl start macbook-keyboard
 
-[Install]
-WantedBy=sleep.target
-WantedBy=suspend.target
-EOF
+    cat <<'EOL' > /etc/default/console-setup
+# CONFIGURATION FILE FOR SETUPCON
 
-systemctl enable wakelock
+# Consult the console-setup(5) manual page.
+
+ACTIVE_CONSOLES=guess
+
+CHARMAP=guess
+
+CODESET=guess
+FONTFACE=TerminusBold
+FONTSIZE=16x32
+
+VIDEOMODE=
+
+# The following is an example how to use a braille font
+# FONT='lat9w-08.psf.gz brl-8x8.psf'
+EOL
+
+# Only for Macbook with HiDpi display
+# Change font size to 16x32 in /etc/default/console-setup
+# Fix alt arrow behaviour of switching ttys: sudo sh -c 'dumpkeys |grep -v cr_Console |loadkeys'
+add-to-file "stty rows 50" "$HOME/.profile"
+
 
 }
 
+
 function setup_firewall {
+    set -x
     firewall-cmd --zone=public --permanent --add-service=http
     firewall-cmd --zone=public --permanent --add-service=https
     firewall-cmd --zone=public --permanent --add-service=mysql
@@ -439,34 +408,41 @@ function setup_firewall {
 
     firewall-cmd --permanent --service=xdebug --add-port=9000/tcp
     firewall-cmd --permanent --service=xdebug --add-port=9000/udp
+
+    # KDE Connect
+    firewall-cmd --zone=public --permanent --add-port=1714-1764/tcp
+    firewall-cmd --zone=public --permanent --add-port=1714-1764/udp
+
     firewall-cmd --reload
+    set +x
 }
 
 function add_repositories {
+    set -x
     # Persist extra repos and import keys.
-    cat << EOF | tee /etc/yum.repos.d/google-chrome.repo
-[google-chrome]
-name=google-chrome
-baseurl=http://dl.google.com/linux/chrome/rpm/stable/x86_64
-enabled=1
-gpgcheck=1
-gpgkey=https://dl-ssl.google.com/linux/linux_signing_key.pub
-EOF
+#    cat << EOF > /etc/yum.repos.d/google-chrome.repo
+#[google-chrome]
+#name=google-chrome
+#baseurl=http://dl.google.com/linux/chrome/rpm/stable/x86_64
+#enabled=1
+#gpgcheck=1
+#gpgkey=https://dl-ssl.google.com/linux/linux_signing_key.pub
+#EOF
 
     rpm --import https://dl-ssl.google.com/linux/linux_signing_key.pub
 
     rpm -ivh http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-28.noarch.rpm
     rpm -ivh http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-28.noarch.rpm
     rpm -ivh https://rpms.remirepo.net/fedora/remi-release-28.rpm
-    dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+
     dnf install -y http://mirror.yandex.ru/fedora/russianfedora/russianfedora/free/fedora/releases/28/Everything/x86_64/os/russianfedora-free-release-28-1.noarch.rpm
 #    dnf install https://www.rpmfind.net/linux/sourceforge/u/un/unitedrpms/27/x86_64/msttcorefonts-2.5-4.fc27.noarch.rpm -y
 
     dnf copr enable dawid/better_fonts -y
-    #dnf config-manager --set-enabled remi-php72
     dnf copr enable yaroslav/i3desktop -y
     rpm --import https://dl.tvcdn.de/download/linux/signature/TeamViewer2017.asc
 
+    # For albert
     rpm --import https://build.opensuse.org/projects/home:manuelschneid3r/public_key
     dnf config-manager --add-repo https://download.opensuse.org/repositories/home:manuelschneid3r/Fedora_28/home:manuelschneid3r.repo
 
@@ -474,10 +450,11 @@ EOF
     rpm -v --import https://download.sublimetext.com/sublimehq-rpm-pub.gpg
     dnf config-manager --add-repo https://download.sublimetext.com/rpm/stable/x86_64/sublime-text.repo
 
+    set +x
 }
 
 function system_update {
-    package-cleanup -y --oldkernels --count=2
+    package-cleanup -y --oldkernels --count=5
     dnf update -y --refresh
 }
 
@@ -488,7 +465,7 @@ function all {
     multimedia
     virtualization
     wine
-    openbox
+#    openbox
 #    cinnamon
     networkutilities
     development
@@ -498,9 +475,12 @@ function all {
 function multimedia {
     # Audio
     dnf install -y ffmpeg flacon shntool cuetools
-    dnf install -y mpc mpd mpv rhythmbox
+    dnf install -y mpc mpd mpv rhythmbox ncmpcpp
+    dnf install -y $DIR/rpms/cli-visualizer*.rpm
+
     # Photo
-    dnf install -y gimp darktable
+    dnf install -y pinta darktable
+    dnf remove -y gimp
 
     # Video
     dnf install -y vlc
@@ -535,6 +515,7 @@ function networkutilities {
 }
 
 function development {
+    dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
     dnf install -y docker-ce docker-compose
     systemctl enable docker
 
@@ -548,11 +529,7 @@ function development {
     pip3 install thefuck
 
     # Vagrant
-    cd /tmp
-    curl https://releases.hashicorp.com/vagrant/2.1.1/vagrant_2.1.1_linux_amd64.zip -o vagrant.zip
-    unzip vagrant.zip
-    rm -rf /usr/bin/vagrant
-    mv vagrant /usr/bin/vagrant
+    dnf install -y https://releases.hashicorp.com/vagrant/2.1.2/vagrant_2.1.2_x86_64.rpm
 
         
     # Install Dry, 
@@ -563,18 +540,14 @@ function development {
         chmod 755 /usr/local/bin/dry
         chmod +x /usr/local/bin/dry
     fi
-    
-    
 
 
     php_tools
-
 
     mkdir -p $HOME/go
 }
 
 function php_tools {
-        # PHP
     dnf install -y composer php-pecl-imagick
     su mandy bash -c 'composer global require "acacha/llum"'
     su mandy bash -c 'composer global require "acacha/adminlte-laravel-installer"'
@@ -584,7 +557,7 @@ function php_tools {
     
     dnf install -y php-pear php-devel re2c
     pecl channel-update pecl.php.net
-    pecl install "channel://pecl.php.net/ui-2.0.0"
+#    pecl install "channel://pecl.php.net/ui-2.0.0"
 
 }
 
@@ -593,9 +566,6 @@ function developer_tools {
     usermod -a -G mock $USER
 
     rpmdev-setuptree
-    cd ~/rpmbuild/SOURCES
-    wget http://ftp.gnu.org/gnu/hello/hello-2.10.tar.gz
-
 }
 
 

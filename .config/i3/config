@@ -167,9 +167,10 @@ bindsym $mod+Shift+i exec "tmp=$(mktemp);tmp1=$(mktemp);ruby ~/dotfiles/install.
 # restart polybar
 bindsym $mod+Shift+p exec bash ~/bin/restart-polybar
 
+bindsym $mod+Shift+x exec bash  ~/bin/default-displays
+
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec ~/bin/logout-dialog
-#"i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -246,6 +247,7 @@ for_window [window_role="Preferences"]                                          
 for_window [window_type="dialog"]                                                       floating enable
 for_window [window_type="menu"]                                                         floating enable
 for_window [class="TeamViewer"]                                                         floating enable
+for_window [class="Arandr"]                                                             floating enable
 
 
 
@@ -279,7 +281,7 @@ for_window [class="Nxplayer.bin"]                                               
 exec "xrandr --dpi $(xrdb -query | grep dpi | head -1 | grep -E -o '[0-9]+')"
 
 # Exec always
-exec_always --no-startup-id bash ~/bin/restart-polybar || xfce4-panel &
+exec_always --no-startup-id bash ~/bin/restart-polybar &
 exec_always --no-startup-id compton &
 exec_always --no-startup-id albert &
 exec_always --no-startup-id killall dunst; while pgrep -x dunst >/dev/null; do sleep 1; done; dunst
@@ -304,8 +306,7 @@ exec_always --no-startup-id sh -c "pgrep -x redshift-gtk ; [ \$? -eq 1 ] && reds
 exec_always --no-startup-id sh -c "pgrep -x chrome ; [ \$? -eq 1 ] && google-chrome &"
 exec_always --no-startup-id pkill xss-lock; xss-lock -- ~/.config/i3/scripts/lock &
 
-exec_always --no-startup-id sh -c "pgrep -x xfce4-notifyd ; [ \$? -eq 1 ] && /usr/lib64/xfce4/notifyd/xfce4-notifyd &"
-exec_always --no-startup-id sh -c "pgrep -x xfconfd ; [ \$? -eq 1 ] && /usr/lib64/xfce4/xfconf/xfconfd &"
+exec_always --no-startup-id sh -c "pgrep -x xfce4-power-manager; [ \$? -eq 1 ] && xfce4-power-manager &"
  
 
 

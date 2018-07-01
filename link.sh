@@ -34,6 +34,7 @@ rm -rf ~/.config/openbox
 ln -sf ${DIR}/.config/openbox ~/.config/openbox
 
 mkdir -p ${DIR}/.config/xfce4/xfconf/xfce-perchannel-xml
+rm  ~/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml
 ln -sf ${DIR}/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml ~/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml
 
 rm -rf ~/.config/xfce4/terminal
@@ -404,6 +405,8 @@ addToProfile 'XDG_CONFIG_HOME' '$HOME/.config'
 addToProfile 'QT_QPA_PLATFORMTHEME' "qt5ct"
 addToProfile '_JAVA_OPTIONS' "-Dawt.useSystemAAFontSettings=on"
 
+
+
 # sudo chown root:mandy /etc/default/locale
 # sudo chmod 664 /etc/default/locale
 #
@@ -463,7 +466,9 @@ locate idea.properties | xargs -I {} sed -E -i 's/#?.*idea.popup.weight=.*$/idea
 # sudo sed -Eri 's# --force-device-scale-factor=[0-9.]+##g' $(locate google-chrome.desktop | head -1)
 
 add-to-file "xinput --set-prop 'PixArt USB Optical Mouse' 'libinput Accel Speed' 0.3 2>/dev/null" "$HOME/.profile"
+add-to-file "xinput set-prop "Razer Razer Abyssus" 287 0.8 2>/dev/null" "$HOME/.profile"
 add-to-file "xset s 300 360" "$HOME/.profile"
+
 
 
 if [ ! -d "$HOME/polybar-scripts" ]; then

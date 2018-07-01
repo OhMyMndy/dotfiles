@@ -1,0 +1,11 @@
+[Unit]
+Description=Tty Switching
+#After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sh -c "ausearch -c 'loadkeys' --raw | audit2allow -M my-loadkeys; semodule -X 300 -i my-loadkeys.pp; /usr/bin/dumpkeys | /usr/bin/grep -v cr_Console | /usr/bin/loadkeys"
+RemainAfterExit=true
+
+[Install]
+WantedBy=multi-user.target

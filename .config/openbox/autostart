@@ -1,4 +1,5 @@
-#xfce4-panel &
-tint2 &
+xfce4-panel &
+xfdesktop &
+#tint2 &
 
-bash -c "source ~/.functions; setWallpaper" &
+#bash -c "source ~/.functions; setWallpaper" &
