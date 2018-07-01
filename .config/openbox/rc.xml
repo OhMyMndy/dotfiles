@@ -340,7 +340,7 @@
 		</keybind>
 		<keybind key="W-Return">
 			<action name="Execute">
-				<command>~/bin/i3-sensible-terminal</command>
+				<command>~/bin/terminal-emulator</command>
 			</action>
 		</keybind>
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-terms=(xfce4-terminal termite xterm uxterm)
+terms=(xfce4-terminal konsole termite xterm uxterm)
 
 for term in "${terms[@]}" ; do
   which $term 2>/dev/null >/dev/null

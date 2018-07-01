@@ -2,56 +2,81 @@
 
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-source $DIR/.functions
-source $DIR/.zshrc 2>/dev/null
+source "$DIR/.functions"
+source "$DIR/.zshrc" 2>/dev/null
 
 dark_mode=$(cat $HOME/.dark-mode 2>/dev/null)
 
-source ~/.functions
 
 mkdir -p ~/.config
 mkdir -p ~/Screenshots
 
-rm -f ~/.startup.sh
-ln -sf ${DIR}/.startup.sh ~/.startup.sh
 
-rm -f ~/.vimrc
-ln -sf ${DIR}/.vimrc ~/.vimrc
+link-file "$DIR" ~/.startup.sh
 
-rm -f ~/.dircolors
-ln -sf ~/dotfiles/.dircolors ~/.dircolors
-
-rm -rf ~/.vim
-ln -sf ${DIR}/.vim ~/.vim
-
-rm -f ~/.config/redshift.conf
-ln -sf ${DIR}/.config/redshift.conf ~/.config/redshift.conf
-
-rm -rf ~/.config/i3
-ln -sf ${DIR}/.config/i3 ~/.config/i3
-
-rm -rf ~/.config/openbox
-ln -sf ${DIR}/.config/openbox ~/.config/openbox
-
+link-file ".startup.sh"
+link-file ".vimrc"
+link-file ".vim"
+link-file ".dircolors"
+link-file ".config/redshift.conf"
+link-file ".config/i3"
+link-file ".i3status.conf"
+link-file ".config/openbox"
 mkdir -p ${DIR}/.config/xfce4/xfconf/xfce-perchannel-xml
-rm  ~/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml
-ln -sf ${DIR}/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml ~/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml
+link-file ".config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml"
 
-rm -rf ~/.config/xfce4/terminal
-ln -sfn ${DIR}/.config/xfce4/terminal ~/.config/xfce4/terminal
 
-rm -rf ~/.config/Thunar/uca.xml
-ln -sfn ${DIR}/.config/Thunar/uca.xml ~/.config/Thunar/uca.xml
 
-rm -rf ~/.config/parcellite/parcelliterc
+mkdir -p ~/.config/xfce4/
+link-file ".config/xfce4/terminal"
+
+mkdir -p ~/.config/Thunar
+link-file ".config/Thunar/uca.xml"
+
 mkdir -p ~/.config/parcellite/
-ln -sfn ${DIR}/.config/parcellite/parcelliterc  ~/.config/parcellite/parcelliterc
+link-file ".config/parcellite/parcelliterc"
 
 
-ln -sf ${DIR}/.wallpaper.jpg ~/.wallpaper.jpg
+# PLASMA
+
+rm -rf ~/.gtkrc-2.0
+ln -sf ${DIR}/.gtkrc-2.0 ~/.gtkrc-2.0
+
+rm -rf ~/.gtkrc-2.0-kde-4
+ln -sf ${DIR}/.gtkrc-2.0 ~/.gtkrc-2.0-kde4
 
 rm -rf ~/.config/gtk-3.0
 ln -sf ${DIR}/.config/gtk-3.0 ~/.config/gtk-3.0
+
+rm -rf ~/.config/gtk-2.0
+ln -sf ${DIR}/.config/gtk-2.0 ~/.config/gtk-2.0
+
+rm -rf ~/.config/gtkrc-2.0
+ln -sf ${DIR}/.config/gtkrc-2.0 ~/.config/gtkrc-2.0
+
+rm -rf ~/.config/gtkrc
+ln -sf ${DIR}/.config/gtkrc ~/.config/gtkrc
+
+rm -rf ~/.config/kglobalshortcutsrc
+ln -sf ${DIR}/.config/kglobalshortcutsrc ~/.config/kglobalshortcutsrc
+
+
+
+
+rm -rf ~/.config/plasma-workspace
+ln -sf ${DIR}/.config/plasma-workspace ~/.config/plasma-workspace
+
+rm -rf ~/.config/plasma-localerc
+ln -sf ${DIR}/.config/plasma-localerc ~/.config/plasma-localerc
+
+rm -rf ~/.config/plasmashellrc
+ln -sf ${DIR}/.config/plasmashellrc ~/.config/plasmashellrc
+
+rm -rf ~/.config//plasma-org.kde.plasma.desktop-appletsrc
+ln -sf ${DIR}/.config/plasma-org.kde.plasma.desktop-appletsrc  ~/.config/plasma-org.kde.plasma.desktop-appletsrc
+
+# PLASMA END
+
 
 rm -rf ~/.config/qt5ct
 ln -sf ${DIR}/.config/qt5ct ~/.config/qt5ct
@@ -206,6 +231,10 @@ ln -sf ${DIR}/.ncmpcpp ~/.ncmpcpp
 
 rm -rf ~/.config/vis
 ln -sf ${DIR}/.config/vis ~/.config/vis
+
+rm -rf ~/.config/tint2
+ln -sf ${DIR}/.config/tint2 ~/.config/tint2
+
 
 ##### START DESKTOP FILES #####
 
@@ -404,6 +433,8 @@ addToProfile 'DOCKER_GID' '$(getent group docker 2>/dev/null | cut -d: -f3 )'
 addToProfile 'XDG_CONFIG_HOME' '$HOME/.config'
 addToProfile 'QT_QPA_PLATFORMTHEME' "qt5ct"
 addToProfile '_JAVA_OPTIONS' "-Dawt.useSystemAAFontSettings=on"
+addToProfile 'XDG_DATA_DIRS' '$XDG_DATA_DIRS:~/.local/share/flatpak/exports/share/applications:/var/lib/flatpak/exports/share/applications'
+
 
 
 

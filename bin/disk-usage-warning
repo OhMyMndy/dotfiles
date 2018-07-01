@@ -19,6 +19,6 @@ for partition in $partitions; do
 	partition=$(echo $partition | awk '{print $3}')
 	echo "percentage $percentage partition $partition mount point $mount_point"
 
-    notify-send -i /usr/share/icons/gnome/256x256/status/dialog-warning.png 'Disk Space Alert' "Partition $partition at $mount_point remaining free space is critically low. Used: $percentage%"
+    notify-send -i dialog-warning.png 'Disk Space Alert' "Partition $partition at $mount_point remaining free space is critically low. Used: $percentage%"
 done
 

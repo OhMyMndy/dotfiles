@@ -34,7 +34,7 @@ accent-light2 = ${xrdb:color4}
 
 
 [bar/top]
-;monitor = ${env:MONITOR:HDMI-1}
+monitor = ${env:MONITOR:HDMI-1}
 dpi = ${xrdb:Xft.dpi:-1}
 width = 100%
 height = <%= polybar['height'] %>
@@ -49,15 +49,15 @@ overline-color = ${colors.foreground-alt}
 underline-size = 2
 underline-color = <%= polybar['highlight_color'] %>
 
-;border-bottom-size = 2
-;border-bottom-color = ${colors.accent-dark1}
-
 padding-left = <%= polybar['padding'] %>
 padding-right = <%= polybar['padding'] %>
 
 
 module-margin-left = 3
 module-margin-right = 3
+
+border-bottom-size = 2px
+border-bottom-color = <%= polybar['highlight_color'] %>
 
 
 font-0 = <%= polybar['fonts'][0] %>
@@ -70,13 +70,21 @@ modules-left = i3 mpd
 ; window
 modules-center = weather
 ; xwindow
-modules-right = pomodoro terminal monitor vpn filesystem load memory eth date logout
+modules-right = pomodoro terminal monitor vpn filesystem load date logout
 separator = "|"
 tray-position = right
 tray-padding = <%= polybar['padding'] %>
 tray-maxsize = 16
 ;tray-transparent = true
 
+
+[bar/bottom]
+inherit = bar/top
+modules-left = i3 mpd
+modules-center = weather
+modules-right = pomodoro terminal monitor vpn filesystem load
+bottom = true
+border-bottom-size = 0px
 
 
 [module/xwindow]
@@ -124,7 +132,7 @@ format-prefix = " "
 
 [module/terminal]
 type=custom/script
-click-left = ~/bin/i3-sensible-terminal &
+click-left = ~/bin/terminal-emulator &
 exec = echo ' '
 format-underline = ${colors.accent-light2}
 format-prefix = " "

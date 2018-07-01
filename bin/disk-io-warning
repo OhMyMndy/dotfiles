@@ -20,6 +20,8 @@ for disk in $disks; do
 
 	echo "percentage $percentage disk $disk"
 
-    notify-send -i /usr/share/icons/gnome/256x256/status/dialog-warning.png 'Disk IO Alert' "Disk $disk high IO Usage: $percentage%"
+    sudo iotop -oqqq -n 4 >
+
+    notify-send -i dialog-warning.png 'Disk IO Alert' "Disk $disk high IO Usage: $percentage%"
 done
 

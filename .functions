@@ -16,7 +16,8 @@ title() {
 randomWallpaper() {
     cd ~/wallpapers || exit 1
     wallpapers=($(find $PWD/ -type f -exec file {} \; | awk -F: '{ if ($2 ~/[Ii]mage|EPS/) print $1}' ))
-    index=$(($RANDOM % ${#wallpapers[@]} ))
+    rnd="$(shuf -i1-6000 -n1)"
+    index=$(($rnd % ${#wallpapers[@]} ))
     wallpaper=${wallpapers[$index]}
     echo ${wallpaper}
 }
@@ -54,9 +55,7 @@ setRandomWallpaper() {
     echo $RANDOM
     wallpaper=$(randomWallpaper)
     echo "Setting wallpaper to ${wallpaper}"
-    feh --bg-fill "${wallpaper}"
-	rm ~/.wallpaper 2>/dev/null
-    ln -s "$wallpaper_file" ~/.wallpaper
+    setWallpaper "$wallpaper"
 }
 
 detect_os() {
@@ -550,4 +549,60 @@ bi "/tank/media/music/to_import/$1"
 
 EOF
 
+}
+
+
+xresources-colors() {
+    counter=1
+    while [ $counter -le 16 ]
+    do
+        val=$(printf '%03d\n' $counter)
+        print -P "%{\$FG[$val]%}COLOR$counter%{\$reset_color%}"
+        ((counter++))
+    done
+}
+
+move-to-dotfiles() {
+    source="$1"
+
+    home=$(echo "$HOME" | sed -e 's/[\/&]/\\&/g');
+    source=$(echo "$1" | sed -E "s/$home\/?//g")
+    target="$HOME/dotfiles/$source"
+
+    if [ -f "$target" ] || [ -d "$target" ]; then
+        echo "Target '$target' already exists, aborting"
+        return
+    fi
+
+    echo "Moving '$1' to '$target'"
+
+    cp -r "$1" "$target"
+    result=$?
+    if [ $result -eq 0 ]; then
+        rm -rf "$1"
+        ln -s "$target" "$1"
+
+        echo "Add the following to link.sh: \"link-file '$source'\""
+
+    fi
+}
+
+
+
+link-file() {
+    dir="$1"
+    # file relative to root folder
+    arg="$2"
+    source="${dir}/$arg"
+    original="${HOME}/$arg"
+
+    if [ ! -f "$source" ] && [ ! -d "$source" ]; then
+        echo "File or folder '$source' ($original) does not exist!"
+        return
+    fi
+
+    set -x
+    rm -f "$original"
+    ln -sf "$source" "$original"
+    set +x
 }

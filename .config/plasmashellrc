@@ -1,0 +1,37 @@
+[Containments][3][General]
+AppletOrder=6
+
+[DownloadDialog Settings]
+Height 1080=485
+Width 1920=700
+
+[PlasmaRunnerManager]
+LaunchCounts=1 services_workspaceoptions.desktop,1 services_jetbrains-phpstorm.desktop,1 services_org.kde.dolphin.desktop,2 services_keys.desktop,1 services_jetbrains-idea-ce.desktop,2 services_rambox.desktop,1 services_kcm_kscreen.desktop,4 services_systemsettings.desktop,1 services_remmina-connection-NMB_Jumpserver.desktop
+pluginWhiteList=services,places,desktopsessions,PowerDevil,shell,bookmarks,recentdocuments,locations,baloosearch
+
+[PlasmaTransientsConfig]
+PreloadWeight=26
+
+[PlasmaViews][Panel 20][Horizontal1440]
+thickness=30
+
+[PlasmaViews][Panel 20][Horizontal1920]
+maxLength=1920
+minLength=1920
+thickness=20
+
+[PlasmaViews][Panel 20][Horizontal720]
+thickness=30
+
+[PlasmaViews][Panel 3]
+panelVisibility=2
+
+[PlasmaViews][Panel 3][Horizontal1920]
+thickness=26
+
+[ScreenConnectors]
+0=HDMI-1
+1=DP-2
+
+[Updates]
+performed=/usr/share/plasma/shells/org.kde.plasma.desktop/contents/updates/obsolete_kickoffrc-1.js,/usr/share/plasma/shells/org.kde.plasma.desktop/contents/updates/00-start-here-2.js

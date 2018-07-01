@@ -27,8 +27,8 @@ WALLPAPER_PATH="/tmp/lockscreen_$(basename "${IMAGE}")__$(basename "${IMAGE2}").
 
 if [ ! -f "$WALLPAPER_PATH" ]; then
 	echo "Converting..."
-	time convert "$IMAGE" -resize 1920x1080^ -gravity center -extent 1920x1080 -sepia-tone 90% "$tmpfile"
-    time convert "$IMAGE2" -resize 1920x1080^ -gravity center -extent 1920x1080 -sepia-tone 90% "$tmpfile2"
+	time convert "$IMAGE" -resize 1920x1080^ -gravity center -extent 1920x1080 -set colorspace sRGB "$tmpfile"
+    time convert "$IMAGE2" -resize 1920x1080^ -gravity center -extent 1920x1080 -set colorspace sRGB "$tmpfile2"
 	time convert +append "$tmpfile" "$tmpfile2" "$WALLPAPER_PATH"
 fi
 

@@ -24,8 +24,29 @@ font pango: <%= i3['font'] %>
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
+# bar
+
+#bar {
+#    status_command i3status --config ~/.i3status.conf
+#    position bottom
+#    output primary
+#    tray_output none
+#    strip_workspace_numbers yes
+#
+#    colors {
+#        background <%= colors['BACKGROUND'] %>
+#        statusline <%= colors['COLOR4'] %>
+#        separator <%= colors['COLOR6'] %>
+#        focused_workspace  <%= colors['COLOR4'] %> <%= colors['COLOR4'] %> <%= colors['BACKGROUND'] %>
+#        inactive_workspace <%= colors['BACKGROUND'] %> <%= colors['BACKGROUND'] %> <%= colors['COLOR4'] %>
+#    }
+#
+#}
+
+
 # start a terminal
-bindsym $mod+Return exec bash ~/bin/i3-sensible-terminal
+bindsym $mod+Return exec bash ~/bin/terminal-emulator
+bindsym $mod+Shift+Return exec bash ~/bin/terminal-emulator
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -90,11 +111,12 @@ bindsym $mod+a focus parent
 #bindsym $mod+d focus child
 
 # Execute xkill
-bindsym $mod+Escape exec "xterm -name floating -geometry 40x4 -e xkill"
-bindsym $mod+F1 exec "xterm -name floating -geometry 80x40 +ls -e '~/bin/get_commands'"
-bindsym $mod+F2 exec "xterm -name floating -geometry 120x40 +ls -e 'echo xprop; xprop; read a'"
-bindsym $mod+F3 exec "xterm -name floating -geometry 140x60 +ls -e 'bash'"
-bindsym $mod+F4 exec "xterm -name floating -geometry 140x60 +ls -e 'bash -c \\"htop\\"'"
+bindsym $mod+Escape exec "xfce4-terminal --initial-title=floating --geometry 40x4 -e xkill"
+bindsym $mod+F1 exec "xfce4-terminal --initial-title=floating --geometry 80x40 -e \\"$HOME/bin/get_commands\\"
+bindsym $mod+F2 exec "xfce4-terminal --initial-title=floating --geometry 120x40 -e 'bash -c \\"echo xprop; xprop; read a\\"'"
+bindsym $mod+F3 exec "xfce4-terminal --initial-title=floating --geometry 140x60 -e 'bash'"
+bindsym $mod+F4 exec "xfce4-terminal --initial-title=floating --geometry 140x60"
+bindsym $mod+F5 exec "xfce4-terminal --initial-title=floating --geometry 140x60 -e 'bash -c \\"htop\\"'"
 
 set $workspace1 "1: "
 set $workspace2 "2: "
@@ -228,41 +250,43 @@ assign [class="jetbrains-idea-ce"]                                              
 assign [class="Rambox"]                                                                 $workspace6
 assign [class="Thunar"]                                                                 $workspace3
 assign [class="Atom"]                                                                   $workspace9
-assign [class="Xfce4-terminal"]                                                         $workspace2
+assign [title=".*byobu.*"]                                                              $workspace2
 
 
 hide_edge_borders smart
 
 # For windows
 for_window [class=".*"]                                                                 title_format " %title", border normal <%= i3['border'] %>
-for_window [class="Yad"]                                                                floating enable
-for_window [class="mpv"]                                                                floating enable
-for_window [instance=".*floating.*"]                                                    floating enable
-for_window [title=".*floating.*"]                                                       floating enable
-
-for_window [window_role="pop-up"]                                                       floating enable
-for_window [window_role="bubble"]                                                       floating enable
-for_window [window_role="task_dialog"]                                                  floating enable
-for_window [window_role="Preferences"]                                                  floating enable
-for_window [window_type="dialog"]                                                       floating enable
-for_window [window_type="menu"]                                                         floating enable
-for_window [class="TeamViewer"]                                                         floating enable
-for_window [class="Arandr"]                                                             floating enable
+for_window [class="Yad"]                                                                floating enable, border pixel <%= i3['border'] %>
+for_window [class="mpv"]                                                                floating enable, border pixel <%= i3['border'] %>
+for_window [instance=".*floating.*"]                                                    floating enable, border pixel <%= i3['border'] %>
+for_window [title=".*floating.*"]                                                       floating enable, border pixel <%= i3['border'] %>
 
 
+for_window [window_role="pop-up"]                                                       floating enable, border pixel <%= i3['border'] %>
+for_window [window_role="bubble"]                                                       floating enable, border pixel <%= i3['border'] %>
+for_window [window_role="task_dialog"]                                                  floating enable, border pixel <%= i3['border'] %>
+for_window [window_role="Preferences"]                                                  floating enable, border pixel <%= i3['border'] %>
+for_window [window_type="dialog"]                                                       floating enable, border pixel <%= i3['border'] %>
+for_window [window_type="menu"]                                                         floating enable, border pixel <%= i3['border'] %>
+for_window [class="TeamViewer"]                                                         floating enable, border pixel <%= i3['border'] %>
+
+# for_window [class="^jetbrains-.+"][window_type=dialog] focus
 
 # source: https://github.com/Airblader/dotfiles-manjaro/blob/master/.i3/config
 #for_window [class="(?i)VirtualBox" title="(?i)Manager"]                                floating enable
 #for_window [class="(?i)VirtualBox"]                                                    floating enable
 
-for_window [class="(?i).*xterm.*"]                                                      border pixel 0
+#for_window [class="(?i).*xterm.*"]                                                      border pixel 0
 for_window [class="(?i).*termite.*"]                                                    border pixel 0
 for_window [class="(?i).*jetbrains.*"]                                                  border pixel <%= i3['border'] %>
 for_window [class="Rambox"]                                                             border pixel 0
 for_window [class="Gedit"]                                                              border pixel <%= i3['border'] %>
 for_window [class="Gnome-calculator"]                                                   border pixel 0
 for_window [class="Gnome-disk"]                                                         border pixel <%= i3['border'] %>
+for_window [class="Gnome-font-viewer"]                                                  border pixel <%= i3['border'] %>
 for_window [class="File-roller"]                                                        border pixel 0
+for_window [class="Marker"]                                                             border pixel 0
 #for_window [class="Remmina"]                                                            border pixel 0
 for_window [class="Xfce4-terminal"]                                                     border pixel <%= i3['border'] %>
 
@@ -282,33 +306,33 @@ exec "xrandr --dpi $(xrdb -query | grep dpi | head -1 | grep -E -o '[0-9]+')"
 
 # Exec always
 exec_always --no-startup-id bash ~/bin/restart-polybar &
-exec_always --no-startup-id compton &
-exec_always --no-startup-id albert &
-exec_always --no-startup-id killall dunst; while pgrep -x dunst >/dev/null; do sleep 1; done; dunst
+# exec_always --no-startup-id compton &
+# exec_always --no-startup-id albert &
+# exec_always --no-startup-id killall dunst; while pgrep -x dunst >/dev/null; do sleep 1; done; dunst
 exec_always --no-startup-id bash -c "source ~/.functions; setWallpaper"
-exec_always --no-startup-id sh -c "pgrep -x xbanish; [ \$? -eq 1 ] && xbanish &"
-exec_always --no-startup-id sh -c "pgrep -x pasystray; [ \$? -eq 1 ] && pasystray &"
-exec_always --no-startup-id sh -c "pgrep -x pb-for-desktop; [ \$? -eq 1 ] && pb-for-desktop &"
-exec_always --no-startup-id sh -c "pgrep -x nm-applet; [ \$? -eq 1 ] && nm-applet &"
-exec_always --no-startup-id sh -c "pgrep -x parcellite; [ \$? -eq 1 ] && parcellite &"
-exec_always --no-startup-id sh -c "pgrep -x imwheel; [ \$? -eq 1 ] && imwheel &"
-exec_always --no-startup-id killall synergys; while pgrep -x synergys >/dev/null; do sleep 1; done; synergys -c ~/.synergy.conf &
-exec_always --no-startup-id killall notify-server; while pgrep -x notify-server >/dev/null; do sleep 1; done; notify-server &
+# exec_always --no-startup-id sh -c "pgrep -x xbanish; [ \$? -eq 1 ] && xbanish &"
+# exec_always --no-startup-id sh -c "pgrep -x pasystray; [ \$? -eq 1 ] && pasystray &"
+# exec_always --no-startup-id sh -c "pgrep -x pb-for-desktop; [ \$? -eq 1 ] && pb-for-desktop &"
+# exec_always --no-startup-id sh -c "pgrep -x nm-applet; [ \$? -eq 1 ] && nm-applet &"
+# exec_always --no-startup-id sh -c "pgrep -x parcellite; [ \$? -eq 1 ] && parcellite &"
+# exec_always --no-startup-id sh -c "pgrep -x imwheel; [ \$? -eq 1 ] && imwheel &"
+# exec_always --no-startup-id killall synergys; while pgrep -x synergys >/dev/null; do sleep 1; done; synergys -c ~/.synergy.conf &
+# exec_always --no-startup-id killall notify-server; while pgrep -x notify-server >/dev/null; do sleep 1; done; notify-server &
+#
+# exec_always --no-startup-id sh -c "pgrep -x rambox; [ \$? -eq 1 ] && /opt/Rambox/rambox &"
+# exec_always --no-startup-id sh -c "pgrep -x xfce4-terminal; [ \$? -eq 1 ] && xfce4-terminal -e byobu"
+# exec_always --no-startup-id sh -c "pgrep -x thunar; [ \$? -eq 1 ] && thunar &"
+# exec_always --no-startup-id sh -c "pgrep -x shutter; [ \$? -eq 1 ] && shutter --min_at_startup &"
+# #exec_always --no-startup-id sh -c "pgrep -x jetbrains-toolbox ; [ \$? -eq 1 ] && jetbrains-toolbox &"
+# #exec_always --no-startup-id sh -c "pgrep -x unclutter ; [ \$? -eq 1 ] && unclutter -idle 2 -jitter 5 -noevents -root &"
+# exec_always --no-startup-id sh -c "pgrep -x redshift-gtk ; [ \$? -eq 1 ] && redshift-gtk &"
+# #exec_always --no-startup-id sh -c "pgrep -x udiskie ; [ \$? -eq 1 ] && udiskie --tray --use-udisks2 &"
+# exec_always --no-startup-id sh -c "pgrep -x chrome ; [ \$? -eq 1 ] && google-chrome &"
+# exec_always --no-startup-id pkill xss-lock; xss-lock -- ~/.config/i3/scripts/lock &
 
-exec_always --no-startup-id sh -c "pgrep -x rambox; [ \$? -eq 1 ] && /opt/Rambox/rambox &"
-exec_always --no-startup-id sh -c "pgrep -x xfce4-terminal; [ \$? -eq 1 ] && xfce4-terminal -e byobu"
-exec_always --no-startup-id sh -c "pgrep -x thunar; [ \$? -eq 1 ] && thunar &"
-exec_always --no-startup-id sh -c "pgrep -x shutter; [ \$? -eq 1 ] && shutter --min_at_startup &"
-#exec_always --no-startup-id sh -c "pgrep -x jetbrains-toolbox ; [ \$? -eq 1 ] && jetbrains-toolbox &"
-#exec_always --no-startup-id sh -c "pgrep -x unclutter ; [ \$? -eq 1 ] && unclutter -idle 2 -jitter 5 -noevents -root &"
-exec_always --no-startup-id sh -c "pgrep -x redshift-gtk ; [ \$? -eq 1 ] && redshift-gtk &"
-#exec_always --no-startup-id sh -c "pgrep -x udiskie ; [ \$? -eq 1 ] && udiskie --tray --use-udisks2 &"
-exec_always --no-startup-id sh -c "pgrep -x chrome ; [ \$? -eq 1 ] && google-chrome &"
-exec_always --no-startup-id pkill xss-lock; xss-lock -- ~/.config/i3/scripts/lock &
-
-exec_always --no-startup-id sh -c "pgrep -x xfce4-power-manager; [ \$? -eq 1 ] && xfce4-power-manager &"
- 
-
+# exec_always --no-startup-id sh -c "pgrep -x xfce4-notifyd; [ \$? -eq 1 ] && /usr/lib64/xfce4/notifyd/xfce4-notifyd &"
+# exec_always --no-startup-id sh -c "pgrep -x xfconfd; [ \$? -eq 1 ] && /usr/lib64/xfce4/xfconf/xfconfd &"
+# exec_always --no-startup-id sh -c "pgrep -x xfce4-power-manager; [ \$? -eq 1 ] && xfce4-power-manager &"
 
 
 
@@ -323,11 +347,6 @@ bindsym $mod+Shift+Escape exec xset s activate
 bindsym Print exec shutter -f
 # bindsym $mod+Print exec flameshot full -p ~/Screenshots/ -c
 
-# Pulse Audio controls
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume $(pactl list short sinks | grep alsa_output | cut -f1) +2% #increase sound volume
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume $(pactl list short sinks | grep alsa_output | cut -f1) -2% #decrease sound volume
-bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute $(pactl list short sinks | grep alsa_output | cut -f1) toggle # mute sound
-
 
 # Media player controls
 bindsym XF86AudioPlay exec mpc toggle
@@ -341,14 +360,6 @@ bindsym $mod+ctrl+i exec mpc stop
 bindsym $mod+ctrl+o exec mpc toggle
 bindsym $mod+ctrl+p exec mpc next
 
-# Screen brightness controls
-bindsym XF86MonBrightnessUp exec xbacklight -inc 20 # increase screen brightness
-bindsym XF86MonBrightnessDown exec xbacklight -dec 20 # decrease screen brightness
-
-# increase/decrease keyboard brightness
-bindsym XF86KbdBrightnessUp exec kbdbacklight up
-bindsym XF86KbdBrightnessDown exec kbdbacklight down 
-
 <% if i3['gaps']['enabled'] %>
 # Gaps
 gaps inner <%= i3['gaps']['inner'] %>
@@ -360,7 +371,6 @@ gaps outer <%= i3['gaps']['outer'] %>
 
 # FOCUS
 focus_on_window_activation urgent
-
 
 
 # Display
@@ -382,19 +392,22 @@ mode "$mode_display" {
 bindsym $mod+x mode "$mode_display"
 
 
-# Power management
-set $mode_system System (l) lock, (e) logout, (s) suspend, (h) hibernate, (r) reboot, (Shift+s) shutdown
-mode "$mode_system" {
-    bindsym l exec --no-startup-id $Locker, mode "default"
-    bindsym e exec --no-startup-id i3-msg exit, mode "default"
-    bindsym s exec --no-startup-id $Locker && systemctl suspend, mode "default"
-    bindsym h exec --no-startup-id $Locker && systemctl hibernate, mode "default"
-    bindsym r exec --no-startup-id systemctl reboot, mode "default"
-    bindsym Shift+s exec --no-startup-id systemctl poweroff -i, mode "default"
+## Plasma Integration
+# https://www.reddit.com/r/unixporn/comments/64mihc/i3_kde_plasma_a_match_made_in_heaven/
+# https://www.reddit.com/r/archlinux/comments/6kpyi3/i3wm_for_kde_how/
 
- # back to normal: Enter or Escape
-    bindsym Return mode "default"
-    bindsym Escape mode "default"
-}
+# exec --no-startup-id wmctrl -c Plasma
+for_window [title="Desktop — Plasma"] kill; floating enable; border none
 
-bindsym $mod+Pause mode "$mode_system"
+## Avoid tiling popups, dropdown windows from plasma
+# for the first time, manually resize them, i3 will remember the setting for floating windows
+for_window [class="plasmashell"]    floating enable, border pixel 0
+for_window [class="Plasma"]         floating enable, border pixel 0
+for_window [title="plasma-desktop"] floating enable, border pixel 0
+for_window [class="krunner"]        floating enable, border pixel 0
+for_window [class="Kmix"]           floating enable, border pixel 0
+for_window [class="Klipper"]        floating enable, border pixel 0
+for_window [class="Plasmoidviewer"] floating enable, border pixel 0
+no_focus [class="plasmashell"]
+
+# focus_follows_mouse = no

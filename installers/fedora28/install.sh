@@ -207,14 +207,16 @@ mesa-dri-drivers
 
 okular
 console-setup
+xfce4-terminal
 EOL
     status=$?
     if [ $status -ne 0 ]; then
         echo "Install exited with status ${status}"
         exit 2
     fi
-    set -x
-    dnf remove gnome-calculator evince file-roller gedit gedit-plugins gnucash parcellite engrampa xarchiver -y || true
+    dnf remove gnome-calculator evince file-roller gedit gedit-plugins gnucash redshift-gtk lightdm -y
+
+    su mandy bash -c "rm -rf ~/.gemrc; ln -sf ${DIR}/../../.gemrc ~/.gemrc"
 
     gem install json --no-ri --no-rdoc
     gem install teamocil --no-ri --no-rdoc
@@ -288,33 +290,33 @@ LC_IDENTIFICATION="nl_BE.UTF-8"
 
 EOL
 
-    cat <<'EOL' > /etc/fonts/local.conf
+     cat <<'EOL' | tee /etc/fonts/local.conf
 <?xml version='1.0'?>
 <!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
 <fontconfig>
-<match target="font">
-     <edit name="antialias" mode="assign">
+    <match target="font">
+        <edit name="antialias" mode="assign">
          <bool>true</bool>
-     </edit>
-     <edit name="autohint" mode="assign">
+        </edit>
+        <edit name="autohint" mode="assign">
          <bool>false</bool>
-     </edit>
-     <edit name="hinting" mode="assign">
+        </edit>
+        <edit name="hinting" mode="assign">
          <bool>true</bool>
-     </edit>
-     <edit name="hintstyle" mode="assign">
+        </edit>
+        <edit name="hintstyle" mode="assign">
          <const>hintslight</const>
-     </edit>
-     <edit name="lcdfilter" mode="assign">
+        </edit>
+        <edit name="lcdfilter" mode="assign">
          <const>lcddefault</const>
-     </edit>
-     <edit name="rgba" mode="assign">
+        </edit>
+        <edit name="rgba" mode="assign">
          <const>rgb</const>
-     </edit>
-     <edit name="embeddedbitmap" mode="assign">
+        </edit>
+        <edit name="embeddedbitmap" mode="assign">
          <bool>false</bool>
-     </edit>
-</match>
+        </edit>
+    </match>
 </fontconfig>
 EOL
 
@@ -548,7 +550,8 @@ function development {
 }
 
 function php_tools {
-    dnf install -y composer php-pecl-imagick
+        # PHP
+    dnf install -y composer php-pecl-imagick kcachegrind
     su mandy bash -c 'composer global require "acacha/llum"'
     su mandy bash -c 'composer global require "acacha/adminlte-laravel-installer"'
     su mandy bash -c 'composer global require "symfony/console"'

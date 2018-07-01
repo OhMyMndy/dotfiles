@@ -77,6 +77,7 @@ Dir.glob ['*.erb', '.byobu/*.erb', '.config/**/*.erb', '.icons/**/*.erb'], File:
 end
 
 %x( xrdb -remove )
+%x( touch ~/.Xresources-local )
 %x( xrdb -override ~/.Xresources )
 
 

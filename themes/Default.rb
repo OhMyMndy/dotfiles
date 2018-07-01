@@ -10,6 +10,7 @@ class Default
     attr_accessor :dpi
     attr_accessor :byobu
     attr_accessor :ethinterface
+    attr_accessor :default_monitor
 
     def initialize dpi
         @dpi = dpi
@@ -58,7 +59,7 @@ class Default
       @monospace_font_style = "Regular"
       @monospace_font_size = 11;
 
-      @normal_font = "Noto Sans"
+      @normal_font = "Sans Serif"
       @normal_font_style = "Regular"
       @normal_font_size = 10;
 
@@ -85,9 +86,10 @@ class Default
       available_icons = available_icons.split("\n")
 
       @gtk = {
-          "theme"           => "Numix",
-          "icon_theme"      => "Numix",
-          "cursor_theme"    => "DMZ-White"
+          "theme"                   => "Breeze",
+          "icon_theme"              => "breeze",
+          "fallback_icon_theme"     => 'Numix',
+          "cursor_theme"            => "breeze-cursors"
       }
 
       available = available_themes.select {|e| e == @gtk['theme']}
@@ -178,14 +180,14 @@ class Default
           "highlight_color"      => @highlight_color,
           "urgent_color"         => @urgent_color,
           "inactive_color"       => @inactive_color,
-          "height"               => (@normal_font_size * 2).to_s + "px",
+          "height"               => ((@normal_font_size * 2) * 1).to_s + "px",
           "padding"              => 1,
           "wm_padding"           => 3,
           "fonts"                => [
               @fonts["normal"].to_polybar(@normal_font_size, 2),
               @fonts["normal_alternative"].to_polybar(@normal_font_size, 2),
-              @fonts["monospace"].to_polybar(14, 3),
-              @fonts["weather"].to_polybar(12, 2)
+              @fonts["monospace"].to_polybar(12, 3),
+              @fonts["weather"].to_polybar(11, 2)
           ]
       }
 
@@ -199,6 +201,7 @@ class Default
       }
 
       @ethinterface = %x(route | grep '^default' | grep -o '[^ ]*$').strip!
+      @default_monitor = %x(xrandr | grep "connected primary" | grep -Eo -m 1 '[a-zA-Z0-9\-]+' | head -1)
     end
 
     def configuration_override()
