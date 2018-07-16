@@ -59,7 +59,7 @@ class Default
       @monospace_font_style = "Regular"
       @monospace_font_size = 11;
 
-      @normal_font = "Sans Serif"
+      @normal_font = "Ubuntu"
       @normal_font_style = "Regular"
       @normal_font_size = 10;
 
@@ -86,10 +86,10 @@ class Default
       available_icons = available_icons.split("\n")
 
       @gtk = {
-          "theme"                   => "Breeze",
-          "icon_theme"              => "breeze",
-          "fallback_icon_theme"     => 'Numix',
-          "cursor_theme"            => "breeze-cursors"
+          "theme"                   => "Numix",
+          "icon_theme"              => "Pop",
+          "fallback_icon_theme"     => 'Adwaita',
+          "cursor_theme"            => "dmz"
       }
 
       available = available_themes.select {|e| e == @gtk['theme']}
@@ -106,7 +106,6 @@ class Default
           @gtk['icon_theme'] = 'Adwaita'
         end
       end
-
 
 
       available = available_icons.select {|e| e == @gtk['cursor_theme']}
@@ -180,13 +179,13 @@ class Default
           "highlight_color"      => @highlight_color,
           "urgent_color"         => @urgent_color,
           "inactive_color"       => @inactive_color,
-          "height"               => ((@normal_font_size * 2) * 1).to_s + "px",
+          "height"               => ((@normal_font_size * 2) * 1.2).to_s + "px",
           "padding"              => 1,
           "wm_padding"           => 3,
           "fonts"                => [
               @fonts["normal"].to_polybar(@normal_font_size, 2),
               @fonts["normal_alternative"].to_polybar(@normal_font_size, 2),
-              @fonts["monospace"].to_polybar(12, 3),
+              @fonts["monospace"].to_polybar(14, 3),
               @fonts["weather"].to_polybar(11, 2)
           ]
       }

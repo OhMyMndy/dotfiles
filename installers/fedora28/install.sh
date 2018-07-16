@@ -96,13 +96,14 @@ set -e
 @hardware-support
 @base-x
 @firefox
+google-chrome-stable
+chromium
 @fonts
 terminus-fonts-console
 # fontconfig-enhanced-defaults
 # fontconfig-font-replacements
-@kde
-plasma-sdk
-ark
+@xfce
+paper-icon-theme
 @multimedia
 @printing
 @development-tools
@@ -117,6 +118,7 @@ rpmconf
 htop
 iotop
 
+mate-calc
 git
 tig
 gitflow
@@ -124,10 +126,10 @@ gitflow
 strace
 system-config-printer
 
-# i3
-# i3lock
-# wmctrl
-# xterm
+i3
+i3lock
+wmctrl
+xterm
 zsh
 google-roboto-fonts
 redshift
@@ -137,49 +139,89 @@ unrar
 
 openssh
 arandr
-
+lxappearance
+parcellite
 byobu
 tmux
-
+network-manager-applet
+feh
 xsel
 xclip
+variety
+paper-icon-theme
 yad
-
+thunar
+tumbler
+nemo
+unrar
+engrampa
+git
+tig
 ruby
 ruby-devel
 
-synergy
 
+synergy
+pulseaudio
+
+gnome-disk-utility
+
+pluma
+gedit
+lightdm
+xfce4-panel
+xfce4-power-manager
 virt-what
 
 jq
 ImageMagick
 
+numix-gtk-theme
+arc-theme
+dmz-cursor-themes
+
+ristretto
 gnupg
 openssl-devel
 gcc-c++
 make
 neofetch
+xfce4-terminal
 
+pasystray
 glibc-locale-source
 
 wget
 vpnc
 
+dnfdragora
+seahorse
+gnome-keyring
 curl
 sqlite
 
 openssh-askpass
+shutter
+hunspell-en
+hunspell-nl
 
+gnome-python2-gconf
 qdirstat
+font-manager
+libXt-devel
+libXfixes-devel
+libXi-devel
+
 
 keepassxc
-
+qt5ct
 qt-config
 qt5-qtstyleplugins
 exa
+compton
 java-1.8.0-openjdk
 
+imwheel
 
 fuse
 cifs-utils
@@ -187,6 +229,9 @@ gvfs-fuse
 fuse-exfat
 fuse-sshfs
 exfat-utils
+
+atril
+rofi
 
 vlc
 
@@ -196,6 +241,7 @@ system-config-kickstart
 mediawriter
 xss-lock
 libvirt
+sysstat
 albert
 
 openvpn
@@ -205,16 +251,25 @@ sublime-text
 xbacklight
 mesa-dri-drivers
 
-okular
 console-setup
 xfce4-terminal
+xfce4-panel
+
+lshw
+redshift-gtk
+xscreensaver
+xscreensaver-extras
+xscreensaver-gl-extras
+qalculate-gtk
+parallel
 EOL
     status=$?
     if [ $status -ne 0 ]; then
         echo "Install exited with status ${status}"
         exit 2
     fi
-    dnf remove gnome-calculator evince file-roller gedit gedit-plugins gnucash redshift-gtk lightdm -y
+    echo "will cite" | parallel --citation
+    dnf remove gnome-calculator evince file-roller gedit gedit-plugins gnucash  plasma-sdk ark @kde -y
 
     su mandy bash -c "rm -rf ~/.gemrc; ln -sf ${DIR}/../../.gemrc ~/.gemrc"
 
@@ -256,7 +311,7 @@ EOL
 
     dnf install -y https://download.teamviewer.com/download/linux/teamviewer.x86_64.rpm
     dnf install -y http://download.nomachine.com/download/6.1/Linux/nomachine_6.1.6_9_x86_64.rpm
-    #dnf install -y http://rpmfind.net/linux/mageia/distrib/cauldron/x86_64/media/core/release/dunst-1.3.1-1.mga7.x86_64.rpm
+    dnf install -y http://rpmfind.net/linux/mageia/distrib/cauldron/x86_64/media/core/release/dunst-1.3.2-1.mga7.x86_64.rpm
     dnf install $(curl -s https://api.github.com/repos/saenzramiro/rambox/releases/latest | jq -r ".assets[] | select(.name) | select(.browser_download_url | test(\"64.*rpm$\")) | .browser_download_url") -y
     dnf install $( curl -s https://api.github.com/repos/mbusb/multibootusb/releases/latest | jq -r ".assets[] | select(.name) | select(.browser_download_url | test(\".*rpm$\")) | .browser_download_url" | head -1 ) -y
 
@@ -266,6 +321,19 @@ EOL
     # Create swap file
     # create_swap_file 4 /swapfile
     # echo "/swapfile none swap sw 0 0" | tee -a /etc/fstab
+
+    su mandy bash -c '
+    if [ ! -d "$HOME/.nvm" ]; then
+        unset NVM_DIR
+        curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
+        export NVM_DIR="$HOME/.nvm"
+        [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # This loads nvm
+
+        nvm install stable
+    fi'
+    sudo -A chown -R mandy:"$(id -gn mandy)" /home/mandy/.config
+
+
     set +x
 }
 
@@ -290,34 +358,54 @@ LC_IDENTIFICATION="nl_BE.UTF-8"
 
 EOL
 
-     cat <<'EOL' | tee /etc/fonts/local.conf
-<?xml version='1.0'?>
-<!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
-<fontconfig>
-    <match target="font">
-        <edit name="antialias" mode="assign">
-         <bool>true</bool>
-        </edit>
-        <edit name="autohint" mode="assign">
-         <bool>false</bool>
-        </edit>
-        <edit name="hinting" mode="assign">
-         <bool>true</bool>
-        </edit>
-        <edit name="hintstyle" mode="assign">
-         <const>hintslight</const>
-        </edit>
-        <edit name="lcdfilter" mode="assign">
-         <const>lcddefault</const>
-        </edit>
-        <edit name="rgba" mode="assign">
-         <const>rgb</const>
-        </edit>
-        <edit name="embeddedbitmap" mode="assign">
-         <bool>false</bool>
-        </edit>
-    </match>
-</fontconfig>
+#     cat <<'EOL' | tee /etc/fonts/local.conf
+#<?xml version='1.0'?>
+#<!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
+#<fontconfig>
+#    <match target="font">
+#        <edit name="antialias" mode="assign">
+#         <bool>true</bool>
+#        </edit>
+#        <edit name="autohint" mode="assign">
+#         <bool>false</bool>
+#        </edit>
+#        <edit name="hinting" mode="assign">
+#         <bool>true</bool>
+#        </edit>
+#        <edit name="hintstyle" mode="assign">
+#         <const>hintslight</const>
+#        </edit>
+#        <edit name="lcdfilter" mode="assign">
+#         <const>lcddefault</const>
+#        </edit>
+#        <edit name="rgba" mode="assign">
+#         <const>rgb</const>
+#        </edit>
+#        <edit name="embeddedbitmap" mode="assign">
+#         <bool>false</bool>
+#        </edit>
+#    </match>
+#</fontconfig>
+#EOL
+
+
+  cat <<'EOL' > /etc/default/console-setup
+# CONFIGURATION FILE FOR SETUPCON
+
+# Consult the console-setup(5) manual page.
+
+ACTIVE_CONSOLES=guess
+
+CHARMAP=guess
+
+CODESET=guess
+FONTFACE=TerminusBold
+FONTSIZE=16
+
+VIDEOMODE=
+
+# The following is an example how to use a braille font
+# FONT='lat9w-08.psf.gz brl-8x8.psf'
 EOL
 
     cat <<'EOL' > /etc/sysctl.conf
@@ -422,14 +510,14 @@ function setup_firewall {
 function add_repositories {
     set -x
     # Persist extra repos and import keys.
-#    cat << EOF > /etc/yum.repos.d/google-chrome.repo
-#[google-chrome]
-#name=google-chrome
-#baseurl=http://dl.google.com/linux/chrome/rpm/stable/x86_64
-#enabled=1
-#gpgcheck=1
-#gpgkey=https://dl-ssl.google.com/linux/linux_signing_key.pub
-#EOF
+    cat << EOF > /etc/yum.repos.d/google-chrome.repo
+[google-chrome]
+name=google-chrome
+baseurl=http://dl.google.com/linux/chrome/rpm/stable/x86_64
+enabled=1
+gpgcheck=1
+gpgkey=https://dl-ssl.google.com/linux/linux_signing_key.pub
+EOF
 
     rpm --import https://dl-ssl.google.com/linux/linux_signing_key.pub
 
@@ -438,9 +526,9 @@ function add_repositories {
     rpm -ivh https://rpms.remirepo.net/fedora/remi-release-28.rpm
 
     dnf install -y http://mirror.yandex.ru/fedora/russianfedora/russianfedora/free/fedora/releases/28/Everything/x86_64/os/russianfedora-free-release-28-1.noarch.rpm
-#    dnf install https://www.rpmfind.net/linux/sourceforge/u/un/unitedrpms/27/x86_64/msttcorefonts-2.5-4.fc27.noarch.rpm -y
+    # http://mscorefonts2.sourceforge.net/
+    rpm -i https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm
 
-    dnf copr enable dawid/better_fonts -y
     dnf copr enable yaroslav/i3desktop -y
     rpm --import https://dl.tvcdn.de/download/linux/signature/TeamViewer2017.asc
 
@@ -492,6 +580,10 @@ function multimedia {
 
 function virtualization {
     dnf install -y VirtualBox
+    virtualbox_version=$(vboxmanage --version | grep -Eo '[0-9+]\.[0-9]+\.[0-9]+')
+    cd /tmp
+    curl -J -O -L https://download.virtualbox.org/virtualbox/${virtualbox_version}/Oracle_VM_VirtualBox_Extension_Pack-${virtualbox_version}.vbox-extpack
+    yes | vboxmanage extpack install /tmp/Oracle_VM_VirtualBox_Extension_Pack-${virtualbox_version}.vbox-extpack
 }
 
 function wine {

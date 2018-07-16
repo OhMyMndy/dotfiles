@@ -12,138 +12,79 @@ mkdir -p ~/.config
 mkdir -p ~/Screenshots
 
 
-link-file "$DIR" ~/.startup.sh
-
-link-file ".startup.sh"
-link-file ".vimrc"
-link-file ".vim"
-link-file ".dircolors"
-link-file ".config/redshift.conf"
-link-file ".config/i3"
-link-file ".i3status.conf"
-link-file ".config/openbox"
+link-file "$DIR" ".startup.sh"
+link-file "$DIR" ".vimrc"
+link-file "$DIR" ".vim"
+link-file "$DIR" ".dircolors"
+link-file "$DIR" ".config/redshift.conf"
+link-file "$DIR"".config/i3"
+link-file "$DIR" ".i3status.conf"
+link-file "$DIR" ".config/openbox"
 mkdir -p ${DIR}/.config/xfce4/xfconf/xfce-perchannel-xml
-link-file ".config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml"
-
+link-file "$DIR" ".config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml"
+link-file "$DIR" '.config/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml'
 
 
 mkdir -p ~/.config/xfce4/
-link-file ".config/xfce4/terminal"
-
+link-file "$DIR" ".config/xfce4/terminal"
 mkdir -p ~/.config/Thunar
-link-file ".config/Thunar/uca.xml"
-
+link-file "$DIR" ".config/Thunar/uca.xml"
 mkdir -p ~/.config/parcellite/
-link-file ".config/parcellite/parcelliterc"
+link-file "$DIR" ".config/parcellite/parcelliterc"
+
+link-file "$DIR" ".lessfilter"
+link-file "$DIR" ".lessrc"
 
 
-# PLASMA
-
-rm -rf ~/.gtkrc-2.0
-ln -sf ${DIR}/.gtkrc-2.0 ~/.gtkrc-2.0
-
-rm -rf ~/.gtkrc-2.0-kde-4
-ln -sf ${DIR}/.gtkrc-2.0 ~/.gtkrc-2.0-kde4
-
-rm -rf ~/.config/gtk-3.0
-ln -sf ${DIR}/.config/gtk-3.0 ~/.config/gtk-3.0
-
-rm -rf ~/.config/gtk-2.0
-ln -sf ${DIR}/.config/gtk-2.0 ~/.config/gtk-2.0
-
-rm -rf ~/.config/gtkrc-2.0
-ln -sf ${DIR}/.config/gtkrc-2.0 ~/.config/gtkrc-2.0
-
-rm -rf ~/.config/gtkrc
-ln -sf ${DIR}/.config/gtkrc ~/.config/gtkrc
-
-rm -rf ~/.config/kglobalshortcutsrc
-ln -sf ${DIR}/.config/kglobalshortcutsrc ~/.config/kglobalshortcutsrc
-
-
-
-
-rm -rf ~/.config/plasma-workspace
-ln -sf ${DIR}/.config/plasma-workspace ~/.config/plasma-workspace
-
-rm -rf ~/.config/plasma-localerc
-ln -sf ${DIR}/.config/plasma-localerc ~/.config/plasma-localerc
-
-rm -rf ~/.config/plasmashellrc
-ln -sf ${DIR}/.config/plasmashellrc ~/.config/plasmashellrc
-
-rm -rf ~/.config//plasma-org.kde.plasma.desktop-appletsrc
-ln -sf ${DIR}/.config/plasma-org.kde.plasma.desktop-appletsrc  ~/.config/plasma-org.kde.plasma.desktop-appletsrc
-
-# PLASMA END
+## PLASMA
+#
+#link-file "$DIR" '.config/khotkeysrc'
+#link-file "$DIR" '.config/konsolerc'
+#link-file "$DIR" '.local/share/konsole'
+#link-file "$DIR" '.config/kdeglobals'
+#link-file "$DIR" '.config/kscreenlockerrc'
+#link-file "$DIR" '.config/klipperrc'
+##link-file "$DIR" '.config/kcmshell5rc'
+#
+#
+#link-file "$DIR" '.gtkrc-2.0'
+#link-file "$DIR" '.gtkrc-2.0-kde-4'
+#link-file "$DIR" '.config/gtk-3.0'
+#link-file "$DIR" '.config/gtk-2.0'
+#link-file "$DIR" '.config/gtkrc-2.0'
+#link-file "$DIR" '.config/gtkrc'
+#link-file "$DIR" '.config/kglobalshortcutsrc'
+#
+#link-file "$DIR" '.config/plasma-workspace'
+#link-file "$DIR" '.config/plasma-localerc'
+#link-file "$DIR" '.config/plasmashellrc'
+#link-file "$DIR" '.config//plasma-org.kde.plasma.desktop-appletsrc'
+## PLASMA END
 
 
-rm -rf ~/.config/qt5ct
-ln -sf ${DIR}/.config/qt5ct ~/.config/qt5ct
-
-rm -rf ~/.conkyrc
-ln -sf ${DIR}/.conkyrc ~/.conkyrc
-
-rm -rf ~/.config/conky
-ln -sf ${DIR}/.config/conky ~/.config/conky
-
-rm -rf ~/.synergy.conf
-ln -sf ${DIR}/.synergy.conf ~/.synergy.conf
-
-rm -f ~/.screenrc
-ln -sf ${DIR}/.screenrc ~/.screenrc
-
-rm -rf ~/.config/terminator
-ln -sf ${DIR}/.config/terminator ~/.config/terminator
-
-rm -rf ~/.config/polybar
-ln -sf ${DIR}/.config/polybar ~/.config/polybar
-
-rm -rf ~/.config/byobu
-ln -sf ${DIR}/.byobu ~/.config/byobu
-
-rm -rf ~/.byobu
-ln -sf ${DIR}/.byobu ~/.byobu
-
-rm -rf ~/.config/fontconfig
-ln -sf ${DIR}/.config/fontconfig ~/.config/fontconfig
-
-rm -f ~/.yaourtrc
-ln -sf ${DIR}/.yaourtrc ~/.yaourtrc
-
-rm -rf ~/.config/mopidy
-ln -sf ${DIR}/.config/mopidy ~/.config/mopidy
-
-rm -rf ~/.config/htop
-ln -sf ${DIR}/.config/htop ~/.config/htop
-
-rm -rf ~/.screenlayout
-ln -sf ${DIR}/.screenlayout ~/.screenlayout
-
-rm -f ~/z.sh
-ln -sf ${DIR}/z.sh ~/z.sh
-
-rm -f ~/.xinitrc
-ln -sf ${DIR}/.xinitrc ~/.xinitrc
-
-rm -rf ~/wallpapers
-ln -sf ${DIR}/wallpapers ~/wallpapers
-
-rm -rf ~/.cheat
-ln -sf ${DIR}/.cheat ~/.cheat
-
-rm -rf ~/commands.txt
-ln -sf ${DIR}/commands.txt ~/commands.txt
-
-rm -rf ~/.mpdconf
-ln -sf ${DIR}/.mpdconf ~/.mpdconf
-
-rm -rf ~/.myclirc
-ln -sf ${DIR}/.myclirc ~/.myclirc
-
-rm -rf ~/.gemrc
-ln -sf ${DIR}/.gemrc ~/.gemrc
-
+link-file "$DIR" '.xscreensaver'
+link-file "$DIR" '.config/qt5ct'
+link-file "$DIR" '.conkyrc'
+link-file "$DIR" '.config/conky'
+link-file "$DIR" '.synergy.conf'
+link-file "$DIR" '.screenrc'
+link-file "$DIR" '.config/terminator'
+link-file "$DIR" '.config/polybar'
+link-file "$DIR" '.config/byobu'
+link-file "$DIR" '.byobu'
+link-file "$DIR" '.config/fontconfig'
+link-file "$DIR" '.yaourtrc'
+link-file "$DIR" '.config/mopidy'
+link-file "$DIR" '.config/htop'
+link-file "$DIR" '.screenlayout'
+link-file "$DIR" 'z.sh'
+link-file "$DIR" '.xinitrc'
+link-file "$DIR" 'wallpapers'
+link-file "$DIR" '.cheat'
+link-file "$DIR" 'commands.txt'
+link-file "$DIR" '.mpdconf'
+link-file "$DIR" '.myclirc'
+link-file "$DIR" '.gemrc'
 
 touch ~/.z
 
@@ -153,52 +94,33 @@ touch ~/.z
 #sudo cp ~/dotfiles/etc/lightdm/lightdm.conf /etc/lightdm/lightdm.conf
 
 
-rm -f ~/.config/compton.conf
-ln -sf ${DIR}/.config/compton.conf ~/.config/compton.conf
-
-rm -rf ~/.config/beets
-ln -sf ${DIR}/.config/beets ~/.config/beets
-
-rm -rf ~/.config/ranger
-ln -sf ${DIR}/.config/ranger ~/.config/ranger
+link-file "$DIR" '.config/compton.conf'
+link-file "$DIR" '.config/beets'
+link-file "$DIR" '.config/ranger'
 
 if [ ! -d ~/bin_bak ]; then
 	mv -f ~/bin ~/bin_bak
 fi
-
-rm -rf ~/bin
-ln -sf ${DIR}/bin ~/bin
+link-file "$DIR" 'bin'
 chmod +x -R ~/bin/
 rm -rf ~/bin/bin
 
 
 mkdir -p ~/.tmux
-
 ln -sf ~/.byobu/.tmux.conf ~/.tmux.conf
 
-rm -f ~/.apm-packages
-ln -sf ${DIR}/.apm-packages ~/.apm-packages
-
-rm -f ~/.imwheelrc
-ln -sf ${DIR}/.imwheelrc ~/.imwheelrc
-
-rm -f ~/.inputrc
-ln -sf ${DIR}/.inputrc ~/.inputrc
-
-ln -sf ${DIR}/.functions ~/.functions
+link-file "$DIR" '.apm-packages'
+link-file "$DIR" '.imwheelrc'
+link-file "$DIR" '.inputrc'
+link-file "$DIR" '.functions'
 
 
 rm -f ~/.config/udiskie/config.yml
-mkdir -p ~/.config/udiskie
-ln -sf ${DIR}/.config/udiskie/config.yml ~/.config/udiskie/config.yml
+link-file "$DIR" '.config/udiskie/config.yml'
 
 
-rm -rf ~/.config/peco
-ln -sf ${DIR}/.config/peco ~/.config/peco
-
-rm -rf ~/.config/Trolltech.conf
-ln -sf ${DIR}/.config/Trolltech.conf ~/.config/Trolltech.conf
-
+link-file "$DIR" '.config/peco'
+link-file "$DIR" '.config/Trolltech.conf'
 
 if [ ! -f ~/.config/mimeapps.list_bak ]; then
 	cp ~/.config/mimeapps.list ~/.config/mimeapps.list_bak
@@ -219,30 +141,20 @@ rm -f ~/.fonts.conf
 ln -sf ${DIR}/.fonts.conf ~/.fonts.conf
 
 
-rm -rf ~/.distro-logos
-ln -sf ${DIR}/.distro-logos ~/.distro-logos
-
+link-file "$DIR" '.distro-logos'
 
 mkdir -p ~/.teamocil
 ln -sf ${DIR}/.teamocil/* ~/.teamocil/
 
-rm -rf ~/.ncmpcpp
-ln -sf ${DIR}/.ncmpcpp ~/.ncmpcpp
-
-rm -rf ~/.config/vis
-ln -sf ${DIR}/.config/vis ~/.config/vis
-
-rm -rf ~/.config/tint2
-ln -sf ${DIR}/.config/tint2 ~/.config/tint2
-
+link-file "$DIR" '.ncmpcpp'
+link-file "$DIR" '.config/vis'
+link-file "$DIR" '.config/tint2'
 
 ##### START DESKTOP FILES #####
 
 mkdir -p ~/.local/share/applications/icons
 
-rm -rf ~/.local/share/applications/icons
-ln -sf ${DIR}/.local/share/applications/icons ~/.local/share/applications/icons
-
+link-file "$DIR" '.local/share/applications/icons'
 ln -sf ${DIR}/.local/share/applications/*.desktop ~/.local/share/applications/
 
 mkdir -p ~/.local/share/icons/hicolor/48x48/apps/
@@ -252,25 +164,15 @@ ln -s ${DIR}/.local/share/applications/icons/*.png ~/.local/share/icons/hicolor/
 ##### END DESKTOP FILES #####
 
 
-rm -rf ~/dockerFiles
-ln -sf  ${DIR}/dockerFiles ~/dockerFiles
-
-rm -rf ~/.config/powerline
-ln -sf  ${DIR}/.config/powerline ~/.config/powerline
-
+link-file "$DIR" 'dockerFiles'
+link-file "$DIR" '.config/powerline'
 touch ~/custom_commands.txt
 
-rm -rf ~/.mpdconf
-ln -sf  ${DIR}/.mpdconf ~/.mpdconf
-
-rm -rf ~/.config/albert/albert.conf
+link-file "$DIR" '.mpdconf'
 mkdir -p ~/.config/albert/
-ln -sf  ${DIR}/.config/albert/albert.conf ~/.config/albert/albert.conf
-
-rm -rf ~/.config/volumeicon/volumeicon
+link-file "$DIR" '.config/albert/albert.conf'
 mkdir -p ~/.config/volumeicon/
-ln -sf  ${DIR}/.config/volumeicon/volumeicon ~/.config/volumeicon/volumeicon
-
+link-file "$DIR" '.config/volumeicon/volumeicon'
 
 
 if [ "$dark_mode" = "1" ]; then
@@ -295,9 +197,7 @@ if [ -d ~/.oh-my-zsh/custom ]; then
     ln -sf ${DIR}/.oh-my-zsh/custom/themes/mandy.zsh-theme ~/.oh-my-zsh/custom/themes/mandy.zsh-theme
 fi
 
-rm -f ~/.zshrc
-ln -sf ${DIR}/.zshrc ~/.zshrc
-
+link-file "$DIR" '.zshrc'
 
 mkdir -p ~/.tmux/plugins
 if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
@@ -469,13 +369,7 @@ pstorm="$(locate phpstorm.sh | tail -1)"
 #find /usr/share/themes/Arc -type f -name '*.rc' | sudo xargs -I {} sed -E -i 's/(radius\s*=)([^;]+)/\1 0/g' {}
 #find /usr/share/themes/Arc -type f -name '*.css' | sudo xargs -I {} sed -E -i 's/(border.+radius:)([^;]+);/\1 0px;/g' {}
 
-if [ ! -d "$HOME/.nvm" ]; then
-	curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash
-	export NVM_DIR="$HOME/.nvm"
-	[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # This loads nvm
-	sudo -A chown -R $USER:"$(id -gn $USER)" $HOME/.config
-	nvm install stable
-fi
+
 
 if ! grep -q '192.168.10.120/tank' /etc/fstab; then
 	echo "Please enter password of 192.168.10.120/tank"

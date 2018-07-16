@@ -15,7 +15,7 @@ if [ $polybar_exists -eq 0 ]; then
   while pgrep -x polybar >/dev/null
       do sleep 1
   done
-  polybar -r bottom & >/dev/null 2>&1
+  polybar -r top & >/dev/null 2>&1
   sleep 2
   if ! pgrep -x polybar >/dev/null; then
     xfce4-panel & >/dev/null 2>&1

@@ -66,7 +66,9 @@ export GEM_PATH=$HOME/.gem
 
 export GOPATH=$HOME/go
 
-export LESS="-RS"
+source ~/.lessrc
+
+
 export TERMINAL=termite
 compctl -g "$HOME/.teamocil/*(:t:r)" teamocil
 if exists dircolors; then
@@ -151,10 +153,10 @@ if [ "$(uname -s)" != 'Darwin' ]; then
 fi
 
 export IP_ADDRESS=$(ip_address)
-export GID=$(id -g)
-export UID
 export HOSTNAME="$(hostname)"
 
-#export NVM_DIR="$HOME/.nvm"
-#[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-#[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" --no-use  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+setupcon 2>/dev/null

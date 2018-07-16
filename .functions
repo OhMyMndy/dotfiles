@@ -511,8 +511,7 @@ create_swap_file() {
 	sudo chmod 0600 "$file"
 	sudo mkswap "$file"
 	sudo swapon "$file"
-	echo "Add the following to /etc/fstab to make the swapfile persistent:"
-	echo "$file none swap sw 0 0"
+	echo "$file none swap sw 0 0" | sudo tee -a /etc/fstab
 }
 
 add-to-file() {
@@ -582,11 +581,35 @@ move-to-dotfiles() {
         rm -rf "$1"
         ln -s "$target" "$1"
 
-        echo "Add the following to link.sh: \"link-file '$source'\""
+        echo "Add the following to link.sh:  link-file \"\$DIR\" '$source'"
 
     fi
 }
 
+
+remove-from-dotfiles() {
+    source="$1"
+
+    home=$(echo "$HOME" | sed -e 's/[\/&]/\\&/g');
+    source=$(echo "$1" | sed -E "s/$home\/?//g")
+    source="$HOME/dotfiles/$source"
+    target="$1"
+
+    echo "target $target"
+    echo "source $source"
+
+    echo "Moving '$source' to '$target'"
+
+    # Remove link first
+    rm -rf "$target"
+    cp -r "$source" "$target"
+    result=$?
+    if [ $result -eq 0 ]; then
+        rm -rf "$source"
+        echo "Do not forget to remove the correct record in link.sh for 'link-file'"
+
+    fi
+}
 
 
 link-file() {
@@ -596,13 +619,18 @@ link-file() {
     source="${dir}/$arg"
     original="${HOME}/$arg"
 
+    if [ "$arg" = '' ]; then
+        echo "You need to provide source folder as first parameter"
+        return
+    fi
+
     if [ ! -f "$source" ] && [ ! -d "$source" ]; then
         echo "File or folder '$source' ($original) does not exist!"
         return
     fi
 
     set -x
-    rm -f "$original"
+    rm -rf "$original"
     ln -sf "$source" "$original"
     set +x
 }

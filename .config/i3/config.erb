@@ -305,39 +305,38 @@ for_window [class="Nxplayer.bin"]                                               
 exec "xrandr --dpi $(xrdb -query | grep dpi | head -1 | grep -E -o '[0-9]+')"
 
 # Exec always
-exec_always --no-startup-id bash ~/bin/restart-polybar &
-# exec_always --no-startup-id compton &
-# exec_always --no-startup-id albert &
-# exec_always --no-startup-id killall dunst; while pgrep -x dunst >/dev/null; do sleep 1; done; dunst
+exec_always --no-startup-id bash ~/bin/restart-polybar || xfce4-panel &
+exec_always --no-startup-id compton &
+exec_always --no-startup-id albert &
+exec_always --no-startup-id killall dunst; while pgrep -x dunst >/dev/null; do sleep 1; done; dunst
 exec_always --no-startup-id bash -c "source ~/.functions; setWallpaper"
-# exec_always --no-startup-id sh -c "pgrep -x xbanish; [ \$? -eq 1 ] && xbanish &"
-# exec_always --no-startup-id sh -c "pgrep -x pasystray; [ \$? -eq 1 ] && pasystray &"
-# exec_always --no-startup-id sh -c "pgrep -x pb-for-desktop; [ \$? -eq 1 ] && pb-for-desktop &"
-# exec_always --no-startup-id sh -c "pgrep -x nm-applet; [ \$? -eq 1 ] && nm-applet &"
-# exec_always --no-startup-id sh -c "pgrep -x parcellite; [ \$? -eq 1 ] && parcellite &"
-# exec_always --no-startup-id sh -c "pgrep -x imwheel; [ \$? -eq 1 ] && imwheel &"
-# exec_always --no-startup-id killall synergys; while pgrep -x synergys >/dev/null; do sleep 1; done; synergys -c ~/.synergy.conf &
-# exec_always --no-startup-id killall notify-server; while pgrep -x notify-server >/dev/null; do sleep 1; done; notify-server &
-#
-# exec_always --no-startup-id sh -c "pgrep -x rambox; [ \$? -eq 1 ] && /opt/Rambox/rambox &"
-# exec_always --no-startup-id sh -c "pgrep -x xfce4-terminal; [ \$? -eq 1 ] && xfce4-terminal -e byobu"
-# exec_always --no-startup-id sh -c "pgrep -x thunar; [ \$? -eq 1 ] && thunar &"
-# exec_always --no-startup-id sh -c "pgrep -x shutter; [ \$? -eq 1 ] && shutter --min_at_startup &"
-# #exec_always --no-startup-id sh -c "pgrep -x jetbrains-toolbox ; [ \$? -eq 1 ] && jetbrains-toolbox &"
-# #exec_always --no-startup-id sh -c "pgrep -x unclutter ; [ \$? -eq 1 ] && unclutter -idle 2 -jitter 5 -noevents -root &"
-# exec_always --no-startup-id sh -c "pgrep -x redshift-gtk ; [ \$? -eq 1 ] && redshift-gtk &"
-# #exec_always --no-startup-id sh -c "pgrep -x udiskie ; [ \$? -eq 1 ] && udiskie --tray --use-udisks2 &"
-# exec_always --no-startup-id sh -c "pgrep -x chrome ; [ \$? -eq 1 ] && google-chrome &"
-# exec_always --no-startup-id pkill xss-lock; xss-lock -- ~/.config/i3/scripts/lock &
+exec_always --no-startup-id sh -c "pgrep -x xbanish; [ \$? -eq 1 ] && xbanish &"
+exec_always --no-startup-id sh -c "pgrep -x pasystray; [ \$? -eq 1 ] && pasystray &"
+exec_always --no-startup-id sh -c "pgrep -x pb-for-desktop; [ \$? -eq 1 ] && pb-for-desktop &"
+exec_always --no-startup-id sh -c "pgrep -x nm-applet; [ \$? -eq 1 ] && nm-applet &"
+exec_always --no-startup-id sh -c "pgrep -x parcellite; [ \$? -eq 1 ] && parcellite &"
+exec_always --no-startup-id sh -c "pgrep -x imwheel; [ \$? -eq 1 ] && imwheel &"
+exec_always --no-startup-id killall synergys; while pgrep -x synergys >/dev/null; do sleep 1; done; synergys -c ~/.synergy.conf &
+exec_always --no-startup-id killall notify-server; while pgrep -x notify-server >/dev/null; do sleep 1; done; notify-server &
 
-# exec_always --no-startup-id sh -c "pgrep -x xfce4-notifyd; [ \$? -eq 1 ] && /usr/lib64/xfce4/notifyd/xfce4-notifyd &"
-# exec_always --no-startup-id sh -c "pgrep -x xfconfd; [ \$? -eq 1 ] && /usr/lib64/xfce4/xfconf/xfconfd &"
-# exec_always --no-startup-id sh -c "pgrep -x xfce4-power-manager; [ \$? -eq 1 ] && xfce4-power-manager &"
+exec_always --no-startup-id sh -c "pgrep -x rambox; [ \$? -eq 1 ] && /opt/Rambox/rambox &"
+exec_always --no-startup-id sh -c "pgrep -x xfce4-terminal; [ \$? -eq 1 ] && xfce4-terminal -e byobu"
+exec_always --no-startup-id sh -c "pgrep -x thunar; [ \$? -eq 1 ] && thunar &"
+exec_always --no-startup-id sh -c "pgrep -x shutter; [ \$? -eq 1 ] && shutter --min_at_startup &"
+#exec_always --no-startup-id sh -c "pgrep -x jetbrains-toolbox ; [ \$? -eq 1 ] && jetbrains-toolbox &"
+#exec_always --no-startup-id sh -c "pgrep -x unclutter ; [ \$? -eq 1 ] && unclutter -idle 2 -jitter 5 -noevents -root &"
+exec_always --no-startup-id sh -c "pgrep -x redshift-gtk ; [ \$? -eq 1 ] && redshift-gtk &"
+#exec_always --no-startup-id sh -c "pgrep -x udiskie ; [ \$? -eq 1 ] && udiskie --tray --use-udisks2 &"
+exec_always --no-startup-id sh -c "pgrep -x chrome ; [ \$? -eq 1 ] && google-chrome &"
+exec_always --no-startup-id sh -c "pgrep -x xss-lock ; [ \$? -eq 1 ] && xss-lock -- xscreensaver-command -lock  &"
 
+exec_always --no-startup-id sh -c "pgrep -x xfconfd; [ \$? -eq 1 ] && /usr/lib64/xfce4/xfconf/xfconfd &"
+exec_always --no-startup-id sh -c "pgrep -x xfsettingsd; [ \$? -eq 1 ] && xfsettingsd &"
+exec_always --no-startup-id sh -c "pgrep -x xfce4-power-manager; [ \$? -eq 1 ] && xfce4-power-manager &"
 
 
 #exec_always --no-startup-id pkill -f resolution-changed; bash ~/bin/resolution-changed ~/bin/restart-polybar
-exec_always --no-startup-id bash "$HOME/.screenlayout/$(hostname).sh"
+# exec_always --no-startup-id bash "$HOME/.screenlayout/$(hostname).sh"
 
 # Custom bindsym
 bindsym $mod+Shift+greater move workspace to output right
@@ -346,6 +345,11 @@ bindsym Scroll_Lock exec xset s activate
 bindsym $mod+Shift+Escape exec xset s activate
 bindsym Print exec shutter -f
 # bindsym $mod+Print exec flameshot full -p ~/Screenshots/ -c
+
+# Pulse Audio controls
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume $(pactl list short sinks | grep alsa_output | cut -f1) +2% #increase sound volume
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume $(pactl list short sinks | grep alsa_output | cut -f1) -2% #decrease sound volume
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute $(pactl list short sinks | grep alsa_output | cut -f1) toggle # mute sound
 
 
 # Media player controls
@@ -377,19 +381,19 @@ focus_on_window_activation urgent
 
 ## Manual management of external displays
 # Set the shortcuts and what they do
-set $mode_display Display mode [w]ork dual displays, [s]ingle display Full HD, s[i]ngle display 1440x900
-mode "$mode_display" {
-    bindsym w exec --no-startup-id bash ~/.screenlayout/work.sh
-    bindsym s exec --no-startup-id bash ~/.screenlayout/1-display-full-hd.sh
-    bindsym i exec --no-startup-id bash ~/.screenlayout/1-display-1400x900.sh
-
-
- # back to normal: Enter or Escape
-    bindsym Return mode "default"
-    bindsym Escape mode "default"
-}
-# Declare here the shortcut to bring the display selection menu
-bindsym $mod+x mode "$mode_display"
+#set $mode_display Display mode [w]ork dual displays, [s]ingle display Full HD, s[i]ngle display 1440x900
+#mode "$mode_display" {
+#    bindsym w exec --no-startup-id bash ~/.screenlayout/work.sh
+#    bindsym s exec --no-startup-id bash ~/.screenlayout/1-display-full-hd.sh
+#    bindsym i exec --no-startup-id bash ~/.screenlayout/1-display-1400x900.sh
+#
+#
+# # back to normal: Enter or Escape
+#    bindsym Return mode "default"
+#    bindsym Escape mode "default"
+#}
+## Declare here the shortcut to bring the display selection menu
+#bindsym $mod+x mode "$mode_display"
 
 
 ## Plasma Integration
