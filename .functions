@@ -515,6 +515,7 @@ create_swap_file() {
 }
 
 add-to-file() {
+    touch "$2"
     grep -q -F "$1" "$2" || echo "$1" | tee -a "$2"
 }
 
@@ -575,7 +576,7 @@ move-to-dotfiles() {
 
     echo "Moving '$1' to '$target'"
 
-    cp -r "$1" "$target"
+    cp -r "$HOME/$1" "$target"
     result=$?
     if [ $result -eq 0 ]; then
         rm -rf "$1"
@@ -633,4 +634,13 @@ link-file() {
     rm -rf "$original"
     ln -sf "$source" "$original"
     set +x
+}
+
+install-service() {
+    file="$1"
+    service_name="$(echo "$file" | sed -E 's#.*/([^/]+).service#\1#p' | head -1)"
+    cp "$1" /etc/systemd/system/
+    systemctl daemon-reload
+    systemctl enable "$service_name"
+    systemctl start "$service_name"
 }

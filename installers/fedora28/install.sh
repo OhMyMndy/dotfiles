@@ -15,7 +15,10 @@ fi
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-source ~/.functions
+set +e
+source "$DIR/../../.functions"
+title "Install"
+set -e
 
 # tab width
 tabs 4
@@ -254,6 +257,7 @@ mesa-dri-drivers
 console-setup
 xfce4-terminal
 xfce4-panel
+xfce4-whiskermenu-plugin
 
 lshw
 redshift-gtk
@@ -269,7 +273,7 @@ EOL
         exit 2
     fi
     echo "will cite" | parallel --citation
-    dnf remove gnome-calculator evince file-roller gedit gedit-plugins gnucash  plasma-sdk ark @kde -y
+    dnf remove gnome-calculator evince file-roller gedit gedit-plugins gnucash ark @kde 'plasma*'-y
 
     su mandy bash -c "rm -rf ~/.gemrc; ln -sf ${DIR}/../../.gemrc ~/.gemrc"
 
@@ -311,7 +315,7 @@ EOL
 
     dnf install -y https://download.teamviewer.com/download/linux/teamviewer.x86_64.rpm
     dnf install -y http://download.nomachine.com/download/6.1/Linux/nomachine_6.1.6_9_x86_64.rpm
-    dnf install -y http://rpmfind.net/linux/mageia/distrib/cauldron/x86_64/media/core/release/dunst-1.3.2-1.mga7.x86_64.rpm
+    dnf install -y http://ftp.gwdg.de/pub/opensuse/distribution/leap/15.0/repo/oss/x86_64/dunst-1.3.2-lp150.1.1.x86_64.rpm
     dnf install $(curl -s https://api.github.com/repos/saenzramiro/rambox/releases/latest | jq -r ".assets[] | select(.name) | select(.browser_download_url | test(\"64.*rpm$\")) | .browser_download_url") -y
     dnf install $( curl -s https://api.github.com/repos/mbusb/multibootusb/releases/latest | jq -r ".assets[] | select(.name) | select(.browser_download_url | test(\".*rpm$\")) | .browser_download_url" | head -1 ) -y
 
@@ -454,10 +458,9 @@ function setup_custom_services {
 
 
 function macbook {
-    cp $DIR/../..//services/macbook-keyboard.service /etc/systemd/system/
-    systemctl daemon-reload
-    systemctl enable macbook-keyboard
-    systemctl start macbook-keyboard
+    install-service $DIR/../../services/macbook-keyboard.service
+    install-service $DIR/../../services/wifi-resume.service
+    install-service $DIR/../../services/mount-resume.service
 
     cat <<'EOL' > /etc/default/console-setup
 # CONFIGURATION FILE FOR SETUPCON
@@ -481,7 +484,8 @@ EOL
 # Only for Macbook with HiDpi display
 # Change font size to 16x32 in /etc/default/console-setup
 # Fix alt arrow behaviour of switching ttys: sudo sh -c 'dumpkeys |grep -v cr_Console |loadkeys'
-add-to-file "stty rows 50" "$HOME/.profile"
+#add-to-file "stty rows 50" "$HOME/.profile"
+#add-to-file "stty columns 160" "$HOME/.profile"
 
 
 }
@@ -584,6 +588,7 @@ function virtualization {
     cd /tmp
     curl -J -O -L https://download.virtualbox.org/virtualbox/${virtualbox_version}/Oracle_VM_VirtualBox_Extension_Pack-${virtualbox_version}.vbox-extpack
     yes | vboxmanage extpack install /tmp/Oracle_VM_VirtualBox_Extension_Pack-${virtualbox_version}.vbox-extpack
+    VBoxManage setextradata global GUI/Input/HostKeyCombination 65514 # right alt
 }
 
 function wine {

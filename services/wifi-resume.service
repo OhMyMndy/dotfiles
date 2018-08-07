@@ -1,0 +1,17 @@
+[Unit]
+Description=Restart networkmanager at resume
+
+After=suspend.target
+After=hibernate.target
+After=hybrid-sleep.target
+
+
+[Service]
+Type=oneshot
+ExecStart=/bin/systemctl restart NetworkManager.service
+
+
+[Install]
+WantedBy=suspend.target
+WantedBy=hibernate.target
+WantedBy=hybrid-sleep.target

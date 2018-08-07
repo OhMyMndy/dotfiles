@@ -11,7 +11,7 @@ PROMPT='$FG[237]---------------------------------------------------------%{$rese
 %{$FG[003]%} %n %{$reset_color%}%{$FG[006]%}@ %{$FG[005]%}%m \
 %{$FG[004]%}%~\
 $(git_prompt_info) \
-%{$FG[008]%}%(!.#.»)%{$reset_color%} '
+%{$FG[002]%}%(!.#.»)%{$reset_color%} '
 PROMPT2='%{$fg[red]%}\\ $reset_color%'
 RPS1='${return_code}'
 

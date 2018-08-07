@@ -172,22 +172,22 @@ resize  >/dev/null 2>&1
 # Generated with pty2tty.awk by Joep van Delft
 # http://github.com/joepvd/tty-solarized
 if [ "$TERM" = "linux" ]; then
-echo -en "\e]P0#1a1b21" #black
-echo -en "\e]P1#cb271c" #darkred
-echo -en "\e]P2#17934c" #darkgreen
-echo -en "\e]P3#eeec26" #brown
-echo -en "\e]P4#39c2ed" #darkblue
-echo -en "\e]P5#a942af" #darkmagenta
-echo -en "\e]P6#2975e8" #darkcyan
-echo -en "\e]P7#ffffff" #lightgrey
-echo -en "\e]P8#5e6670" #darkgrey
-echo -en "\e]P9#cb271c" #red
-echo -en "\e]PA#17934c" #green
-echo -en "\e]PB#eeec26" #yellow
-echo -en "\e]PC#39c2ed" #blue
-echo -en "\e]PD#a942af" #magenta
-echo -en "\e]PE#2975e8" #cyan
-echo -en "\e]PF#ffffff" #white
+echo -en "\e]P0<%= colors['COLOR0'] %>" #black
+echo -en "\e]P1<%= colors['COLOR1'] %>" #darkred
+echo -en "\e]P2<%= colors['COLOR2'] %>" #darkgreen
+echo -en "\e]P3<%= colors['COLOR3'] %>" #brown
+echo -en "\e]P4<%= colors['COLOR4'] %>" #darkblue
+echo -en "\e]P5<%= colors['COLOR5'] %>" #darkmagenta
+echo -en "\e]P6<%= colors['COLOR6'] %>" #darkcyan
+echo -en "\e]P7<%= colors['COLOR7'] %>" #lightgrey
+echo -en "\e]P8<%= colors['COLOR8'] %>" #darkgrey
+echo -en "\e]P9<%= colors['COLOR9'] %>" #red
+echo -en "\e]PA<%= colors['COLOR10'] %>" #green
+echo -en "\e]PB<%= colors['COLOR11'] %>" #yellow
+echo -en "\e]PC<%= colors['COLOR12'] %>" #blue
+echo -en "\e]PD<%= colors['COLOR13'] %>" #magenta
+echo -en "\e]PE<%= colors['COLOR14'] %>" #cyan
+echo -en "\e]PF<%= colors['COLOR15'] %>" #white
 clear #for background artifacting
 fi
 

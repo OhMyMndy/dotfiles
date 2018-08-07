@@ -16,6 +16,6 @@ git clone --recursive https://github.com/jaagr/polybar /tmp/polybar
 cd /tmp/polybar
 mkdir build
 cd build
-cmake ..
+sudo cmake ..
 sudo make install
 # end install Polybar

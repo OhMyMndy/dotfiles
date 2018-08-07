@@ -21,8 +21,14 @@ link-file "$DIR"".config/i3"
 link-file "$DIR" ".i3status.conf"
 link-file "$DIR" ".config/openbox"
 mkdir -p ${DIR}/.config/xfce4/xfconf/xfce-perchannel-xml
-link-file "$DIR" ".config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml"
-link-file "$DIR" '.config/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml'
+if  [ ! -L ".config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml" ]; then
+    rm -f "$HOME/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml"
+    link-file "$DIR" ".config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml"
+fi
+if  [ ! -L ".config/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml" ]; then
+    rm -f "$HOME/.config/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml"
+    link-file "$DIR" '.config/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml'
+fi
 
 
 mkdir -p ~/.config/xfce4/
@@ -235,8 +241,8 @@ installZshPlugin "https://github.com/skx/sysadmin-util.git" "sysadmin-util"
 # installZshTheme "https://raw.githubusercontent.com/caiogondim/bullet-train-oh-my-zsh-theme/master/bullet-train.zsh-theme" "bullet-train.zsh-theme"
 
 # Regular fonts
-installFontsFromZip "https://www.wfonts.com/download/data/2016/05/11/gill-sans-std/gill-sans-std.zip" "GillSans"
-installFontsFromZip "https://github.com/erikflowers/weather-icons/archive/2.0.10.zip" "Weather-Icons"
+#installFontsFromZip "https://www.wfonts.com/download/data/2016/05/11/gill-sans-std/gill-sans-std.zip" "GillSans"
+#installFontsFromZip "https://github.com/erikflowers/weather-icons/archive/2.0.10.zip" "Weather-Icons"
 
 installFontsFromZip "https://github.com/RedHatBrand/Overpass/releases/download/3.0.2/overpass-desktop-fonts.zip" "overpass"
 if [ "$(uname)" != 'Darwin' ]; then
@@ -249,7 +255,7 @@ installFontsFromZip "https://github.com/KDE/oxygen-fonts/archive/master.zip" "ox
 installFontsFromZip "https://dl.dafont.com/dl/?f=liberation_sans" "liberation-sans"
 installFontsFromZip "https://www.fontsquirrel.com/fonts/download/montserrat" "montserrat"
 installFontsFromZip "https://www.wfonts.com/download/data/2015/03/12/futura/futura.zip" "Futura"
-installFontsFromZip "https://www.wfonts.com/download/data/2015/06/23/frutiger/frutiger.zip" "Frutiger"
+#installFontsFromZip "https://www.wfonts.com/download/data/2015/06/23/frutiger/frutiger.zip" "Frutiger"
 
 # Monospaced fonts
 installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v1.2.0/FiraMono.zip" "FiraMono"
@@ -270,22 +276,22 @@ installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v
 # installFontsFromZip "http://www.fontspace.com/download/6269/e70447f0601e46ecbea2dc3bf9f59695/prismtone_ptf-nordic.zip" "PrismtoneNordic"
 installFontsFromZip "http://dl.1001fonts.com/ubuntu.zip" "Ubuntu"
 
-installFontsFromZip "https://dl.dafont.com/dl/?f=openlogos" "OpenLogos"
-installFontsFromZip "https://dl.dafont.com/dl/?f=pizzadude_bullets" "PizzaDude Bullets"
-installFontsFromZip "https://dl.dafont.com/dl/?f=style_bats" "StyleBats"
-installFont "https://fonts2u.com/download/pie-charts-for-maps.font" "Pie charts for maps"
+#installFontsFromZip "https://dl.dafont.com/dl/?f=openlogos" "OpenLogos"
+#installFontsFromZip "https://dl.dafont.com/dl/?f=pizzadude_bullets" "PizzaDude Bullets"
+#installFontsFromZip "https://dl.dafont.com/dl/?f=style_bats" "StyleBats"
+#installFont "https://fonts2u.com/download/pie-charts-for-maps.font" "Pie charts for maps"
 
 
 if [ $fontsAdded -eq 1 ]; then
 	fc-cache -f -v
 fi
 
-installGtkTheme "https://github.com/B00merang-Project/macOS-Sierra/archive/master.zip" "macOS-Sierra"
-installGtkTheme "https://github.com/B00merang-Project/Windows-10/archive/master.zip" "Windows-10"
-installGtkTheme "https://github.com/Elbullazul/Redmond-Themes/releases/download/2016%2F11%2F15/Windows.3.x.R4.zip" "Windows-3.x"
-installGtkTheme "https://github.com/B00merang-Project/Android/archive/master.zip" "Boomerang-Android"
-installGtkTheme "https://github.com/B00merang-Project/Fushia/archive/master.zip" "Boomerang-Android-Fushia"
-installGtkTheme "https://github.com/B00merang-Project/Chrome-OS/archive/master.zip" "Boomerang-Chrome-OS"
+#installGtkTheme "https://github.com/B00merang-Project/macOS-Sierra/archive/master.zip" "macOS-Sierra"
+#installGtkTheme "https://github.com/B00merang-Project/Windows-10/archive/master.zip" "Windows-10"
+#installGtkTheme "https://github.com/Elbullazul/Redmond-Themes/releases/download/2016%2F11%2F15/Windows.3.x.R4.zip" "Windows-3.x"
+#installGtkTheme "https://github.com/B00merang-Project/Android/archive/master.zip" "Boomerang-Android"
+#installGtkTheme "https://github.com/B00merang-Project/Fushia/archive/master.zip" "Boomerang-Android-Fushia"
+#installGtkTheme "https://github.com/B00merang-Project/Chrome-OS/archive/master.zip" "Boomerang-Chrome-OS"
 
 set +e
 
@@ -333,7 +339,7 @@ addToProfile 'DOCKER_GID' '$(getent group docker 2>/dev/null | cut -d: -f3 )'
 addToProfile 'XDG_CONFIG_HOME' '$HOME/.config'
 addToProfile 'QT_QPA_PLATFORMTHEME' "qt5ct"
 addToProfile '_JAVA_OPTIONS' "-Dawt.useSystemAAFontSettings=on"
-addToProfile 'XDG_DATA_DIRS' '$XDG_DATA_DIRS:~/.local/share/flatpak/exports/share/applications:/var/lib/flatpak/exports/share/applications'
+#addToProfile 'XDG_DATA_DIRS' '$XDG_DATA_DIRS:~/.local/share/flatpak/exports/share/applications:/var/lib/flatpak/exports/share/applications'
 
 
 
@@ -390,9 +396,9 @@ locate idea.properties | xargs -I {} sed -E -i 's/#?.*idea.popup.weight=.*$/idea
 # sudo sed -Eri 's#(Exec=[a-zA-Z0-9/-]+)#\1 --force-device-scale-factor=0.9#g' $(locate google-chrome.desktop | head -1)
 # sudo sed -Eri 's# --force-device-scale-factor=[0-9.]+##g' $(locate google-chrome.desktop | head -1)
 
-add-to-file "xinput --set-prop 'PixArt USB Optical Mouse' 'libinput Accel Speed' 0.3 2>/dev/null" "$HOME/.profile"
-add-to-file "xinput set-prop "Razer Razer Abyssus" 287 0.8 2>/dev/null" "$HOME/.profile"
-add-to-file "xset s 300 360" "$HOME/.profile"
+#add-to-file "xinput --set-prop 'PixArt USB Optical Mouse' 'libinput Accel Speed' 0.3 2>/dev/null" "$HOME/.profile"
+#add-to-file "xinput set-prop 'Razer Razer Abyssus' 287 0.8 2>/dev/null" "$HOME/.profile"
+#add-to-file "xset s 300 360 2>/dev/null" "$HOME/.profile"
 
 
 

@@ -312,6 +312,7 @@ exec_always --no-startup-id killall dunst; while pgrep -x dunst >/dev/null; do s
 exec_always --no-startup-id bash -c "source ~/.functions; setWallpaper"
 exec_always --no-startup-id sh -c "pgrep -x xbanish; [ \$? -eq 1 ] && xbanish &"
 exec_always --no-startup-id sh -c "pgrep -x pasystray; [ \$? -eq 1 ] && pasystray &"
+exec_always --no-startup-id sh -c "pgrep -x xfsettingsd; [ \$? -eq 1 ] && xfsettingsd --sm-client-disable  &"
 exec_always --no-startup-id sh -c "pgrep -x pb-for-desktop; [ \$? -eq 1 ] && pb-for-desktop &"
 exec_always --no-startup-id sh -c "pgrep -x nm-applet; [ \$? -eq 1 ] && nm-applet &"
 exec_always --no-startup-id sh -c "pgrep -x parcellite; [ \$? -eq 1 ] && parcellite &"
@@ -343,6 +344,7 @@ bindsym $mod+Shift+greater move workspace to output right
 bindsym $mod+Shift+less move workspace to output left
 bindsym Scroll_Lock exec xset s activate
 bindsym $mod+Shift+Escape exec xset s activate
+bindsym $mod+Shift+D exec bash -c "source ~/.functions; setWallpaper"
 bindsym Print exec shutter -f
 # bindsym $mod+Print exec flameshot full -p ~/Screenshots/ -c
 

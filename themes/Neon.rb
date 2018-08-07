@@ -6,7 +6,7 @@ class Neon < Default
         @dpi = dpi
         @colors = {
             "COLOR0"         => "#1a1b21",
-            "COLOR8"         => "#455160",
+            "COLOR8"         => "#5e6670",
 
             "COLOR1"         => "#cb271c",
             "COLOR9"         => "#cb271c",
@@ -23,8 +23,8 @@ class Neon < Default
             "COLOR5"         => "#a942af",
             "COLOR13"        => "#a942af",
 
-            "COLOR6"         => "#2163c6",
-            "COLOR14"        => "#2163c6",
+            "COLOR6"         => "#2975e8",
+            "COLOR14"        => "#2975e8",
 
             "COLOR7"         => "#ffffff",
             "COLOR15"        => "#ffffff",
