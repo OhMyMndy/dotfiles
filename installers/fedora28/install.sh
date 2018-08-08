@@ -266,6 +266,7 @@ xscreensaver-extras
 xscreensaver-gl-extras
 qalculate-gtk
 parallel
+snapd
 EOL
     status=$?
     if [ $status -ne 0 ]; then
@@ -324,7 +325,6 @@ EOL
     touch $HOME/.config/mpd/database
     # Create swap file
     # create_swap_file 4 /swapfile
-    # echo "/swapfile none swap sw 0 0" | tee -a /etc/fstab
 
     su mandy bash -c '
     if [ ! -d "$HOME/.nvm" ]; then
@@ -337,6 +337,7 @@ EOL
     fi'
     sudo -A chown -R mandy:"$(id -gn mandy)" /home/mandy/.config
 
+    wget -qO- https://raw.githubusercontent.com/PapirusDevelopmentTeam/papirus-icon-theme/master/install.sh | sh
 
     set +x
 }
@@ -589,6 +590,8 @@ function virtualization {
     curl -J -O -L https://download.virtualbox.org/virtualbox/${virtualbox_version}/Oracle_VM_VirtualBox_Extension_Pack-${virtualbox_version}.vbox-extpack
     yes | vboxmanage extpack install /tmp/Oracle_VM_VirtualBox_Extension_Pack-${virtualbox_version}.vbox-extpack
     VBoxManage setextradata global GUI/Input/HostKeyCombination 65514 # right alt
+
+    dnf install -y virt-manager qemu
 }
 
 function wine {

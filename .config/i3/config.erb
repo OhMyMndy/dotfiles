@@ -36,7 +36,7 @@ floating_modifier $mod
 #    colors {
 #        background <%= colors['BACKGROUND'] %>
 #        statusline <%= colors['COLOR4'] %>
-#        separator <%= colors['COLOR6'] %>
+#        separator <%= colors['COLOR5'] %>
 #        focused_workspace  <%= colors['COLOR4'] %> <%= colors['COLOR4'] %> <%= colors['BACKGROUND'] %>
 #        inactive_workspace <%= colors['BACKGROUND'] %> <%= colors['BACKGROUND'] %> <%= colors['COLOR4'] %>
 #    }
@@ -239,8 +239,8 @@ client.focused_inactive <%= i3['client']['focused_inactive'] %>
 client.urgent           <%= i3['client']['urgent'] %>
 
 # Default workspaces
-assign [class="wunderlist.com"]                                                         $workspace5
-assign [class=".*1password.com"]                                                        $workspace5
+assign [class="WunderList"]                                                             $workspace5
+assign [class="1Password"]                                                              $workspace5
 assign [class="Google-chrome"]                                                          $workspace1
 assign [class="Chromium"]                                                               $workspace1
 assign [class="Vmplayer"]                                                               $workspace8
@@ -263,12 +263,12 @@ for_window [instance=".*floating.*"]                                            
 for_window [title=".*floating.*"]                                                       floating enable, border pixel <%= i3['border'] %>
 
 
-for_window [window_role="pop-up"]                                                       floating enable, border pixel <%= i3['border'] %>
-for_window [window_role="bubble"]                                                       floating enable, border pixel <%= i3['border'] %>
-for_window [window_role="task_dialog"]                                                  floating enable, border pixel <%= i3['border'] %>
-for_window [window_role="Preferences"]                                                  floating enable, border pixel <%= i3['border'] %>
-for_window [window_type="dialog"]                                                       floating enable, border pixel <%= i3['border'] %>
-for_window [window_type="menu"]                                                         floating enable, border pixel <%= i3['border'] %>
+for_window [window_role="pop-up"]                                                       floating enable, border normal <%= i3['border'] %>
+for_window [window_role="bubble"]                                                       floating enable, border normal <%= i3['border'] %>
+for_window [window_role="task_dialog"]                                                  floating enable, border normal <%= i3['border'] %>
+for_window [window_role="Preferences"]                                                  floating enable, border normal <%= i3['border'] %>
+for_window [window_type="dialog"]                                                       floating enable, border normal <%= i3['border'] %>
+for_window [window_type="menu"]                                                         floating enable, border normal <%= i3['border'] %>
 for_window [class="TeamViewer"]                                                         floating enable, border pixel <%= i3['border'] %>
 
 # for_window [class="^jetbrains-.+"][window_type=dialog] focus
@@ -278,7 +278,6 @@ for_window [class="TeamViewer"]                                                 
 #for_window [class="(?i)VirtualBox"]                                                    floating enable
 
 #for_window [class="(?i).*xterm.*"]                                                      border pixel 0
-for_window [class="(?i).*termite.*"]                                                    border pixel 0
 for_window [class="(?i).*jetbrains.*"]                                                  border pixel <%= i3['border'] %>
 for_window [class="Rambox"]                                                             border pixel 0
 for_window [class="Gedit"]                                                              border pixel <%= i3['border'] %>
@@ -289,7 +288,8 @@ for_window [class="File-roller"]                                                
 for_window [class="Marker"]                                                             border pixel 0
 #for_window [class="Remmina"]                                                            border pixel 0
 for_window [class="Xfce4-terminal"]                                                     border pixel <%= i3['border'] %>
-
+for_window [class="WunderList"]                                                         floating disabled, border normal <%= i3['border'] %>
+for_window [class="1Password"]                                                          floating disabled, border normal <%= i3['border'] %>
 
 # Float IntelliJ update window
 for_window [class="sun-awt-X11-XDialogPeer"]                                            floating enable, border normal <%= i3['border'] %>
@@ -302,7 +302,7 @@ for_window [class="Nxclient.bin"]                                               
 for_window [class="Nxplayer.bin"]                                                       floating enable, border pixel <%= i3['border'] %>
 
 
-exec "xrandr --dpi $(xrdb -query | grep dpi | head -1 | grep -E -o '[0-9]+')"
+# exec "xrandr --dpi $(xrdb -query | grep dpi | head -1 | grep -E -o '[0-9]+')"
 
 # Exec always
 exec_always --no-startup-id bash ~/bin/restart-polybar || xfce4-panel &
@@ -312,7 +312,6 @@ exec_always --no-startup-id killall dunst; while pgrep -x dunst >/dev/null; do s
 exec_always --no-startup-id bash -c "source ~/.functions; setWallpaper"
 exec_always --no-startup-id sh -c "pgrep -x xbanish; [ \$? -eq 1 ] && xbanish &"
 exec_always --no-startup-id sh -c "pgrep -x pasystray; [ \$? -eq 1 ] && pasystray &"
-exec_always --no-startup-id sh -c "pgrep -x xfsettingsd; [ \$? -eq 1 ] && xfsettingsd --sm-client-disable  &"
 exec_always --no-startup-id sh -c "pgrep -x pb-for-desktop; [ \$? -eq 1 ] && pb-for-desktop &"
 exec_always --no-startup-id sh -c "pgrep -x nm-applet; [ \$? -eq 1 ] && nm-applet &"
 exec_always --no-startup-id sh -c "pgrep -x parcellite; [ \$? -eq 1 ] && parcellite &"
@@ -327,13 +326,14 @@ exec_always --no-startup-id sh -c "pgrep -x shutter; [ \$? -eq 1 ] && shutter --
 #exec_always --no-startup-id sh -c "pgrep -x jetbrains-toolbox ; [ \$? -eq 1 ] && jetbrains-toolbox &"
 #exec_always --no-startup-id sh -c "pgrep -x unclutter ; [ \$? -eq 1 ] && unclutter -idle 2 -jitter 5 -noevents -root &"
 exec_always --no-startup-id sh -c "pgrep -x redshift-gtk ; [ \$? -eq 1 ] && redshift-gtk &"
-#exec_always --no-startup-id sh -c "pgrep -x udiskie ; [ \$? -eq 1 ] && udiskie --tray --use-udisks2 &"
+exec_always --no-startup-id sh -c "pgrep -x udiskie ; [ \$? -eq 1 ] && udiskie --tray --use-udisks2 &"
 exec_always --no-startup-id sh -c "pgrep -x chrome ; [ \$? -eq 1 ] && google-chrome &"
-exec_always --no-startup-id sh -c "pgrep -x xss-lock ; [ \$? -eq 1 ] && xss-lock -- xscreensaver-command -lock  &"
+exec_always --no-startup-id sh -c "pgrep -x xscreensaver ; [ \$? -eq 1 ] &&  xscreensaver -no-splash &"
 
 exec_always --no-startup-id sh -c "pgrep -x xfconfd; [ \$? -eq 1 ] && /usr/lib64/xfce4/xfconf/xfconfd &"
-exec_always --no-startup-id sh -c "pgrep -x xfsettingsd; [ \$? -eq 1 ] && xfsettingsd &"
+exec_always --no-startup-id sh -c "pgrep -x xfsettingsd; [ \$? -eq 1 ] && xfsettingsd --replace --no-daemon &"
 exec_always --no-startup-id sh -c "pgrep -x xfce4-power-manager; [ \$? -eq 1 ] && xfce4-power-manager &"
+exec_always --no-startup-id sh -c "pgrep -x xfce-polkit; [ \$? -eq 1 ] &&  /usr/libexec/xfce-polkit &"
 
 
 #exec_always --no-startup-id pkill -f resolution-changed; bash ~/bin/resolution-changed ~/bin/restart-polybar
@@ -342,8 +342,8 @@ exec_always --no-startup-id sh -c "pgrep -x xfce4-power-manager; [ \$? -eq 1 ] &
 # Custom bindsym
 bindsym $mod+Shift+greater move workspace to output right
 bindsym $mod+Shift+less move workspace to output left
-bindsym Scroll_Lock exec xset s activate
-bindsym $mod+Shift+Escape exec xset s activate
+bindsym Scroll_Lock exec xscreensaver-command -lock
+bindsym $mod+Shift+Escape exec xscreensaver-command -lock
 bindsym $mod+Shift+D exec bash -c "source ~/.functions; setWallpaper"
 bindsym Print exec shutter -f
 # bindsym $mod+Print exec flameshot full -p ~/Screenshots/ -c
@@ -372,30 +372,12 @@ gaps inner <%= i3['gaps']['inner'] %>
 gaps outer <%= i3['gaps']['outer'] %>
 <% end %>
 
-# new_float none
+new_float normal
 
 
 # FOCUS
 focus_on_window_activation urgent
 
-
-# Display
-
-## Manual management of external displays
-# Set the shortcuts and what they do
-#set $mode_display Display mode [w]ork dual displays, [s]ingle display Full HD, s[i]ngle display 1440x900
-#mode "$mode_display" {
-#    bindsym w exec --no-startup-id bash ~/.screenlayout/work.sh
-#    bindsym s exec --no-startup-id bash ~/.screenlayout/1-display-full-hd.sh
-#    bindsym i exec --no-startup-id bash ~/.screenlayout/1-display-1400x900.sh
-#
-#
-# # back to normal: Enter or Escape
-#    bindsym Return mode "default"
-#    bindsym Escape mode "default"
-#}
-## Declare here the shortcut to bring the display selection menu
-#bindsym $mod+x mode "$mode_display"
 
 
 ## Plasma Integration

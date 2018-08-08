@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Xfce settings manager
+Exec=xfce4-settings-manager
+StartupNotify=false
+Terminal=false
+Type=Application
+Icon=1password
+Categories=Utility;

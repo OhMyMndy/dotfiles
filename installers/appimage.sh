@@ -25,6 +25,6 @@ install_appimage http://www.remmina.org/appimage-test/x86_64/Remmina-1.2.0_rcgit
 
 # AppImageD
 if [ ! -f ~/.local/bin/appimaged ]; then
-  install_appimage https://github.com/AppImage/AppImageKit/releases/download/continuous/appimaged-x86_64.AppImage AppImageD
+  install_appimage https://github.com/AppImage/appimaged/releases/download/continuous/appimaged-x86_64.AppImage AppImageD
   sudo /usr/local/bin/AppImageD --install
 fi

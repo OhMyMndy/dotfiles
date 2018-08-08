@@ -5,42 +5,50 @@ class Neon < Default
     def initialize dpi
         @dpi = dpi
         @colors = {
+            # Black
             "COLOR0"         => "#1a1b21",
-            "COLOR8"         => "#5e6670",
+            "COLOR8"         => "#959498",
 
-            "COLOR1"         => "#cb271c",
-            "COLOR9"         => "#cb271c",
+            # Red
+            "COLOR1"         => "#ff1835",
+            "COLOR9"         => "#ff1835",
 
-            "COLOR2"         => "#17934c",
-            "COLOR10"        => "#17934c",
+            # Green
+            "COLOR2"         => "#31ff7f",
+            "COLOR10"        => "#31ff7f",
 
-            "COLOR3"         => "#eeec26",
-            "COLOR11"        => "#eeec26",
+            # Yellow
+            "COLOR3"         => "#f3ff4d",
+            "COLOR11"        => "#f3ff4d",
 
+            # Blue
             "COLOR4"         => "#39c2ed",
             "COLOR12"        => "#39c2ed",
 
-            "COLOR5"         => "#a942af",
-            "COLOR13"        => "#a942af",
+            # Purple / Magenta
+            "COLOR5"         => "#ff68d1",
+            "COLOR13"        => "#ff68d1",
 
-            "COLOR6"         => "#2975e8",
-            "COLOR14"        => "#2975e8",
+            # Cyan
+            "COLOR6"         => "#169375",
+            "COLOR14"        => "#169375",
 
+            # White
             "COLOR7"         => "#ffffff",
             "COLOR15"        => "#ffffff",
 
-            "COLOR16"        => "#738fb7",
+            "COLOR16"        => "#3d96b7",
 
-            "BACKGROUND"     => "#1a1b21",
-            "FOREGROUND"     => "#eeeeee",
+            "BACKGROUND"     => "#101010",
+            "FOREGROUND"     => "#ffffff",
         }
 
         dark_mode_file = Dir.home + '.dark-mode'
         @dark_mode = File.read(dark_mode_file) if File.exist?(dark_mode_file)
 
-        @highlight_color = @colors['COLOR6']
-        @urgent_color = @colors['COLOR3']
-        @inactive_color = @colors['COLOR16']
+        @highlight_color = @colors['COLOR5']
+        @urgent_color = @colors['COLOR4']
+        @inactive_color = @colors['COLOR8']
     end
 
 end

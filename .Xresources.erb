@@ -48,15 +48,16 @@ Xft.hintstyle: hintslight
 Xft.lcdfilter: lcddefault
 
 ! Enable the extended coloring options
-rofi.modi: drun,run,window
+rofi.modi: drun,window
 rofi.color-enabled: true
 
-!                  bg           border     separator
-rofi.color-window: BACKGROUND,  COLOR1,    FOREGROUND
-!                  bg           fg         bg-alt     hl-bg        hl-fg
-rofi.color-normal: COLOR0,      COLOR15,   COLOR0,    BACKGROUND,  COLOR3
-rofi.color-active: COLOR0,      COLOR4,    COLOR0,    COLOR0,      COLOR2
-rofi.color-urgent: COLOR0,      COLOR5,    COLOR0,    COLOR0,      COLOR5
+!                  bg               border     separator
+rofi.color-window: BACKGROUND,      COLOR1,    FOREGROUND
+!                  bg               fg         bg-alt       hl-bg       hl-fg
+rofi.color-normal: BACKGROUND,      COLOR15,   BACKGROUND,  COLOR4,     BACKGROUND
+rofi.color-normal: BACKGROUND,      COLOR15,   BACKGROUND,  COLOR4,     BACKGROUND
+rofi.color-active: BACKGROUND,      COLOR4,    BACKGROUND,  BACKGROUND, COLOR3
+rofi.color-urgent: BACKGROUND,      COLOR1,    BACKGROUND,  BACKGROUND, COLOR1
 rofi.separator-style: solid
 rofi.sidebar-mode: true
 rofi.bw: 1

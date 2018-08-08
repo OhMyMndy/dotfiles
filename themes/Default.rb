@@ -49,7 +49,7 @@ class Default
 
         @highlight_color = @colors['COLOR6']
         @urgent_color = @colors['COLOR3']
-        @inactive_color = @colors['COLOR16']
+        @inactive_color = @colors['COLOR8']
     end
 
     def configuration()
@@ -59,7 +59,7 @@ class Default
       @monospace_font_style = "Regular"
       @monospace_font_size = 11;
 
-      @normal_font = "Ubuntu"
+      @normal_font = "Noto Sans"
       @normal_font_style = "Regular"
       @normal_font_size = 10;
 
@@ -86,19 +86,21 @@ class Default
       available_icons = available_icons.split("\n")
 
       @gtk = {
-          "theme"                   => "Numix",
-          "icon_theme"              => "Pop",
+          "theme"                   => "Arc",
+          "icon_theme"              => "Papirus",
           "fallback_icon_theme"     => 'Adwaita',
           "cursor_theme"            => "dmz"
       }
 
       available = available_themes.select {|e| e == @gtk['theme']}
       if available.length == 0
+        puts "Chosen theme " + @gtk['theme'] + " not found"
         @gtk['theme'] = 'Adwaita'
       end
 
       available = available_icons.select {|e| e == @gtk['icon_theme']}
       if available.length == 0
+        puts "Chosen icon theme " + @gtk['icon_theme'] + " not found"
         available = available_icons.select {|e| e == 'Numix'}
         if available.length == 1
           @gtk['icon_theme'] = 'Numix'
@@ -106,7 +108,6 @@ class Default
           @gtk['icon_theme'] = 'Adwaita'
         end
       end
-
 
       available = available_icons.select {|e| e == @gtk['cursor_theme']}
       if available.length == 0
@@ -125,7 +126,7 @@ class Default
       @dunst = {
           "global"          => {
               "font"            => @fonts['normal'].to_dunst,
-              "format"          => "<b><i>%s</i></b>\\n%b",
+              "format"          => "<b>%s</b>\\n%b",
               "separator_color" => @colors['COLOR1'],
               "geometry"        => "360x6-6+32",
               "separator_height"=> 2,
@@ -133,23 +134,26 @@ class Default
               "horizontal_padding" => 10,
           },
           "frame"     => {
-              "color" => @colors['COLOR6'],
+              "color" => @colors['COLOR2'],
               "width" => 1
           },
           "urgency_low"     => {
               "background"  => @colors['BACKGROUND'],
               "foreground"  => @colors['FOREGROUND'],
-              "timeout"     => 5
+              "timeout"     => 5,
+              "frame_color" => @colors['COLOR4']
           },
           "urgency_normal"     => {
               "background"  => @colors['BACKGROUND'],
               "foreground"  => @colors['FOREGROUND'],
-              "timeout"     => 40
+              "timeout"     => 40,
+              "frame_color" => @colors['COLOR2']
           },
           "urgency_critical"     => {
-              "background"  => @colors['COLOR0'],
-              "foreground"  => @urgent_color,
-              "timeout"     => 60
+              "background"  => @colors['BACKGROUND'],
+              "foreground"  => @colors['FOREGROUND'],
+              "timeout"     => 60,
+              "frame_color" => @colors['COLOR1']
           },
       }
 
@@ -160,10 +164,10 @@ class Default
           "font" => @fonts["normal"].to_gtk,
           "border" => 2,
           "client" => {
-              "focused"           => I3Colors.new(@colors['COLOR8'], @colors['COLOR8'], @colors['FOREGROUND'], @colors['COLOR4']),
+              "focused"           => I3Colors.new(@colors['COLOR2'], @colors['COLOR2'], @colors['BACKGROUND'], @colors['COLOR4']),
               "unfocused"         => I3Colors.new(@colors['COLOR0'], @colors['COLOR0'], @colors['FOREGROUND'], @colors['COLOR4']),
               "focused_inactive"  => I3Colors.new(@colors['COLOR0'], @colors['COLOR0'], @colors['FOREGROUND'], @colors['COLOR4']),
-              "urgent"            => I3Colors.new(@urgent_color, @urgent_color, @colors['COLOR0'], @colors['COLOR4']),
+              "urgent"            => I3Colors.new(@urgent_color, @urgent_color, @colors['BACKGROUND'], @colors['COLOR4']),
           },
           "gaps" => {
               "inner" => 2,
@@ -176,17 +180,18 @@ class Default
       @polybar = {
           "background"           => @colors['BACKGROUND'],
           "foreground"           => @colors['FOREGROUND'],
-          "highlight_color"      => @highlight_color,
+          "highlight_color"      => @colors['COLOR2'],
           "urgent_color"         => @urgent_color,
           "inactive_color"       => @inactive_color,
           "height"               => ((@normal_font_size * 2) * 1.2).to_s + "px",
-          "padding"              => 1,
-          "wm_padding"           => 3,
+          "padding"              => 2,
+          "tray_padding"         => 2,
+          "wm_padding"           => 2,
           "fonts"                => [
-              @fonts["normal"].to_polybar(@normal_font_size, 2),
-              @fonts["normal_alternative"].to_polybar(@normal_font_size, 2),
+              @fonts["normal"].to_polybar(@normal_font_size - 1, 2),
+              @fonts["normal_alternative"].to_polybar(@normal_font_size - 1, 2),
               @fonts["monospace"].to_polybar(14, 3),
-              @fonts["weather"].to_polybar(11, 2)
+              @fonts["weather"].to_polybar(9, 2)
           ]
       }
 
@@ -195,7 +200,7 @@ class Default
               "dark" => @colors['BACKGROUND'],
               "light" => @colors['FOREGROUND'],
               "accent" => @urgent_color,
-              "hightlight" => @highlight_color,
+              "highlight" => @highlight_color,
           }
       }
 

@@ -49,14 +49,14 @@ overline-color = ${colors.foreground-alt}
 underline-size = 2
 underline-color = <%= polybar['highlight_color'] %>
 
-padding-left = <%= polybar['padding'] %>
+padding-left = 0
 padding-right = <%= polybar['padding'] %>
 
 
-module-margin-left = 3
-module-margin-right = 3
+module-margin-left = <%= polybar['padding'] %>
+module-margin-right = <%= polybar['padding'] %>
 
-border-bottom-size = 2px
+border-bottom-size = 0px
 border-bottom-color = <%= polybar['highlight_color'] %>
 
 
@@ -66,14 +66,14 @@ font-2 = <%= polybar['fonts'][2] %>
 font-3 = <%= polybar['fonts'][3] %>
 
 
-modules-left = i3 mpd
+modules-left = i3 mpd timed-command
 ; window
 modules-center = weather
 ; xwindow
-modules-right = pomodoro terminal monitor vpn filesystem load date logout
-separator = "|"
+modules-right = pomodoro terminal monitor vpn memory filesystem load date logout
+;separator = "|"
 tray-position = right
-tray-padding = <%= polybar['padding'] %>
+tray-padding = <%= polybar['tray_padding'] %>
 tray-maxsize = 16
 ;tray-transparent = true
 
@@ -110,15 +110,15 @@ exec-if = ip tuntap show | grep -iE 'tun[0-9]+'
 interval = 30
 format-underline = ${colors.accent-dark2}
 format-prefix = " "
-format-prefix-foreground = #5b
+;format-prefix-foreground = #5b
 
 [module/pomodoro]
 type = custom/script
 exec =  [ -f /tmp/pomodoro_time ] && date -d@$(cat /tmp/pomodoro_time) -u +%M:%S 2>/dev/null || echo "Start" 
 interval = 5
-format-underline = ${colors.accent-dark2}
-format-prefix = "  "
-format-prefix-foreground = #5b
+format-underline = ${colors.accent-dark1}
+format-prefix = " "
+;format-prefix-foreground = #5b
 click-left = bash ~/bin/pomodoro-timer &
 click-right = pkill -e -f pomodoro-timer
 
@@ -128,14 +128,14 @@ click-left = bash ~/.config/polybar/scripts/display-resolution.sh &
 exec = echo ' '
 interval = 9000
 format-underline = ${colors.accent-dark1}
-format-prefix = " "
+format-prefix = ""
 
 [module/terminal]
 type=custom/script
 click-left = ~/bin/terminal-emulator &
 exec = echo ' '
 format-underline = ${colors.accent-light2}
-format-prefix = " "
+format-prefix = ""
 
 interval = 9000
 
@@ -145,8 +145,8 @@ type=custom/script
 click-left = /usr/bin/xkill
 exec = df --output=pcent / -h | tail -1
 interval = 60
-format-underline = ${colors.accent-light1}
-format-prefix = "   "
+format-underline = ${colors.accent-light2}
+format-prefix = " "
 
 
 [module/redshift]
@@ -164,16 +164,16 @@ wrapping-scroll = false
 
 label-padding = <%= polybar['wm_padding'] %>
 
-label-mode-padding = <%= polybar['wm_padding'] %>
 label-mode-foreground = <%= polybar['foreground'] %>
-;label-mode-background = ${colors.primary}
+label-mode-background = <%= polybar['highlight_color'] %>
+label-mode-padding = <%= polybar['wm_padding'] %>
 
 label-focused = "%icon%"
-label-focused-foreground = <%= polybar['foreground'] %>
+label-focused-foreground = <%= polybar['background'] %>
+label-focused-background = <%= polybar['highlight_color'] %>
 label-focused-padding = <%= polybar['wm_padding'] %>
 
 label-unfocused = "%icon%"
-#label-unfocused =
 label-unfocused-foreground = <%= polybar['inactive_color'] %>
 label-unfocused-padding = <%= polybar['wm_padding'] %>
 
@@ -182,7 +182,8 @@ label-urgent-foreground = <%= polybar['urgent_color'] %>
 label-urgent-padding = <%= polybar['wm_padding'] %>
 
 label-visible = "%icon%"
-label-visible-foreground = <%= polybar['foreground'] %>
+label-visible-foreground = <%= polybar['inactive_color'] %>
+;label-visible-background = <%= polybar['highlight_color'] %>
 label-visible-padding = <%= polybar['wm_padding'] %>
 
 ws-icon-0 = 1: ;
@@ -292,8 +293,8 @@ bar-used-foreground-3 = #ff5555
 bar-used-fill =▮
 bar-used-empty =▮
 bar-used-empty-foreground = #444444
-format-underline = ${colors.accent-light1}
-format-prefix = "   "
+format-underline = ${colors.accent-dark1}
+format-prefix = " "
 
 [module/swap]
 type=custom/script
@@ -308,8 +309,16 @@ format-prefix = "Swap free: "
 type=custom/script
 interval = 10
 exec = cat /proc/loadavg | cut -f1 -d' '
-format-prefix = "  "
-format-underline = ${colors.accent-dark2}
+format-prefix = " "
+format-underline = ${colors.accent-dark1}
+
+
+[module/timed-command]
+type=custom/script
+interval = 5
+exec = cat /tmp/timed_command_polybar 2>/dev/null
+format-prefix = " "
+format-underline = ${colors.accent-dark1}
 
 
 [module/wlan]
@@ -354,7 +363,7 @@ type=custom/script
 #type = internal/date
 interval = 30
 exec = date +"%a %x %R"
-format-prefix = "  "
+format-prefix = " "
 format-underline = ${colors.accent-light2}
 ;format-prefix-foreground = ${colors.foreground}
 click-right = gsimplecal
