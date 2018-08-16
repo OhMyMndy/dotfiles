@@ -54,18 +54,24 @@ class Default
 
     def configuration()
 
-      @monospace_font = "Hack Nerd Font Mono"
-      #@monospace_font = "Ubuntu Mono Nerd Font"
-      @monospace_font_style = "Regular"
-      @monospace_font_size = 11;
+      monospace_font = %x(xfconf-query -c xsettings -p /Gtk/MonospaceFontName | grep -Eo '[^0-9]+').chomp
+      monospace_font_size = %x(xfconf-query -c xsettings -p /Gtk/MonospaceFontName | grep -Eo '[0-9]+$').chomp.to_i
 
-      @normal_font = "Noto Sans"
+      @monospace_font = monospace_font
+      @monospace_font_style = "Regular"
+      @monospace_font_size = monospace_font_size;
+
+
+      normal_font = %x(xfconf-query -c xsettings -p /Gtk/FontName | grep -Eo '[^0-9]+').chomp
+      normal_font_size = %x(xfconf-query -c xsettings -p /Gtk/FontName | grep -Eo '[0-9]+$').chomp.to_i
+
+      @normal_font = normal_font
       @normal_font_style = "Regular"
-      @normal_font_size = 10;
+      @normal_font_size = normal_font_size;
 
       @normal_font_alternative = @normal_font
-      @normal_font_style_alternative = "Regular"
-      @normal_font_size_alternative = 11;
+      @normal_font_style_alternative = @normal_font_style
+      @normal_font_size_alternative = normal_font_size;
 
       @weather_font = "Weather Icons"
       @weather_font_style = "Regular"
@@ -86,10 +92,10 @@ class Default
       available_icons = available_icons.split("\n")
 
       @gtk = {
-          "theme"                   => "Arc",
-          "icon_theme"              => "Papirus",
+          "theme"                   => %x(xfconf-query -c xsettings -p /Net/ThemeName).chomp,
+          "icon_theme"              => %x(xfconf-query -c xsettings -p /Net/IconThemeName).chomp,
           "fallback_icon_theme"     => 'Adwaita',
-          "cursor_theme"            => "dmz"
+          "cursor_theme"            => %x(xfconf-query -c xsettings -p /Gtk/CursorThemeName).chomp
       }
 
       available = available_themes.select {|e| e == @gtk['theme']}
@@ -162,12 +168,12 @@ class Default
       puts "i3 gaps: " + i3gaps_enabled.to_s
       @i3 = {
           "font" => @fonts["normal"].to_gtk,
-          "border" => 2,
+          "border" => 4,
           "client" => {
-              "focused"           => I3Colors.new(@colors['COLOR2'], @colors['COLOR2'], @colors['BACKGROUND'], @colors['COLOR4']),
-              "unfocused"         => I3Colors.new(@colors['COLOR0'], @colors['COLOR0'], @colors['FOREGROUND'], @colors['COLOR4']),
-              "focused_inactive"  => I3Colors.new(@colors['COLOR0'], @colors['COLOR0'], @colors['FOREGROUND'], @colors['COLOR4']),
-              "urgent"            => I3Colors.new(@urgent_color, @urgent_color, @colors['BACKGROUND'], @colors['COLOR4']),
+              "focused"           => I3Colors.new(@colors['COLOR0'], @colors['COLOR2'], @colors['BACKGROUND'], @colors['COLOR5']),
+              "unfocused"         => I3Colors.new(@colors['BACKGROUND'], @colors['COLOR0'], @colors['FOREGROUND'], @colors['BACKGROUND']),
+              "focused_inactive"  => I3Colors.new(@colors['BACKGROUND'], @colors['COLOR0'], @colors['FOREGROUND'], @colors['BACKGROUND']),
+              "urgent"            => I3Colors.new(@urgent_color, @urgent_color, @colors['BACKGROUND'], @colors['COLOR5']),
           },
           "gaps" => {
               "inner" => 2,

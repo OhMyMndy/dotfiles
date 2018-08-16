@@ -90,21 +90,6 @@ Process.fork { system "xrandr --dpi #{$dpi} > /dev/null 2>&1 " }
 Process.fork { system "i3 reload" }
 # Process.fork { system "sudo hardcode-tray --theme Papirus --apply" }
 
-#############
-# Gnome desktop settings
-#############
-#%x( dconf write /org/gnome/desktop/interface/font-name "'#{$theme_instance.fonts['normal'].to_gtk}'" )
-#%x( dconf write /org/gnome/desktop/interface/monospace-font-name "'#{$theme_instance.fonts['monospace'].to_gtk}'" )
-#%x( dconf write /org/gnome/desktop/interface/text-scaling-factor 1 )
-
-#############
-# Install even better ls
-#############
-# %x( which ls-i )
-# if $?.exitstatus != 0
-#    %x( sh -c "$(curl -fsSL https://raw.githubusercontent.com/illinoisjackson/even-better-ls/master/install.sh)" )
-# end
-
 
 #############
 ## Git settings

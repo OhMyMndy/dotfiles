@@ -163,32 +163,24 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" --no-use  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-setupcon 2>/dev/null
-resize  >/dev/null 2>&1
-# Solarized theme for tty, the dark version.
-# Based on:
-#   - Solarized (http://ethanschoonover.com/solarized)
-#   - Xresources from http://github.com/altercation/solarized
-# Generated with pty2tty.awk by Joep van Delft
-# http://github.com/joepvd/tty-solarized
 if [ "$TERM" = "linux" ]; then
-echo -en "\e]P0<%= colors['COLOR0'] %>" #black
-echo -en "\e]P1<%= colors['COLOR1'] %>" #darkred
-echo -en "\e]P2<%= colors['COLOR2'] %>" #darkgreen
-echo -en "\e]P3<%= colors['COLOR3'] %>" #brown
-echo -en "\e]P4<%= colors['COLOR4'] %>" #darkblue
-echo -en "\e]P5<%= colors['COLOR5'] %>" #darkmagenta
-echo -en "\e]P6<%= colors['COLOR6'] %>" #darkcyan
-echo -en "\e]P7<%= colors['COLOR7'] %>" #lightgrey
-echo -en "\e]P8<%= colors['COLOR8'] %>" #darkgrey
-echo -en "\e]P9<%= colors['COLOR9'] %>" #red
-echo -en "\e]PA<%= colors['COLOR10'] %>" #green
-echo -en "\e]PB<%= colors['COLOR11'] %>" #yellow
-echo -en "\e]PC<%= colors['COLOR12'] %>" #blue
-echo -en "\e]PD<%= colors['COLOR13'] %>" #magenta
-echo -en "\e]PE<%= colors['COLOR14'] %>" #cyan
-echo -en "\e]PF<%= colors['COLOR15'] %>" #white
-clear #for background artifacting
+    echo -en "\e]P0<%= colors['COLOR0'].sub '#', '' %>" #black
+    echo -en "\e]P1<%= colors['COLOR1'].sub '#', '' %>" #darkred
+    echo -en "\e]P2<%= colors['COLOR2'].sub '#', '' %>" #darkgreen
+    echo -en "\e]P3<%= colors['COLOR3'].sub '#', '' %>" #brown
+    echo -en "\e]P4<%= colors['COLOR4'].sub '#', '' %>" #darkblue
+    echo -en "\e]P5<%= colors['COLOR5'].sub '#', '' %>" #darkmagenta
+    echo -en "\e]P6<%= colors['COLOR6'].sub '#', '' %>" #darkcyan
+    echo -en "\e]P7<%= colors['COLOR7'].sub '#', '' %>" #lightgrey
+    echo -en "\e]P8<%= colors['COLOR8'].sub '#', '' %>" #darkgrey
+    echo -en "\e]P9<%= colors['COLOR9'].sub '#', '' %>" #red
+    echo -en "\e]PA<%= colors['COLOR10'].sub '#', '' %>" #green
+    echo -en "\e]PB<%= colors['COLOR11'].sub '#', '' %>" #yellow
+    echo -en "\e]PC<%= colors['COLOR12'].sub '#', '' %>" #blue
+    echo -en "\e]PD<%= colors['COLOR13'].sub '#', '' %>" #magenta
+    echo -en "\e]PE<%= colors['COLOR14'].sub '#', '' %>" #cyan
+    echo -en "\e]PF<%= colors['COLOR15'].sub '#', '' %>" #white
+    clear #for background artifacting
 fi
 
 function set_term_size() {
@@ -196,4 +188,5 @@ function set_term_size() {
     add-to-file "stty columns 160" "$HOME/.profile"
 }
 
+[[ "$(tty)" =~ /dev/tty[0-9]* ]] && setupcon
 [[ "$(tty)" =~ /dev/tty[0-9]* ]] && [[ "$(hostname)" =~ macbook ]] && set_term_size

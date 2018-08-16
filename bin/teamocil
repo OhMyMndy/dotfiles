@@ -6,6 +6,7 @@ config="$1"
 tmp_config="$HOME/.teamocil/_tmp_$config.yml"
 
 finish() {
+    cat $tmp_config
     rm $tmp_config
 }
 trap finish EXIT

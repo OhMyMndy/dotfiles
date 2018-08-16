@@ -55,7 +55,7 @@ bindsym ctrl+Shift+q kill
 # start dmenu (a program launcher)
 bindsym $mod+d exec "rofi -show || dmenu_run"
 bindsym $mod+space exec --no-startup-id "albert show || dmenu run"
-bindsym $alt+Tab exec "rofi -show"
+bindsym Mod1+Tab workspace back_and_forth
 
 # change focus
 bindsym $mod+j focus left
@@ -184,7 +184,7 @@ bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
 
 # ruby installer
-bindsym $mod+Shift+i exec "tmp=$(mktemp);tmp1=$(mktemp);ruby ~/dotfiles/install.rb 2>${tmp} >/${tmp1} && notify-send \\"Ruby install success\\" \\"$(cat ${tmp1})\\"|| notify-send \\"Ruby installer error\\" \\"$(cat ${tmp})\\"; rm -f ${tmp}; rm -f ${tmp1}"
+bindsym $mod+Shift+i exec "tmp=$(mktemp);tmp1=$(mktemp);ruby ~/dotfiles/install.rb 2>${tmp} >/${tmp1} && sleep 2; notify-send \\"Ruby install success\\" \\"$(cat ${tmp1})\\"|| notify-send \\"Ruby installer error\\" \\"$(cat ${tmp})\\"; rm -f ${tmp}; rm -f ${tmp1}"
 
 # restart polybar
 bindsym $mod+Shift+p exec bash ~/bin/restart-polybar
@@ -270,6 +270,8 @@ for_window [window_role="Preferences"]                                          
 for_window [window_type="dialog"]                                                       floating enable, border normal <%= i3['border'] %>
 for_window [window_type="menu"]                                                         floating enable, border normal <%= i3['border'] %>
 for_window [class="TeamViewer"]                                                         floating enable, border pixel <%= i3['border'] %>
+for_window [class="vokoscreen"]                                                         floating enable, border normal <%= i3['border'] %>
+for_window [class="vlc"]                                                                floating enable, border normal <%= i3['border'] %>
 
 # for_window [class="^jetbrains-.+"][window_type=dialog] focus
 
@@ -308,7 +310,7 @@ for_window [class="Nxplayer.bin"]                                               
 exec_always --no-startup-id bash ~/bin/restart-polybar || xfce4-panel &
 exec_always --no-startup-id compton &
 exec_always --no-startup-id albert &
-exec_always --no-startup-id killall dunst; while pgrep -x dunst >/dev/null; do sleep 1; done; dunst
+exec_always --no-startup-id sh -c "pgrep -x dunst; [ \$? -eq 1 ] && dunst &"
 exec_always --no-startup-id bash -c "source ~/.functions; setWallpaper"
 exec_always --no-startup-id sh -c "pgrep -x xbanish; [ \$? -eq 1 ] && xbanish &"
 exec_always --no-startup-id sh -c "pgrep -x pasystray; [ \$? -eq 1 ] && pasystray &"

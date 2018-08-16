@@ -95,7 +95,7 @@ setopt EXTENDED_HISTORY
 # }
 
 
-alias docker-ps-min='docker ps --format "table{{.Names}}\t{{.RunningFor}}\t{{.Status}}\t{{.Image}}"'
+alias docker-ps-min='docker ps --format "table{{.Names}}\t{{.RunningFor}}\t{{.Status}}"'
 alias hl='grepc "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+"'
 #alias current-window-process='ps -o args= $(xprop -id $(xprop -root -f _NET_ACTIVE_WINDOW 0x " \$0\\n" _NET_ACTIVE_WINDOW | awk "{print \$2}") -f _NET_WM_PID 0c " \$0\\n" _NET_WM_PID | awk "{print \$2}")'
 alias disk-usage='sudo du -h -t200M -x / 2>/dev/null'
@@ -163,32 +163,24 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" --no-use  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-setupcon 2>/dev/null
-resize  >/dev/null 2>&1
-# Solarized theme for tty, the dark version.
-# Based on:
-#   - Solarized (http://ethanschoonover.com/solarized)
-#   - Xresources from http://github.com/altercation/solarized
-# Generated with pty2tty.awk by Joep van Delft
-# http://github.com/joepvd/tty-solarized
 if [ "$TERM" = "linux" ]; then
-echo -en "\e]P0#1a1b21" #black
-echo -en "\e]P1#cb271c" #darkred
-echo -en "\e]P2#17934c" #darkgreen
-echo -en "\e]P3#eeec26" #brown
-echo -en "\e]P4#39c2ed" #darkblue
-echo -en "\e]P5#a942af" #darkmagenta
-echo -en "\e]P6#2975e8" #darkcyan
-echo -en "\e]P7#ffffff" #lightgrey
-echo -en "\e]P8#5e6670" #darkgrey
-echo -en "\e]P9#cb271c" #red
-echo -en "\e]PA#17934c" #green
-echo -en "\e]PB#eeec26" #yellow
-echo -en "\e]PC#39c2ed" #blue
-echo -en "\e]PD#a942af" #magenta
-echo -en "\e]PE#2975e8" #cyan
-echo -en "\e]PF#ffffff" #white
-clear #for background artifacting
+    echo -en "\e]P01a1b21" #black
+    echo -en "\e]P1ff1835" #darkred
+    echo -en "\e]P231ff7f" #darkgreen
+    echo -en "\e]P3f3ff4d" #brown
+    echo -en "\e]P439c2ed" #darkblue
+    echo -en "\e]P5ff68d1" #darkmagenta
+    echo -en "\e]P6169375" #darkcyan
+    echo -en "\e]P7ffffff" #lightgrey
+    echo -en "\e]P8959498" #darkgrey
+    echo -en "\e]P9ff1835" #red
+    echo -en "\e]PA31ff7f" #green
+    echo -en "\e]PBf3ff4d" #yellow
+    echo -en "\e]PC39c2ed" #blue
+    echo -en "\e]PDff68d1" #magenta
+    echo -en "\e]PE169375" #cyan
+    echo -en "\e]PFffffff" #white
+    clear #for background artifacting
 fi
 
 function set_term_size() {
@@ -196,4 +188,5 @@ function set_term_size() {
     add-to-file "stty columns 160" "$HOME/.profile"
 }
 
+[[ "$(tty)" =~ /dev/tty[0-9]* ]] && setupcon
 [[ "$(tty)" =~ /dev/tty[0-9]* ]] && [[ "$(hostname)" =~ macbook ]] && set_term_size

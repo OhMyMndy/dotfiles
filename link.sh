@@ -30,10 +30,16 @@ if  [ ! -L ".config/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml" ]; then
     link-file "$DIR" '.config/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml'
 fi
 
+mkdir -p ~/.config/Thunar
+if  [ ! -L ".config/Thunar/uca.xml" ]; then
+    rm -f "$HOME/.config/Thunar/uca.xml"
+    link-file "$DIR" ".config/Thunar/uca.xml"
+fi
+
 
 mkdir -p ~/.config/xfce4/
 link-file "$DIR" ".config/xfce4/terminal"
-mkdir -p ~/.config/Thunar
+
 link-file "$DIR" ".config/Thunar/uca.xml"
 mkdir -p ~/.config/parcellite/
 link-file "$DIR" ".config/parcellite/parcelliterc"
@@ -243,6 +249,10 @@ installZshPlugin "https://github.com/skx/sysadmin-util.git" "sysadmin-util"
 # Regular fonts
 #installFontsFromZip "https://www.wfonts.com/download/data/2016/05/11/gill-sans-std/gill-sans-std.zip" "GillSans"
 #installFontsFromZip "https://github.com/erikflowers/weather-icons/archive/2.0.10.zip" "Weather-Icons"
+
+cd /home/mandy/.local/share/fonts
+git clone https://github.com/r4in/typefaces.git
+cd $DIR
 
 installFontsFromZip "https://github.com/RedHatBrand/Overpass/releases/download/3.0.2/overpass-desktop-fonts.zip" "overpass"
 if [ "$(uname)" != 'Darwin' ]; then

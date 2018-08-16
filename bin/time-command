@@ -15,7 +15,7 @@ fi
 
 finish() {
     rm $file 2>/dev/null
-    kill $pid 2>/dev/null
+    kill $pid 2>/dev/null &
 }
 trap finish INT EXIT
 
@@ -26,12 +26,11 @@ $@ | tee /dev/tty >/dev/null 2>&1 &
 
 pid=$!
 
-echo $pid
 time=-1;
-while [ -n "$(ps -o etime= $pid)" ]; do
+while [ -n "$(ps -o pid= $pid)" ]; do
     time="$(ps -o etime= $pid | sed -E 's/\s//g')"
     echo "$name : $time" > $file
-    sleep 10
+    sleep 1
 done
 
-notify-send -u critical "Running command finished!" "Command '$command' finished in $time"
+notify-send -u critical "Running command finished!" "Command '$command' finished in $time" &

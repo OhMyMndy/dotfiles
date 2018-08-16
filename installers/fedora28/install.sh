@@ -106,6 +106,7 @@ terminus-fonts-console
 # fontconfig-enhanced-defaults
 # fontconfig-font-replacements
 @xfce
+plank
 paper-icon-theme
 @multimedia
 @printing
@@ -155,9 +156,8 @@ paper-icon-theme
 yad
 thunar
 tumbler
-nemo
 unrar
-engrampa
+xarchiver
 git
 tig
 ruby
@@ -267,6 +267,7 @@ xscreensaver-gl-extras
 qalculate-gtk
 parallel
 snapd
+vokoscreen
 EOL
     status=$?
     if [ $status -ne 0 ]; then

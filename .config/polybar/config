@@ -37,43 +37,43 @@ accent-light2 = ${xrdb:color4}
 ;monitor = ${env:MONITOR:HDMI-1}
 dpi = ${xrdb:Xft.dpi:-1}
 width = 100%
-height = 24.0px
+height = 26.4px
 offset-x = 0
 offset-y = 0
 
-background = #1a1b21
-foreground = #eeeeee
+background = #101010
+foreground = #ffffff
 
 overline-size = 2
 overline-color = ${colors.foreground-alt}
 underline-size = 2
-underline-color = #2975e8
+underline-color = #31ff7f
 
-padding-left = 1
-padding-right = 1
-
-
-module-margin-left = 3
-module-margin-right = 3
-
-border-bottom-size = 2px
-border-bottom-color = #2975e8
+padding-left = 0
+padding-right = 2
 
 
-font-0 = Ubuntu:style=Regular:pixelsize=10;2
-font-1 = Ubuntu:style=Regular:pixelsize=10;2
-font-2 = Hack Nerd Font Mono:style=Regular:pixelsize=14;3
-font-3 = Weather Icons:style=Regular:pixelsize=11;2
+module-margin-left = 2
+module-margin-right = 2
+
+border-bottom-size = 0px
+border-bottom-color = #31ff7f
 
 
-modules-left = i3 mpd
+font-0 = Droid Sans :style=Regular:pixelsize=10;2
+font-1 = Droid Sans :style=Regular:pixelsize=10;2
+font-2 = Hack Nerd Font Mono :style=Regular:pixelsize=14;3
+font-3 = Weather Icons:style=Regular:pixelsize=9;2
+
+
+modules-left = i3 mpd timed-command
 ; window
 modules-center = weather
 ; xwindow
-modules-right = pomodoro terminal monitor vpn filesystem load date logout
-separator = "|"
+modules-right = pomodoro terminal monitor vpn memory filesystem load date logout
+;separator = "|"
 tray-position = right
-tray-padding = 1
+tray-padding = 2
 tray-maxsize = 16
 ;tray-transparent = true
 
@@ -96,7 +96,7 @@ type = internal/xkeyboard
 blacklist-0 = num lock
 label-layout = %{F#55}%{F-} %layout%
 label-layout-underline = ${colors.secondary}
-label-indicator-padding = 1
+label-indicator-padding = 2
 #label-indicator-margin = 1
 label-indicator-foreground = ${colors.background}
 label-indicator-background = ${colors.secondary}
@@ -110,15 +110,15 @@ exec-if = ip tuntap show | grep -iE 'tun[0-9]+'
 interval = 30
 format-underline = ${colors.accent-dark2}
 format-prefix = " "
-format-prefix-foreground = #5b
+;format-prefix-foreground = #5b
 
 [module/pomodoro]
 type = custom/script
 exec =  [ -f /tmp/pomodoro_time ] && date -d@$(cat /tmp/pomodoro_time) -u +%M:%S 2>/dev/null || echo "Start" 
 interval = 5
-format-underline = ${colors.accent-dark2}
-format-prefix = "  "
-format-prefix-foreground = #5b
+format-underline = ${colors.accent-dark1}
+format-prefix = " "
+;format-prefix-foreground = #5b
 click-left = bash ~/bin/pomodoro-timer &
 click-right = pkill -e -f pomodoro-timer
 
@@ -128,14 +128,14 @@ click-left = bash ~/.config/polybar/scripts/display-resolution.sh &
 exec = echo ' '
 interval = 9000
 format-underline = ${colors.accent-dark1}
-format-prefix = " "
+format-prefix = ""
 
 [module/terminal]
 type=custom/script
 click-left = ~/bin/terminal-emulator &
 exec = echo ' '
 format-underline = ${colors.accent-light2}
-format-prefix = " "
+format-prefix = ""
 
 interval = 9000
 
@@ -145,8 +145,8 @@ type=custom/script
 click-left = /usr/bin/xkill
 exec = df --output=pcent / -h | tail -1
 interval = 60
-format-underline = ${colors.accent-light1}
-format-prefix = "   "
+format-underline = ${colors.accent-light2}
+format-prefix = " "
 
 
 [module/redshift]
@@ -162,28 +162,29 @@ format = <label-state> <label-mode>
 index-sort = true
 wrapping-scroll = false
 
-label-padding = 3
+label-padding = 2
 
-label-mode-padding = 3
-label-mode-foreground = #eeeeee
-;label-mode-background = ${colors.primary}
+label-mode-foreground = #ffffff
+label-mode-background = #31ff7f
+label-mode-padding = 2
 
 label-focused = "%icon%"
-label-focused-foreground = #eeeeee
-label-focused-padding = 3
+label-focused-foreground = #101010
+label-focused-background = #31ff7f
+label-focused-padding = 2
 
 label-unfocused = "%icon%"
-#label-unfocused =
-label-unfocused-foreground = #738fb7
-label-unfocused-padding = 3
+label-unfocused-foreground = #959498
+label-unfocused-padding = 2
 
 label-urgent = "%icon%!"
-label-urgent-foreground = #eeec26
-label-urgent-padding = 3
+label-urgent-foreground = #39c2ed
+label-urgent-padding = 2
 
 label-visible = "%icon%"
-label-visible-foreground = #eeeeee
-label-visible-padding = 3
+label-visible-foreground = #959498
+;label-visible-background = #31ff7f
+label-visible-padding = 2
 
 ws-icon-0 = 1: ;
 ws-icon-1 = 2: ;
@@ -292,8 +293,8 @@ bar-used-foreground-3 = #ff5555
 bar-used-fill =▮
 bar-used-empty =▮
 bar-used-empty-foreground = #444444
-format-underline = ${colors.accent-light1}
-format-prefix = "   "
+format-underline = ${colors.accent-dark1}
+format-prefix = " "
 
 [module/swap]
 type=custom/script
@@ -308,8 +309,16 @@ format-prefix = "Swap free: "
 type=custom/script
 interval = 10
 exec = cat /proc/loadavg | cut -f1 -d' '
-format-prefix = "  "
-format-underline = ${colors.accent-dark2}
+format-prefix = " "
+format-underline = ${colors.accent-dark1}
+
+
+[module/timed-command]
+type=custom/script
+interval = 5
+exec = cat /tmp/timed_command_polybar 2>/dev/null
+format-prefix = " "
+format-underline = ${colors.accent-dark1}
 
 
 [module/wlan]
@@ -340,21 +349,21 @@ interval = 10
 ;   up - down icons
 ;format-connected-underline = ${colors.accent-light2}
 format-connected-prefix = " "
-format-connected-foreground = #eeeeee
+format-connected-foreground = #ffffff
 label-connected =  %downspeed%  %upspeed%
 label-connected-alt = %local_ip%  %downspeed%  %upspeed%
 
 ;format-disconnected-underline = ${self.format-connected-underline}
 format-disconnected-prefix = " "
 label-disconnected = %ifname% disconnected
-label-disconnected-foreground = #738fb7
+label-disconnected-foreground = #959498
 
 [module/date]
 type=custom/script
 #type = internal/date
 interval = 30
 exec = date +"%a %x %R"
-format-prefix = "  "
+format-prefix = " "
 format-underline = ${colors.accent-light2}
 ;format-prefix-foreground = ${colors.foreground}
 click-right = gsimplecal

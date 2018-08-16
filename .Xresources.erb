@@ -40,11 +40,11 @@
 
 
 Xft.dpi: <%= dpi %>
-Xft.antialias: true
-Xft.hinting: true
-Xft.rgba: rgb
+Xft.antialias: <%= %x(xfconf-query -c xsettings -p /Xft/Antialias).chomp.to_i %>
+Xft.hinting: <%= %x(xfconf-query -c xsettings -p /Xft/Hinting).chomp.to_i %>
+Xft.rgba: <%= %x(xfconf-query -c xsettings -p /Xft/RGBA).chomp %>
 Xft.autohint: false
-Xft.hintstyle: hintslight
+Xft.hintstyle: <%= %x(xfconf-query -c xsettings -p /Xft/HintStyle).chomp %>
 Xft.lcdfilter: lcddefault
 
 ! Enable the extended coloring options
