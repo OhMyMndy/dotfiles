@@ -13,7 +13,7 @@ set $mod Mod4
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
-font pango: <%= i3['font'] %>
+font xft: <%= i3['font'] %>
 # Before i3 v4.8, we used to recommend this one as the default:
 # font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
 # The font above is very space-efficient, that is, it looks good, sharp and
@@ -113,7 +113,7 @@ bindsym $mod+a focus parent
 # Execute xkill
 bindsym $mod+Escape exec "xfce4-terminal --initial-title=floating --geometry 40x4 -e xkill"
 bindsym $mod+F1 exec "xfce4-terminal --initial-title=floating --geometry 80x40 -e \\"$HOME/bin/get_commands\\"
-bindsym $mod+F2 exec "xfce4-terminal --initial-title=floating --geometry 120x40 -e 'bash -c \\"echo xprop; xprop; read a\\"'"
+bindsym $mod+F2 exec "xfce4-terminal --initial-title=floating --geometry 120x40 -e 'bash -c \\"sleep 1; echo xprop; xprop; read a\\"'"
 bindsym $mod+F3 exec "xfce4-terminal --initial-title=floating --geometry 140x60 -e 'bash'"
 bindsym $mod+F4 exec "xfce4-terminal --initial-title=floating --geometry 140x60"
 bindsym $mod+F5 exec "xfce4-terminal --initial-title=floating --geometry 140x60 -e 'bash -c \\"htop\\"'"
@@ -127,7 +127,7 @@ set $workspace6 "6: "
 set $workspace7 "7: "
 set $workspace8 "8: "
 set $workspace9 "9: "
-set $workspace10 "10: "
+set $workspace10 "10: "
 
 
 # move focused container to workspace
@@ -251,6 +251,7 @@ assign [class="Rambox"]                                                         
 assign [class="Thunar"]                                                                 $workspace3
 assign [class="Atom"]                                                                   $workspace9
 assign [title=".*byobu.*"]                                                              $workspace2
+assign [class="quodlibet"]                                                              $workspace10
 
 
 hide_edge_borders smart
@@ -272,6 +273,8 @@ for_window [window_type="menu"]                                                 
 for_window [class="TeamViewer"]                                                         floating enable, border pixel <%= i3['border'] %>
 for_window [class="vokoscreen"]                                                         floating enable, border normal <%= i3['border'] %>
 for_window [class="vlc"]                                                                floating enable, border normal <%= i3['border'] %>
+for_window [class="xscreensaver.*"]                                                     floating enable, border normal <%= i3['border'] %>
+for_window [class="nm-connection-editor"]                                               floating enable, border normal <%= i3['border'] %>
 
 # for_window [class="^jetbrains-.+"][window_type=dialog] focus
 
@@ -302,6 +305,7 @@ for_window [class="albert"]                                                     
 for_window [class="Unetinbootin"]                                                       floating enable, border pixel <%= i3['border'] %>
 for_window [class="Nxclient.bin"]                                                       floating enable, border pixel <%= i3['border'] %>
 for_window [class="Nxplayer.bin"]                                                       floating enable, border pixel <%= i3['border'] %>
+for_window [class="Shutter"]                                                            floating enable, border pixel <%= i3['border'] %>
 
 
 # exec "xrandr --dpi $(xrdb -query | grep dpi | head -1 | grep -E -o '[0-9]+')"
@@ -314,7 +318,7 @@ exec_always --no-startup-id sh -c "pgrep -x dunst; [ \$? -eq 1 ] && dunst &"
 exec_always --no-startup-id bash -c "source ~/.functions; setWallpaper"
 exec_always --no-startup-id sh -c "pgrep -x xbanish; [ \$? -eq 1 ] && xbanish &"
 exec_always --no-startup-id sh -c "pgrep -x pasystray; [ \$? -eq 1 ] && pasystray &"
-exec_always --no-startup-id sh -c "pgrep -x pb-for-desktop; [ \$? -eq 1 ] && pb-for-desktop &"
+#exec_always --no-startup-id sh -c "pgrep -x pb-for-desktop; [ \$? -eq 1 ] && pb-for-desktop &"
 exec_always --no-startup-id sh -c "pgrep -x nm-applet; [ \$? -eq 1 ] && nm-applet &"
 exec_always --no-startup-id sh -c "pgrep -x parcellite; [ \$? -eq 1 ] && parcellite &"
 exec_always --no-startup-id sh -c "pgrep -x imwheel; [ \$? -eq 1 ] && imwheel &"
@@ -323,13 +327,13 @@ exec_always --no-startup-id killall notify-server; while pgrep -x notify-server 
 
 exec_always --no-startup-id sh -c "pgrep -x rambox; [ \$? -eq 1 ] && /opt/Rambox/rambox &"
 exec_always --no-startup-id sh -c "pgrep -x xfce4-terminal; [ \$? -eq 1 ] && xfce4-terminal -e byobu"
-exec_always --no-startup-id sh -c "pgrep -x thunar; [ \$? -eq 1 ] && thunar &"
+exec_always --no-startup-id sh -c "pgrep -x thunar; [ \$? -eq 1 ] && thunar --daemon &"
 exec_always --no-startup-id sh -c "pgrep -x shutter; [ \$? -eq 1 ] && shutter --min_at_startup &"
 #exec_always --no-startup-id sh -c "pgrep -x jetbrains-toolbox ; [ \$? -eq 1 ] && jetbrains-toolbox &"
 #exec_always --no-startup-id sh -c "pgrep -x unclutter ; [ \$? -eq 1 ] && unclutter -idle 2 -jitter 5 -noevents -root &"
 exec_always --no-startup-id sh -c "pgrep -x redshift-gtk ; [ \$? -eq 1 ] && redshift-gtk &"
 exec_always --no-startup-id sh -c "pgrep -x udiskie ; [ \$? -eq 1 ] && udiskie --tray --use-udisks2 &"
-exec_always --no-startup-id sh -c "pgrep -x chrome ; [ \$? -eq 1 ] && google-chrome &"
+#exec_always --no-startup-id sh -c "pgrep -x chrome ; [ \$? -eq 1 ] && google-chrome &"
 exec_always --no-startup-id sh -c "pgrep -x xscreensaver ; [ \$? -eq 1 ] &&  xscreensaver -no-splash &"
 
 exec_always --no-startup-id sh -c "pgrep -x xfconfd; [ \$? -eq 1 ] && /usr/lib64/xfce4/xfconf/xfconfd &"
@@ -344,11 +348,11 @@ exec_always --no-startup-id sh -c "pgrep -x xfce-polkit; [ \$? -eq 1 ] &&  /usr/
 # Custom bindsym
 bindsym $mod+Shift+greater move workspace to output right
 bindsym $mod+Shift+less move workspace to output left
-bindsym Scroll_Lock exec xscreensaver-command -lock
-bindsym $mod+Shift+Escape exec xscreensaver-command -lock
+bindsym Scroll_Lock exec bash -c "xscreensaver -no-splash & xscreensaver-command -lock"
+bindsym $mod+Shift+Escape exec bash -c "xscreensaver -no-splash & xscreensaver-command -lock"
 bindsym $mod+Shift+D exec bash -c "source ~/.functions; setWallpaper"
 bindsym Print exec shutter -f
-# bindsym $mod+Print exec flameshot full -p ~/Screenshots/ -c
+bindsym $mod+Print exec shutter -a
 
 # Pulse Audio controls
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume $(pactl list short sinks | grep alsa_output | cut -f1) +2% #increase sound volume

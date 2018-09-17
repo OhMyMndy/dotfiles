@@ -173,6 +173,7 @@ pluma
 gedit
 lightdm
 xfce4-panel
+tint2
 xfce4-power-manager
 virt-what
 
@@ -268,6 +269,7 @@ qalculate-gtk
 parallel
 snapd
 vokoscreen
+perl-File-MimeInfo
 EOL
     status=$?
     if [ $status -ne 0 ]; then
@@ -275,7 +277,7 @@ EOL
         exit 2
     fi
     echo "will cite" | parallel --citation
-    dnf remove gnome-calculator evince file-roller gedit gedit-plugins gnucash ark @kde 'plasma*'-y
+    dnf remove gnome-calculator evince file-roller gedit gedit-plugins gnucash ark @kde 'plasma*' xfdesktop -y
 
     su mandy bash -c "rm -rf ~/.gemrc; ln -sf ${DIR}/../../.gemrc ~/.gemrc"
 
@@ -449,13 +451,11 @@ EOL
 
 
 function setup_custom_services {
-    set -x
-    cp $DIR/../..//services/tty-switching.service /etc/systemd/system/
+    cp $DIR/../../services/tty-switching.service /etc/systemd/system/
     systemctl daemon-reload
 
     systemctl enable tty-switching
-    systemctl start tty-switching
-    set +x
+    systemctl restart tty-switching
 }
 
 
@@ -494,7 +494,8 @@ EOL
 
 
 function setup_firewall {
-    set -x
+    set +e
+    firewall-cmd --zone=public --permanent --add-service=ssh
     firewall-cmd --zone=public --permanent --add-service=http
     firewall-cmd --zone=public --permanent --add-service=https
     firewall-cmd --zone=public --permanent --add-service=mysql
@@ -509,8 +510,16 @@ function setup_firewall {
     firewall-cmd --zone=public --permanent --add-port=1714-1764/tcp
     firewall-cmd --zone=public --permanent --add-port=1714-1764/udp
 
+
+    # Virtualbox webservice
+    firewall-cmd --permanent --new-service=vboxweb
+    firewall-cmd --zone=public --permanent --add-service=vboxweb
+    firewall-cmd --zone=public --permanent --add-port=18083-18083/tcp
+    firewall-cmd --zone=public --permanent --add-port=18083-18083/udp
+
+
     firewall-cmd --reload
-    set +x
+    set -e
 }
 
 function add_repositories {
@@ -560,8 +569,8 @@ function all {
     base
     multimedia
     virtualization
-    wine
-#    openbox
+#    wine
+    openbox
 #    cinnamon
     networkutilities
     development
@@ -573,6 +582,7 @@ function multimedia {
     dnf install -y ffmpeg flacon shntool cuetools
     dnf install -y mpc mpd mpv rhythmbox ncmpcpp
     dnf install -y $DIR/rpms/cli-visualizer*.rpm
+    dnf install -y quodlibet soundconverter
 
     # Photo
     dnf install -y pinta darktable
@@ -585,14 +595,49 @@ function multimedia {
 }
 
 function virtualization {
-    dnf install -y VirtualBox
+    set +e
+    dnf install -y VirtualBox VirtualBox-webservice
     virtualbox_version=$(vboxmanage --version | grep -Eo '[0-9+]\.[0-9]+\.[0-9]+')
     cd /tmp
     curl -J -O -L https://download.virtualbox.org/virtualbox/${virtualbox_version}/Oracle_VM_VirtualBox_Extension_Pack-${virtualbox_version}.vbox-extpack
-    yes | vboxmanage extpack install /tmp/Oracle_VM_VirtualBox_Extension_Pack-${virtualbox_version}.vbox-extpack
+    yes | vboxmanage extpack install /tmp/Oracle_VM_VirtualBox_Extension_Pack-${virtualbox_version}.vbox-extpack --accept-license=56be48f923303c8cababb0bb4c478284b688ed23f16d775d729b89a2e8e5f9eb
+
     VBoxManage setextradata global GUI/Input/HostKeyCombination 65514 # right alt
 
     dnf install -y virt-manager qemu
+
+    mkdir -p  /etc/systemd/system/vboxweb.service.d
+cat <<'EOL' | tee  /etc/systemd/system/vboxweb.service.d/override.conf
+[Unit]
+Description=VirtualBox Web Service
+After=network.target
+
+[Service]
+Type=forking
+ExecStart=
+ExecStart=/usr/bin/vboxwebsrv --pidfile /home/mandy/.vboxweb.pid  --background --host=0.0.0.0
+ExecStopPost=
+ExecStopPost=/usr/bin/rm /home/mandy/.vboxweb.pid
+PIDFile=/home/mandy/.vboxweb.pid
+User=mandy
+Group=vboxusers
+
+[Install]
+WantedBy=multi-user.target
+EOL
+
+    systemctl daemon-reload
+    systemctl restart vboxweb
+    set -e
+
+#    docker run --name vbox_http --restart=always \
+#    -p 8888:80 \
+#    -e ID_PORT_18083_TCP=IP:18083 \
+#    -e ID_NAME="Machine name" \
+#    -e ID_USER=username \
+#    -e ID_PW='password' \
+#    -e CONF_browserRestrictFolders="/data,/home" \
+#    -d jazzdd/phpvirtualbox
 }
 
 function wine {
@@ -624,12 +669,12 @@ function development {
 
     dnf install -y meld filezilla ShellCheck
     
-    pip3 install mycli
-    pip3 install httpie
+    /usr/local/bin/pip install --upgrade mycli
+    /usr/local/bin/pip install --upgrade httpie
     
     # The fuck
     dnf install -y python3-devel
-    pip3 install thefuck
+    /usr/local/bin/pip install --upgrade thefuck
 
     # Vagrant
     dnf install -y https://releases.hashicorp.com/vagrant/2.1.2/vagrant_2.1.2_x86_64.rpm
@@ -645,13 +690,15 @@ function development {
     fi
 
 
+    dnf install -y https://github.com/browsh-org/browsh/releases/download/v1.4.12/browsh_1.4.12_linux_amd64.rpm
+
     php_tools
 
     mkdir -p $HOME/go
 }
 
 function php_tools {
-        # PHP
+    # PHP
     dnf install -y composer php-pecl-imagick kcachegrind
     su mandy bash -c 'composer global require "acacha/llum"'
     su mandy bash -c 'composer global require "acacha/adminlte-laravel-installer"'

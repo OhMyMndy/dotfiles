@@ -1,11 +1,11 @@
 # XScreenSaver Preferences File
-# Written by xscreensaver-demo 5.39 for mandy on Mon Jul  9 12:55:11 2018.
+# Written by xscreensaver-demo 5.39 for mandy on Fri Aug 17 12:52:06 2018.
 # https://www.jwz.org/xscreensaver/
 
-timeout:	0:10:00
+timeout:	0:04:00
 cycle:		0:10:00
 lock:		True
-lockTimeout:	0:00:00
+lockTimeout:	0:00:05
 passwdTimeout:	0:00:15
 visualID:	default
 installColormap:    True
@@ -187,7 +187,7 @@ programs:								      \
   GL: 				gleidescope -root			    \n\
   GL: 				glknots -root				    \n\
   GL: 				glmatrix -root				    \n\
-- GL: 				glslideshow -root -zoom 84 -pan 9	    \n\
+- GL: 				glslideshow -root -zoom 100 -pan 1	    \n\
   GL: 				hypertorus -root			    \n\
 - GL: 				jigglypuff -root			    \n\
 				metaballs -root				    \n\
@@ -285,4 +285,3 @@ xinputExtensionDev: False
 overlayStderr:	True
 authWarningSlack:   20
 
-newLoginCommand: dm-tool switch-to-greeter

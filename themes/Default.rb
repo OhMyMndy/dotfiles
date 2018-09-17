@@ -66,7 +66,7 @@ class Default
       normal_font_size = %x(xfconf-query -c xsettings -p /Gtk/FontName | grep -Eo '[0-9]+$').chomp.to_i
 
       @normal_font = normal_font
-      @normal_font_style = "Regular"
+      @normal_font_style = ""
       @normal_font_size = normal_font_size;
 
       @normal_font_alternative = @normal_font
@@ -167,7 +167,7 @@ class Default
       i3gaps_enabled = $?.exitstatus === 0
       puts "i3 gaps: " + i3gaps_enabled.to_s
       @i3 = {
-          "font" => @fonts["normal"].to_gtk,
+          "font" => @fonts["normal"].to_i3(@normal_font_size + 3),
           "border" => 4,
           "client" => {
               "focused"           => I3Colors.new(@colors['COLOR0'], @colors['COLOR2'], @colors['BACKGROUND'], @colors['COLOR5']),
@@ -194,8 +194,8 @@ class Default
           "tray_padding"         => 2,
           "wm_padding"           => 2,
           "fonts"                => [
-              @fonts["normal"].to_polybar(@normal_font_size - 1, 2),
-              @fonts["normal_alternative"].to_polybar(@normal_font_size - 1, 2),
+              @fonts["normal"].to_polybar(@normal_font_size , 2),
+              @fonts["normal_alternative"].to_polybar(@normal_font_size , 2),
               @fonts["monospace"].to_polybar(14, 3),
               @fonts["weather"].to_polybar(9, 2)
           ]

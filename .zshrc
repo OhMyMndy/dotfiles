@@ -138,8 +138,6 @@ export ARCH=$(uname -m | sed 's/x86_//;s/i[3-6]86/32/')
 export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on'
 export CHEATCOLORS=true
 
-
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=6'
 setup_lsi
 
 if [ "$(uname -s)" != 'Darwin' ]; then
@@ -171,7 +169,7 @@ if [ "$TERM" = "linux" ]; then
     echo -en "\e]P439c2ed" #darkblue
     echo -en "\e]P5ff68d1" #darkmagenta
     echo -en "\e]P6169375" #darkcyan
-    echo -en "\e]P7ffffff" #lightgrey
+    echo -en "\e]P7dbdbdb" #lightgrey
     echo -en "\e]P8959498" #darkgrey
     echo -en "\e]P9ff1835" #red
     echo -en "\e]PA31ff7f" #green

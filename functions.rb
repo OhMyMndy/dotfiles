@@ -23,8 +23,10 @@ class Font
         end
     end
 
-    def to_i3
-        to_xterm
+    def to_i3 (size=nil)
+        size = @size if size == nil
+        "#{@name} #{size}px"
+
     end
 
     def to_gtk

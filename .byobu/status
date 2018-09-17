@@ -59,11 +59,11 @@ detect_os() {
 
 detect_os
 if [ "$OS" = "Ubuntu" ]; then
-    LOGO=$(bash -c 'printf " \uf30c  \n"')
+    LOGO=$(bash -c 'printf " \uf31c  \n"')
 elif [ "$OS" = "Arch Linux" ]; then
-    LOGO=$(bash -c 'printf " \uf300  \n"')
+    LOGO=$(bash -c 'printf " \uf303  \n"')
 elif [ "$OS" = "Fedora" ]; then
-    LOGO=$(bash -c 'printf " \uf312  \n"')
+    LOGO=$(bash -c 'printf " \uf30a  \n"')
 fi
 
 

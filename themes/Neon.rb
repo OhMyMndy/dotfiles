@@ -34,7 +34,7 @@ class Neon < Default
             "COLOR14"        => "#169375",
 
             # White
-            "COLOR7"         => "#ffffff",
+            "COLOR7"         => "#dbdbdb",
             "COLOR15"        => "#ffffff",
 
             "COLOR16"        => "#3d96b7",

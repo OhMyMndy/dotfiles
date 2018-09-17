@@ -91,3 +91,5 @@ audio/x-real-audio=vlc.desktop;
 audio/x-scpls=vlc.desktop;
 audio/x-vorbis+ogg=vlc.desktop;
 audio/x-wav=vlc.desktop;
+text/x-go=sublime_text.desktop;
+text/csv=libreoffice-calc.desktop;

@@ -23,7 +23,7 @@
 		<icon>folder-black</icon>
 		<name>Folder size</name>
 		<unique-id>1532589432496120-2</unique-id>
-		<command>du -h -c %f 2>&1 | grep total | zenity --text-info --width=600 --height=200</command>
+		<command>du -h -c %f 2>&amp;1 | grep total | zenity --text-info --width=600 --height=200</command>
 		<description></description>
 		<patterns>*</patterns>
 		<directories/>
@@ -32,7 +32,7 @@
 		<icon>disk-usage-analyzer</icon>
 		<name>Show Disk Usage</name>
 		<unique-id>1533207112427838-15</unique-id>
-		<command>df -h %f 2>&1 | zenity --text-info --width=600 --height=200</command>
+		<command>df -h %f 2>&amp;1 | zenity --text-info --width=600 --height=200</command>
 		<description></description>
 		<patterns>*</patterns>
 		<startup-notify/>
