@@ -4,8 +4,6 @@ source $HOME/z.sh
 export ZSH=$HOME/.oh-my-zsh
 export ZSH_THEME="mandy"
 
-# zshaddhistory() { whence ${${(z)1}[1]} >| /dev/null || return 1 }
-
 zstyle ':completion:*' use-cache yes
 
 # shellcheck source=.functions
@@ -13,12 +11,8 @@ source $HOME/.functions
 
 detect_os
 
-# Compleat https://limpet.net/mbrubeck/2009/10/30/compleat.html``
-# sysadmin-util https://github.com/skx/sysadmin-util
 
-
-
-plugins=(git docker docker-compose zsh-completions z zsh-autosuggestions zsh-syntax-highlighting extract jira httpie zsh-peco-history wd colored-man-pages command-not-found cp)
+plugins=(git docker docker-compose zsh-completions z zsh-autosuggestions zsh-syntax-highlighting extract httpie fzf-zsh colored-man-pages cp)
 
 if [ "$OS" = "Ubuntu" ]; then
     plugins+=(debian)
@@ -73,9 +67,7 @@ source ~/.lessrc
 
 export TERMINAL=termite
 compctl -g "$HOME/.teamocil/*(:t:r)" teamocil
-if exists dircolors; then
-    eval "$(dircolors ~/.dircolors)";
-fi
+
 
 
 export HISTFILE="$HOME/.zhistory"
@@ -83,23 +75,8 @@ HISTSIZE=1000000
 export SAVEHIST=$HISTSIZE
 setopt EXTENDED_HISTORY
 
-# precmd () {
-#     exec 2>&- >&-
-#     lastline=$(tail -1 ~/.command.out)
-#     sleep 0.1   # TODO: synchronize better
-#     exec > /dev/tty 2>&1
-# }
-#
-# preexec() {
-#     exec > >(tee ~/.command.out&)
-# }
-
 
 alias docker-ps-min='docker ps --format "table{{.Names}}\t{{.RunningFor}}\t{{.Status}}"'
-alias hl='grepc "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+"'
-#alias current-window-process='ps -o args= $(xprop -id $(xprop -root -f _NET_ACTIVE_WINDOW 0x " \$0\\n" _NET_ACTIVE_WINDOW | awk "{print \$2}") -f _NET_WM_PID 0c " \$0\\n" _NET_WM_PID | awk "{print \$2}")'
-alias disk-usage='sudo du -h -t200M -x / 2>/dev/null'
-alias xdg-open='exo-open'
 
 # exa aliases
 alias dir="exa -lag --git --time-style=long-iso --group-directories-first"
@@ -136,13 +113,8 @@ export DISABLE_AUTO_TITLE=true
 export AUTO_TITLE=false
 export ARCH=$(uname -m | sed 's/x86_//;s/i[3-6]86/32/')
 export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on'
-export CHEATCOLORS=true
-
-setup_lsi
 
 if [ "$(uname -s)" != 'Darwin' ]; then
-    export SUDO_ASKPASS=/usr/libexec/openssh/gnome-ssh-askpass
-
     # Launch SSH agent if not running
     if ! ps aux | grep "$(whoami)" | grep ssh-agent | grep -v grep >/dev/null; then ssh-agent ; fi
 
@@ -155,36 +127,17 @@ if [ "$(uname -s)" != 'Darwin' ]; then
 fi
 
 export IP_ADDRESS=$(ip_address)
-export HOSTNAME="$(hostname)"
+export GID=$(id -g)
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" --no-use  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 if [ "$TERM" = "linux" ]; then
-    echo -en "\e]P01a1b21" #black
-    echo -en "\e]P1ff1835" #darkred
-    echo -en "\e]P231ff7f" #darkgreen
-    echo -en "\e]P3f3ff4d" #brown
     echo -en "\e]P439c2ed" #darkblue
-    echo -en "\e]P5ff68d1" #darkmagenta
-    echo -en "\e]P6169375" #darkcyan
-    echo -en "\e]P7dbdbdb" #lightgrey
-    echo -en "\e]P8959498" #darkgrey
-    echo -en "\e]P9ff1835" #red
-    echo -en "\e]PA31ff7f" #green
-    echo -en "\e]PBf3ff4d" #yellow
     echo -en "\e]PC39c2ed" #blue
-    echo -en "\e]PDff68d1" #magenta
-    echo -en "\e]PE169375" #cyan
-    echo -en "\e]PFffffff" #white
     clear #for background artifacting
 fi
 
-function set_term_size() {
-    add-to-file "stty rows 50" "$HOME/.profile"
-    add-to-file "stty columns 160" "$HOME/.profile"
-}
 
 [[ "$(tty)" =~ /dev/tty[0-9]* ]] && setupcon
-[[ "$(tty)" =~ /dev/tty[0-9]* ]] && [[ "$(hostname)" =~ macbook ]] && set_term_size

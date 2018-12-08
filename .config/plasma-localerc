@@ -1,0 +1,11 @@
+[Formats]
+LANG=nl_BE.UTF-8
+LC_COLLATE=C
+LC_MEASUREMENT=nl_BE.UTF-8
+LC_MONETARY=nl_BE.UTF-8
+LC_NUMERIC=nl_BE.UTF-8
+LC_TIME=nl_BE.UTF-8
+useDetailed=true
+
+[Translations]
+LANGUAGE=en_GB:en_US

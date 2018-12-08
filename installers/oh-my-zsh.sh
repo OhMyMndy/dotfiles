@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
 if [ ! -d ~/.oh-my-zsh/lib ]; then
     rm -rf ~/.oh-my-zsh/
     cd /tmp
@@ -29,11 +32,14 @@ function installZshPlugin() {
 
 }
 
+mkdir -p ~/.oh-my-zsh/custom/themes
+ln -sf $DIR/../.oh-my-zsh/custom/themes/mandy.zsh-theme ~/.oh-my-zsh/custom/themes/mandy.zsh-theme
+
+
 installZshPlugin "git://github.com/zsh-users/zsh-autosuggestions" "zsh-autosuggestions"
 installZshPlugin "https://github.com/zsh-users/zsh-completions" "zsh-completions"
 installZshPlugin "https://github.com/zsh-users/zsh-syntax-highlighting.git" "zsh-syntax-highlighting"
-installZshPlugin "https://github.com/jimeh/zsh-peco-history.git" "zsh-peco-history"
-sed -i -e's/\s*BUFFER=.*/BUFFER=$\(fc -l -n 1 |  eval $tac | awk "\!x\[\\$0\]++" | \\/' ~/.oh-my-zsh/custom/plugins/zsh-peco-history/zsh-peco-history.zsh
+installZshPlugin "https://github.com/junegunn/fzf.git" "fzf"
+~/.oh-my-zsh/custom/plugins/fzf/install --bin
 
-
-installZshPlugin "https://github.com/skx/sysadmin-util.git" "sysadmin-util"
+installZshPlugin "https://github.com/Treri/fzf-zsh.git" "fzf-zsh"

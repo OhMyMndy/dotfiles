@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Tidal
+StartupWMClass=Tidal
+Exec=google-chrome --app=https://listen.tidal.com --class=tidal &&xdotool search --sync --classname Tidal set_window --class Tidal
+StartupNotify=true
+Terminal=false
+Type=Application
+Icon=tidal
+Categories=Multimedia;Music;

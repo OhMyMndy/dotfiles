@@ -1,0 +1,20 @@
+[Desktop Entry]
+Categories=Utility;Multimedia
+Comment[en_GB]=
+Comment=
+Exec=/usr/bin/pulseaudio -k
+GenericName[en_GB]=
+GenericName=
+Icon=music
+MimeType=
+Name[en_GB]=Restart Pulseaudio
+Name=Restart Pulseaudio
+Path=
+StartupNotify=true
+Terminal=false
+TerminalOptions=
+Type=Application
+X-DBUS-ServiceName=
+X-DBUS-StartupType=
+X-KDE-SubstituteUID=false
+X-KDE-Username=

@@ -1,8 +1,0 @@
-#!/usr/bin/env python3
-
-import beets.library
-import os
-libpath = os.path.expanduser('~/.config/beets/library.db')
-lib = beets.library.Library(libpath)
-for item in lib.items('artist:Stigmata'):
-    print(item.title)

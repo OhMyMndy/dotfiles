@@ -111,41 +111,6 @@ highlight() {
 }
 
 
-setup_lsi() {
-
-    if exists ls-i;
-    then
-        export LS_COLORS=$(ls_colors_generator)
-
-        run_ls() {
-            ls-i --color=auto -w "$(tput cols)" "$@"
-        }
-
-        run_dir() {
-            dir-i --color=auto -w "$(tput cols)" "$@"
-        }
-
-        run_vdir() {
-            vdir-i --color=auto -w "$(tput cols)" "$@"
-        }
-        #alias ls="run_ls"
-        #alias dir="run_dir"
-        #alias vdir="run_vdir"
-    fi
-}
-
-
-grepc() {
-    pattern=$1
-    shift
-    if [ ! -z $2 ]; then
-    esc=$(printf "\0\$2")
-    shift
-    else
-    esc=$(printf "\033")
-    fi
-    sed -E 's"'"$pattern"'"'$esc'[32m&'$esc'[0m"g' "$@"
-}
 
 
 histcmd() {
@@ -630,10 +595,8 @@ link-file() {
         return
     fi
 
-    set -x
     rm -rf "$original"
     ln -sf "$source" "$original"
-    set +x
 }
 
 install-service() {

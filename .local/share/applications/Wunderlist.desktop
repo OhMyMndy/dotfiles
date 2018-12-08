@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Wunderlist
 StartupWMClass=WunderList
-Exec=bash -c "chromium-browser --app=https://wunderlist.com --class=WunderList || google-chrome --app=https://wunderlist.com" --class=WunderList
+Exec=google-chrome --app=https://wunderlist.com &&xdotool search --sync --classname Wunderlist set_window --class Wunderlist
 StartupNotify=true
 Terminal=false
 Type=Application
