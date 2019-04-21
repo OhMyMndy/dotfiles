@@ -101,11 +101,7 @@ if [ -f $HOME/.lessrc ]; then
     source ~/.lessrc
 fi
 
-
 compctl -g "$HOME/.teamocil/*(:t:r)" teamocil
-if exists dircolors; then
-    eval "$(dircolors ~/.dircolors)";
-fi
 if exists dircolors; then
     eval "$(dircolors ~/.dircolors)";
 fi

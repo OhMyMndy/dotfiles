@@ -1,3 +1,4 @@
+#!/usr/bin/env xdg-open
 [Desktop Entry]
 Name=Newshosting
 Exec=bash -c "$HOME/newshosting/newshosting.sh"

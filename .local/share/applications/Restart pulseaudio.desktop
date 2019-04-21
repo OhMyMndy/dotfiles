@@ -2,7 +2,7 @@
 Categories=Utility;Multimedia
 Comment[en_GB]=
 Comment=
-Exec=/usr/bin/pulseaudio -k
+Exec=bash -c "sleep 20; /usr/bin/pulseaudio -k"
 GenericName[en_GB]=
 GenericName=
 Icon=music

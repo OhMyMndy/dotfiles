@@ -29,6 +29,7 @@ link-file "$DIR" '.config/plasma-localerc'
 
 
 link-file "$DIR" '.synergy.conf'
+link-file "$DIR" '.dircolors'
 link-file "$DIR" '.screenrc'
 link-file "$DIR" '.byobu'
 link-file "$DIR" '.config/mopidy'
@@ -103,9 +104,12 @@ yes | vim +PluginInstall +qall
 #installFontsFromZip "https://github.com/IBM/plex/releases/download/v1.1.6/OpenType.zip" "IBM-Plex"
 #installFontsFromZip "http://dl.1001fonts.com/ubuntu.zip" "Ubuntu"
 #
-#if [ $fontsAdded -eq 1 ]; then
-#	fc-cache -f -v
-#fi
+installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/FiraMono.zip FiraMonoNerdFont
+installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/Hack.zip HackNerdFont
+installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/SourceCodePro.zip SourceCodeProNerdFont
+if [ $fontsAdded -eq 1 ]; then
+	fc-cache -f -v
+fi
 
 bash "$DIR/installers/oh-my-zsh.sh"
 
