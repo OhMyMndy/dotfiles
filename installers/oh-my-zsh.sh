@@ -13,7 +13,7 @@ if [ ! -d ~/.oh-my-zsh/lib ]; then
     rm install.sh
 fi
 
-sed -Ei 's#ZSH_THEME.*#ZSH_THEME="af-magic"#g' ~/.zshrc
+# sed -Ei 's#ZSH_THEME.*#ZSH_THEME="af-magic"#g' ~/.zshrc
 
 
 # Change shell
@@ -40,6 +40,7 @@ installZshPlugin "git://github.com/zsh-users/zsh-autosuggestions" "zsh-autosugge
 installZshPlugin "https://github.com/zsh-users/zsh-completions" "zsh-completions"
 installZshPlugin "https://github.com/zsh-users/zsh-syntax-highlighting.git" "zsh-syntax-highlighting"
 installZshPlugin "https://github.com/junegunn/fzf.git" "fzf"
+installZshPlugin "https://github.com/marzocchi/zsh-notify.git" "notify"
 ~/.oh-my-zsh/custom/plugins/fzf/install --bin
 
 installZshPlugin "https://github.com/Treri/fzf-zsh.git" "fzf-zsh"

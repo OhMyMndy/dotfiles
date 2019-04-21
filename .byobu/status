@@ -58,7 +58,7 @@ detect_os() {
 }
 
 detect_os
-if [ "$OS" = "Ubuntu" ]; then
+if [ "$OS" = "Ubuntu" ] || [ "$OS" = "KDE neon" ]; then
     LOGO=$(bash -c 'printf " \uf31c  \n"')
 elif [ "$OS" = "Arch Linux" ]; then
     LOGO=$(bash -c 'printf " \uf303  \n"')

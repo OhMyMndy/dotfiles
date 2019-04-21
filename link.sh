@@ -38,6 +38,7 @@ link-file "$DIR" 'z.sh'
 link-file "$DIR" '.mpdconf'
 link-file "$DIR" '.myclirc'
 link-file "$DIR" '.gemrc'
+link-file "$DIR" '.dircolors'
 
 touch ~/.z
 
@@ -106,5 +107,6 @@ yes | vim +PluginInstall +qall
 #	fc-cache -f -v
 #fi
 
+bash "$DIR/installers/oh-my-zsh.sh"
 
 create_remmina_desktop_files
