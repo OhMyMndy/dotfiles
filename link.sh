@@ -7,7 +7,9 @@ fi
 
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+# shellcheck source=.functions
 source "$DIR/.functions"
+# shellcheck source=.zshrc
 source "$DIR/.zshrc" 2>/dev/null
 
 
@@ -19,6 +21,8 @@ link-file "$DIR" ".vimrc"
 
 mkdir -p ~/.config/xfce4/
 link-file "$DIR" ".config/xfce4/terminal"
+link-file "$DIR" ".config/i3"
+link-file "$DIR" ".config/rofi"
 link-file "$DIR" ".lessrc"
 
 
@@ -84,7 +88,8 @@ if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
 	git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plugins/tpm/bin/install_plugins
 fi
 tmux source ~/.tmux.conf
-$HOME/.tmux/plugins/tpm/bin/install_plugins
+#shellcheck source=$HOME/.tmux/plugins/tpm/bin/install_plugins
+source "$HOME/.tmux/plugins/tpm/bin/install_plugins"
 
 
 if [ ! -d "$HOME/.vim/bundle/Vundle.vim" ]; then
@@ -107,10 +112,11 @@ yes | vim +PluginInstall +qall
 installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/FiraMono.zip FiraMonoNerdFont
 installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/Hack.zip HackNerdFont
 installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/SourceCodePro.zip SourceCodeProNerdFont
+installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/FantasqueSansMono.zip FantasqueSansMono
 if [ $fontsAdded -eq 1 ]; then
 	fc-cache -f -v
 fi
 
-bash "$DIR/installers/oh-my-zsh.sh"
+bash "$DIR/installers/apps/oh-my-zsh.sh"
 
 create_remmina_desktop_files

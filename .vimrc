@@ -20,7 +20,7 @@ call vundle#end()            " required
 filetype plugin indent on    " required
 
 
-colorscheme zellner
+colorscheme desert
 set nu
 syntax on
 let g:colorizer_auto_color=1
@@ -48,6 +48,10 @@ set shiftwidth=4	" Number of auto-indent spaces
 set smartindent	" Enable smart-indent
 set smarttab	" Enable smart-tabs
 set softtabstop=4	" Number of spaces per Tab
+set tabstop=4
+
+set list listchars=tab:>-,extends:>,nbsp:•,trail:•,extends:⟩,precedes:⟨
+
 
 "Easier split navigation
 nnoremap <C-J> <C-W><C-J>
@@ -101,7 +105,20 @@ augroup END
 
 "NERDTree mapping
 map <C-n> :NERDTreeToggle<CR>
+let g:NERDTreeChDirMode=2
 
 
+" recursive path from cwd
+set path +=./**
+
+"" gvim settings
+set gfn=FantasqueSansMono\ Nerd\ Font\ Mono\ 11
 
 cmap w!! w !sudo tee > /dev/null %
+
+set clipboard=unnamedplus
+
+"" paste from system clipboard
+map <C-p> "+gP<CR>
+map <C-e> :!%:p<CR>
+

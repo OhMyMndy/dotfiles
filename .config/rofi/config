@@ -1,0 +1,28 @@
+! Enable the extended coloring options
+rofi.modi: drun,window
+rofi.color-enabled: true
+
+!                  bg               border     separator
+rofi.color-window: #101010,      #ff1835,    #ffffff
+!                  bg               fg         bg-alt       hl-bg       hl-fg
+rofi.color-normal: #101010,      #ffffff,   #101010,  #39c2ed,     #101010
+rofi.color-normal: #101010,      #ffffff,   #101010,  #39c2ed,     #101010
+rofi.color-active: #101010,      #39c2ed,    #101010,  #101010, #f3ff4d
+rofi.color-urgent: #101010,      #ff1835,    #101010,  #101010, #ff1835
+rofi.separator-style: solid
+rofi.sidebar-mode: true
+rofi.bw: 1
+rofi.columns: 1
+rofi.padding: 16
+
+rofi.yoffset: 0
+rofi.fake-transparency: false
+rofi.location: 0
+rofi.width: 50
+rofi.font: IBM Plex Sans   10
+rofi.lines: 15
+rofi.fixed-num-lines: true
+rofi.dpi: 96
+rofi.show-icons: true
+rofi.run-command: zsh -c -i '{cmd}'
+

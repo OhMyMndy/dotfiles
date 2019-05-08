@@ -1,3 +1,8 @@
 #!/usr/bin/env bash
 
-xfce4-terminal -e "bash -c \"sudo umount /mnt/tank; sudo mkdir -p /mnt/tank; sudo mount -t cifs //192.168.10.120/tank /mnt/tank -o username=mandy,uid=$(id -u),gid=$(id -g),file_mode=0750,dir_mode=0750; sleep 2\""
+xfce4-terminal -e "bash -c \"sudo umount /tank; 
+sudo umount /mnt/media;
+sudo mkdir -p /tank /mnt/media; 
+sudo mount -t cifs //192.168.10.120/tank /tank -o username=mandy,uid=$(id -u),gid=$(id -g),file_mode=0750,dir_mode=0750; 
+sudo mount -t cifs //192.168.10.120/media /mnt/media -o username=mandy,uid=$(id -u),gid=$(id -g),file_mode=0750,dir_mode=0750; 
+sleep 2\""
