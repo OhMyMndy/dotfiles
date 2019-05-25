@@ -15,12 +15,15 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-syntastic/syntastic'
 Plugin 'airblade/vim-gitgutter'
+Plugin 'joshdick/onedark.vim'
+Plugin 'sheerun/vim-polyglot'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
 
 
-colorscheme desert
+let g:onedark_termcolors=16
+colorscheme onedark
 set nu
 syntax on
 let g:colorizer_auto_color=1
@@ -40,7 +43,8 @@ set backupcopy=yes
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 " map <C-n> :NERDTreeToggle<CR>
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-" set mouse=
+
+set mouse=a
 
 filetype plugin indent on
 set autoindent	" Auto-indent new lines

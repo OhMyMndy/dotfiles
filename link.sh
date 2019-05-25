@@ -19,6 +19,12 @@ mkdir -p ~/Screenshots
 
 link-file "$DIR" ".vimrc"
 
+
+if [ ! -f ~/.Xresources_bak ] && [ -f ~/.Xresources ]; then
+	cp ~/.Xresources ~/.Xresources_bak
+fi
+link-file "$DIR" ".Xresources"
+
 mkdir -p ~/.config/xfce4/
 link-file "$DIR" ".config/xfce4/terminal"
 link-file "$DIR" ".config/i3"
@@ -50,7 +56,7 @@ touch ~/.z
 link-file "$DIR" '.config/beets'
 
 
-if [ ! -d ~/bin_bak ]; then
+if [ ! -d ~/bin_bak ] && [ -d ~/bin ]; then
 	mv -f ~/bin ~/bin_bak
 fi
 link-file "$DIR" 'bin'
