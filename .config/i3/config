@@ -315,7 +315,8 @@ bindsym XF86AudioPrev exec mpc prev
 exec_always --no-startup-id ulauncher
 exec_always --no-startup-id compton
 exec_always --no-startup-id "pkill albert; albert"
-exec_always --no-startup-id dunst
+# exec_always --no-startup-id dunst
+#exec_always --no-startup-id sh -c "pgrep -x xfce4-panel; [ \$? -eq 1 ] && xfce4-panel &"
 exec_always --no-startup-id "pkill polybar; pkill xfce4-panel; polybar -r top || xfce4-panel"
 exec_always --no-startup-id sh -c "pgrep -x shutter; [ \$? -eq 1 ] && shutter --min_at_startup &"
 exec_always --no-startup-id sh -c "pgrep -x redshift-gtk ; [ \$? -eq 1 ] && redshift-gtk &"
@@ -323,4 +324,4 @@ exec_always --no-startup-id sh -c "pgrep -x parcellite; [ \$? -eq 1 ] && parcell
 exec_always --no-startup-id sh -c "pgrep -x nm-applet; [ \$? -eq 1 ] && nm-applet &"
 exec_always --no-startup-id sh -c "pgrep -x pasystray; [ \$? -eq 1 ] && pasystray &"
 exec_always --no-startup-id sh -c "pgrep -x nextcloud; [ \$? -eq 1 ] && nextcloud-client &"
-exec_always --no-startup-id sh -c "pgrep -x kdeconnect-indicator; [ \$? -eq 1 ] && kdeconnect-indicator"
+exec_always --no-startup-id sh -c "pgrep -x indicator-kdeconnect; [ \$? -eq 1 ] && indicator-kdeconnect"
