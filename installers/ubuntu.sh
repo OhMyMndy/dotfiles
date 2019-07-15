@@ -9,12 +9,8 @@ fi
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-set -e
-source "$DIR/../../.functions"
-set +e
 
-
-function install_deb_from_url() {
+function _install_deb_from_url() {
 	url="$1"
 	tmp="$(mktemp)"
 	curl -L "$url" >> "$tmp"
@@ -27,26 +23,57 @@ function setup() {
 	general
 	locale
 	settings
+	firewall
+	dns
+	albert
 }
 
-function green_bold() {
+function _green_bold() {
 	echo "$(tput setaf 2)$*$(tput sgr0)"
 	echo ''
 }
 
 function general() {
-	green_bold Installing vim git byobu tmux
-	sudo apt install vim-gtk3 git byobu tmux iotop htop zsh nmap tree -y
+	sudo apt install git byobu tmux iotop htop zsh nmap tree curl -y
 
-	green_bold Installing shutter parcellite
-	sudo apt install shutter parcellite thunar redshift-gtk xfce4-terminal kdeconnect chromium-browser seahorse mate-calc -y
+	# build tools
+	sudo apt install build-essential dkms -y
 
-	sudo apt install vlc mpv sysfsutils sysstat openvpn network-manager-openvpn network-manager-openvpn-gnome remmina hfsprogs parallel cdck ruby -y
-	sudo apt install xsel xclip samba arc-theme flatpak -y
-	sudo apt install openssh-server -y
-	sudo apt install cifs-utils exfat-fuse exfat-utils -y
+	sudo apt install -y shutter parcellite redshift-gtk xfce4-terminal xfce4-genmon-plugin kdeconnect chromium-browser seahorse mate-calc ristretto trash-cli
+
+
+	# system utils
+	sudo apt install -y sysfsutils sysstat
+
+	# editors
+	sudo apt install -y mousepad geany vim-gtk3
+
+	# media
+	sudo apt install -y vlc quodlibet
+
+	# vpn and network manager
+	sudo apt install -y openvpn network-manager-openvpn network-manager-openvpn-gnome parallel ruby ntp
+
+	# file management and disk plugins
+	sudo apt install -y thunar pcmanfm cifs-utils exfat-fuse exfat-utils gnome-disk-utility samba hfsprogs cdck
+
+	# remote desktop
+	sudo apt install -y remmina vinagre
+
+	sudo apt install xsel xclip arc-theme flatpak wmctrl xscreensaver -y
+
+	sudo apt install openssh-server libsecret-tools -y
+
+
+	# networking tools
+	sudo apt install -y iputils-ping mtr traceroute
+
+	# archiving
+	sudo apt install -y engrampa unzip unrar p7zip-full ecm
+
 	# pdf
 	sudo apt install zathura 'zathura*' evince -y
+
 	if ! which ulauncher >/dev/null 2>&1
 	then
 		sudo add-apt-repository ppa:agornostal/ulauncher -y
@@ -56,16 +83,35 @@ function general() {
 		sudo apt install -y -f
 	fi
 
+	if [ ! -f /usr/NX/bin/nxplayer ]
+	then
+		_install_deb_from_url "$(curl https://www.nomachine.com/download/download\&id\=6 2>/dev/null | grep -E -o "http.*download.*deb")"
+	fi
+
+	if ! which nextcloud-client >/dev/null 2>&1
+	then
+		sudo add-apt-repository ppa:nextcloud-devs/client -y
+		sudo apt update
+		sudo apt install nextcloud-client -y
+	fi
+
 	if ! which bat >/dev/null 2>&1
 	then
-		install_deb_from_url https://github.com/sharkdp/bat/releases/download/v0.11.0/bat_0.11.0_amd64.deb
+		_install_deb_from_url https://github.com/sharkdp/bat/releases/download/v0.11.0/bat_0.11.0_amd64.deb
 	fi
 
 	if ! which fd >/dev/null 2>&1
 	then
-		install_deb_from_url https://github.com/sharkdp/fd/releases/download/v7.3.0/fd_7.3.0_amd64.deb
+		_install_deb_from_url https://github.com/sharkdp/fd/releases/download/v7.3.0/fd_7.3.0_amd64.deb
 	fi
 
+
+	if ! which indicator-kdeconnect >/dev/null 2>&1
+	then
+		yes | sudo add-apt-repository ppa:webupd8team/indicator-kdeconnect
+		sudo apt update
+		sudo apt install -y kdeconnect indicator-kdeconnect
+	fi
 	if ! apt -qq list papirus-icon-theme 2>/dev/null| grep -i -q installed
 	then
 		sudo add-apt-repository ppa:papirus/papirus -y
@@ -88,11 +134,19 @@ function general() {
 
 	sudo chsh -s "$(which zsh)" mandy
 	sudo snap install ripgrep --classic
-	sudo snap install nextcloud-client --classic
-	sudo snap connect nextcloud-client:password-manager-service
 
-	yes | sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-	sudo flatpak install flathub com.github.wwmm.pulseeffects -y
+
+	yes | flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo --user
+	flatpak install flathub com.github.wwmm.pulseeffects -y --user
+
+
+	sudo apt remove parole orage mpv -y
+
+
+	sudo apt install -y python-pip python3-pip arandr
+
+	sudo pip3 install thefuck
+	sudo pip3 install numpy
 }
 
 
@@ -106,6 +160,7 @@ function groups() {
 	sudo usermod -aG vboxusers mandy
 	sudo usermod -aG sudo mandy
 	sudo usermod -aG sambashare mandy
+	sudo usermod -aG netdev mandy
 
 }
 
@@ -117,7 +172,7 @@ function fonts() {
 	xfconf-query -c xsettings -p /Gtk/MonospaceFontName -s "FantasqueSansMono Nerd Font Mono 10"
 	xfconf-query -c xsettings -p /Gtk/DecorationLayout -s "menu:minimize,maximize,close"
 	
-	if [ "$fontsAdded" -eq 1 ]; then
+	if [ "$fontsAdded" = 1 ]; then
 		fc-cache -f -v
 	fi
 }
@@ -130,8 +185,13 @@ function settings() {
 		xfconf-query --channel thunar --property /misc-exec-shell-scripts-by-default --create --type bool --set true
 
 		xfconf-query -c xsettings -p /Net/ThemeName -s Adwaita
-		xfconf-query -c xfwm4 -p /general/theme -s Adwaita
+		xfconf-query -c xfwm4 -p /general/theme -s Greybird
 		xfconf-query -c xfwm4 -p /general/title_font -s "IBM Plex Sans Text 9"
+
+ 		xfconf-query -c xfce4-session -p /compat/LaunchGNOME  -s true
+		xfconf-query -c xsettings -p /Net/IconThemeName -s 'Papirus-Light'
+
+
 	fi
 }
 
@@ -175,7 +235,8 @@ function i3() {
 		echo "deb http://debian.sur5r.net/i3/ $(grep '^DISTRIB_CODENAME=' /etc/lsb-release | cut -f2 -d=) universe" | sudo tee /etc/apt/sources.list.d/sur5r-i3.list
 		sudo apt update
 	fi
-	sudo apt install udiskie compton dunst nitrogen feh xfce4-panel pcmanfm spacefm dunst rofi engrampa ssh-askpass-gnome -y
+
+	sudo apt install udiskie compton nitrogen feh xfce4-panel pcmanfm spacefm rofi ssh-askpass-gnome -y
 	sudo apt install -y "i3" i3blocks i3lock
 	sudo apt install -y dmenu rofi
 }
@@ -197,7 +258,7 @@ function usb_ssd() {
 
 function upgrade() {
 	sudo apt update; sudo apt "upgrade" -y
-	sudo apt install linux-headers-$(uname -r) dkms -y
+	sudo apt install "linux-headers-$(uname -r)" dkms -y
 	sudo /sbin/vboxconfig
 	sudo apt autoremove -y
 }
@@ -227,7 +288,7 @@ function uninstall_kde() {
 function privacy() {
 	sudo apt install torbrowser-launcher -y
 	# @todo add expressvpn / purevpn
-	install_deb_from_url "https://s3.amazonaws.com/purevpn-dialer-assets/linux/app/purevpn_1.2.2_amd64.deb"
+	_install_deb_from_url "https://s3.amazonaws.com/purevpn-dialer-assets/linux/app/purevpn_1.2.2_amd64.deb"
 }
 
 
@@ -248,10 +309,11 @@ function etcher() {
 function albert() {
 	if ! which albert >/dev/null 2>&1
 	then
+		. /etc/lsb-release   
 		cd /tmp || exit 2
 		wget -nv -O Release.key https://build.opensuse.org/projects/home:manuelschneid3r/public_key
 		sudo apt-key add - < Release.key
-		sudo sh -c "echo 'deb http://download.opensuse.org/repositories/home:/manuelschneid3r/xUbuntu_18.10/ /' > /etc/apt/sources.list.d/home:manuelschneid3r.list"
+		sudo sh -c "echo \"deb http://download.opensuse.org/repositories/home:/manuelschneid3r/xUbuntu_$DISTRIB_RELEASE/ /\" > /etc/apt/sources.list.d/home:manuelschneid3r.list"
 		sudo apt-get update
 		sudo apt install "albert" -y
 		rm Release.key
@@ -266,14 +328,20 @@ function qt_dev() {
 
 
 function dev() {
-	sudo apt install shellcheck -y
+	sudo apt install shellcheck nodejs npm -y
+
+	# Run typescript without compiling
+ 	sudo npm install -g ts-node
+ 	sudo npm install -g typescript
 	sudo snap install code --classic
-	bash "$DIR/code.sh"
+	bash "$DIR/apps/code.sh"
+
 }
 
 
 function php() {
 	sudo apt install wkhtmltopdf php-cli php-xml php-mbstring php-curl php-zip php-pdo-sqlite php-intl -y
+	sudo apt install kcachegrind -y
 	sudo snap install phpstorm --classic
 }
 
@@ -313,6 +381,11 @@ function docker() {
 		sudo add-apt-repository -y ppa:projectatomic/ppa
 		sudo apt install podman -y
 	fi
+
+	cd /tmp
+	curl -L https://github.com/jesseduffield/lazydocker/releases/download/v0.2.5/lazydocker_0.2.5_Linux_x86_64.tar.gz > lazydocker.tgz
+	tar xzf lazydocker.tgz
+	sudo install lazydocker /usr/local/bin/
 }
 
 function polybar() {
@@ -325,9 +398,84 @@ function polybar() {
 }
 
 
-for i in "$@"
-do
-	function="${i//\-/}"
-	echo "Executing $function"
-	$function
-done
+function dns() {
+	if [ ! -f /etc/NetworkManager/conf.d/00-use-dnsmasq.conf ]; then
+		sudo tee /etc/NetworkManager/conf.d/00-use-dnsmasq.conf << EOL
+# This enabled the dnsmasq plugin.
+[main]
+dns=dnsmasq
+EOL
+
+		sudo tee /etc/NetworkManager/dnsmasq.d/00-dev.conf << EOL
+address=/home.mndy.be/192.168.10.120
+addn-hosts=/etc/hosts
+EOL
+
+		# use network manager instead of systemd resolve resolv.conf
+		sudo rm /etc/resolv.conf; sudo ln -s /var/run/NetworkManager/resolv.conf /etc/resolv.conf
+		sudo systemctl restart NetworkManager
+	fi
+}
+
+function firewall() {
+	sudo ufw enable
+	yes | sudo ufw reset
+	sudo ufw allow 22/udp
+	sudo ufw allow 22/tcp
+}
+
+function git() {
+	git config --global submodule.recurse true
+	git config --global user.name Mandy Schoep
+}
+
+set -e
+source "$DIR/../.functions"
+set +e
+
+function _print_usage() {
+	shopt -s extdebug
+	IFS=$'\n'
+
+	echo "Usage: $0 [options]"
+	echo
+	echo "Options:"
+	echo
+
+	for f in $(declare -F); do
+		f="${f:11}"
+		function_location="$(declare -f -F $f | cut -d' ' -f3)"
+		if [[ "${f:0:1}" != "_" ]] &&  [[ "$function_location" == "$BASH_SOURCE" ]]; then
+			echo "  --${f}"
+		fi
+	done
+}
+
+
+if [[ $# -eq 0 ]]; then
+	_print_usage
+else
+	shopt -s extdebug
+	for i in "$@"
+	do
+		function="${i//\-/}"
+		starts_with_underscore=0
+		if [[ "${i::1}" == '_' ]]; then
+			starts_with_underscore=1
+		fi
+		if [[ "$function" == "help" ]]; then
+			_print_usage
+			exit 0
+		fi
+		function_location="$(declare -F $function | cut -d' ' -f3)"
+		if [[ -n "$(declare -f -F $function)" ]] && [[ "$function_location" == "$BASH_SOURCE" ]] && [ $starts_with_underscore -eq 0 ]; then
+			echo "Executing $function"
+			$function
+		else
+			>&2 echo "Function with name \"$function\" not found!"
+			>&2 echo
+			_print_usage
+			exit 2
+		fi
+	done
+fi

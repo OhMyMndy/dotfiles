@@ -10,3 +10,6 @@ code --install-extension PeterJausovec.vscode-docker
 code --install-extension ms-python.python
 code --install-extension malmaud.tmux
 code --install-extension chintans98.markdown-jira
+code --install-extension eamodio.gitlens
+code --install-extension donjayamanne.githistory
+code --install-extension christian-kohler.path-intellisense
