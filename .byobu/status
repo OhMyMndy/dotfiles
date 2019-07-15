@@ -68,6 +68,7 @@ else
     LOGO=x
 fi
 
+LOGO=$(bash -c 'printf " \uf61a  \n"')
 
 # Screen has two status lines, with 4 quadrants for status
 screen_upper_left="color"
