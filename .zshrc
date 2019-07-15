@@ -42,7 +42,7 @@ plugins=(
 )
 
 if [ "$OS" = "Ubuntu" ]; then
-    plugins+=(debian)
+    plugins+=(ubuntu )
 elif [ "$OS" = "Arch Linux" ]; then
     plugins+=(archlinux)
 elif [ "$OS" = "Fedora" ]; then
@@ -87,8 +87,8 @@ if [ -f $HOME/bin/commands-to-aliases ]; then
     source $HOME/.aliases
 fi
 
-export PATH=$HOME/.config/composer/vendor/bin:$HOME/.composer/vendor/bin:$HOME/.local/bin:/usr/share/doc/git/contrib/diff-highlight:/usr/local/go/bin:$HOME/.go/bin:$HOME/bin:$HOME/bin/appimages:/usr/bin/local:$PATH
-PATH="$PATH:$HOME/.gem/bin"
+# export PATH=$HOME/.config/composer/vendor/bin:$HOME/.composer/vendor/bin:$HOME/.local/bin:/usr/share/doc/git/contrib/diff-highlight:/usr/local/go/bin:$HOME/.go/bin:$HOME/bin:$HOME/bin/appimages:/usr/bin/local:$PATH
+export PATH="$HOME/bin:$HOME/.go/bin:$PATH:$HOME/.gem/bin"
 
 export GEM_HOME=$HOME/.gem
 export GEM_PATH=$HOME/.gem
@@ -135,8 +135,12 @@ alias rmv='rsync -ahrt --info progress2 --remove-sent-files'
 
 alias lc='colorls -lA --sd'
 
+
+alias dockly='docker run -it --rm -v /var/run/docker.sock:/var/run/docker.sock lirantal/dockly'
+
 # Prevents local TERM from affecting ssh.
 alias ssh='TERM=xterm ssh'
+unalias fd
 
 if exists thefuck; then eval "$(thefuck --alias)"; fi
 
@@ -223,3 +227,4 @@ bindkey  "^[[4~"   end-of-line
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE=fg=5
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+eval $(thefuck --alias)
