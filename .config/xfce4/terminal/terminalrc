@@ -1,6 +1,6 @@
 [Configuration]
 MiscAlwaysShowTabs=FALSE
-MiscBell=FALSE
+MiscBell=TRUE
 MiscBordersDefault=TRUE
 MiscCursorBlinks=FALSE
 MiscCursorShape=TERMINAL_CURSOR_SHAPE_BLOCK
@@ -17,7 +17,7 @@ MiscTabPosition=GTK_POS_TOP
 MiscHighlightUrls=TRUE
 MiscScrollAlternateScreen=TRUE
 ScrollingSingleLine=FALSE
-MiscBellUrgent=FALSE
+MiscBellUrgent=TRUE
 MiscMouseWheelZoom=TRUE
 MiscMiddleClickOpensUri=FALSE
 MiscCopyOnSelect=FALSE
@@ -26,7 +26,7 @@ MiscUseShiftArrowsToScroll=FALSE
 MiscSlimTabs=FALSE
 MiscNewTabAdjacent=FALSE
 MiscShowRelaunchDialog=TRUE
-ColorPalette=rgb(0,0,0);rgb(251,1,32);rgb(82,231,92);rgb(254,80,4);rgb(36,197,232);rgb(226,84,198);rgb(88,218,193);rgb(255,255,255);rgb(11,1,1);rgb(251,1,32);rgb(85,235,62);rgb(255,44,15);rgb(55,202,230);rgb(226,84,198);rgb(70,215,186);rgb(255,255,255)
+ColorPalette=rgb(0,0,0);rgb(251,1,32);rgb(82,231,92);rgb(254,80,4);rgb(36,197,232);rgb(226,84,198);rgb(88,218,193);rgb(255,255,255);rgb(122,122,122);rgb(251,1,32);rgb(85,235,62);rgb(255,44,15);rgb(55,202,230);rgb(226,84,198);rgb(70,215,186);rgb(255,255,255)
 TitleMode=TERMINAL_TITLE_REPLACE
 FontUseSystem=TRUE
 ScrollingBar=TERMINAL_SCROLLBAR_NONE

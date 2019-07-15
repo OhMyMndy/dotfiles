@@ -27,6 +27,13 @@ link-file "$DIR" ".Xresources"
 
 mkdir -p ~/.config/xfce4/
 link-file "$DIR" ".config/xfce4/terminal"
+
+
+mkdir -p  ~/.local/share/
+rm -rf ~/.local/share/xfpanel-switch/
+link-file "$DIR" ".local/share/xfpanel-switch"
+
+link-file "$DIR" '.config/fontconfig'
 link-file "$DIR" ".config/i3"
 link-file "$DIR" ".config/rofi"
 link-file "$DIR" ".lessrc"
