@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+#
+# needs: Pulseaudio, VLC
+
+DEFAULT_OUTPUT=$(pacmd list-sinks | grep -A1 "* index" | grep -oP "<\K[^ >]+")
+# Load null sink module if not already loaded
+pacmd list-sinks | grep "Record-and-Play" 2>&1 >/dev/null
+if [[ $? == 1 ]]; then
+  pactl load-module module-combine-sink \
+    sink_name=record-n-play slaves=$DEFAULT_OUTPUT \
+    sink_properties=device.description="Record-and-Play"
+fi
+# Get current IP address
+IP=127.0.0.1
+tput setaf 2
+echo "Serving output stream on: http://$IP:8080/audio.mp3"
+echo "Stop with CTRL-C"
+tput sgr0
+
+# Start VLC, serving the sink output as MP3 stream
+cvlc -q pulse://record-n-play.monitor --sout "#transcode{acodec=mpga,ab=320,channels=2}:standard{access=http,dst=$IP:8080/audio.mp3}"
