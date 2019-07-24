@@ -602,7 +602,7 @@ link-file() {
 install-service() {
     file="$1"
     service_name="$(echo "$file" | sed -E 's#.*/([^/]+).service#\1#p' | head -1)"
-    cp "$1" /etc/systemd/system/
+    cp "$file" /etc/systemd/system/
     systemctl daemon-reload
     systemctl enable "$service_name"
     systemctl start "$service_name"
@@ -618,7 +618,7 @@ xdg-all-apps() {
         echo "There are no application associated with $1"
         return
     fi
-    echo "$MATCHING" |cut -d = -f 2 |\
-        sed -z -e 's:\n::;s:;:\n:g' |\
-        sort |uniq
+    echo "$MATCHING" | cut -d = -f 2 | \
+        sed -z -e 's:\n::;s:;:\n:g' | \
+        sort | uniq
 }

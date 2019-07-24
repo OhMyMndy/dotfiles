@@ -6,9 +6,9 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 if [ ! -d ~/.oh-my-zsh/lib ]; then
     rm -rf ~/.oh-my-zsh/
     cd /tmp
-    wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh
+    yes n | locale
+	wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh
     sed -i.tmp 's:env zsh::g' install.sh
-    sed -i.tmp 's:chsh -s .*$::g' install.sh
     sh install.sh
     rm install.sh
 fi

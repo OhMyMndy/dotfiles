@@ -11,11 +11,12 @@ if [[ $? == 1 ]]; then
     sink_properties=device.description="Record-and-Play"
 fi
 # Get current IP address
-IP=127.0.0.1
+IP=0.0.0.0
 tput setaf 2
-echo "Serving output stream on: http://$IP:8080/audio.mp3"
+echo "Serving output stream on: http://$IP:8080/audio.flac"
 echo "Stop with CTRL-C"
 tput sgr0
 
-# Start VLC, serving the sink output as MP3 stream
-cvlc -q pulse://record-n-play.monitor --sout "#transcode{acodec=mpga,ab=320,channels=2}:standard{access=http,dst=$IP:8080/audio.mp3}"
+# Start VLC, serving the sink output as flac stream
+# cvlc -q pulse://record-n-play.monitor --sout "#transcode{acodec=mpga,ab=320,channels=2}:standard{access=http,dst=$IP:8080/audio.mp3}"
+cvlc -q pulse://record-n-play.monitor --sout "#transcode{acodec=flac,channels=2}:standard{access=http,dst=$IP:8080/audio.flac}"

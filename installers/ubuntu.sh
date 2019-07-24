@@ -33,26 +33,11 @@ function _green_bold() {
 	echo ''
 }
 
-function general() {
+function minimal() {
+	sudo apt update -y
 	sudo apt install git byobu tmux iotop htop zsh nmap tree curl -y
 
-	# build tools
-	sudo apt install build-essential dkms -y
-
 	sudo apt install -y shutter parcellite redshift-gtk xfce4-terminal xfce4-genmon-plugin kdeconnect chromium-browser seahorse mate-calc ristretto trash-cli
-
-
-	# system utils
-	sudo apt install -y sysfsutils sysstat
-
-	# editors
-	sudo apt install -y mousepad geany vim-gtk3
-
-	# media
-	sudo apt install -y vlc quodlibet
-
-	# vpn and network manager
-	sudo apt install -y openvpn network-manager-openvpn network-manager-openvpn-gnome parallel ruby ntp
 
 	# file management and disk plugins
 	sudo apt install -y thunar pcmanfm cifs-utils exfat-fuse exfat-utils gnome-disk-utility samba hfsprogs cdck
@@ -64,12 +49,53 @@ function general() {
 
 	sudo apt install openssh-server libsecret-tools -y
 
+	# editors
+	sudo apt install -y mousepad geany vim-gtk3
+
+	# archiving
+	sudo apt install -y engrampa unzip unrar p7zip-full ecm
+
+
+	bash "$DIR/apps/oh-my-zsh.sh"
+
+	# Fix for snaps with ZSH
+	LINE="emulate sh -c 'source /etc/profile'"
+	FILE=/etc/zsh/zprofile
+	grep -qF -- "$LINE" "$FILE" || echo "$LINE" | sudo tee "$FILE"
+
+
+	if ! which fzf >/dev/null 2>&1
+	then
+		git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+		yes | ~/.fzf/install
+	fi
+
+	sudo chsh -s "$(which zsh)" mandy
+}
+
+function general() {
+	set -e
+	sudo apt update -y
+
+	# build tools
+	sudo apt install build-essential dkms software-properties-common -y
+
+
+	# system utils
+	sudo apt install -y sysfsutils sysstat
+
+
+	# media
+	sudo apt install -y vlc quodlibet
+
+	# vpn and network manager
+	sudo apt install -y openvpn network-manager-openvpn network-manager-openvpn-gnome parallel ruby ntp
+
+
 
 	# networking tools
 	sudo apt install -y iputils-ping mtr traceroute
 
-	# archiving
-	sudo apt install -y engrampa unzip unrar p7zip-full ecm
 
 	# pdf
 	sudo apt install zathura 'zathura*' evince -y
@@ -112,27 +138,14 @@ function general() {
 		sudo apt update
 		sudo apt install -y kdeconnect indicator-kdeconnect
 	fi
+
 	if ! apt -qq list papirus-icon-theme 2>/dev/null| grep -i -q installed
 	then
 		sudo add-apt-repository ppa:papirus/papirus -y
 		sudo apt update
 		sudo apt install papirus-icon-theme -y
 	fi
-	bash "$DIR/apps/oh-my-zsh.sh"
-
-	# Fix for snaps with ZSH
-	LINE="emulate sh -c 'source /etc/profile'"
-	FILE=/etc/zsh/zprofile
-	grep -qF -- "$LINE" "$FILE" || echo "$LINE" | sudo tee "$FILE"
-
-
-	if ! which fzf >/dev/null 2>&1
-	then
-		git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-		yes | ~/.fzf/install
-	fi
-
-	sudo chsh -s "$(which zsh)" mandy
+	
 	sudo snap install ripgrep --classic
 
 
@@ -147,6 +160,7 @@ function general() {
 
 	sudo pip3 install thefuck
 	sudo pip3 install numpy
+	set +e
 }
 
 
@@ -167,10 +181,9 @@ function groups() {
 function fonts() {
 	installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/SourceCodePro.zip SourceCodeProNerdFont
 	installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/FantasqueSansMono.zip FantasqueSansMono 
+	installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/DroidSansMono.zip DroidSansMono
 	installFontsFromZip https://github.com/IBM/plex/releases/download/v1.4.1/OpenType.zip "IBM Plex" 
-	xfconf-query -c xsettings -p /Gtk/FontName -s "IBM Plex Sans Text 9"
-	xfconf-query -c xsettings -p /Gtk/MonospaceFontName -s "FantasqueSansMono Nerd Font Mono 10"
-	xfconf-query -c xsettings -p /Gtk/DecorationLayout -s "menu:minimize,maximize,close"
+	
 	
 	if [ "$fontsAdded" = 1 ]; then
 		fc-cache -f -v
@@ -184,11 +197,17 @@ function settings() {
 		# Execute executables in Thunar instead of editing them on double click: https://bbs.archlinux.org/viewtopic.php?id=194464
 		xfconf-query --channel thunar --property /misc-exec-shell-scripts-by-default --create --type bool --set true
 
+
+		xfconf-query -c xsettings -p /Gtk/FontName -s "Ubuntu 10"
+		# xfconf-query -c xsettings -p /Gtk/MonospaceFontName -s "FantasqueSansMono Nerd Font Mono 10"
+		xfconf-query -c xsettings -p /Gtk/MonospaceFontName -s "DroidSansMono Nerd Font 10"
+		xfconf-query -c xsettings -p /Gtk/DecorationLayout -s "menu:minimize,maximize,close"
+
 		xfconf-query -c xsettings -p /Net/ThemeName -s Adwaita
 		xfconf-query -c xfwm4 -p /general/theme -s Greybird
-		xfconf-query -c xfwm4 -p /general/title_font -s "IBM Plex Sans Text 9"
+		xfconf-query -c xfwm4 -p /general/title_font -s "Ubuntu 10"
 
- 		xfconf-query -c xfce4-session -p /compat/LaunchGNOME  -s true
+ 		xfconf-query -c xfce4-session -p /compat/LaunchGNOME -s true
 		xfconf-query -c xsettings -p /Net/IconThemeName -s 'Papirus-Light'
 
 
@@ -221,8 +240,6 @@ function locale() {
 	LC_TELEPHONE=nl_BE.UTF-8 \
 	LC_MEASUREMENT=nl_BE.UTF-8 \
 	LC_IDENTIFICATION=nl_BE.UTF-8
-
-
 }
 
 
@@ -335,7 +352,6 @@ function dev() {
  	sudo npm install -g typescript
 	sudo snap install code --classic
 	bash "$DIR/apps/code.sh"
-
 }
 
 
@@ -373,14 +389,14 @@ function docker() {
 		sudo chmod +x /usr/local/bin/docker-compose
 	fi
 
-	if which podman >/dev/null 2>&1
-	then
-		# Podman
-		sudo apt update
-		sudo apt -y install software-properties-common
-		sudo add-apt-repository -y ppa:projectatomic/ppa
-		sudo apt install podman -y
-	fi
+	# if which podman >/dev/null 2>&1
+	# then
+	# 	# Podman
+	# 	sudo apt update
+	# 	sudo apt -y install software-properties-common
+	# 	sudo add-apt-repository -y ppa:projectatomic/ppa
+	# 	sudo apt install podman -y
+	# fi
 
 	cd /tmp
 	curl -L https://github.com/jesseduffield/lazydocker/releases/download/v0.2.5/lazydocker_0.2.5_Linux_x86_64.tar.gz > lazydocker.tgz
@@ -422,6 +438,10 @@ function firewall() {
 	yes | sudo ufw reset
 	sudo ufw allow 22/udp
 	sudo ufw allow 22/tcp
+
+	# pulse over HTTP
+	sudo ufw allow 8080/udp
+	sudo ufw allow 8080/tcp
 }
 
 function git() {

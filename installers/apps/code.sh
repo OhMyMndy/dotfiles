@@ -13,3 +13,7 @@ code --install-extension chintans98.markdown-jira
 code --install-extension eamodio.gitlens
 code --install-extension donjayamanne.githistory
 code --install-extension christian-kohler.path-intellisense
+code --install-extension davidanson.vscode-markdownlint
+code --install-extension pkief.material-icon-theme
+code --install-extension equinusocio.vsc-material-theme
+code --install-extension felixfbecker.php-intellisense
