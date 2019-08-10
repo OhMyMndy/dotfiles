@@ -20,12 +20,15 @@ function _install_deb_from_url() {
 
 function setup() {
 	upgrade
-	general
+	#general
+	minimal
 	locale
 	settings
 	firewall
 	dns
 	albert
+	autostart
+	git_config
 }
 
 function _green_bold() {
@@ -55,14 +58,16 @@ function minimal() {
 	# archiving
 	sudo apt install -y engrampa unzip unrar p7zip-full ecm
 
-
+	albert
 	bash "$DIR/apps/oh-my-zsh.sh"
-
 	# Fix for snaps with ZSH
 	LINE="emulate sh -c 'source /etc/profile'"
 	FILE=/etc/zsh/zprofile
 	grep -qF -- "$LINE" "$FILE" || echo "$LINE" | sudo tee "$FILE"
 
+
+	sudo snap install code --classic
+	bash "$DIR/apps/code.sh"
 
 	if ! which fzf >/dev/null 2>&1
 	then
@@ -350,8 +355,6 @@ function dev() {
 	# Run typescript without compiling
  	sudo npm install -g ts-node
  	sudo npm install -g typescript
-	sudo snap install code --classic
-	bash "$DIR/apps/code.sh"
 }
 
 
@@ -444,9 +447,17 @@ function firewall() {
 	sudo ufw allow 8080/tcp
 }
 
-function git() {
+function git_config() {
 	git config --global submodule.recurse true
 	git config --global user.name Mandy Schoep
+}
+
+function autostart() {
+	mkdir -p ~/.config/autostart
+	cp /usr/share/applications/albert.desktop ~/.config/autostart/
+	cp /usr/share/applications/redshift-gtk.desktop ~/.config/autostart/
+	cp /usr/share/applications/parcellite.desktop ~/.config/autostart/
+	cp /usr/share/applications/nextcloud.desktop ~/.config/autostart/
 }
 
 set -e
