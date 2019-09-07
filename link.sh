@@ -29,9 +29,8 @@ mkdir -p ~/.config/xfce4/
 link-file "$DIR" ".config/xfce4/terminal"
 
 
-mkdir -p  ~/.local/share/
-rm -rf ~/.local/share/xfpanel-switch/
-link-file "$DIR" ".local/share/xfpanel-switch"
+mkdir -p ~/.local/share/xfpanel-switch/
+cp -f $DIR/.local/share/xfpanel-switch/*  ~/.local/share/xfpanel-switch/
 
 link-file "$DIR" '.config/fontconfig'
 link-file "$DIR" ".config/i3"
