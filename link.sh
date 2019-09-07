@@ -76,6 +76,7 @@ ln -sf ~/.byobu/.tmux.conf ~/.tmux.conf
 link-file "$DIR" '.functions'
 link-file "$DIR" '.ncmpcpp'
 link-file "$DIR" '.config/vis'
+link-file "$DIR" '.config/alacritty'
 link-file "$DIR" '.zshrc'
 
 ##### START DESKTOP FILES #####
