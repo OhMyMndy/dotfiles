@@ -5,7 +5,6 @@ filetype off                  " required
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
-
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'chrisbra/Colorizer'
@@ -15,53 +14,51 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-syntastic/syntastic'
 Plugin 'airblade/vim-gitgutter'
-Plugin 'joshdick/onedark.vim'
+" Plugin 'Valloric/YouCompleteMe'
+" Plugin 'ctrlpvim/ctrlp.vim'
+" Plugin 'joshdick/onedark.vim'
 Plugin 'sheerun/vim-polyglot'
+Plugin 'editorconfig/editorconfig-vim'
+Plugin 'vim-voom/VOoM'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
 
-
-let g:onedark_termcolors=16
-colorscheme onedark
+colorscheme industry
 set nu
 syntax on
-let g:colorizer_auto_color=1
-filetype plugin indent on
+
 set wildmenu
 set backspace=indent,eol,start
 set ignorecase
 set hlsearch
 set t_Co=256
+highlight Normal guibg=Black
 
 " Do not throw away file and create a new one, just reuse the current one
 " https://github.com/moby/moby/issues/15793
 set noswapfile
 set backupcopy=yes
 
-" autocmd StdinReadPre * let s:std_in=1/
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-" map <C-n> :NERDTreeToggle<CR>
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+" To save a file on a gvfs
+" :w !tee % >/dev/null
+
+cmap w!! w !sudo tee % >/dev/null
+set clipboard=unnamedplus
+
+" recursive path from cwd
+set path +=./**
 
 set mouse=a
 
-filetype plugin indent on
+" Indenting
 set autoindent	" Auto-indent new lines
 set shiftwidth=4	" Number of auto-indent spaces
 set smartindent	" Enable smart-indent
 set smarttab	" Enable smart-tabs
 set softtabstop=4	" Number of spaces per Tab
-set tabstop=4
+set tabstop=4	" Number of spaces per Tab
 
-set list listchars=tab:>-,extends:>,nbsp:•,trail:•,extends:⟩,precedes:⟨
-
-
-"Easier split navigation
-nnoremap <C-J> <C-W><C-J>
-nnoremap <C-K> <C-W><C-K>
-nnoremap <C-L> <C-W><C-L>
-nnoremap <C-H> <C-W><C-H>
 
 set splitbelow
 set splitright
@@ -70,7 +67,7 @@ set splitright
 set hidden
 
 
-"Syntastic
+" Syntastic
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
@@ -79,18 +76,19 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
-
 let g:syntastic_yaml_checkers = ['yamllint']
-
-
 let g:syntastic_php_checkers = ["php"]
 "["php", "phpcs", "phpmd"]
-
 let g:syntastic_sh_shellcheck_args="-x"
 
-" Switch file tabs
-map <C-PageUp> :tabp<CR>
-map <C-PageDown> :tabn<CR>
+
+
+" Nerd tree
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+map <C-n> :NERDTreeToggle<CR>
+let g:NERDTreeChDirMode=2
+
+
 
 " Create folder if not exists
 function s:MkNonExDir(file, buf)
@@ -107,22 +105,23 @@ augroup BWCCreateDir
 augroup END
 
 
-"NERDTree mapping
-map <C-n> :NERDTreeToggle<CR>
-let g:NERDTreeChDirMode=2
+" Switch file tabs
+map <C-PageUp> :tabp<CR>
+map <C-PageDown> :tabn<CR>
 
+map <C-t> :SyntasticToggleMode<CR>
 
-" recursive path from cwd
-set path +=./**
+" Easier split navigation
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
 
-"" gvim settings
-set gfn=FantasqueSansMono\ Nerd\ Font\ Mono\ 11
+" Gvim settings
+set gfn=Iosevka\ Nerd\ Font\ Mono\ 11
 
-cmap w!! w !sudo tee > /dev/null %
-
-set clipboard=unnamedplus
-
-"" paste from system clipboard
-map <C-p> "+gP<CR>
-map <C-e> :!%:p<CR>
-
+" Highlighting settings
+highlight DiffAdd    cterm=bold ctermfg=10 ctermbg=17 gui=none guifg=bg guibg=Red
+highlight DiffDelete cterm=bold ctermfg=10 ctermbg=17 gui=none guifg=bg guibg=Red
+highlight DiffChange cterm=bold ctermfg=10 ctermbg=17 gui=none guifg=bg guibg=Red
+highlight DiffText   cterm=bold ctermfg=10 ctermbg=88 gui=none guifg=bg guibg=Red

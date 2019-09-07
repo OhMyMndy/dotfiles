@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cd "$DIR"
+
+file_name="$1/commands.txt"
+
+if [ ! -f "$file_name" ]; then
+    echo "File '$file_name' does not exist!" >&2
+    file_name="$HOME/commands.txt"
+
+    if [ ! -f "$file_name" ]; then
+        echo "File '$file_name' does not exist!" >&2
+        exit 3
+    else
+        cd "$HOME"
+    fi
+else
+    cd "$1"
+fi
+
+
+
+eval "$(cat "$file_name" | fzf --height=33 --no-sort --tac)"

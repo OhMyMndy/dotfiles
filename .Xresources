@@ -5,3 +5,108 @@ Xft.rgba: rgb
 Xft.autohint: false
 Xft.hintstyle: hintmedium
 Xft.lcdfilter: lcddefault
+
+
+
+XTerm*renderFont: true
+
+!XTerm*faceName: IBMPlexMono\ Nerd\ Font\ Mono\ :style=Regular
+XTerm*faceName: Iosevka\ Nerd\ Font\ Mono\ :style=Regular
+XTerm*faceSize: 11
+XTerm*eightBitInput: false
+XTerm*selectToClipboard:false
+XTerm*background: #000000
+XTerm*saveLines: 16384
+XTerm*loginShell: true
+XTerm*termName: xterm-256color
+XTerm*scaleHeight: 1
+XTerm*ScrollBar: false
+
+XTerm*VT100.Translations:       #override\n\
+ Shift Ctrl <KeyPress> v: insert-selection(CLIPBOARD)\n\
+ Shift Ctrl <KeyPress> c: copy-selection(CLIPBOARD)\n
+
+
+
+
+#define BACKGROUND #101010
+#define FOREGROUND #ffffff
+
+! Black
+#define COLOR0     #1a1b21
+#define COLOR8     #959498
+
+! Red
+#define COLOR1     #ff1835
+#define COLOR9     #ff1835
+
+! Green
+#define COLOR2     #31ff7f
+#define COLOR10    #31ff7f
+
+! Yellow
+#define COLOR3     #f3ff4d
+#define COLOR11    #f3ff4d
+
+! Blue
+#define COLOR4     #39c2ed
+#define COLOR12    #39c2ed
+
+! Purple / Magenta
+#define COLOR5     #ff68d1
+#define COLOR13    #ff68d1
+
+! Cyan
+#define COLOR6     #169375
+#define COLOR14    #169375
+
+! White
+#define COLOR7     #dbdbdb
+#define COLOR15    #ffffff
+
+#define COLOR16    #3d96b7
+
+
+! ##### COLORS #####
+! special
+*foreground:   FOREGROUND
+*background:   BACKGROUND
+*cursorColor:  FOREGROUND
+
+! black
+*color0:       COLOR0
+*color8:       COLOR8
+
+! red
+*color1:       COLOR1
+*color9:       COLOR9
+
+! green
+*color2:       COLOR2
+*color10:      COLOR10
+
+! yellow
+*color3:       COLOR3
+*color11:      COLOR11
+
+! blue
+*color4:       COLOR4
+*color12:      COLOR12
+
+! magenta
+*color5:       COLOR5
+*color13:      COLOR13
+
+! cyan
+*color6:       COLOR6
+*color14:      COLOR14
+
+! white
+*color7:       COLOR7
+*color15:      COLOR15
+
+
+*color16:      COLOR16
+
+
+! ##### END COLORS #####

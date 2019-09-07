@@ -18,7 +18,6 @@ detect_os
 # sysadmin-util https://github.com/skx/sysadmin-util
 
 plugins=(
-    common-aliases
     colored-man-pages
     command-not-found
     cp # This plugin defines a cpv function that uses rsync so that you get the features and security of this command.
@@ -30,7 +29,6 @@ plugins=(
     git
     httpie
     jira
-    kate
     notify
     nmap # https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins/nmap
     rsync # rsync-copy rsync-move rsync-update rsync-synchronize
@@ -42,7 +40,7 @@ plugins=(
 )
 
 if [ "$OS" = "Ubuntu" ]; then
-    plugins+=(ubuntu )
+    plugins+=(ubuntu)
 elif [ "$OS" = "Arch Linux" ]; then
     plugins+=(archlinux)
 elif [ "$OS" = "Fedora" ]; then
@@ -102,6 +100,7 @@ if [ -f $HOME/.lessrc ]; then
 fi
 
 compctl -g "$HOME/.teamocil/*(:t:r)" teamocil
+
 if exists dircolors; then
     eval "$(dircolors ~/.dircolors)";
 fi
@@ -135,12 +134,14 @@ alias rmv='rsync -ahrt --info progress2 --remove-sent-files'
 
 alias lc='colorls -lA --sd'
 
-
 alias dockly='docker run -it --rm -v /var/run/docker.sock:/var/run/docker.sock lirantal/dockly'
 
 # Prevents local TERM from affecting ssh.
 alias ssh='TERM=xterm ssh'
-unalias fd
+
+# Python aliases
+alias ve='python3 -m venv ./venv'
+alias va='source ./venv/bin/activate'
 
 if exists thefuck; then eval "$(thefuck --alias)"; fi
 
@@ -166,6 +167,9 @@ export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on'
 export CHEATCOLORS=true
 
 
+export IP_ADDRESS=$(ip_address)
+export HOSTNAME="$(hostname)"
+
 # ssh-agent omzsh should do the same
 if [ "$(uname -s)" != 'Darwin' ]; then
     # export SUDO_ASKPASS=/usr/libexec/openssh/gnome-ssh-askpass
@@ -181,33 +185,11 @@ if [ "$(uname -s)" != 'Darwin' ]; then
     export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock
 fi
 
-export IP_ADDRESS=$(ip_address)
-export HOSTNAME="$(hostname)"
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" --no-use  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-function set_term_colors() {
-    # echo -en "\e]P01a1b21" #black
-    # echo -en "\e]P1ff1835" #darkred
-    # echo -en "\e]P231ff7f" #darkgreen
-    # echo -en "\e]P3f3ff4d" #brown
-    echo -en "\e]P439c2ed" #darkblue
-    # echo -en "\e]P5ff68d1" #darkmagenta
-    # echo -en "\e]P6169375" #darkcyan
-    # echo -en "\e]P7dbdbdb" #lightgrey
-    # echo -en "\e]P8959498" #darkgrey
-    # echo -en "\e]P9ff1835" #red
-    # echo -en "\e]PA31ff7f" #green
-    # echo -en "\e]PBf3ff4d" #yellow
-    echo -en "\e]PC39c2ed" #blue
-    # echo -en "\e]PDff68d1" #magenta
-    # echo -en "\e]PE169375" #cyan
-    # echo -en "\e]PFffffff" #white
-
-    clear #for background artifacting
-}
 
 if [ "$TERM" = "linux" ]; then
   set_term_colors
@@ -217,14 +199,24 @@ function set_macbook_term_size() {
     add-to-file "stty rows 50" "$HOME/.profile"
     add-to-file "stty columns 160" "$HOME/.profile"
 }
+
 bindkey  "^[[1~"   beginning-of-line
 bindkey  "^[[4~"   end-of-line
+
+#bindkey '^[[1;5C' forward-word
+#bindkey '^[[1;5D' backward-word
+
 [[ "$(tty)" =~ /dev/tty[0-9]* ]] && setupcon
 [[ "$(tty)" =~ /dev/tty[0-9]* ]] && [[ "$(hostname)" =~ macbook ]] && set_macbook_term_size
 
 
 
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE=fg=5
+ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor)
+typeset -A ZSH_HIGHLIGHT_PATTERNS
+
+# To have commands starting with `rm -rf` in red:
+ZSH_HIGHLIGHT_PATTERNS+=('rm -rf *' 'fg=white,bold,bg=red')
+
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-eval $(thefuck --alias)

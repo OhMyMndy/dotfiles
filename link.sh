@@ -51,7 +51,7 @@ link-file "$DIR" '.screenrc'
 link-file "$DIR" '.byobu'
 link-file "$DIR" '.config/mopidy'
 link-file "$DIR" '.config/htop'
-link-file "$DIR" '.screenlayout'
+# link-file "$DIR" '.toprc'
 link-file "$DIR" 'z.sh'
 link-file "$DIR" '.mpdconf'
 link-file "$DIR" '.myclirc'
@@ -126,6 +126,7 @@ installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2
 installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/Hack.zip HackNerdFont
 installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/SourceCodePro.zip SourceCodeProNerdFont
 installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/FantasqueSansMono.zip FantasqueSansMono
+installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/Iosevka.zip IosevkaNerdFont
 if [ $fontsAdded -eq 1 ]; then
 	fc-cache -f -v
 fi
@@ -133,3 +134,11 @@ fi
 bash "$DIR/installers/apps/oh-my-zsh.sh"
 
 create_remmina_desktop_files
+
+
+# autostart files
+mkdir -p ~/.config/autostart
+ln -s ${DIR}/.config/autostart/*.desktop ~/.config/autostart/ 2>/dev/null
+
+find /usr/share/applications -iname 'nextcloud.desktop' | xargs -I {} ln -s {} ~/.config/autostart
+find /usr/share/applications -iname 'albert.desktop' | xargs -I {} ln -s {} ~/.config/autostart

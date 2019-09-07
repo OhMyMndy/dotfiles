@@ -34,26 +34,70 @@ function _green_bold() {
 }
 
 function minimal() {
+	sudo add-apt-repository -y "deb http://archive.canonical.com/ $(lsb_release -sc) partner"
+
 	sudo apt update -y
-	sudo apt install git byobu tmux iotop htop zsh nmap tree curl -y
 
-	sudo apt install -y shutter parcellite redshift-gtk xfce4-terminal xfce4-genmon-plugin kdeconnect chromium-browser seahorse mate-calc ristretto trash-cli
+	# minimal
+	sudo apt install -y file coreutils findutils vlock nnn ack sed tree grep 
 
-	# file management and disk plugins
-	sudo apt install -y thunar pcmanfm cifs-utils exfat-fuse exfat-utils gnome-disk-utility samba hfsprogs cdck
+	# Misc
+	sudo apt install -y git zsh less curl rename rsync openssh-server most multitail trash-cli libsecret-tools parallel ruby ntp vim fonts-noto
 
-	# remote desktop
+	# Terminal multiplexing
+	sudo apt install -y byobu tmux
+
+	# System monitoring
+	sudo apt install -y iotop htop nload glances
+
+	# Networking tools
+	sudo apt install -y nmap iputils-ping dnsutils telnet-ssl mtr traceroute
+
+	# Cron
+	sudo apt install -y cron cronic
+
+	# Mailing
+	sudo apt install -y msmtp-mta thunderbird
+
+	# Cli browser with inline images
+	sudo apt install -y w3m w3m-img
+
+	# Apt tools
+	sudo apt install -y apt-file wajig
+
+	# Esential X tools
+	# kdeconnect
+	sudo apt install -y shutter parcellite redshift-gtk xfce4-terminal xfce4-genmon-plugin chromium-browser seahorse galculator orage ristretto \
+		xsel xclip arandr wmctrl xscreensaver flatpak
+
+	# File management and disk plugins
+	sudo apt install -y cifs-utils exfat-fuse exfat-utils samba hfsprogs cdck ncdu
+
+	# File management and disk plugins X
+	sudo apt install -y thunar pcmanfm gnome-disk-utility
+
+	# Remote desktop
 	sudo apt install -y remmina vinagre
 
-	sudo apt install xsel xclip arc-theme flatpak wmctrl xscreensaver -y
+	# Themes
+	sudo apt install -y arc-theme bluebird-gtk-theme
 
-	sudo apt install openssh-server libsecret-tools -y
-
-	# editors
+	# Editors
 	sudo apt install -y mousepad geany vim-gtk3
 
-	# archiving
+	# Archiving
 	sudo apt install -y engrampa unzip unrar p7zip-full ecm
+
+	# Window managing
+	# quicktile dependencies
+	sudo apt install -y python python-gtk2 python-xlib python-dbus python-setuptools
+	cd /tmp && wget http://ftp.nl.debian.org/debian/pool/main/g/gnome-python-desktop/python-wnck_2.32.0+dfsg-3_amd64.deb
+	sudo dpkg -i python-wnck_2.32.0+dfsg-3_amd64.deb
+
+
+	sudo pip2 install https://github.com/ssokolow/quicktile/archive/master.zip
+
+ 	sudo pip3 install git+https://github.com/jeffkaufman/icdiff.git
 
 
 	bash "$DIR/apps/oh-my-zsh.sh"
@@ -64,7 +108,7 @@ function minimal() {
 	grep -qF -- "$LINE" "$FILE" || echo "$LINE" | sudo tee "$FILE"
 
 
-	if ! which fzf >/dev/null 2>&1
+	if ! which fzf &>/dev/null
 	then
 		git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 		yes | ~/.fzf/install
@@ -76,74 +120,65 @@ function minimal() {
 function general() {
 	set -e
 	sudo apt update -y
+	
 
-	# build tools
-	sudo apt install build-essential dkms software-properties-common -y
+	# Build tools
+	sudo apt install -y build-essential dkms software-properties-common
 
+	# System utils
+	sudo apt install -y sysfsutils sysstat qdirstat
 
-	# system utils
-	sudo apt install -y sysfsutils sysstat
+	# Media
+	sudo apt install -y vlc quodlibet imagemagick
 
+	# Vpn and network manager
+	sudo apt install -y openvpn network-manager-openvpn network-manager-openvpn-gnome 
 
-	# media
-	sudo apt install -y vlc quodlibet
-
-	# vpn and network manager
-	sudo apt install -y openvpn network-manager-openvpn network-manager-openvpn-gnome parallel ruby ntp
-
-
-
-	# networking tools
-	sudo apt install -y iputils-ping mtr traceroute
-
-
-	# pdf
-	sudo apt install zathura 'zathura*' evince -y
-
-	if ! which ulauncher >/dev/null 2>&1
-	then
-		sudo add-apt-repository ppa:agornostal/ulauncher -y
-		sudo apt update
-		sudo apt install ulauncher -y
-		# fix dependencies if necessary
-		sudo apt install -y -f
-	fi
+	# PDF
+	sudo apt install -y zathura 'zathura*' atril
 
 	if [ ! -f /usr/NX/bin/nxplayer ]
 	then
 		_install_deb_from_url "$(curl https://www.nomachine.com/download/download\&id\=6 2>/dev/null | grep -E -o "http.*download.*deb")"
 	fi
 
-	if ! which nextcloud-client >/dev/null 2>&1
+	if ! which nextcloud-client &>/dev/null
 	then
 		sudo add-apt-repository ppa:nextcloud-devs/client -y
 		sudo apt update
-		sudo apt install nextcloud-client -y
+		sudo apt install -y nextcloud-client
 	fi
 
-	if ! which bat >/dev/null 2>&1
+	if ! which bat &>/dev/null
 	then
 		_install_deb_from_url https://github.com/sharkdp/bat/releases/download/v0.11.0/bat_0.11.0_amd64.deb
 	fi
 
-	if ! which fd >/dev/null 2>&1
+	if ! which alacritty &>/dev/null
+	then
+		sudo add-apt-repository ppa:mmstick76/alacritty -y
+		sudo apt update
+		sudo apt install -y alacritty
+	fi
+
+	if ! which fd &>/dev/null
 	then
 		_install_deb_from_url https://github.com/sharkdp/fd/releases/download/v7.3.0/fd_7.3.0_amd64.deb
 	fi
 
 
-	if ! which indicator-kdeconnect >/dev/null 2>&1
-	then
-		yes | sudo add-apt-repository ppa:webupd8team/indicator-kdeconnect
-		sudo apt update
-		sudo apt install -y kdeconnect indicator-kdeconnect
-	fi
+	# if ! which indicator-kdeconnect &>/dev/null
+	# then
+	# 	yes | sudo add-apt-repository ppa:webupd8team/indicator-kdeconnect
+	# 	sudo apt update
+	# 	sudo apt install -y kdeconnect indicator-kdeconnect
+	# fi
 
-	if ! apt -qq list papirus-icon-theme 2>/dev/null| grep -i -q installed
+	if ! apt -qq list papirus-icon-theme 2>/dev/null | grep -i -q installed
 	then
 		sudo add-apt-repository ppa:papirus/papirus -y
 		sudo apt update
-		sudo apt install papirus-icon-theme -y
+		sudo apt install -y papirus-icon-theme
 	fi
 	
 	sudo snap install ripgrep --classic
@@ -153,13 +188,16 @@ function general() {
 	flatpak install flathub com.github.wwmm.pulseeffects -y --user
 
 
-	sudo apt remove parole orage mpv -y
+	sudo apt remove -y parole mpv
 
-
-	sudo apt install -y python-pip python3-pip arandr
+	sudo apt install -y python-pip python3-pip
 
 	sudo pip3 install thefuck
 	sudo pip3 install numpy
+	sudo pip3 install csvkit
+	sudo pip3 install httpie
+	sudo python3 -m pip install docnado --upgrade
+
 	set +e
 }
 
@@ -167,8 +205,11 @@ function general() {
 function groups() {
 	sudo groupadd docker
 	sudo groupadd vboxusers
+	sudo groupadd mail
+	sudo groupadd sambashare
+	
 	sudo usermod -aG docker mandy
-
+	sudo usermod -aG mail mandy
 	sudo usermod -aG disk mandy
 	sudo usermod -aG cdrom mandy
 	sudo usermod -aG vboxusers mandy
@@ -182,6 +223,8 @@ function fonts() {
 	installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/SourceCodePro.zip SourceCodeProNerdFont
 	installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/FantasqueSansMono.zip FantasqueSansMono 
 	installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/DroidSansMono.zip DroidSansMono
+	installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/DejaVuSansMono.zip DejaVuSansMono
+	installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/Iosevka.zip Iosevka
 	installFontsFromZip https://github.com/IBM/plex/releases/download/v1.4.1/OpenType.zip "IBM Plex" 
 	
 	
@@ -192,25 +235,27 @@ function fonts() {
 
 
 function settings() {
-	if which xfconf-query >/dev/null 2>&1
+	if which xfconf-query &>/dev/null
 	then
 		# Execute executables in Thunar instead of editing them on double click: https://bbs.archlinux.org/viewtopic.php?id=194464
 		xfconf-query --channel thunar --property /misc-exec-shell-scripts-by-default --create --type bool --set true
 
 
-		xfconf-query -c xsettings -p /Gtk/FontName -s "Ubuntu 10"
+		xfconf-query -c xsettings -p /Gtk/FontName -s "Noto Sans Regular 10"
 		# xfconf-query -c xsettings -p /Gtk/MonospaceFontName -s "FantasqueSansMono Nerd Font Mono 10"
-		xfconf-query -c xsettings -p /Gtk/MonospaceFontName -s "DroidSansMono Nerd Font 10"
+		# xfconf-query -c xsettings -p /Gtk/MonospaceFontName -s "DroidSansMono Nerd Font 10"
+		xfconf-query -c xsettings -p /Gtk/MonospaceFontName -s "Iosevka Nerd Font Mono 10"
 		xfconf-query -c xsettings -p /Gtk/DecorationLayout -s "menu:minimize,maximize,close"
+		
+		xfconf-query -c xsettings -p /Gtk/ButtonImages -s true
 
 		xfconf-query -c xsettings -p /Net/ThemeName -s Adwaita
-		xfconf-query -c xfwm4 -p /general/theme -s Greybird
-		xfconf-query -c xfwm4 -p /general/title_font -s "Ubuntu 10"
+		xfconf-query -c xfwm4 -p /general/theme -s Bluebird
+		xfconf-query -c xfwm4 -p /general/title_font -s "Noto Sans Regular 10"
+		xfconf-query -c xfwm4 -p /general/button_layout t -s "O|HMC"
 
  		xfconf-query -c xfce4-session -p /compat/LaunchGNOME -s true
-		xfconf-query -c xsettings -p /Net/IconThemeName -s 'Papirus-Light'
-
-
+		xfconf-query -c xsettings -p /Net/IconThemeName -s Papirus-Light
 	fi
 }
 
@@ -253,7 +298,7 @@ function i3() {
 		sudo apt update
 	fi
 
-	sudo apt install udiskie compton nitrogen feh xfce4-panel pcmanfm spacefm rofi ssh-askpass-gnome -y
+	sudo apt install -y udiskie compton nitrogen feh xfce4-panel pcmanfm spacefm rofi ssh-askpass-gnome
 	sudo apt install -y "i3" i3blocks i3lock
 	sudo apt install -y dmenu rofi
 }
@@ -283,15 +328,15 @@ function upgrade() {
 
 function media() {
 	# Media things, disk burn software
-	sudo apt install -y digikam k3b
+	sudo apt install -y digikam k3b # darktable
 	# Permissions for ripping cds
-	sudo chmod 4711 /usr/bin/wodim; sudo chmod 4711 /usr/bin/cdrdao
+	sudo chmod 4711 /usr/bin/wodim; 
+	sudo chmod 4711 /usr/bin/cdrdao
 }
 
 
 function kde() {
-	sudo apt install kronometer ktimer -y
-	sudo apt install -y ark 
+	sudo apt install -y kronometer ktimer ark
 	sudo apt remove -y konsole akonadi korganizer kaddressbook kmail kjots kalarm kmail amarok
 	# @todo remove kde pim etc
 }
@@ -303,8 +348,8 @@ function uninstall_kde() {
 }
 
 function privacy() {
-	sudo apt install torbrowser-launcher -y
-	# @todo add expressvpn / purevpn
+	# sudo apt install -y torbrowser-launcher
+	# @todo add expressvpn
 	_install_deb_from_url "https://s3.amazonaws.com/purevpn-dialer-assets/linux/app/purevpn_1.2.2_amd64.deb"
 }
 
@@ -324,7 +369,7 @@ function etcher() {
 
 
 function albert() {
-	if ! which albert >/dev/null 2>&1
+	if ! which albert &>/dev/null
 	then
 		. /etc/lsb-release   
 		cd /tmp || exit 2
@@ -340,12 +385,12 @@ function albert() {
 
 function qt_dev() {
 	# Qt development
-	sudo apt install kdevelop qt5-default build-essential mesa-common-dev libglu1-mesa-dev -y
+	sudo apt install -y kdevelop qt5-default build-essential mesa-common-dev libglu1-mesa-dev
 }
 
 
 function dev() {
-	sudo apt install shellcheck nodejs npm -y
+	sudo apt install -y shellcheck nodejs npm
 
 	# Run typescript without compiling
  	sudo npm install -g ts-node
@@ -356,8 +401,8 @@ function dev() {
 
 
 function php() {
-	sudo apt install wkhtmltopdf php-cli php-xml php-mbstring php-curl php-zip php-pdo-sqlite php-intl -y
-	sudo apt install kcachegrind -y
+	sudo apt install -y wkhtmltopdf php-cli php-xml php-mbstring php-curl php-zip php-pdo-sqlite php-intl
+	sudo apt install -y kcachegrind
 	sudo snap install phpstorm --classic
 }
 
@@ -370,7 +415,7 @@ function docker() {
 		gnupg2 \
 		software-properties-common
 
-	if ! which docker >/dev/null 2>&1
+	if ! which docker &>/dev/null
 	then
 		curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 		sudo apt-key fingerprint 0EBFCD88
@@ -383,13 +428,13 @@ function docker() {
 		sudo usermod -aG "docker" "$(whoami)"  
 	fi
 
-	if ! which docker-compose >/dev/null 2>&1
+	if ! which docker-compose &>/dev/null
 	then
 		sudo curl -L "https://github.com/docker/compose/releases/download/1.23.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 		sudo chmod +x /usr/local/bin/docker-compose
 	fi
 
-	# if which podman >/dev/null 2>&1
+	# if which podman &>/dev/null
 	# then
 	# 	# Podman
 	# 	sudo apt update
@@ -399,7 +444,7 @@ function docker() {
 	# fi
 
 	cd /tmp
-	curl -L https://github.com/jesseduffield/lazydocker/releases/download/v0.2.5/lazydocker_0.2.5_Linux_x86_64.tar.gz > lazydocker.tgz
+	curl -L https://github.com/jesseduffield/lazydocker/releases/download/v0.7.1/lazydocker_0.7.1_Linux_x86_64.tar.gz > lazydocker.tgz
 	tar xzf lazydocker.tgz
 	sudo install lazydocker /usr/local/bin/
 }
@@ -439,9 +484,17 @@ function firewall() {
 	sudo ufw allow 22/udp
 	sudo ufw allow 22/tcp
 
+	sudo ufw allow 80/udp
+	sudo ufw allow 443/udp
+	sudo ufw allow 80/tcp
+	sudo ufw allow 443/tcp
+
 	# pulse over HTTP
 	sudo ufw allow 8080/udp
 	sudo ufw allow 8080/tcp
+
+	# access local hosts through vpn
+	sudo ip route add 192.168.10.0/24 dev $(ls /sys/class/net | grep "^en*" | head -1)  
 }
 
 function git() {

@@ -622,3 +622,26 @@ xdg-all-apps() {
         sed -z -e 's:\n::;s:;:\n:g' | \
         sort | uniq
 }
+
+
+
+function set_term_colors() {
+    # echo -en "\e]P01a1b21" #black
+    # echo -en "\e]P1ff1835" #darkred
+    # echo -en "\e]P231ff7f" #darkgreen
+    # echo -en "\e]P3f3ff4d" #brown
+    echo -en "\e]P439c2ed" #darkblue
+    # echo -en "\e]P5ff68d1" #darkmagenta
+    # echo -en "\e]P6169375" #darkcyan
+    # echo -en "\e]P7dbdbdb" #lightgrey
+    # echo -en "\e]P8959498" #darkgrey
+    # echo -en "\e]P9ff1835" #red
+    # echo -en "\e]PA31ff7f" #green
+    # echo -en "\e]PBf3ff4d" #yellow
+    echo -en "\e]PC39c2ed" #blue
+    # echo -en "\e]PDff68d1" #magenta
+    # echo -en "\e]PE169375" #cyan
+    # echo -en "\e]PFffffff" #white
+
+    clear #for background artifacting
+}

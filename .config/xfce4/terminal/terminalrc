@@ -2,7 +2,7 @@
 MiscAlwaysShowTabs=FALSE
 MiscBell=TRUE
 MiscBordersDefault=TRUE
-MiscCursorBlinks=FALSE
+MiscCursorBlinks=TRUE
 MiscCursorShape=TERMINAL_CURSOR_SHAPE_BLOCK
 MiscDefaultGeometry=80x24
 MiscInheritGeometry=FALSE
@@ -30,4 +30,7 @@ ColorPalette=rgb(0,0,0);rgb(251,1,32);rgb(82,231,92);rgb(254,80,4);rgb(36,197,23
 TitleMode=TERMINAL_TITLE_REPLACE
 FontUseSystem=TRUE
 ScrollingBar=TERMINAL_SCROLLBAR_NONE
+ColorCursorUseDefault=FALSE
+ColorCursorForeground=#000000000000
+ColorCursor=#ffffffffffff
 
