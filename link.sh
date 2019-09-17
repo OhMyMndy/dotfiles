@@ -18,6 +18,7 @@ mkdir -p ~/Screenshots
 
 
 link-file "$DIR" ".vimrc"
+link-file "$DIR" ".spacemacs"
 
 
 if [ ! -f ~/.Xresources_bak ] && [ -f ~/.Xresources ]; then
@@ -110,26 +111,6 @@ if [ ! -d "$HOME/.vim/bundle/Vundle.vim" ]; then
 fi
 
 yes | vim +PluginInstall +qall
-
-
-
-#cd $DIR
-#installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/Hack.zip" "Hack"
-#installFontsFromZip "https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/UbuntuMono.zip" "UbuntuMono"
-#installFontsFromZip "https://github.com/sgolovine/PlexNerdfont/archive/master.zip" "IBM-Plex-Mono-NerdFont"
-#rm -rf ~/.local/share/fonts/IBM-Plex/originals
-#rm -rf ~/.local/share/fonts/IBM-Plex/windows-compatable
-#installFontsFromZip "https://github.com/IBM/plex/releases/download/v1.1.6/OpenType.zip" "IBM-Plex"
-#installFontsFromZip "http://dl.1001fonts.com/ubuntu.zip" "Ubuntu"
-#
-installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/FiraMono.zip FiraMonoNerdFont
-installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/Hack.zip HackNerdFont
-installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/SourceCodePro.zip SourceCodeProNerdFont
-installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/FantasqueSansMono.zip FantasqueSansMono
-installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/Iosevka.zip IosevkaNerdFont
-if [ $fontsAdded -eq 1 ]; then
-	fc-cache -f -v
-fi
 
 bash "$DIR/installers/apps/oh-my-zsh.sh"
 

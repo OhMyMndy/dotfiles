@@ -12,14 +12,15 @@ Plugin 'tpope/vim-sensible'
 Plugin 'StanAngeloff/php.vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'vim-airline/vim-airline'
-Plugin 'vim-syntastic/syntastic'
+Plugin 'dense-analysis/ale'
 Plugin 'airblade/vim-gitgutter'
 " Plugin 'Valloric/YouCompleteMe'
 " Plugin 'ctrlpvim/ctrlp.vim'
-" Plugin 'joshdick/onedark.vim'
 Plugin 'sheerun/vim-polyglot'
 Plugin 'editorconfig/editorconfig-vim'
 Plugin 'vim-voom/VOoM'
+Plugin 'junegunn/fzf'
+Plugin 'junegunn/fzf.vim'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required

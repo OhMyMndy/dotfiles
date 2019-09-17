@@ -63,10 +63,10 @@ window:
   startup_mode: Windowed
 
   # Window title
-  #title: Alacritty
+  title: Alacritty
 
   # Window class (Linux only):
-  #class: Alacritty
+  class: Alacritty
 
 scrolling:
   # Maximum number of lines in the scrollback buffer.

@@ -42,8 +42,8 @@ function minimal() {
 	sudo apt update -y
 
 	# minimal
-	sudo apt install -y file coreutils findutils vlock nnn ack sed tree grep 
-
+	sudo apt install -y file coreutils findutils vlock nnn ack sed tree grep silversearcher-ag
+	sudo apt install -y python-pip python3-pip
 	# Misc
 	sudo apt install -y git zsh less curl rename rsync openssh-server most multitail trash-cli libsecret-tools parallel ruby ntp vim fonts-noto
 
@@ -54,7 +54,7 @@ function minimal() {
 	sudo apt install -y iotop htop nload glances
 
 	# Networking tools
-	sudo apt install -y nmap iputils-ping dnsutils telnet-ssl mtr traceroute
+	sudo apt install -y nmap iputils-ping dnsutils telnet-ssl mtr traceroute libnss3-tools
 
 	# Cron
 	sudo apt install -y cron cronic
@@ -74,26 +74,28 @@ function minimal() {
 		xsel xclip arandr wmctrl xscreensaver flatpak
 
 	# File management and disk plugins
-	sudo apt install -y cifs-utils exfat-fuse exfat-utils samba hfsprogs cdck ncdu
+	sudo apt install -y cifs-utils exfat-fuse exfat-utils samba hfsprogs cdck ncdu mtp-tools
 
 	# File management and disk plugins X
 	sudo apt install -y thunar pcmanfm gnome-disk-utility
 
 	# Remote desktop
-	sudo apt install -y remmina vinagre
+	sudo apt install -y remmina vinagre xephyr
 
 	# Themes
 	sudo apt install -y arc-theme bluebird-gtk-theme
 
+	git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d
+
 	# Editors
-	sudo apt install -y mousepad geany vim-gtk3
+	sudo apt install -y geany vim-gtk3 emacs
 
 	# Archiving
 	sudo apt install -y engrampa unzip unrar p7zip-full ecm
 
 	# Window managing
 	# quicktile dependencies
-	sudo apt install -y python python-gtk2 python-xlib python-dbus python-setuptools
+	sudo apt install -y python python-gtk2 python-xlib python-dbus python-setuptools libpango-1.0
 	cd /tmp && wget http://ftp.nl.debian.org/debian/pool/main/g/gnome-python-desktop/python-wnck_2.32.0+dfsg-3_amd64.deb
 	sudo dpkg -i python-wnck_2.32.0+dfsg-3_amd64.deb
 
@@ -132,13 +134,15 @@ function general() {
 	sudo apt install -y build-essential dkms software-properties-common
 
 	# System utils
-	sudo apt install -y sysfsutils sysstat qdirstat
+	sudo apt install -y sysfsutils sysstat qdirstat 
 
 	# Media
 	sudo apt install -y vlc quodlibet imagemagick
 
 	# Vpn and network manager
 	sudo apt install -y openvpn network-manager-openvpn network-manager-openvpn-gnome 
+
+	sudo apt install -y moka-icon-theme
 
 	# PDF
 	sudo apt install -y zathura 'zathura*' atril
@@ -172,6 +176,20 @@ function general() {
 		_install_deb_from_url https://github.com/sharkdp/fd/releases/download/v7.3.0/fd_7.3.0_amd64.deb
 	fi
 
+	if ! which x11docker &>/dev/null
+	then
+		curl -fsSL https://raw.githubusercontent.com/mviereck/x11docker/master/x11docker | sudo bash -s -- --update
+
+	fi
+		
+
+	if ! which lazygit &>/dev/null
+	then
+		sudo add-apt-repository ppa:lazygit-team/release -y
+		sudo apt-get update
+		sudo apt-get install -y lazygit
+	fi
+
 
 	# if ! which indicator-kdeconnect &>/dev/null
 	# then
@@ -194,9 +212,7 @@ function general() {
 	flatpak install flathub com.github.wwmm.pulseeffects -y --user
 
 
-	sudo apt remove -y parole mpv
-
-	sudo apt install -y python-pip python3-pip
+	sudo apt remove -y parole mpv 'pidgin*'
 
 	sudo pip3 install thefuck
 	sudo pip3 install numpy
@@ -434,7 +450,7 @@ function docker() {
 
 	if ! which docker-compose &>/dev/null
 	then
-		sudo curl -L "https://github.com/docker/compose/releases/download/1.23.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+		sudo curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 		sudo chmod +x /usr/local/bin/docker-compose
 	fi
 

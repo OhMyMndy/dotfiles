@@ -212,7 +212,7 @@ bindkey  "^[[4~"   end-of-line
 
 
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE=fg=5
-ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor)
+ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)
 typeset -A ZSH_HIGHLIGHT_PATTERNS
 
 # To have commands starting with `rm -rf` in red:
