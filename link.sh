@@ -36,6 +36,7 @@ cp -f $DIR/.local/share/xfpanel-switch/*  ~/.local/share/xfpanel-switch/
 link-file "$DIR" '.config/fontconfig'
 link-file "$DIR" ".config/i3"
 link-file "$DIR" ".config/rofi"
+link-file "$DIR" ".config/quicktile.cfg"
 link-file "$DIR" ".lessrc"
 
 
