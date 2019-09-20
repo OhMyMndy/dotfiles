@@ -85,6 +85,9 @@ function minimal() {
 	# Themes
 	sudo apt install -y arc-theme bluebird-gtk-theme
 
+	# Language and spell check
+	sudo apt install -y aspell
+
 	git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d
 
 	# Editors
@@ -417,6 +420,9 @@ function dev() {
 	# Run typescript without compiling
  	sudo npm install -g ts-node
  	sudo npm install -g typescript
+
+  # Gnu global
+  sudo apt install -y global ctags
 }
 
 
@@ -424,6 +430,7 @@ function php() {
 	sudo apt install -y wkhtmltopdf php-cli php-xml php-mbstring php-curl php-zip php-pdo-sqlite php-intl
 	sudo apt install -y kcachegrind
 	sudo snap install phpstorm --classic
+	sudo pip3 install pre-commit
 }
 
 
