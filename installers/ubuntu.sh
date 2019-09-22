@@ -359,7 +359,11 @@ function media() {
 	sudo chmod 4711 /usr/bin/cdrdao
 }
 
+function chat() {
+	sudo snap install slack --classic
+	sudo snap install discord --classic
 
+}
 function kde() {
 	sudo apt install -y kronometer ktimer ark
 	sudo apt remove -y konsole akonadi korganizer kaddressbook kmail kjots kalarm kmail amarok
