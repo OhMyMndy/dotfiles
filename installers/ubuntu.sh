@@ -241,6 +241,7 @@ function groups() {
 	sudo usermod -aG sudo mandy
 	sudo usermod -aG sambashare mandy
 	sudo usermod -aG netdev mandy
+	sudo usermod -aG dialout mandy
 
 }
 

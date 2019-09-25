@@ -63,6 +63,7 @@ link-file "$DIR" '.dircolors'
 touch ~/.z
 
 link-file "$DIR" '.config/beets'
+link-file "$DIR" '.config/redshift.conf'
 
 
 if [ ! -d ~/bin_bak ] && [ -d ~/bin ]; then
