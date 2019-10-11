@@ -85,6 +85,9 @@ function minimal() {
 	# Themes
 	sudo apt install -y arc-theme bluebird-gtk-theme
 
+	# Language and spell check
+	sudo apt install -y aspell
+
 	git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d
 
 	# Editors
@@ -239,6 +242,7 @@ function groups() {
 	sudo usermod -aG sudo mandy
 	sudo usermod -aG sambashare mandy
 	sudo usermod -aG netdev mandy
+	sudo usermod -aG dialout mandy
 
 }
 
@@ -357,7 +361,11 @@ function media() {
 	sudo chmod 4711 /usr/bin/cdrdao
 }
 
+function chat() {
+	sudo snap install slack --classic
+	sudo snap install discord --classic
 
+}
 function kde() {
 	sudo apt install -y kronometer ktimer ark
 	sudo apt remove -y konsole akonadi korganizer kaddressbook kmail kjots kalarm kmail amarok
@@ -423,6 +431,8 @@ function dev() {
 	if ! which circleci &>/dev/null
 		curl -fLSs https://circle.ci/cli | sudo bash
 	fi
+	# Gnu global
+	sudo apt install -y global ctags
 }
 
 
@@ -431,6 +441,7 @@ function php() {
 	sudo apt install -y kcachegrind
 	sudo snap install phpstorm --classic
 	sudo pip3 install -y mycli
+	sudo pip3 install pre-commit
 }
 
 
