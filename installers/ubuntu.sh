@@ -45,7 +45,7 @@ function minimal() {
 	sudo apt install -y file coreutils findutils vlock nnn ack sed tree grep silversearcher-ag
 	sudo apt install -y python-pip python3-pip
 	# Misc
-	sudo apt install -y git zsh less curl rename rsync openssh-server most multitail trash-cli libsecret-tools parallel ruby ntp vim fonts-noto
+	sudo apt install -y git tig gitg zsh less curl rename rsync openssh-server most multitail trash-cli libsecret-tools parallel ruby ntp vim fonts-noto fonts-roboto
 
 	# Terminal multiplexing
 	sudo apt install -y byobu tmux
@@ -54,7 +54,7 @@ function minimal() {
 	sudo apt install -y iotop htop nload glances
 
 	# Networking tools
-	sudo apt install -y nmap iputils-ping dnsutils telnet-ssl mtr traceroute libnss3-tools
+	sudo apt install -y nmap iputils-ping dnsutils telnet-ssl mtr-tiny traceroute libnss3-tools
 
 	# Cron
 	sudo apt install -y cron cronic
@@ -104,7 +104,8 @@ function minimal() {
 
  	sudo pip3 install git+https://github.com/jeffkaufman/icdiff.git
 
-
+	# @todo set the gemrc files in place before running gem install
+	#gem install teamocil
 	albert
 	bash "$DIR/apps/oh-my-zsh.sh"
 	# Fix for snaps with ZSH
@@ -417,6 +418,11 @@ function dev() {
 	# Run typescript without compiling
  	sudo npm install -g ts-node
  	sudo npm install -g typescript
+
+
+	if ! which circleci &>/dev/null
+		curl -fLSs https://circle.ci/cli | sudo bash
+	fi
 }
 
 
@@ -424,6 +430,7 @@ function php() {
 	sudo apt install -y wkhtmltopdf php-cli php-xml php-mbstring php-curl php-zip php-pdo-sqlite php-intl
 	sudo apt install -y kcachegrind
 	sudo snap install phpstorm --classic
+	sudo pip3 install -y mycli
 }
 
 
@@ -487,7 +494,7 @@ function dns() {
 dns=dnsmasq
 EOL
 
-		sudo tee /etc/NetworkManager/dnsmasq.d/00-dev.conf << EOL
+		sudo tee /etc/NetworkManager/dnsmasq.d/00-home-mndy-be.conf << EOL
 address=/home.mndy.be/192.168.10.120
 addn-hosts=/etc/hosts
 EOL
@@ -496,6 +503,17 @@ EOL
 		sudo rm /etc/resolv.conf; sudo ln -s /var/run/NetworkManager/resolv.conf /etc/resolv.conf
 		sudo systemctl restart NetworkManager
 	fi
+}
+
+function sysctl() {
+	# @todo add https://askubuntu.com/questions/23674/netbook-freezes-with-high-load-on-every-io-operation to sysctl if IO performance is a problem
+	# @todo add to /etc/sysctl.conf
+#fs.inotify.max_user_watches = 524288
+#net.ipv4.ip_forward=1
+#kernel.printk = 2 4 1 7
+#vm.swappiness = 2
+#vm.max_map_count=262144
+	echo "todo"
 }
 
 function firewall() {
@@ -520,6 +538,7 @@ function firewall() {
 function git_config() {
 	git config --global submodule.recurse true
 	git config --global user.name Mandy Schoep
+	echo "Manually execute 'git config --global user.email <email>'"
 }
 
 function autostart() {

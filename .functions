@@ -272,9 +272,9 @@ function installFontsFromZip() {
 
 function deleteWindowsFonts() {
   if [ "$(uname)" = 'Darwin' ]; then
-		DIR=~/Library/Fonts
+		local DIR=~/Library/Fonts
 	else
-		DIR=~/.local/share/fonts
+		local DIR=~/.local/share/fonts
 	fi
   find $DIR -iname '*windows*' -exec rm -r "{}" \;
 }

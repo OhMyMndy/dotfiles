@@ -22,3 +22,4 @@ heidisql
 .idea
 __pycache__
 *.pyc
+.projectile

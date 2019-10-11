@@ -3,9 +3,6 @@
 source $HOME/z.sh
 export ZSH=$HOME/.oh-my-zsh
 export ZSH_THEME="mandy"
-# export ZSH_THEME="robbyrussell"
-
-# zshaddhistory() { whence ${${(z)1}[1]} >| /dev/null || return 1 }
 
 #zstyle ':completion:*' use-cache yes
 
@@ -161,6 +158,12 @@ export VISUAL="vim"
 export EDITOR='vim'
 export TZ='Europe/Brussels'
 export DISABLE_AUTO_TITLE=true
+# Uncomment the following line to enable command auto-correction.
+ENABLE_CORRECTION="true"
+
+# Uncomment the following line to display red dots whilst waiting for completion.
+COMPLETION_WAITING_DOTS="true"
+
 export AUTO_TITLE=false
 export ARCH=$(uname -m | sed 's/x86_//;s/i[3-6]86/32/')
 export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on'
@@ -220,3 +223,8 @@ ZSH_HIGHLIGHT_PATTERNS+=('rm -rf *' 'fg=white,bold,bg=red')
 
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+if which direnv >/dev/null 2>&1
+then
+	eval "$(direnv hook zsh)"
+fi

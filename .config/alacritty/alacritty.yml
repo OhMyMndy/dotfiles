@@ -96,7 +96,7 @@ scrolling:
 # Some applications, like Emacs, rely on knowing about the width of a tab.
 # To prevent unexpected behavior in these applications, it's also required to
 # change the `it` value in terminfo when altering this setting.
-tabspaces: 8
+tabspaces: 4
 
 # Font configuration (changes require restart)
 font:
@@ -142,7 +142,7 @@ font:
   # as modifying the line spacing, and `offset.x` as modifying the letter spacing.
   offset:
     x: 0
-    y: 0
+    y: 2
 
   # Glyph offset determines the locations of the glyphs within their cells with
   # the default being at the bottom. Increasing `x` moves the glyph to the right,
@@ -639,3 +639,17 @@ key_bindings:
   - { key: F11,      mods: Super,   chars: "\x1b[23;3~"                      }
   - { key: F12,      mods: Super,   chars: "\x1b[24;3~"                      }
   - { key: NumpadEnter,             chars: "\n"                              }
+
+  # Byobu split resize sequences.
+  - { key: Up,       mods: Shift|Alt,   chars: "\x1b[1;4A"                   }
+  - { key: Down,     mods: Shift|Alt,   chars: "\x1b[1;4B"                   }
+  - { key: Right,    mods: Shift|Alt,   chars: "\x1b[1;4C"                   }
+  - { key: Left,     mods: Shift|Alt,   chars: "\x1b[1;4D"                   }
+
+  - { key: Right,    mods: Control|Shift,   chars: "\x1b[1;6C"               }
+  - { key: Left,     mods: Control|Shift,   chars: "\x1b[1;6D"               }
+
+  - { key: Up,       mods: Control|Shift|Super,   chars: "\x1b[1;8A"         }
+  - { key: Down,     mods: Control|Shift|Super,   chars: "\x1b[1;8B"         }
+  - { key: Right,    mods: Control|Shift|Super,   chars: "\x1b[1;8C"         }
+  - { key: Left,     mods: Control|Shift|Super,   chars: "\x1b[1;8D"         }
