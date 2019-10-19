@@ -13,13 +13,17 @@ fi
 # Get current IP address
 IP=0.0.0.0
 tput setaf 2
-echo "Serving output stream on: http://$IP:8080/audio.flac"
+format=mp3
+echo "Serving output stream on: http://$IP:8080/audio.${format}"
 echo "Stop with CTRL-C"
 tput sgr0
 
 # set volume to max
 pactl set-sink-volume "record-n-play" 100%
-
+pactl set-sink-mute "record-n-play" 0  
 # Start VLC, serving the sink output as flac stream
-cvlc -q pulse://record-n-play.monitor --sout "#transcode{acodec=mpga,ab=320,channels=2}:standard{access=http,dst=$IP:8080/audio.mp3}"
-# cvlc -q pulse://record-n-play.monitor --sout "#transcode{acodec=flac,channels=2}:standard{access=http,dst=$IP:8080/audio.flac}"
+if [[ $format -eq "mp3" ]]; then
+	cvlc -q pulse://record-n-play.monitor --sout "#transcode{acodec=mpga,ab=320,channels=2}:standard{access=http,dst=$IP:8080/audio.mp3}"
+elif [[ $format -eq "flac" ]]; then
+	cvlc -q pulse://record-n-play.monitor --sout "#transcode{acodec=flac,channels=2}:standard{access=http,dst=$IP:8080/audio.flac}"
+fi

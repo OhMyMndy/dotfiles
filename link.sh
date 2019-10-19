@@ -84,6 +84,8 @@ link-file "$DIR" '.functions'
 link-file "$DIR" '.ncmpcpp'
 link-file "$DIR" '.config/vis'
 link-file "$DIR" '.config/alacritty'
+mkdir -p ~/.config/cmus
+link-file "$DIR" '.config/cmus/rc'
 link-file "$DIR" '.zshrc'
 
 ##### START DESKTOP FILES #####

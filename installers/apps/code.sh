@@ -17,3 +17,7 @@ code --install-extension davidanson.vscode-markdownlint
 code --install-extension pkief.material-icon-theme
 code --install-extension equinusocio.vsc-material-theme
 code --install-extension felixfbecker.php-intellisense
+code --install-extension tootone.org-mode
+code --install-extension xyz.local-history
+code --install-extension vscodevim.vim
+code --install-extension dracula-theme.theme-dracula

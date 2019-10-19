@@ -279,11 +279,21 @@ function settings() {
 		xfconf-query -c xsettings -p /Net/ThemeName -s Adwaita
 		xfconf-query -c xfwm4 -p /general/theme -s Bluebird
 		xfconf-query -c xfwm4 -p /general/title_font -s "Noto Sans Regular 10"
-		xfconf-query -c xfwm4 -p /general/button_layout t -s "O|HMC"
+		xfconf-query -c xfwm4 -p /general/button_layout  -s "O|HMC"
+		xfconf-query -c xfwm4 -p /general/cycle_preview -s false
+		xfconf-query -c xfwm4 -p /general/mousewheel_rollup  -s false
+		xfconf-query -c xfwm4 -p /general/workspace_names  -n -t string -t string -t string -t string -s "1" -s "2" -s "3" -s "4"
+		xfconf-query -c xfwm4 -p /general/workspace_count -s 4
+
 
  		xfconf-query -c xfce4-session -p /compat/LaunchGNOME -s true
 		xfconf-query -c xsettings -p /Net/IconThemeName -s Papirus-Light
 	fi
+
+
+	# X11 forwarding over SSH
+	sudo sed -i -E 's|.*X11UseLocalhost.*|X11UseLocalhost no|g' /etc/ssh/sshd_config
+	sudo sed -i -E 's|.*X11Forwarding.*|X11Forwarding yes|g' /etc/ssh/sshd_config
 }
 
 
@@ -429,6 +439,7 @@ function dev() {
 
 
 	if ! which circleci &>/dev/null
+	then
 		curl -fLSs https://circle.ci/cli | sudo bash
 	fi
 	# Gnu global
