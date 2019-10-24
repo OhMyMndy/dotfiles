@@ -54,7 +54,8 @@ function minimal() {
 	sudo apt install -y iotop htop nload glances
 
 	# Networking tools
-	sudo apt install -y nmap iputils-ping dnsutils telnet-ssl mtr-tiny traceroute libnss3-tools
+	sudo apt install -y nmap iputils-ping dnsutils telnet-ssl mtr-tiny traceroute libnss3-tools netdiscover
+	# smbmap, only available in disco+
 
 	# Cron
 	sudo apt install -y cron cronic
@@ -430,6 +431,14 @@ function qt_dev() {
 }
 
 
+function jupyter() {
+	pip3 install jupyterlab
+	npm config set prefix $HOME/.local
+	npm install -g ijavascript && ijsinstall
+	pip3 install bash_kernel && python3 -m bash_kernel.install
+	pip3 install gnuplot_kernel && python3 -m gnuplot_kernel install --user
+}
+
 function dev() {
 	sudo apt install -y shellcheck nodejs npm
 
@@ -448,11 +457,17 @@ function dev() {
 
 
 function php() {
-	sudo apt install -y wkhtmltopdf php-cli php-xml php-mbstring php-curl php-zip php-pdo-sqlite php-intl
+	sudo apt install -y wkhtmltopdf php-cli php-xml php-mbstring php-curl php-zip php-pdo-sqlite php-intl php-zmq
 	sudo apt install -y kcachegrind
 	sudo snap install phpstorm --classic
-	sudo pip3 install -y mycli
-	sudo pip3 install pre-commit
+	pip3 install mycli
+	pip3 install pre-commit
+
+	if ! which composer &>/dev/null
+	then
+		curl -sS https://getcomposer.org/installer | $(which php) && sudo mv composer.phar /usr/local/bin/composer
+	fi
+	curl -sS https://litipk.github.io/Jupyter-PHP-Installer/dist/jupyter-php-installer.phar > /tmp/jupyter.php; $(which php) /tmp/jupyter.php install; rm /tmp/jupyter.php
 }
 
 
