@@ -71,8 +71,14 @@ function minimal() {
 
 	# Esential X tools
 	# kdeconnect
-	sudo apt install -y shutter parcellite redshift-gtk xfce4-terminal xfce4-genmon-plugin chromium-browser seahorse galculator orage ristretto \
-		xsel xclip arandr wmctrl xscreensaver flatpak
+	sudo apt install -y shutter redshift-gtk xfce4-terminal xfce4-genmon-plugin chromium-browser seahorse galculator orage ristretto \
+		xsel xclip arandr wmctrl xscreensaver flatpak compton
+
+	if ! which copyq &>/dev/null; then
+		sudo add-apt-repository ppa:hluk/copyq -y 
+		sudo apt-get update
+		sudo apt install -y copyq
+	fi
 
 	# File management and disk plugins
 	sudo apt install -y cifs-utils exfat-fuse exfat-utils samba hfsprogs cdck ncdu mtp-tools
@@ -102,7 +108,8 @@ function minimal() {
 	sudo apt install -y python python-gtk2 python-xlib python-dbus python-setuptools libpango-1.0
 	cd /tmp && wget http://ftp.nl.debian.org/debian/pool/main/g/gnome-python-desktop/python-wnck_2.32.0+dfsg-3_amd64.deb
 	sudo dpkg -i python-wnck_2.32.0+dfsg-3_amd64.deb
-
+	# Fix dependencies
+	sudo apt install -f
 
 	sudo pip2 install https://github.com/ssokolow/quicktile/archive/master.zip
 
@@ -110,7 +117,7 @@ function minimal() {
 
 	# @todo set the gemrc files in place before running gem install
 	#gem install teamocil
-	albert
+	ulauncher
 	bash "$DIR/apps/oh-my-zsh.sh"
 	# Fix for snaps with ZSH
 	LINE="emulate sh -c 'source /etc/profile'"
@@ -228,6 +235,18 @@ function general() {
 	set +e
 }
 
+function shutter() {
+	source /etc/lsb-release
+	# http://ubuntuhandbook.org/index.php/2018/04/fix-edit-option-disabled-shutter-ubuntu-18-04/
+	if [[ $DISTRIB_RELEASE = "18.04" ]]
+	then
+		_install_deb_from_url "https://launchpad.net/ubuntu/+archive/primary/+files/libgoocanvas-common_1.0.0-1_all.deb"
+		_install_deb_from_url "https://launchpad.net/ubuntu/+archive/primary/+files/libgoocanvas3_1.0.0-1_amd64.deb"
+		_install_deb_from_url "https://launchpad.net/ubuntu/+archive/primary/+files/libgoo-canvas-perl_0.06-2ubuntu3_amd64.deb"
+	fi
+	sudo apt install shutter -y
+
+}
 
 function groups() {
 	sudo groupadd docker
@@ -268,6 +287,7 @@ function settings() {
 		# Execute executables in Thunar instead of editing them on double click: https://bbs.archlinux.org/viewtopic.php?id=194464
 		xfconf-query --channel thunar --property /misc-exec-shell-scripts-by-default --create --type bool --set true
 
+		# @todo disable screentearing here and use compton instead (see autostart function)
 
 		xfconf-query -c xsettings -p /Gtk/FontName -s "Noto Sans Regular 10"
 		# xfconf-query -c xsettings -p /Gtk/MonospaceFontName -s "FantasqueSansMono Nerd Font Mono 10"
@@ -409,22 +429,6 @@ function etcher() {
 	sudo apt-get install balena-etcher-electron -y
 }
 
-
-function albert() {
-	if ! which albert &>/dev/null
-	then
-		. /etc/lsb-release   
-		cd /tmp || exit 2
-		wget -nv -O Release.key https://build.opensuse.org/projects/home:manuelschneid3r/public_key
-		sudo apt-key add - < Release.key
-		sudo sh -c "echo \"deb http://download.opensuse.org/repositories/home:/manuelschneid3r/xUbuntu_$DISTRIB_RELEASE/ /\" > /etc/apt/sources.list.d/home:manuelschneid3r.list"
-		sudo apt-get update
-		sudo apt install "albert" -y
-		rm Release.key
-	fi
-}
-
-
 function qt_dev() {
 	# Qt development
 	sudo apt install -y kdevelop qt5-default build-essential mesa-common-dev libglu1-mesa-dev
@@ -478,6 +482,12 @@ function docker() {
 		curl \
 		gnupg2 \
 		software-properties-common
+
+	if ! which ctop &>/dev/null
+	then
+		sudo wget https://github.com/bcicen/ctop/releases/download/v0.7.2/ctop-0.7.2-linux-amd64 -O /usr/local/bin/ctop
+		sudo chmod +x /usr/local/bin/ctop
+	fi
 
 	if ! which docker &>/dev/null
 	then
@@ -580,10 +590,11 @@ function git_config() {
 
 function autostart() {
 	mkdir -p ~/.config/autostart
-	cp /usr/share/applications/albert.desktop ~/.config/autostart/
+	cp /usr/share/applications/ulauncher.desktop ~/.config/autostart/
 	cp /usr/share/applications/redshift-gtk.desktop ~/.config/autostart/
-	cp /usr/share/applications/parcellite.desktop ~/.config/autostart/
+	cp /usr/share/applications/com.github.hluk.copyq.desktop ~/.config/autostart/
 	cp /usr/share/applications/nextcloud.desktop ~/.config/autostart/
+	cp ~/dotfiles/.local/share/applications/Compton.desktop ~/.config/autostart/
 }
 
 set -e

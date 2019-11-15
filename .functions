@@ -587,12 +587,12 @@ link-file() {
 
     if [ "$arg" = '' ]; then
         echo "You need to provide source folder as first parameter"
-        return
+        return 1
     fi
 
     if [ ! -f "$source" ] && [ ! -d "$source" ]; then
         echo "File or folder '$source' ($original) does not exist!"
-        return
+        return 2
     fi
 
     rm -rf "$original"
@@ -623,7 +623,11 @@ xdg-all-apps() {
         sort | uniq
 }
 
-
+function set_wm_name() {
+	xprop -f WM_NAME 8s -set WM_NAME "Alacritty - $1" 
+	xprop -f _NET_WM_NAME 8s -set _NET_WM_NAME "Alacritty - $1"
+	tmux rename-session "$1"
+}
 
 function set_term_colors() {
     # echo -en "\e]P01a1b21" #black

@@ -7,20 +7,27 @@ call vundle#begin()
 
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
+Plugin 'ycm-core/YouCompleteMe'
 Plugin 'chrisbra/Colorizer'
 Plugin 'tpope/vim-sensible'
+Plugin 'tpope/vim-obsession'
 Plugin 'StanAngeloff/php.vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'vim-airline/vim-airline'
 Plugin 'dense-analysis/ale'
 Plugin 'airblade/vim-gitgutter'
 " Plugin 'Valloric/YouCompleteMe'
-" Plugin 'ctrlpvim/ctrlp.vim'
+Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'sheerun/vim-polyglot'
 Plugin 'editorconfig/editorconfig-vim'
 Plugin 'vim-voom/VOoM'
 Plugin 'junegunn/fzf'
-Plugin 'junegunn/fzf.vim'
+Plugin 'majutsushi/tagbar'
+Plugin 'tpope/vim-fugitive'
+Plugin 'mbbill/undotree'
+Plugin 'christoomey/vim-tmux-runner'
+Plugin 'godlygeek/tabular'
+
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -50,15 +57,16 @@ set clipboard=unnamedplus
 " recursive path from cwd
 set path +=./**
 
+set ttymouse=xterm2
 set mouse=a
 
 " Indenting
-set autoindent	" Auto-indent new lines
-set shiftwidth=4	" Number of auto-indent spaces
-set smartindent	" Enable smart-indent
-set smarttab	" Enable smart-tabs
-set softtabstop=4	" Number of spaces per Tab
-set tabstop=4	" Number of spaces per Tab
+set autoindent " Auto-indent new lines
+set shiftwidth=4       " Number of auto-indent spaces
+set smartindent        " Enable smart-indent
+set smarttab   " Enable smart-tabs
+set softtabstop=4      " Number of spaces per Tab
+set tabstop=4  " Number of spaces per Tab
 
 
 set splitbelow
@@ -68,27 +76,11 @@ set splitright
 set hidden
 
 
-" Syntastic
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
 
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-let g:syntastic_yaml_checkers = ['yamllint']
-let g:syntastic_php_checkers = ["php"]
-"["php", "phpcs", "phpmd"]
-let g:syntastic_sh_shellcheck_args="-x"
-
-
-
-" Nerd tree
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-map <C-n> :NERDTreeToggle<CR>
-let g:NERDTreeChDirMode=2
-
+if has("persistent_undo")
+    set undodir=~/.vim/undo-dir
+    set undofile
+endif
 
 
 " Create folder if not exists
@@ -105,12 +97,17 @@ augroup BWCCreateDir
     autocmd BufWritePre * :call s:MkNonExDir(expand('<afile>'), +expand('<abuf>'))
 augroup END
 
+" Nerd tree
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+map <C-n> :NERDTreeToggle<CR>
+let g:NERDTreeChDirMode=2
+
 
 " Switch file tabs
 map <C-PageUp> :tabp<CR>
 map <C-PageDown> :tabn<CR>
 
-map <C-t> :SyntasticToggleMode<CR>
+map <C-t> :TagbarToggle<CR>
 
 " Easier split navigation
 nnoremap <C-J> <C-W><C-J>
@@ -126,3 +123,6 @@ highlight DiffAdd    cterm=bold ctermfg=10 ctermbg=17 gui=none guifg=bg guibg=Re
 highlight DiffDelete cterm=bold ctermfg=10 ctermbg=17 gui=none guifg=bg guibg=Red
 highlight DiffChange cterm=bold ctermfg=10 ctermbg=17 gui=none guifg=bg guibg=Red
 highlight DiffText   cterm=bold ctermfg=10 ctermbg=88 gui=none guifg=bg guibg=Red
+
+let g:airline#extensions#tabline#enabled = 1
+

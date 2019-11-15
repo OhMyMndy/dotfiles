@@ -13,13 +13,19 @@ source "$DIR/.functions"
 source "$DIR/.zshrc" 2>/dev/null
 
 
-mkdir -p ~/.config
+mkdir -p ~/.config/{copyq,ulauncher}
 mkdir -p ~/Screenshots
 
+link-file "$DIR" ".config/copyq/copyq.conf"
 
 link-file "$DIR" ".vimrc"
+mkdir -p ~/.vim/{sessions,undo-dir,bundle,view}
+
 link-file "$DIR" ".spacemacs"
 
+link-file "$DIR" ".config/ulauncher/shortcuts.json"
+link-file "$DIR" ".config/ulauncher/settings.json"
+link-file "$DIR" ".config/ulauncher/extensions.json"
 
 if [ ! -f ~/.Xresources_bak ] && [ -f ~/.Xresources ]; then
 	cp ~/.Xresources ~/.Xresources_bak
@@ -129,5 +135,5 @@ create_remmina_desktop_files
 mkdir -p ~/.config/autostart
 ln -s ${DIR}/.config/autostart/*.desktop ~/.config/autostart/ 2>/dev/null
 
-find /usr/share/applications -iname 'nextcloud.desktop' | xargs -I {} ln -s {} ~/.config/autostart
-find /usr/share/applications -iname 'albert.desktop' | xargs -I {} ln -s {} ~/.config/autostart
+#find /usr/share/applications -iname 'nextcloud.desktop' | xargs -I {} ln -s {} ~/.config/autostart
+#find /usr/share/applications -iname 'albert.desktop' | xargs -I {} ln -s {} ~/.config/autostart

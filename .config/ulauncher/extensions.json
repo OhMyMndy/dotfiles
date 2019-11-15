@@ -1,0 +1,37 @@
+{
+    "com.github.pedrotroller.ulauncher-php-packagist": {
+        "id": "com.github.pedrotroller.ulauncher-php-packagist",
+        "url": "https://github.com/PedroTroller/ulauncher-php-packagist",
+        "updated_at": "2019-11-04T10:22:14.538101",
+        "last_commit": "a2b434126665529a458990dc19d866605588d8bf",
+        "last_commit_time": "2019-10-03T12:19:35"
+    },
+    "com.github.fisadev.ulauncher-better-file-browser": {
+        "id": "com.github.fisadev.ulauncher-better-file-browser",
+        "url": "https://github.com/fisadev/ulauncher-better-file-browser",
+        "updated_at": "2019-11-04T10:23:20.721896",
+        "last_commit": "8ec8a0dda09e172de62051cd1f251816ce4af368",
+        "last_commit_time": "2019-09-06T19:20:09"
+    },
+    "com.github.dhollinger.ulauncher-jira": {
+        "id": "com.github.dhollinger.ulauncher-jira",
+        "url": "https://github.com/dhollinger/ulauncher-jira",
+        "updated_at": "2019-11-04T10:23:32.490110",
+        "last_commit": "5c5d2c15a71bc60b85cce79e3b5f22a7b407faf3",
+        "last_commit_time": "2019-09-23T15:51:47"
+    },
+    "com.github.friday.ulauncher-clipboard": {
+        "id": "com.github.friday.ulauncher-clipboard",
+        "url": "https://github.com/friday/ulauncher-clipboard",
+        "updated_at": "2019-11-04T10:55:53.780977",
+        "last_commit": "3e9cab113c6b8b2d4c0c808b219534497ea52efe",
+        "last_commit_time": "2019-06-19T12:51:23"
+    },
+    "com.github.brpaz.ulauncher-docker": {
+        "id": "com.github.brpaz.ulauncher-docker",
+        "url": "https://github.com/brpaz/ulauncher-docker",
+        "updated_at": "2019-11-04T10:57:15.437325",
+        "last_commit": "add2dcdec3c3288236485117a3c2d463a9a3a652",
+        "last_commit_time": "2019-06-22T13:50:35"
+    }
+}

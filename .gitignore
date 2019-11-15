@@ -24,3 +24,4 @@ __pycache__
 *.pyc
 .projectile
 .history
+*.un~

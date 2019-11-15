@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Compton
+StartupWMClass=Compton (GLX backend)
+Exec=/usr/bin/compton --backend glx --paint-on-overlay --vsync opengl-swc
+StartupNotify=true
+Terminal=false
+Type=Application
+Icon=terminal
+Categories=Utility;

@@ -11,13 +11,18 @@ finish() {
 trap finish EXIT
 
 touch "$tmp_config"
-cat "$HOME/.teamocil/$config.yml" > "$tmp_config"
+
+if [ -f "$HOME/.teamocil/$config.yml" ]; then
+	cat "$HOME/.teamocil/$config.yml" > "$tmp_config"
+else
+	exec ~/.gem/bin/teamocil $@
+fi
 
 
 # Execute all commands before
 set +e
 IFS=$'\n'
-before_commands=$(cat $tmp_config | grep '^#before' | cut -d' ' -f2-)
+before_commands=$(cat $tmp_config | grep -E '^#before' | cut -d' ' -f2-)
 for var in ${before_commands}; do
     echo -e "\e[34mExecuting command before: $var\e[39m"
     eval $var
@@ -49,7 +54,8 @@ done
 # Remove all variables which cannot be replaced
 sed -i -e "s#{{[^}]*}}##g" $tmp_config
 
-~/.gem/bin/teamocil "_tmp_$config"
+shift
+~/.gem/bin/teamocil "_tmp_$config" $@
 
 exit
 
@@ -57,9 +63,9 @@ exit
 ## Example yml file ##
 ######################
 
-#before tmux list-panes -a -F "#I:#W" | grep "Artisan ${PWD##*/}" | cut -d: -f1 | uniq | sed '/^\s*$/d' | xargs -I{} tmux kill-window -t {}
-#before export project=${PWD##*/}
-#before export pwd=$(pwd)
+# before tmux list-panes -a -F "#I:#W" | grep "Artisan ${PWD##*/}" | cut -d: -f1 | uniq | sed '/^\s*$/d' | xargs -I{} tmux kill-window -t {}
+# before export project=${PWD##*/}
+# before export pwd=$(pwd)
 
 windows:
   - name: Artisan {{project}}

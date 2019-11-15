@@ -1,9 +1,9 @@
 [Desktop Entry]
 Name=Scrcpy
 StartupWMClass=Scrcpy
-Exec=/bin/bash -c "cd /home/mandy/src/scrcpy-docker && xhost + local:docker && docker-compose run --rm -T scrcpy scrcpy -S; sleep 3"
+Exec=scrcpy -S
 StartupNotify=true
-Terminal=true
+Terminal=false
 Type=Application
 Icon=android-sdk
 Categories=Utility;

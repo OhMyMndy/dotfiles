@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+
+# Based on https://gist.github.com/vshymanskyy/a44ff7af2848653e91f269910cb9d50f
+
+scrcpy_short_opts=$(scrcpy --help 2>&1 | grep -Eo "\s\-[a-zA-Z]" | sed -E 's#-| ##g' | tr -d '\n')
+
+# @todo
+#scrcpy_long_opts_without_value=$(scrcpy --help 2>&1 | grep -Eo "\s\-[a-zA-Z]" | sed -E 's#-| ##g' | tr -d '\n')
+getopt --long density:,null-keyboard,landscape,leena -- "$@" &>/dev/null
+set -e
+
+args=""
+# extract options and their arguments into variables.
+while true ; do
+	# Skip all short opts from scrcpy
+	if [[ "$scrcpy_short_opts" != *"${1//-/}"* ]];
+	then
+		case "$1" in
+			--density) density=$2 ; shift 2;;
+			--null-keyboard) null_keyboard=1; shift ;;
+			--landscape) landscape=1; shift;;
+			--leena) leena=1; shift;;
+	        --) shift ; break ;;
+	        *) echo "Unknown flag '$1'"; exit 2; break ;;
+	    esac
+		continue
+	
+	fi
+	args="$args $1"
+	if [[ "$1" = "" ]]; then break; fi
+	shift
+done
+
+
+ime=$(adb shell settings get secure default_input_method)
+wm_density=$(adb shell wm density | tail -1 | grep -Eo '[0-9]+')
+
+function setup() {
+	# Disable Keyboard
+	if [[ -v null_keyboard ]]; then adb shell ime set com.wparam.nullkeyboard/.NullKeyboard; fi
+	if [[ -v density ]]; then adb shell wm density $density; fi
+	if [[ -v landscape ]]; then
+		adb shell settings put system user_rotation 3
+		adb shell settings put system accelerometer_rotation 0
+	fi
+	if [[ -v leena ]]; then adb shell monkey -p de.m_lang.leena 1; fi
+}
+
+restored=0
+function restore() {
+	if [[ $restored -eq 0 ]];
+	then
+		restored=1
+		echo
+		echo "Restoring keyboard to $ime"
+		adb shell ime set $ime
+		echo "Restoring wm density to $wm_density"
+		adb shell wm density $wm_density
+
+		if [[ -v leena ]]; then adb shell am force-stop de.m_lang.leena; fi
+		adb shell settings put system user_rotation 0
+		adb shell settings put system accelerometer_rotation 1
+	fi
+}
+
+trap restore  0 1 2 3 6 14 15
+
+setup
+scrcpy $args
+restore
+
