@@ -1,7 +1,7 @@
 [Desktop Entry]
-Name=Scrcpy
+Name=Scrcpy landscape
 StartupWMClass=Scrcpy
-Exec=scrcpy -S
+Exec=sh -c "\$HOME/bin/scrcpy_wrapper --density 280 --landscape --null-keyboard -S"
 StartupNotify=true
 Terminal=false
 Type=Application

@@ -18,6 +18,10 @@ mkdir -p ~/Screenshots
 
 link-file "$DIR" ".config/copyq/copyq.conf"
 
+
+mkdir -p ~/dotfiles/.config/Thunar
+link-file "$DIR" ".config/Thunar/uca.xml"
+
 link-file "$DIR" ".vimrc"
 mkdir -p ~/.vim/{sessions,undo-dir,bundle,view}
 

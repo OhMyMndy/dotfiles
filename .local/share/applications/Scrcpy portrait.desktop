@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Scrcpy portrait
+StartupWMClass=Scrcpy
+Exec=sh -c "\$HOME/bin/scrcpy_wrapper --density 320 --null-keyboard -S"
+StartupNotify=true
+Terminal=false
+Type=Application
+Icon=android-sdk
+Categories=Utility;

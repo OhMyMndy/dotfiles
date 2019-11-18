@@ -2,11 +2,27 @@
 
 # Based on https://gist.github.com/vshymanskyy/a44ff7af2848653e91f269910cb9d50f
 
+function run() {
+	output=$($@ 2>&1)
+	return_code=$?
+	if [[ $return_code -ne 0 ]];
+	then
+		zenity --question --text="$output\nWould you like to continue?"
+		return_code=$?
+		if [[ $return_code -ne 0 ]]; then
+			return 1
+			exit
+		fi
+	fi
+	echo $output
+}
+typeset -fx run
+
 scrcpy_short_opts=$(scrcpy --help 2>&1 | grep -Eo "\s\-[a-zA-Z]" | sed -E 's#-| ##g' | tr -d '\n')
 
 # @todo
 #scrcpy_long_opts_without_value=$(scrcpy --help 2>&1 | grep -Eo "\s\-[a-zA-Z]" | sed -E 's#-| ##g' | tr -d '\n')
-getopt --long density:,null-keyboard,landscape,leena -- "$@" &>/dev/null
+getopt --long density:,font-scale:,null-keyboard,landscape,leena -- "$@" &>/dev/null
 set -e
 
 args=""
@@ -20,6 +36,7 @@ while true ; do
 			--null-keyboard) null_keyboard=1; shift ;;
 			--landscape) landscape=1; shift;;
 			--leena) leena=1; shift;;
+			--font-scale) font_scale="$2"; shift 2;;
 	        --) shift ; break ;;
 	        *) echo "Unknown flag '$1'"; exit 2; break ;;
 	    esac
@@ -32,18 +49,19 @@ while true ; do
 done
 
 
-ime=$(adb shell settings get secure default_input_method)
-wm_density=$(adb shell wm density | tail -1 | grep -Eo '[0-9]+')
-
+ime=$(run adb shell settings get secure default_input_method)
+wm_density=$(run adb shell wm density | tail -1 | grep -Eo '[0-9]+')
+original_font_scale="$(run adb shell settings get system font_scale)"
 function setup() {
 	# Disable Keyboard
-	if [[ -v null_keyboard ]]; then adb shell ime set com.wparam.nullkeyboard/.NullKeyboard; fi
-	if [[ -v density ]]; then adb shell wm density $density; fi
+	if [[ -v null_keyboard ]]; then run adb shell ime set com.wparam.nullkeyboard/.NullKeyboard; fi
+	if [[ -v density ]]; then run adb shell wm density "$density"; fi
 	if [[ -v landscape ]]; then
-		adb shell settings put system user_rotation 3
-		adb shell settings put system accelerometer_rotation 0
+		run adb shell settings put system user_rotation 3
+		run adb shell settings put system accelerometer_rotation 0
 	fi
-	if [[ -v leena ]]; then adb shell monkey -p de.m_lang.leena 1; fi
+	if [[ -v leena ]]; then run adb shell monkey -p de.m_lang.leena 1; fi
+	if [[ -v font_scale ]]; then run adb shell settings put system font_scale "$font_scale"; fi
 }
 
 restored=0
@@ -53,13 +71,14 @@ function restore() {
 		restored=1
 		echo
 		echo "Restoring keyboard to $ime"
-		adb shell ime set $ime
+		adb shell ime set "$ime"
 		echo "Restoring wm density to $wm_density"
-		adb shell wm density $wm_density
+		adb shell wm density "$wm_density"
 
 		if [[ -v leena ]]; then adb shell am force-stop de.m_lang.leena; fi
 		adb shell settings put system user_rotation 0
 		adb shell settings put system accelerometer_rotation 1
+		adb shell settings put system font_scale "$original_font_scale"
 	fi
 }
 
