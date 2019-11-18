@@ -309,6 +309,17 @@ function settings() {
 
  		xfconf-query -c xfce4-session -p /compat/LaunchGNOME -s true
 		xfconf-query -c xsettings -p /Net/IconThemeName -s Papirus-Light
+
+		# Notifyd
+		xfconf-query -c xfce4-notifyd -p /log-level -s 1
+		xfconf-query -c xfce4-notifyd -p /log-level-apps -s 0
+		xfconf-query -c xfce4-notifyd -p /notification-log -s true
+		xfconf-query -c xfce4-notifyd -p /notify-location -s 2
+		xfconf-query -c xfce4-notifyd -p /primary-monitor -s 0
+		xfconf-query -c xfce4-notifyd -p /theme -s Greybird
+
+
+
 	fi
 
 
