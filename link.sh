@@ -87,6 +87,11 @@ chmod +x -R ~/bin/
 rm -rf ~/bin/bin
 
 
+if ! which fzf >/dev/null 2>&1
+then
+	git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+	yes | ~/.fzf/install
+fi
 mkdir -p ~/.tmux
 ln -sf ~/.byobu/.tmux.conf ~/.tmux.conf
 
@@ -141,3 +146,16 @@ ln -s ${DIR}/.config/autostart/*.desktop ~/.config/autostart/ 2>/dev/null
 
 #find /usr/share/applications -iname 'nextcloud.desktop' | xargs -I {} ln -s {} ~/.config/autostart
 #find /usr/share/applications -iname 'albert.desktop' | xargs -I {} ln -s {} ~/.config/autostart
+
+
+
+if [[ $(uname -o) = 'Android' ]];
+then
+	mkdir -p ~/.config/openbox
+	
+	link-file "$DIR" 'termux/.config/openbox' '.config/openbox'
+	link-file "$DIR" 'termux/.vnc' '.vnc'
+
+	installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/Iosevka.zip Iosevka
+	cp ~/.local/share/fonts/Iosevka/Iosevka\ Term\ Nerd\ Font\ Complete\ Mono.ttf ~/.termux/font.ttf
+fi

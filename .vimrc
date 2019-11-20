@@ -108,6 +108,12 @@ map <C-PageUp> :tabp<CR>
 map <C-PageDown> :tabn<CR>
 
 map <C-t> :TagbarToggle<CR>
+let g:tagbar_autofocus = 1
+let g:tagbar_autoclose = 1
+
+
+
+nnoremap <C-> :ls<CR>
 
 " Easier split navigation
 nnoremap <C-J> <C-W><C-J>

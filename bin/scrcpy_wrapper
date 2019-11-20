@@ -19,6 +19,8 @@ function run() {
 typeset -fx run
 
 scrcpy_short_opts=$(scrcpy --help 2>&1 | grep -Eo "\s\-[a-zA-Z]" | sed -E 's#-| ##g' | tr -d '\n')
+scrcpy_short_opts_with_argument=$(scrcpy --help 2>&1 | grep -E "\s\-[a-zA-Z], \-\-[a-zA-Z0-9:-]+ [a-zA-Z0-9.:-]+" | grep -Eo "\s\-[a-zA-Z]" | sed -E 's#-| ##g' | tr -d '\n')
+
 
 # @todo
 #scrcpy_long_opts_without_value=$(scrcpy --help 2>&1 | grep -Eo "\s\-[a-zA-Z]" | sed -E 's#-| ##g' | tr -d '\n')
@@ -43,8 +45,19 @@ while true ; do
 		continue
 	
 	fi
-	args="$args $1"
-	if [[ "$1" = "" ]]; then break; fi
+	if [[ "$scrcpy_short_opts_with_argument" = *"${1//-/}"* ]];
+	then
+		args="$args $1 $2"
+		if [[ $# -ne 0 ]]; then 
+			shift
+		fi
+	else
+		args="$args $1"
+	fi
+	
+	if [[ $# -eq 0 ]]; then 
+		break
+	fi
 	shift
 done
 

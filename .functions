@@ -251,8 +251,8 @@ function installFont() {
 }
 
 function installFontsFromZip() {
-	fontUrl="$1"
-	fontName="$2"
+	local fontUrl="$1"
+	local fontName="$2"
 	if [ "$(uname)" = 'Darwin' ]; then
 		mkdir -p ~/Library/Fonts
 		cd ~/Library/Fonts
@@ -262,9 +262,9 @@ function installFontsFromZip() {
 	fi
 
 	if [ ! -d "$fontName" ]; then
-		rm -f "/tmp/$fontName.zip"
-    	curl -fLo "/tmp/$fontName.zip" "$fontUrl"
-		unzip "/tmp/$fontName.zip" -d "$fontName"
+		rm -f "${TMPDIR:-/tmp}/$fontName.zip"
+    	curl -fLo "${TMPDIR:-/tmp}/$fontName.zip" "$fontUrl"
+		unzip "${TMPDIR:-/tmp}/$fontName.zip" -d "$fontName"
 		fontsAdded=1
     deleteWindowsFonts
 	fi
@@ -287,10 +287,10 @@ function installGtkTheme() {
 		cd ~/.themes || exit 1
 		if [ ! -d "$themeName" ]; then
 			tmp_dir=$(mktemp -d)
-			rm -f "/tmp/$themeName.zip"
-			curl -fLo "/tmp/$themeName.zip" "$themeUrl"
+			rm -f "${TMPDIR:-/tmp}/$themeName.zip"
+			curl -fLo "${TMPDIR:-/tmp}/$themeName.zip" "$themeUrl"
 			cd "${tmp_dir}" || exit 2
-			unzip "/tmp/$themeName.zip"
+			unzip "${TMPDIR:-/tmp}/$themeName.zip"
 			mkdir -p "$HOME/.themes/$themeName"
 			mv "${tmp_dir}"/*/** "$HOME/.themes/$themeName"
 			rm -rf "${tmp_dir}"
@@ -326,7 +326,7 @@ function installJetbrainsPlugin() {
 
     echo "plugindirs: ${pluginDirs}"
 
-    tmpZipFileName="/tmp/jetbrainsPlugin.zip"
+    tmpZipFileName="${TMPDIR:-/tmp}/jetbrainsPlugin.zip"
     curl -L -o "${tmpZipFileName}" "${zipUrl}"
 #    echo $?
 
@@ -583,20 +583,25 @@ link-file() {
     # file relative to root folder
     arg="$2"
     source="${dir}/$arg"
-    original="${HOME}/$arg"
+    target="${HOME}/$arg"
 
-    if [ "$arg" = '' ]; then
+    # Optional third argument to override the targer
+    if [[ $# -eq 3 ]]; then
+        target="$3"
+    fi
+
+    if [[ $arg = '' ]]; then
         echo "You need to provide source folder as first parameter"
         return 1
     fi
 
     if [ ! -f "$source" ] && [ ! -d "$source" ]; then
-        echo "File or folder '$source' ($original) does not exist!"
+        echo "File or folder '$source' ($target) does not exist!"
         return 2
     fi
 
-    rm -rf "$original"
-    ln -sf "$source" "$original"
+    rm -rf "$target"
+    ln -sf "$source" "$target"
 }
 
 install-service() {

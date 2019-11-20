@@ -172,6 +172,7 @@ export CHEATCOLORS=true
 
 export IP_ADDRESS=$(ip_address)
 export HOSTNAME="$(hostname)"
+export USER="$(whoami)"
 
 # ssh-agent omzsh should do the same
 if [ "$(uname -s)" != 'Darwin' ]; then
@@ -182,7 +183,7 @@ if [ "$(uname -s)" != 'Darwin' ]; then
 
     # Link the latest ssh-agent socket
     mkdir -p ~/.ssh/
-    ln -sf "$(find /tmp -maxdepth 2 -type s -name 'agent*' -user $USER -printf '%T@ %p\n' 2>/dev/null |sort -n|tail -1|cut -d' ' -f2)" ~/.ssh/ssh_auth_sock
+    ln -sf "$(find  ${TMPDIR:-/tmp} -maxdepth 2 -type s -name 'agent*' -user $(whoami) -printf '%T@ %p\n' 2>/dev/null |sort -n|tail -1|cut -d' ' -f2)" ~/.ssh/ssh_auth_sock
     ssh-add -l > /dev/null || ssh-add
 
     export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock
@@ -227,4 +228,9 @@ ZSH_HIGHLIGHT_PATTERNS+=('rm -rf *' 'fg=white,bold,bg=red')
 if which direnv >/dev/null 2>&1
 then
 	eval "$(direnv hook zsh)"
+fi
+
+# https://stackoverflow.com/questions/6429515/stty-hupcl-ixon-ixoff
+if [[ -t 0 ]]; then
+	stty -ixon -ixoff
 fi
