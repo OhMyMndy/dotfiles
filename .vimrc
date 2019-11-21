@@ -14,6 +14,7 @@ Plugin 'tpope/vim-obsession'
 Plugin 'StanAngeloff/php.vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
 Plugin 'dense-analysis/ale'
 Plugin 'airblade/vim-gitgutter'
 " Plugin 'Valloric/YouCompleteMe'
@@ -75,7 +76,8 @@ set splitright
 " Switch between buffers without having to save each buffer
 set hidden
 
-
+set relativenumber
+set number
 
 if has("persistent_undo")
     set undodir=~/.vim/undo-dir
@@ -132,3 +134,17 @@ highlight DiffText   cterm=bold ctermfg=10 ctermbg=88 gui=none guifg=bg guibg=Re
 
 let g:airline#extensions#tabline#enabled = 1
 
+
+"This unsets the "last search pattern" register by hitting return
+nnoremap <CR> :noh<CR><CR>
+
+" https://stackoverflow.com/questions/1873736/vim-ctrlp-plugin-manually-set-root-search-directory
+let g:ctrlp_working_path_mode = 'wra'
+let g:ctrlp_show_hidden = 1
+
+if exists("g:ctrl_user_command")
+    unlet g:ctrlp_user_command
+endif
+set wildignore+=*.o,*.a,*.so,*.pyc,*.swp,*/.history/*,*/.git/*,*/.idea/*,*.un~
+
+let g:airline_theme='papercolor'
