@@ -6,6 +6,7 @@ if [ $UID -eq 0 ]; then
 	exit 99
 fi
 
+fontsAdded=0
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
@@ -71,7 +72,7 @@ function minimal() {
 
 	# Esential X tools
 	# kdeconnect
-	sudo apt install -y shutter redshift-gtk xfce4-terminal xfce4-genmon-plugin chromium-browser seahorse galculator orage ristretto \
+	sudo apt install -y "shutter" redshift-gtk xfce4-terminal xfce4-genmon-plugin chromium-browser seahorse galculator orage ristretto \
 		xsel xclip arandr wmctrl xscreensaver flatpak compton
 
 	if ! which copyq &>/dev/null; then
@@ -156,6 +157,7 @@ function general() {
 
 	if [ ! -f /usr/NX/bin/nxplayer ]
 	then
+		# shellcheck disable=1001
 		_install_deb_from_url "$(curl https://www.nomachine.com/download/download\&id\=6 2>/dev/null | grep -E -o "http.*download.*deb")"
 	fi
 
@@ -239,17 +241,17 @@ function shutter() {
 		_install_deb_from_url "https://launchpad.net/ubuntu/+archive/primary/+files/libgoocanvas3_1.0.0-1_amd64.deb"
 		_install_deb_from_url "https://launchpad.net/ubuntu/+archive/primary/+files/libgoo-canvas-perl_0.06-2ubuntu3_amd64.deb"
 	fi
-	sudo apt install shutter -y
+	sudo apt install "shutter" -y
 
 }
 
 function groups() {
-	sudo groupadd docker
+	sudo groupadd "docker"
 	sudo groupadd vboxusers
 	sudo groupadd mail
 	sudo groupadd sambashare
 	
-	sudo usermod -aG docker mandy
+	sudo usermod -aG "docker" mandy
 	sudo usermod -aG mail mandy
 	sudo usermod -aG disk mandy
 	sudo usermod -aG cdrom mandy
@@ -269,8 +271,7 @@ function fonts() {
 	installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/Iosevka.zip Iosevka
 	installFontsFromZip https://github.com/IBM/plex/releases/download/v1.4.1/OpenType.zip "IBM Plex" 
 	
-	
-	if [ "$fontsAdded" = 1 ]; then
+	if [[ $fontsAdded -eq 1 ]]; then
 		fc-cache -f -v
 	fi
 }
@@ -282,7 +283,14 @@ function settings() {
 		# Execute executables in Thunar instead of editing them on double click: https://bbs.archlinux.org/viewtopic.php?id=194464
 		xfconf-query --channel thunar --property /misc-exec-shell-scripts-by-default --create --type bool --set true
 
-		# @todo disable screentearing here and use compton instead (see autostart function)
+	
+		# XFT
+		xfconf-query -c xsettings -p /Xft/Antialias -s 1
+		xfconf-query -c xsettings -p /Xft/Hinting -s 1
+		xfconf-query -c xsettings -p /Xft/HintStyle -s "hintslight"
+		xfconf-query -c xsettings -p /Xft/Lcdfilter -s "lcddefault"
+		xfconf-query -c xsettings -p /Xft/RGBA -s "rgb"
+
 
 		xfconf-query -c xsettings -p /Gtk/FontName -s "Noto Sans Regular 10"
 		# xfconf-query -c xsettings -p /Gtk/MonospaceFontName -s "FantasqueSansMono Nerd Font Mono 10"
@@ -313,8 +321,9 @@ function settings() {
 		xfconf-query -c xfce4-notifyd -p /primary-monitor -s 0
 		xfconf-query -c xfce4-notifyd -p /theme -s Greybird
 
-
-
+		# Keyboard
+		xfconf-query -c keyboards -p /Default/KeyRepeat/Delay -s 300
+		xfconf-query -c keyboards -p /Default/KeyRepeat/Rate -s 26
 	fi
 
 
@@ -443,7 +452,7 @@ function qt_dev() {
 
 function jupyter() {
 	pip3 install jupyterlab
-	npm config set prefix $HOME/.local
+	npm config set prefix "$HOME/.local"
 	npm install -g ijavascript && ijsinstall
 	pip3 install bash_kernel && python3 -m bash_kernel.install
 	pip3 install gnuplot_kernel && python3 -m gnuplot_kernel install --user
@@ -471,9 +480,11 @@ function php() {
 
 	if ! which composer &>/dev/null
 	then
+		# shellcheck disable=SC2091
 		curl -sS https://getcomposer.org/installer | $(which php) && sudo mv composer.phar /usr/local/bin/composer
 	fi
-	curl -sS https://litipk.github.io/Jupyter-PHP-Installer/dist/jupyter-php-installer.phar >  ${TMPDIR:-/tmp}/jupyter.php; $(which php)  ${TMPDIR:-/tmp}/jupyter.php install; rm  ${TMPDIR:-/tmp}/jupyter.php
+	# shellcheck disable=SC2091
+	curl -sS https://litipk.github.io/Jupyter-PHP-Installer/dist/jupyter-php-installer.phar >  "${TMPDIR:-/tmp}/jupyter.php"; $(which php)  "${TMPDIR:-/tmp}/jupyter.php" install; rm  "${TMPDIR:-/tmp}/jupyter.php"
 }
 
 
@@ -519,7 +530,7 @@ function docker() {
 	# 	sudo apt install podman -y
 	# fi
 
-	cd ${TMPDIR:-/tmp}
+	cd "${TMPDIR:-/tmp}"
 	curl -L https://github.com/jesseduffield/lazydocker/releases/download/v0.7.1/lazydocker_0.7.1_Linux_x86_64.tar.gz > lazydocker.tgz
 	tar xzf lazydocker.tgz
 	sudo install lazydocker /usr/local/bin/
@@ -529,7 +540,7 @@ function polybar() {
 	sudo apt install -y build-essential git cmake cmake-data pkg-config python3-sphinx libcairo2-dev libxcb1-dev libxcb-util0-dev libxcb-randr0-dev libxcb-composite0-dev python-xcbgen xcb-proto libxcb-image0-dev libxcb-ewmh-dev libxcb-icccm4-dev
 	sudo apt install -y libxcb-xkb-dev libxcb-xrm-dev libxcb-cursor-dev libasound2-dev libpulse-dev i3-wm libjsoncpp-dev libmpdclient-dev libcurl4-openssl-dev libnl-genl-3-dev
 
-	cd ${TMPDIR:-/tmp}
+	cd "${TMPDIR:-/tmp}"
 	git clone https://github.com/jaagr/polybar.git
 	cd polybar && ./build.sh --all-features --gcc --install-config --auto
 }
@@ -581,7 +592,8 @@ function firewall() {
 	sudo ufw allow 8080/tcp
 
 	# access local hosts through vpn
-	sudo ip route add 192.168.10.0/24 dev $(ls /sys/class/net | grep "^en*" | head -1)  
+	# shellcheck disable=SC2010
+	sudo ip route add 192.168.10.0/24 "dev" "$(ls /sys/class/net | grep "^en*" | head -1)"
 }
 
 function git_config() {
@@ -600,6 +612,8 @@ function autostart() {
 }
 
 set -e
+
+# shellcheck source=../../.functions
 source "$DIR/../.functions"
 set +e
 
@@ -614,8 +628,8 @@ function _print_usage() {
 
 	for f in $(declare -F); do
 		f="${f:11}"
-		function_location="$(declare -f -F $f | cut -d' ' -f3)"
-		if [[ "${f:0:1}" != "_" ]] &&  [[ "$function_location" == "$BASH_SOURCE" ]]; then
+		function_location="$(declare -f -F "$f" | cut -d' ' -f3)"
+		if [[ "${f:0:1}" != "_" ]] &&  [[ "$function_location" == "${BASH_SOURCE[0]}" ]]; then
 			echo "  --${f}"
 		fi
 	done
@@ -638,7 +652,7 @@ else
 			exit 0
 		fi
 		function_location="$(declare -F $function | cut -d' ' -f3)"
-		if [[ -n "$(declare -f -F $function)" ]] && [[ "$function_location" == "$BASH_SOURCE" ]] && [ $starts_with_underscore -eq 0 ]; then
+		if [[ -n "$(declare -f -F "$function")" ]] && [[ "$function_location" == "${BASH_SOURCE[0]}" ]] && [ $starts_with_underscore -eq 0 ]; then
 			echo "Executing $function"
 			$function
 		else

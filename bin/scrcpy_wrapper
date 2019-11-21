@@ -3,7 +3,7 @@
 # Based on https://gist.github.com/vshymanskyy/a44ff7af2848653e91f269910cb9d50f
 
 function run() {
-	output=$($@ 2>&1)
+	output=$("$@" 2>&1)
 	return_code=$?
 	if [[ $return_code -ne 0 ]];
 	then
@@ -14,9 +14,13 @@ function run() {
 			exit
 		fi
 	fi
-	echo $output
+	echo "$output"
 }
+
+# https://unix.stackexchange.com/questions/65751/how-to-get-functions-propagated-to-subshell
+# shellcheck disable=SC2034
 typeset -fx run
+
 
 scrcpy_short_opts=$(scrcpy --help 2>&1 | grep -Eo "\s\-[a-zA-Z]" | sed -E 's#-| ##g' | tr -d '\n')
 scrcpy_short_opts_with_argument=$(scrcpy --help 2>&1 | grep -E "\s\-[a-zA-Z], \-\-[a-zA-Z0-9:-]+ [a-zA-Z0-9.:-]+" | grep -Eo "\s\-[a-zA-Z]" | sed -E 's#-| ##g' | tr -d '\n')
@@ -62,9 +66,12 @@ while true ; do
 done
 
 
-ime=$(run adb shell settings get secure default_input_method)
-wm_density=$(run adb shell wm density | tail -1 | grep -Eo '[0-9]+')
+original_ime=$(run adb shell settings get secure default_input_method)
+original_wm_density=$(run adb shell wm density | tail -1 | grep -Eo '[0-9]+')
 original_font_scale="$(run adb shell settings get system font_scale)"
+original_user_rotation="$(run adb shell settings get system user_rotation)"
+original_accelerometer_rotation="$(run adb shell settings get system accelerometer_rotation)"
+
 function setup() {
 	# Disable Keyboard
 	if [[ -v null_keyboard ]]; then run adb shell ime set com.wparam.nullkeyboard/.NullKeyboard; fi
@@ -83,14 +90,12 @@ function restore() {
 	then
 		restored=1
 		echo
-		echo "Restoring keyboard to $ime"
-		adb shell ime set "$ime"
-		echo "Restoring wm density to $wm_density"
-		adb shell wm density "$wm_density"
+		adb shell ime set "$original_ime"
+		adb shell wm density "$original_wm_density"
 
 		if [[ -v leena ]]; then adb shell am force-stop de.m_lang.leena; fi
-		adb shell settings put system user_rotation 0
-		adb shell settings put system accelerometer_rotation 1
+		adb shell settings put system user_rotation "$original_user_rotation"
+		adb shell settings put system accelerometer_rotation "$original_accelerometer_rotation"
 		adb shell settings put system font_scale "$original_font_scale"
 	fi
 }
@@ -98,6 +103,7 @@ function restore() {
 trap restore  0 1 2 3 6 14 15
 
 setup
+
+# shellcheck disable=SC2086
 scrcpy $args
 restore
-
