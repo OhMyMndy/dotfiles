@@ -1,9 +1,16 @@
 #!/usr/bin/env bash
 
+OLD_PWD="$PWD"
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd "$DIR"
 
-file_name="$1/commands.txt"
+if [[ $# -eq 1 ]];
+then
+	file_name="$@/commands.txt"
+else
+	cd "$OLD_PWD"
+	file_name="$PWD/commands.txt"
+fi
 
 if [ ! -f "$file_name" ]; then
     echo "File '$file_name' does not exist!" >&2
@@ -19,6 +26,7 @@ else
     cd "$1"
 fi
 
-
-
+export PATH="$HOME/.fzf/bin/:$PATH"
+echo $PATH
+echo $file_name
 eval "$(cat "$file_name" | fzf --height=33 --no-sort --tac)"

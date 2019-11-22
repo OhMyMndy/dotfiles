@@ -10,8 +10,7 @@ Xft.lcdfilter: lcddefault
 
 XTerm*renderFont: true
 
-!XTerm*faceName: IBMPlexMono\ Nerd\ Font\ Mono\ :style=Regular
-XTerm*faceName: Iosevka\ Nerd\ Font\ Mono\ :style=Regular
+XTerm*faceName: Iosevka\ Nerd\ Font\ Mono:style=Regular
 XTerm*faceSize: 11
 XTerm*eightBitInput: false
 XTerm*selectToClipboard:false
@@ -29,39 +28,39 @@ XTerm*VT100.Translations:       #override\n\
 
 
 
-#define BACKGROUND #101010
-#define FOREGROUND #ffffff
+#define BACKGROUND #000000
+#define FOREGROUND #eaeaea
 
 ! Black
-#define COLOR0     #1a1b21
-#define COLOR8     #959498
+#define COLOR0     #000000
+#define COLOR8     #666666
 
 ! Red
-#define COLOR1     #ff1835
-#define COLOR9     #ff1835
+#define COLOR1     #fb0120
+#define COLOR9     #fb0120
 
 ! Green
-#define COLOR2     #31ff7f
-#define COLOR10    #31ff7f
+#define COLOR2     #52e75c
+#define COLOR10    #52e75c
 
 ! Yellow
-#define COLOR3     #f3ff4d
-#define COLOR11    #f3ff4d
+#define COLOR3     #fe5004
+#define COLOR11    #fe5004
 
 ! Blue
-#define COLOR4     #39c2ed
-#define COLOR12    #39c2ed
+#define COLOR4     #24c5e8
+#define COLOR12    #24c5e8
 
 ! Purple / Magenta
-#define COLOR5     #ff68d1
-#define COLOR13    #ff68d1
+#define COLOR5     #e254c6
+#define COLOR13    #e254c6
 
 ! Cyan
-#define COLOR6     #169375
-#define COLOR14    #169375
+#define COLOR6     #58dac1
+#define COLOR14    #58dac1
 
 ! White
-#define COLOR7     #dbdbdb
+#define COLOR7     #eaeaea
 #define COLOR15    #ffffff
 
 #define COLOR16    #3d96b7

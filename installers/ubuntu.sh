@@ -292,9 +292,7 @@ function settings() {
 		xfconf-query -c xsettings -p /Xft/RGBA -s "rgb"
 
 
-		xfconf-query -c xsettings -p /Gtk/FontName -s "Noto Sans Regular 10"
-		# xfconf-query -c xsettings -p /Gtk/MonospaceFontName -s "FantasqueSansMono Nerd Font Mono 10"
-		# xfconf-query -c xsettings -p /Gtk/MonospaceFontName -s "DroidSansMono Nerd Font 10"
+		xfconf-query -c xsettings -p /Gtk/FontName -s "Lato Medium 10"
 		xfconf-query -c xsettings -p /Gtk/MonospaceFontName -s "Iosevka Nerd Font Mono 10"
 		xfconf-query -c xsettings -p /Gtk/DecorationLayout -s "menu:minimize,maximize,close"
 		
@@ -302,7 +300,7 @@ function settings() {
 
 		xfconf-query -c xsettings -p /Net/ThemeName -s Adwaita
 		xfconf-query -c xfwm4 -p /general/theme -s Bluebird
-		xfconf-query -c xfwm4 -p /general/title_font -s "Noto Sans Regular 10"
+		xfconf-query -c xfwm4 -p /general/title_font -s "Lato Medium 10"
 		xfconf-query -c xfwm4 -p /general/button_layout  -s "O|HMC"
 		xfconf-query -c xfwm4 -p /general/cycle_preview -s false
 		xfconf-query -c xfwm4 -p /general/mousewheel_rollup  -s false
