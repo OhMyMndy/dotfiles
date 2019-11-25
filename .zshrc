@@ -1,13 +1,15 @@
+# shellcheck shell=bash
+# shellcheck source-path=../
 
-# shellcheck source=z.zsh
-source $HOME/z.sh
+# shellcheck source=./z.sh
+source "$HOME/z.sh"
 export ZSH=$HOME/.oh-my-zsh
 export ZSH_THEME="mandy"
 
 #zstyle ':completion:*' use-cache yes
 
 # shellcheck source=.functions
-source $HOME/.functions
+source "$HOME/.functions"
 
 detect_os
 
@@ -15,6 +17,7 @@ detect_os
 # sysadmin-util https://github.com/skx/sysadmin-util
 
 plugins=(
+    adb # only works with adb command in path
     colored-man-pages
     command-not-found
     cp # This plugin defines a cpv function that uses rsync so that you get the features and security of this command.
@@ -53,14 +56,14 @@ fi
 # 	compinit -C;
 # fi
 
-if [ -f $HOME/.bash_aliases ]; then
+if [[ -f $HOME/.bash_aliases ]]; then
     # shellcheck source=.bash_aliases
-    source $HOME/.bash_aliases
+    source "$HOME/.bash_aliases"
 fi
 
-if [ -f $HOME/.profile ]; then
+if [[ -f $HOME/.profile ]]; then
     # shellcheck source=.profile
-    source $HOME/.profile
+    source "$HOME/.profile"
 fi
 
 
@@ -70,16 +73,17 @@ zstyle ':notify:*' success-title "Command finished (in #{time_elapsed} seconds)"
 
 zstyle :omz:plugins:ssh-agent agent-forwarding on
 
-if [ -f $HOME/.oh-my-zsh/oh-my-zsh.sh ]; then
-    # shellcheck source=.oh-my-zsh/oh-my-zsh.sh
-    source $HOME/.oh-my-zsh/oh-my-zsh.sh
+if [[ -f $HOME/.oh-my-zsh/oh-my-zsh.sh ]]; then
+    # shellcheck source=./.oh-my-zsh/oh-my-zsh.sh
+    # shellcheck disable=SC1094
+    source "$HOME/.oh-my-zsh/oh-my-zsh.sh"
 fi
 
 
-if [ -f $HOME/bin/commands-to-aliases ]; then
-    $HOME/bin/commands-to-aliases > $HOME/.aliases
-    # shellcheck source=.aliases
-    source $HOME/.aliases
+if [[ -f $HOME/bin/commands-to-aliases ]]; then
+    "$HOME/bin/commands-to-aliases" > "$HOME/.aliases"
+    # shellcheck source=./.aliases
+    source "$HOME/.aliases"
 fi
 
 # export PATH=$HOME/.config/composer/vendor/bin:$HOME/.composer/vendor/bin:$HOME/.local/bin:/usr/share/doc/git/contrib/diff-highlight:/usr/local/go/bin:$HOME/.go/bin:$HOME/bin:$HOME/bin/appimages:/usr/bin/local:$PATH
@@ -91,7 +95,7 @@ export GEM_PATH=$HOME/.gem
 export GOPATH=$HOME/go
 
 
-if [ -f $HOME/.lessrc ]; then
+if [[ -f $HOME/.lessrc ]]; then
     # shellcheck source=.lessrc
     source ~/.lessrc
 fi
@@ -159,31 +163,41 @@ export EDITOR='vim'
 export TZ='Europe/Brussels'
 export DISABLE_AUTO_TITLE=true
 # Uncomment the following line to enable command auto-correction.
-ENABLE_CORRECTION="true"
+export ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
-COMPLETION_WAITING_DOTS="true"
+export COMPLETION_WAITING_DOTS="true"
 
 export AUTO_TITLE=false
-export ARCH=$(uname -m | sed 's/x86_//;s/i[3-6]86/32/')
-export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on'
+
+ARCH=$(uname -m | sed 's/x86_//;s/i[3-6]86/32/')
+export ARCH
+
+_JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on'
+export _JAVA_OPTIONS
+
 export CHEATCOLORS=true
 
 
-export IP_ADDRESS=$(ip_address)
-export HOSTNAME="$(hostname)"
-export USER="$(whoami)"
+IP_ADDRESS=$(ip_address)
+export IP_ADDRESS
+
+HOSTNAME="$(hostname)"
+export HOSTNAME
+
+USER="$(whoami)"
+export USER
 
 # ssh-agent omzsh should do the same
 if [ "$(uname -s)" != 'Darwin' ]; then
     # export SUDO_ASKPASS=/usr/libexec/openssh/gnome-ssh-askpass
 
     # Launch SSH agent if not running
-    if ! ps aux | grep "$(whoami)" | grep ssh-agent | grep -v grep >/dev/null; then ssh-agent ; fi
+    if ! pgrep -f "ssh-agent" --uid "$(id -u)" &>/dev/null; then ssh-agent ; fi
 
     # Link the latest ssh-agent socket
     mkdir -p ~/.ssh/
-    ln -sf "$(find  ${TMPDIR:-/tmp} -maxdepth 2 -type s -name 'agent*' -user $(whoami) -printf '%T@ %p\n' 2>/dev/null |sort -n|tail -1|cut -d' ' -f2)" ~/.ssh/ssh_auth_sock
+    ln -sf "$(find "${TMPDIR:-/tmp}" -maxdepth 2 -type s -name 'agent*' -user "$(whoami)" -printf '%T@ %p\n' 2>/dev/null |sort -n|tail -1|cut -d' ' -f2)" ~/.ssh/ssh_auth_sock
     ssh-add -l > /dev/null || ssh-add
 
     export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock
@@ -191,8 +205,13 @@ fi
 
 
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" --no-use  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# shellcheck source=.nvm/nvm.sh
+# shellcheck disable=SC1091
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" --no-use  # This loads nvm
+
+# shellcheck source=.nvm/bash_completion
+# shellcheck disable=SC1091
+[ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 
 if [ "$TERM" = "linux" ]; then
@@ -210,22 +229,21 @@ bindkey  "^[[4~"   end-of-line
 #bindkey '^[[1;5C' forward-word
 #bindkey '^[[1;5D' backward-word
 
-[[ "$(tty)" =~ /dev/tty[0-9]* ]] && setupcon
+[[ "$(tty)" =~ /dev/tty[0-9]* ]] && command -v setupcon &>/dev/null && setupcon
 [[ "$(tty)" =~ /dev/tty[0-9]* ]] && [[ "$(hostname)" =~ macbook ]] && set_macbook_term_size
 
-
-
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE=fg=5
-ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)
+export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE=fg=5
+export ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)
 typeset -A ZSH_HIGHLIGHT_PATTERNS
 
+#shellcheck disable=SC2190
 # To have commands starting with `rm -rf` in red:
 ZSH_HIGHLIGHT_PATTERNS+=('rm -rf *' 'fg=white,bold,bg=red')
 
-
+# shellcheck source=./.fzf.zsh 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-if which direnv >/dev/null 2>&1
+if command -v direnv >/dev/null 2>&1
 then
 	eval "$(direnv hook zsh)"
 fi

@@ -37,6 +37,7 @@ function _green_bold() {
 	echo ''
 }
 
+
 function minimal() {
 	sudo add-apt-repository -y "deb http://archive.canonical.com/ $(lsb_release -sc) partner"
 
@@ -457,8 +458,15 @@ function jupyter() {
 }
 
 function dev() {
-	sudo apt install -y shellcheck nodejs npm meld
-
+	sudo apt remove -y shellcheck
+	if ! which shellcheck &>/dev/null; then
+	scversion="stable" # or "v0.4.7", or "latest"
+		wget -qO- "https://storage.googleapis.com/shellcheck/shellcheck-${scversion?}.linux.x86_64.tar.xz" | tar -xJv
+		sudo cp "shellcheck-${scversion}/shellcheck" /usr/bin/
+	fi
+	sudo apt install -y nodejs npm meld
+	# Php language server
+	npm install -g intelephense
 
 	if ! which circleci &>/dev/null
 	then

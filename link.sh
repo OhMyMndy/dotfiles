@@ -24,6 +24,7 @@ link-file "$DIR" ".config/Thunar/uca.xml"
 
 link-file "$DIR" ".vimrc"
 mkdir -p ~/.vim/{sessions,undo-dir,bundle,view}
+link-file "$DIR" ".vim/coc-settings.json"
 
 link-file "$DIR" ".spacemacs"
 
@@ -129,11 +130,8 @@ tmux source ~/.tmux.conf
 source "$HOME/.tmux/plugins/tpm/bin/install_plugins"
 
 
-if [ ! -d "$HOME/.vim/bundle/Vundle.vim" ]; then
-	git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-fi
-
-yes | vim +PluginInstall +qall
+yes | vim +PlugInstall +qall
+vim -c 'CocInstall -sync coc-highlight coc-json coc-html coc-phpls coc-python coc-markdownlint |q'   
 
 bash "$DIR/installers/apps/oh-my-zsh.sh"
 

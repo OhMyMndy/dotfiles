@@ -1,0 +1,13 @@
+{
+    "languageserver": {
+        "intelephense": {
+            "command": "intelephense",
+            "args": ["--stdio"],
+            "filetypes": ["php"],
+            "initializationOptions": {
+                "storagePath": "/tmp/intelephense"
+            }
+        }
+    },
+    "python.linting.enabled": true
+}

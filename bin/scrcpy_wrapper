@@ -28,8 +28,12 @@ scrcpy_short_opts_with_argument=$(scrcpy --help 2>&1 | grep -E "\s\-[a-zA-Z], \-
 
 # @todo
 #scrcpy_long_opts_without_value=$(scrcpy --help 2>&1 | grep -Eo "\s\-[a-zA-Z]" | sed -E 's#-| ##g' | tr -d '\n')
-getopt --long density:,font-scale:,null-keyboard,landscape,leena -- "$@" &>/dev/null
+getopt --long density:,font-scale:,null-keyboard,landscape,leena,disable-animations -- "$@" &>/dev/null
 set -e
+
+
+adb devices | tail -n +2 | grep -Eo -m 1 '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+' &>/dev/null
+is_ip_device=$?
 
 args=""
 # extract options and their arguments into variables.
@@ -42,6 +46,7 @@ while true ; do
 			--null-keyboard) null_keyboard=1; shift ;;
 			--landscape) landscape=1; shift;;
 			--leena) leena=1; shift;;
+			--disable-animations) disable_animations=1; shift;;
 			--font-scale) font_scale="$2"; shift 2;;
 	        --) shift ; break ;;
 	        *) echo "Unknown flag '$1'"; exit 2; break ;;
@@ -51,7 +56,13 @@ while true ; do
 	fi
 	if [[ "$scrcpy_short_opts_with_argument" = *"${1//-/}"* ]];
 	then
-		args="$args $1 $2"
+		if [[ $is_ip_device -eq 0 ]] && [[ $1 = '-b' ]]; then
+			echo "Detecting ADB over tcpip -> Setting bitrate to 2M"
+			args="$args $1 2M"
+		else
+			args="$args $1 $2"
+		fi
+		
 		if [[ $# -ne 0 ]]; then 
 			shift
 		fi
@@ -72,6 +83,10 @@ original_font_scale="$(run adb shell settings get system font_scale)"
 original_user_rotation="$(run adb shell settings get system user_rotation)"
 original_accelerometer_rotation="$(run adb shell settings get system accelerometer_rotation)"
 
+original_transition_animation_scale="$(run adb shell settings get global transition_animation_scale)"
+original_window_animation_scale="$(run adb shell settings get global transition_animation_scale)"
+original_animator_duration_scale="$(run adb shell settings get global animator_duration_scale)"
+
 function setup() {
 	# Disable Keyboard
 	if [[ -v null_keyboard ]]; then run adb shell ime set com.wparam.nullkeyboard/.NullKeyboard; fi
@@ -81,7 +96,14 @@ function setup() {
 		run adb shell settings put system accelerometer_rotation 0
 	fi
 	if [[ -v leena ]]; then run adb shell monkey -p de.m_lang.leena 1; fi
-	if [[ -v font_scale ]]; then run adb shell settings put system font_scale "$font_scale"; fi
+	if [[ -v font_scale ]]; then run adb shell settings put system font_scale "$font_scale"; fi	
+
+	if [[ -v disable_animations ]]; then
+		adb shell settings put global window_animation_scale "0.0"
+		adb shell settings put global transition_animation_scale "0.0"
+		adb shell settings put global animator_duration_scale "0.0"
+	fi
+
 }
 
 restored=0
@@ -97,12 +119,18 @@ function restore() {
 		adb shell settings put system user_rotation "$original_user_rotation"
 		adb shell settings put system accelerometer_rotation "$original_accelerometer_rotation"
 		adb shell settings put system font_scale "$original_font_scale"
+
+		adb shell settings put global window_animation_scale "$original_window_animation_scale"
+		adb shell settings put global transition_animation_scale "$original_transition_animation_scale"
+		adb shell settings put global animator_duration_scale "$original_animator_duration_scale"
 	fi
 }
 
 trap restore  0 1 2 3 6 14 15
 
 setup
+
+echo "Args send to scrcpy: $args"
 
 # shellcheck disable=SC2086
 scrcpy $args
