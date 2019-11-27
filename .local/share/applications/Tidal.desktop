@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Tidal
 StartupWMClass=Tidal
-Exec=google-chrome --app=https://listen.tidal.com --class=tidal &&xdotool search --sync --classname Tidal set_window --class Tidal
+Exec=firefox --new-window https://listen.tidal.com
 StartupNotify=true
 Terminal=false
 Type=Application
