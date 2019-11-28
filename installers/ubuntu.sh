@@ -18,7 +18,7 @@ fi
 fontsAdded=0
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-
+ROOT_DIR="$(git rev-parse --show-toplevel)"
 
 function _install_deb_from_url() {
 	local url="$1"
@@ -106,7 +106,7 @@ function minimal() {
 	# Esential X tools
 	# kdeconnect
 	sudo -E apt install -y "shutter" redshift-gtk xfce4-terminal xfce4-genmon-plugin chromium-browser seahorse galculator orage ristretto \
-		xsel xclip arandr wmctrl xscreensaver flatpak compton
+		xsel xclip arandr wmctrl xscreensaver flatpak compton xfce4-appmenu-plugin 
 
 	_add_repo_or_install_deb 'ppa:hluk/copyq' 'copyq' 'https://github.com/hluk/CopyQ/releases/download/v3.9.3/copyq_3.9.3_Debian_10-1_amd64.deb'
 
@@ -305,13 +305,17 @@ function settings-dark() {
 	fi
 }
 
+
+function settings-xfpanel() {
+	xfpanel-switch load "$ROOT_DIR/.local/share/xfpanel-switch/Mandy Mac OS Style with global menu dual monitor.tar.bz2"
+}
+
+
 function settings() {
-	if command -v xfconf-query &>/dev/null
-	then
+	if which xfconf-query &>/dev/null; then
 		# Execute executables in Thunar instead of editing them on double click: https://bbs.archlinux.org/viewtopic.php?id=194464
 		xfconf-query --channel thunar --property /misc-exec-shell-scripts-by-default --create --type bool --set true
 
-	
 		# XFT
 		xfconf-query -c xsettings -p /Xft/Antialias -s 1
 		xfconf-query -c xsettings -p /Xft/Hinting -s 1
@@ -739,14 +743,14 @@ function autostart() {
 	cp /usr/share/applications/redshift-gtk.desktop ~/.config/autostart/
 	cp /usr/share/applications/com.github.hluk.copyq.desktop ~/.config/autostart/
 	cp /usr/share/applications/nextcloud.desktop ~/.config/autostart/
-	cp ~/dotfiles/.local/share/applications/Compton.desktop ~/.config/autostart/
+	cp "$ROOT_DIR/.local/share/applications/Compton.desktop" ~/.config/autostart/
 	update-desktop-database
 }
 
 set -e
 
 # shellcheck source=../../.functions
-source "$DIR/../.functions"
+source "$ROOT_DIR/.functions"
 set +e
 
 function _print_usage() {
