@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Compton
+Comment=Run compton with GLX backend and opengl-swc vsync
 StartupWMClass=Compton (GLX backend)
 Exec=/usr/bin/compton --backend glx --paint-on-overlay --vsync opengl-swc
 StartupNotify=true

@@ -1,9 +1,14 @@
 #!/usr/bin/env bash
 
+# shellcheck disable=SC2230
+# shellcheck disable=SC2155
+
 if [ $UID -eq 0 ]; then
-    echo "Run this script as non root user please..."
-    exit 99
+	echo "Run this script as non root user please..."
+	exit 99
 fi
+
+trap "exit" INT
 
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"

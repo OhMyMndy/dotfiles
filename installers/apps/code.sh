@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+trap "exit" INT
 
 # Vim syntax highlighting
 code --install-extension fallenwood.viml
@@ -23,3 +24,5 @@ code --install-extension xyz.local-history
 # code --install-extension vscodevim.vim
 code --install-extension dracula-theme.theme-dracula
 code --install-extension atlassian.atlascode
+code --install-extension mads-hartmann.bash-ide-vscode
+code --install-extension gruntfuggly.todo-tree

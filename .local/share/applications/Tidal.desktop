@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Tidal
+Comment=Open Tidal in Firefox
 StartupWMClass=Tidal
 Exec=firefox --new-window https://listen.tidal.com
 StartupNotify=true

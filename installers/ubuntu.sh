@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+# shellcheck disable=SC2230
+# shellcheck disable=SC2155
+
+export DEBIAN_FRONTEND=noninteractive
+
+# to test this script: `docker run --rm -v "${PWD}:${PWD}:ro" -it "ubuntu-mandy:0.1-20.04" -c "$PWD/installers/ubuntu.sh --ulauncher"`
+
+trap "exit" INT
+
 
 if [ $UID -eq 0 ]; then
 	echo "Run this script as non root user please..."
@@ -12,17 +21,40 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 
 function _install_deb_from_url() {
-	url="$1"
-	tmp="$(mktemp)"
+	local url="$1"
+	local tmp="$(mktemp)"
 	curl -L "$url" >> "$tmp"
-	sudo dpkg -i "$tmp"
+	sudo -E dpkg -i "$tmp"
+	sudo -E apt install -f -y
+}
+
+function _add_repo_or_install_deb() {
+	local repo="$1"
+	local package_name="$2"
+	local optional_deb="$3"
+
+	if ! which "$package_name" &>/dev/null; then
+		sudo -E add-apt-repository "$repo" -y
+		sudo -E apt-get update
+		sudo -E apt install -y "$package_name"
+	fi
+
+	# still no package?? remove repo and install deb
+	if ! which "$package_name" &>/dev/null; then
+		sudo -E add-apt-repository --remove "$repo" -y
+		if [[ $optional_deb != '' ]]; then
+			_install_deb_from_url "$optional_deb"
+			sudo -E apt install -f -y
+		fi
+	fi
 }
 
 
 function setup() {
 	upgrade
-	#general
 	minimal
+	general
+	themes
 	locale
 	settings
 	firewall
@@ -39,83 +71,74 @@ function _green_bold() {
 
 
 function minimal() {
-	sudo add-apt-repository -y "deb http://archive.canonical.com/ $(lsb_release -sc) partner"
+	sudo -E add-apt-repository -y "deb http://archive.canonical.com/ $(lsb_release -sc) partner"
 
-	sudo apt update -y
+	sudo -E apt update -y
 
 	# minimal
-	sudo apt install -y file coreutils findutils vlock nnn ack sed tree grep silversearcher-ag
-	sudo apt install -y python-pip python3-pip
+	sudo -E apt install -y file coreutils findutils vlock nnn ack sed tree grep silversearcher-ag
+	sudo -E apt install -y python-pip python3-pip
 	# Misc
-	sudo apt install -y git tig gitg zsh less curl rename rsync openssh-server most multitail trash-cli libsecret-tools parallel ruby ntp vim fonts-noto fonts-roboto
+	sudo -E apt install -y git tig gitg zsh less curl rename rsync openssh-server most multitail trash-cli libsecret-tools parallel ruby ntp vim fonts-noto fonts-roboto
 
 	# Terminal multiplexing
-	sudo apt install -y byobu tmux
+	sudo -E apt install -y byobu tmux
 
 	# System monitoring
-	sudo apt install -y iotop htop nload glances
+	sudo -E apt install -y iotop htop nload glances
 
 	# Networking tools
-	sudo apt install -y nmap iputils-ping dnsutils telnet-ssl mtr-tiny traceroute libnss3-tools netdiscover
+	sudo -E apt install -y nmap iputils-ping dnsutils telnet-ssl mtr-tiny traceroute libnss3-tools netdiscover
 	# smbmap, only available in disco+
 
 	# Cron
-	sudo apt install -y cron cronic
+	sudo -E apt install -y cron cronic
 
 	# Mailing
-	sudo apt install -y msmtp-mta thunderbird
+	sudo -E apt install -y msmtp-mta thunderbird
 
 	# Cli browser with inline images
-	sudo apt install -y w3m w3m-img
+	sudo -E apt install -y w3m w3m-img
 
 	# Apt tools
-	sudo apt install -y apt-file wajig
+	sudo -E apt install -y apt-file wajig
 
 	# Esential X tools
 	# kdeconnect
-	sudo apt install -y "shutter" redshift-gtk xfce4-terminal xfce4-genmon-plugin chromium-browser seahorse galculator orage ristretto \
+	sudo -E apt install -y "shutter" redshift-gtk xfce4-terminal xfce4-genmon-plugin chromium-browser seahorse galculator orage ristretto \
 		xsel xclip arandr wmctrl xscreensaver flatpak compton
 
-	if ! which copyq &>/dev/null; then
-		sudo add-apt-repository ppa:hluk/copyq -y 
-		sudo apt-get update
-		sudo apt install -y copyq
-	fi
+	_add_repo_or_install_deb 'ppa:hluk/copyq' 'copyq' 'https://github.com/hluk/CopyQ/releases/download/v3.9.3/copyq_3.9.3_Debian_10-1_amd64.deb'
 
 	# File management and disk plugins
-	sudo apt install -y cifs-utils exfat-fuse exfat-utils samba hfsprogs cdck ncdu mtp-tools
+	sudo -E apt install -y cifs-utils exfat-fuse exfat-utils samba hfsprogs cdck ncdu mtp-tools
 
 	# File management and disk plugins X
-	sudo apt install -y thunar pcmanfm gnome-disk-utility
+	sudo -E apt install -y thunar pcmanfm gnome-disk-utility
 
 	# Remote desktop
-	sudo apt install -y remmina vinagre xephyr
+	sudo -E apt install -y remmina vinagre xephyr
 
-	# Themes
-	sudo apt install -y arc-theme bluebird-gtk-theme
 
 	# Language and spell check
-	sudo apt install -y aspell
+	sudo -E apt install -y aspell
 
 	git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d
 
 	# Editors
-	sudo apt install -y geany vim-gtk3 emacs
+	sudo -E apt install -y geany vim-gtk3 emacs
 
 	# Archiving
-	sudo apt install -y engrampa unzip unrar p7zip-full ecm
+	sudo -E apt install -y engrampa unzip unrar p7zip-full ecm
 
 	# Window managing
 	# quicktile dependencies
-	sudo apt install -y python python-gtk2 python-xlib python-dbus python-setuptools libpango-1.0
-	cd "${TMPDIR:-/tmp}"  && wget http://ftp.nl.debian.org/debian/pool/main/g/gnome-python-desktop/python-wnck_2.32.0+dfsg-3_amd64.deb
-	sudo dpkg -i python-wnck_2.32.0+dfsg-3_amd64.deb
-	# Fix dependencies
-	sudo apt install -f
+	sudo -E apt install -y python python-gtk2 python-xlib python-dbus python-setuptools libpango-1.0
+	_install_deb_from_url 'http://ftp.nl.debian.org/debian/pool/main/g/gnome-python-desktop/python-wnck_2.32.0+dfsg-3_amd64.deb'
+	sudo -E pip2 install https://github.com/ssokolow/quicktile/archive/master.zip
 
-	sudo pip2 install https://github.com/ssokolow/quicktile/archive/master.zip
 
- 	sudo pip3 install git+https://github.com/jeffkaufman/icdiff.git
+ 	sudo -E pip3 install git+https://github.com/jeffkaufman/icdiff.git
 
 	# @todo set the gemrc files in place before running gem install
 	#gem install teamocil
@@ -124,111 +147,96 @@ function minimal() {
 	# Fix for snaps with ZSH
 	LINE="emulate sh -c 'source /etc/profile'"
 	FILE=/etc/zsh/zprofile
-	grep -qF -- "$LINE" "$FILE" || echo "$LINE" | sudo tee "$FILE"
+	grep -qF -- "$LINE" "$FILE" || echo "$LINE" | sudo -E tee "$FILE"
 
 
-	sudo snap install code --classic
+	sudo -E snap install code --classic
 	bash "$DIR/apps/code.sh"
 
 
-	sudo chsh -s "$(which zsh)" mandy
+	sudo -E chsh -s "$(command -v zsh)" mandy
+}
+
+
+function themes() {
+	sudo -E apt install -y arc-theme bluebird-gtk-theme moka-icon-theme xfwm4-themes pocillo-icon-theme
+}
+
+function build-tools() {
+	# Build tools
+	sudo -E apt install -y build-essential dkms software-properties-common
+
+}
+
+function vpn() {
+	# Vpn and network manager
+	sudo -E apt install -y openvpn network-manager-openvpn network-manager-openvpn-gnome 
 }
 
 function general() {
 	set -e
-	sudo apt update -y
+	sudo -E apt update -y
 	
-
-	# Build tools
-	sudo apt install -y build-essential dkms software-properties-common
+	build-tools
 
 	# System utils
-	sudo apt install -y sysfsutils sysstat qdirstat 
+	sudo -E apt install -y sysfsutils sysstat qdirstat 
 
 	# Media
-	sudo apt install -y vlc quodlibet imagemagick
+	sudo -E apt install -y vlc quodlibet imagemagick
 
-	# Vpn and network manager
-	sudo apt install -y openvpn network-manager-openvpn network-manager-openvpn-gnome 
+	vpn
+	themes
 
-	sudo apt install -y moka-icon-theme
+	# Install android tools adbd for android-sdk icon and adb binary
+	sudo -E apt install -y android-tools-adbd
 
 	# PDF
-	sudo apt install -y zathura 'zathura*' atril
+	sudo -E apt install -y atril # zathura 'zathura*'
 
-	if [ ! -f /usr/NX/bin/nxplayer ]
-	then
+	if [ ! -f /usr/NX/bin/nxplayer ]; then
 		# shellcheck disable=1001
 		_install_deb_from_url "$(curl https://www.nomachine.com/download/download\&id\=6 2>/dev/null | grep -E -o "http.*download.*deb")"
 	fi
 
-	if ! which nextcloud-client &>/dev/null
-	then
-		sudo add-apt-repository ppa:nextcloud-devs/client -y
-		sudo apt update
-		sudo apt install -y nextcloud-client
-	fi
+	_add_repo_or_install_deb 'ppa:nextcloud-devs/client' 'nextcloud-client'
 
-	if ! which bat &>/dev/null
-	then
+	if ! command -v bat &>/dev/null; then
 		_install_deb_from_url https://github.com/sharkdp/bat/releases/download/v0.11.0/bat_0.11.0_amd64.deb
 	fi
 
-	if ! which alacritty &>/dev/null
-	then
-		sudo add-apt-repository ppa:mmstick76/alacritty -y
-		sudo apt update
-		sudo apt install -y alacritty
+	_add_repo_or_install_deb 'ppa:mmstick76/alacritty' 'alacritty'
+
+	if ! command -v fd &>/dev/null; then
+		_install_deb_from_url https://github.com/sharkdp/fd/releases/download/v7.4.0/fd_7.4.0_amd64.deb
 	fi
 
-	if ! which fd &>/dev/null
-	then
-		_install_deb_from_url https://github.com/sharkdp/fd/releases/download/v7.3.0/fd_7.3.0_amd64.deb
-	fi
-
-	if ! which x11docker &>/dev/null
-	then
-		curl -fsSL https://raw.githubusercontent.com/mviereck/x11docker/master/x11docker | sudo bash -s -- --update
-
+	if ! command -v x11docker &>/dev/null; then
+		curl -fsSL https://raw.githubusercontent.com/mviereck/x11docker/master/x11docker | sudo -E bash -s -- --update
 	fi
 		
-
-	if ! which lazygit &>/dev/null
-	then
-		sudo add-apt-repository ppa:lazygit-team/release -y
-		sudo apt-get update
-		sudo apt-get install -y lazygit
-	fi
-
-
-	# if ! which indicator-kdeconnect &>/dev/null
-	# then
-	# 	yes | sudo add-apt-repository ppa:webupd8team/indicator-kdeconnect
-	# 	sudo apt update
-	# 	sudo apt install -y kdeconnect indicator-kdeconnect
-	# fi
+	_add_repo_or_install_deb 'ppa:lazygit-team/release' 'lazygit'
+	
+	_add_repo_or_install_deb 'ppa:webupd8team/indicator-kdeconnect' 'indicator-kdeconnect'
 
 	if ! apt -qq list papirus-icon-theme 2>/dev/null | grep -i -q installed
 	then
-		sudo add-apt-repository ppa:papirus/papirus -y
-		sudo apt update
-		sudo apt install -y papirus-icon-theme
+		_add_repo_or_install_deb 'ppa:papirus/papirus' 'papirus-icon-theme'
 	fi
 	
-	sudo snap install ripgrep --classic
+	sudo -E snap install ripgrep --classic
 
 
 	yes | flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo --user
 	flatpak install flathub com.github.wwmm.pulseeffects -y --user
 
 
-	sudo apt remove -y parole mpv 'pidgin*'
+	sudo -E apt remove -y parole mpv 'pidgin*'
 
-	sudo pip3 install thefuck
-	sudo pip3 install numpy
-	sudo pip3 install csvkit
-	sudo pip3 install httpie
-	sudo python3 -m pip install docnado --upgrade
+	pip3 install thefuck
+	pip3 install numpy
+	pip3 install csvkit
+	pip3 install httpie
 
 	set +e
 }
@@ -242,25 +250,25 @@ function shutter() {
 		_install_deb_from_url "https://launchpad.net/ubuntu/+archive/primary/+files/libgoocanvas3_1.0.0-1_amd64.deb"
 		_install_deb_from_url "https://launchpad.net/ubuntu/+archive/primary/+files/libgoo-canvas-perl_0.06-2ubuntu3_amd64.deb"
 	fi
-	sudo apt install "shutter" -y
+	sudo -E apt install "shutter" -y
 
 }
 
 function groups() {
-	sudo groupadd "docker"
-	sudo groupadd vboxusers
-	sudo groupadd mail
-	sudo groupadd sambashare
+	sudo -E groupadd "docker"
+	sudo -E groupadd vboxusers
+	sudo -E groupadd mail
+	sudo -E groupadd sambashare
 	
-	sudo usermod -aG "docker" mandy
-	sudo usermod -aG mail mandy
-	sudo usermod -aG disk mandy
-	sudo usermod -aG cdrom mandy
-	sudo usermod -aG vboxusers mandy
-	sudo usermod -aG sudo mandy
-	sudo usermod -aG sambashare mandy
-	sudo usermod -aG netdev mandy
-	sudo usermod -aG dialout mandy
+	sudo -E usermod -aG "docker" mandy
+	sudo -E usermod -aG mail mandy
+	sudo -E usermod -aG disk mandy
+	sudo -E usermod -aG cdrom mandy
+	sudo -E usermod -aG vboxusers mandy
+	sudo -E usermod -aG sudo -E mandy
+	sudo -E usermod -aG sambashare mandy
+	sudo -E usermod -aG netdev mandy
+	sudo -E usermod -aG dialout mandy
 
 }
 
@@ -278,8 +286,27 @@ function fonts() {
 }
 
 
+function settings-light() {
+	if command -v xfconf-query &>/dev/null
+	then
+		xfconf-query -c xsettings -p /Net/ThemeName -s Adwaita
+		xfconf-query -c xsettings -p /Net/IconThemeName -s Papirus-Light
+		xfconf-query -c xfwm4 -p /general/theme -s Bluebird
+	fi
+}
+
+function settings-dark() {
+	if command -v xfconf-query &>/dev/null
+	then
+		xfconf-query -c xsettings -p /Net/ThemeName -s Arc-Dark
+		# xfconf-query -c xsettings -p /Net/IconThemeName -s Pocillo
+		xfconf-query -c xsettings -p /Net/IconThemeName -s Papirus-Dark
+		xfconf-query -c xfwm4 -p /general/theme -s Bluebird
+	fi
+}
+
 function settings() {
-	if which xfconf-query &>/dev/null
+	if command -v xfconf-query &>/dev/null
 	then
 		# Execute executables in Thunar instead of editing them on double click: https://bbs.archlinux.org/viewtopic.php?id=194464
 		xfconf-query --channel thunar --property /misc-exec-shell-scripts-by-default --create --type bool --set true
@@ -299,50 +326,145 @@ function settings() {
 		
 		xfconf-query -c xsettings -p /Gtk/ButtonImages -s true
 
-		xfconf-query -c xsettings -p /Net/ThemeName -s Adwaita
-		xfconf-query -c xfwm4 -p /general/theme -s Bluebird
 		xfconf-query -c xfwm4 -p /general/title_font -s "Lato Medium 10"
-		xfconf-query -c xfwm4 -p /general/button_layout  -s "O|HMC"
+		xfconf-query -c xfwm4 -p /general/button_layout -s "O|HMC"
 		xfconf-query -c xfwm4 -p /general/cycle_preview -s false
-		xfconf-query -c xfwm4 -p /general/mousewheel_rollup  -s false
-		xfconf-query -c xfwm4 -p /general/workspace_names  -n -t string -t string -t string -t string -s "1" -s "2" -s "3" -s "4"
+		xfconf-query -c xfwm4 -p /general/mousewheel_rollup -s false
+		xfconf-query -c xfwm4 -p /general/workspace_names -n -t string -t string -t string -t string -s "1" -s "2" -s "3" -s "4"
 		xfconf-query -c xfwm4 -p /general/workspace_count -s 4
 
 
  		xfconf-query -c xfce4-session -p /compat/LaunchGNOME -s true
-		xfconf-query -c xsettings -p /Net/IconThemeName -s Papirus-Light
 
 		# Notifyd
-		xfconf-query -c xfce4-notifyd -p /log-level -s 1
-		xfconf-query -c xfce4-notifyd -p /log-level-apps -s 0
-		xfconf-query -c xfce4-notifyd -p /notification-log -s true
-		xfconf-query -c xfce4-notifyd -p /notify-location -s 2
-		xfconf-query -c xfce4-notifyd -p /primary-monitor -s 0
-		xfconf-query -c xfce4-notifyd -p /theme -s Greybird
+		xfconf-query -n -c xfce4-notifyd -p /log-level -t int -s 1
+		xfconf-query -n -c xfce4-notifyd -p /log-level-apps -t int -s 0
+		xfconf-query -n -c xfce4-notifyd -p /notification-log -t bool -s true
+		xfconf-query -n -c xfce4-notifyd -p /notify-location -t int -s 2
+		xfconf-query -n -c xfce4-notifyd -p /primary-monitor -t int -s 0
+		xfconf-query -n -c xfce4-notifyd -p /theme -t string -s Greybird
 
 		# Keyboard
-		xfconf-query -c keyboards -p /Default/KeyRepeat/Delay -s 300
-		xfconf-query -c keyboards -p /Default/KeyRepeat/Rate -s 26
+		xfconf-query -n -c keyboards -p /Default/KeyRepeat/Delay -t int -s 300 
+		xfconf-query -n -c keyboards -p /Default/KeyRepeat/Rate -t int -s 26
+
+		xfconf-query -n -c keyboard-layout -p /Default/XkbDisable -t bool -s false
+		xfconf-query -n -c keyboard-layout -p /Default/XkbLayout -t string -s us
+		xfconf-query -n -c keyboard-layout -p /Default/XkbVariant -t string -s altgr-intl
+
+		# Thunar volman
+		xfconf-query -n -c thunar-volman -p /autoplay-audio-cds/enabled -t bool -s false
+		#xfconf-query -n -c thunar-volman -p /autoplay-audio-cds/command -t string -s "vlc cdda://%d"
+		xfconf-query -n -c thunar-volman -p /autoplay-video-cds/enabled -t bool -s false
+		#xfconf-query -n -c thunar-volman -p /autoplay-video-cds/command -t string -s "vlc dvd://%d"
+		xfconf-query -n -c thunar-volman -p /autorun/enabled -t bool -s true
 	fi
 
 
 	# X11 forwarding over SSH
-	sudo sed -i -E 's|.*X11UseLocalhost.*|X11UseLocalhost no|g' /etc/ssh/sshd_config
-	sudo sed -i -E 's|.*X11Forwarding.*|X11Forwarding yes|g' /etc/ssh/sshd_config
+	sudo -E sed -i -E 's|.*X11UseLocalhost.*|X11UseLocalhost no|g' /etc/ssh/sshd_config
+	sudo -E sed -i -E 's|.*X11Forwarding.*|X11Forwarding yes|g' /etc/ssh/sshd_config
 }
 
 
+function keybindings() {
+	if which xfconf-query &>/dev/null; then
+		# Find keyboard shortcuts: xfconf-query -c xfce4-keyboard-shortcuts -l | grep -E '/custom/'
+
+		# # Script to generate the keyboard shortcuts commands from the current setup
+		# key=xfce4-keyboard-shortcuts
+		# results="$(xfconf-query -c "$key" -l | grep -E '/custom/')"
+		# for result in $results;
+		# do
+		# 	value="$(xfconf-query -c "$key" -p "$result")"
+		# 	the_type='string'
+		# 	if [[ $value = 'true' ]] || [[ $value = 'false' ]]; then
+		# 		the_type='bool'
+		# 	fi
+		# 	echo "xfconf-query -n -c \"$key\" -p \"$result\" -s \"$value\" -t \"$the_type\""
+		# done
+
+		# Clear all keyboard shortcuts
+		xfconf-query -c "xfce4-keyboard-shortcuts" -l | xargs -r -i xfconf-query -c "xfce4-keyboard-shortcuts" -p "{}" -r
+
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Alt>F1" -s "xfce4-popup-applicationsmenu" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Alt>F2" -s "xfrun4" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Alt>F2/startup-notify" -s "true" -t "bool"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Alt>F3" -s "xfce4-appfinder" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Alt>F3/startup-notify" -s "true" -t "bool"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Alt>Print" -s "shutter -s" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/override" -s "true" -t "bool"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Primary><Alt>Delete" -s "dm-tool lock" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Primary><Alt>Escape" -s "xkill" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Primary>Escape" -s "xfce4-popup-whiskermenu" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/Print" -s "shutter -f" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Super>e" -s "mousepad" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Super>f" -s "exo-open --launch FileManager" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Super>F1" -s "xfce4-find-cursor" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Super>m" -s "exo-open --launch MailReader" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Super>p" -s "xfce4-display-settings --minimal" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Super>r" -s "xfce4-appfinder" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Super>Return" -s "exo-open --launch TerminalEmulator" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Super>w" -s "exo-open --launch WebBrowser" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/XF86Calculator" -s "mate-calc" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/XF86Display" -s "xfce4-display-settings --minimal" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/XF86Explorer" -s "exo-open --launch FileManager" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/XF86HomePage" -s "exo-open --launch WebBrowser" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/XF86Mail" -s "exo-open --launch MailReader" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/XF86WWW" -s "exo-open --launch WebBrowser" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Alt>F4" -s "close_window_key" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Alt>grave" -s "switch_window_key" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Alt>space" -s "popup_menu_key" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Alt>Tab" -s "cycle_windows_key" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/Down" -s "down_key" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/Escape" -s "cancel_key" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/Left" -s "left_key" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/override" -s "true" -t "bool"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Primary><Alt>d" -s "show_desktop_key" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Primary><Shift><Alt>Left" -s "move_window_left_key" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Primary><Shift><Alt>Right" -s "move_window_right_key" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Primary><Shift><Alt>Up" -s "move_window_up_key" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/Right" -s "right_key" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Shift><Alt>ISO_Left_Tab" -s "cycle_reverse_windows_key" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Shift><Super>ampersand" -s "move_window_workspace_7_key" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Shift><Super>asciicircum" -s "move_window_workspace_6_key" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Shift><Super>asterisk" -s "move_window_workspace_8_key" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Shift><Super>at" -s "move_window_workspace_2_key" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Shift><Super>dollar" -s "move_window_workspace_4_key" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Shift><Super>exclam" -s "move_window_workspace_1_key" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Shift><Super>numbersign" -s "move_window_workspace_3_key" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Shift><Super>parenleft" -s "move_window_workspace_9_key" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Shift><Super>parenright" -s "move_window_workspace_10_key" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Shift><Super>percent" -s "move_window_workspace_5_key" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Super>0" -s "workspace_10_key" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Super>1" -s "workspace_1_key" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Super>2" -s "workspace_2_key" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Super>3" -s "workspace_3_key" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Super>4" -s "workspace_4_key" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Super>5" -s "workspace_5_key" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Super>6" -s "workspace_6_key" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Super>7" -s "workspace_7_key" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Super>8" -s "workspace_8_key" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Super>9" -s "workspace_9_key" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/Up" -s "up_key" -t "string"
+	fi
+}
+
+function ulauncher() {
+	_add_repo_or_install_deb 'ppa:agornostal/ulauncher' 'ulauncher' 'https://github.com/Ulauncher/Ulauncher/releases/download/5.4.0/ulauncher_5.4.0_all.deb'
+}
+
 function locale() {
 	# Locale
-	sudo locale-gen nl_BE
-	sudo locale-gen nl_BE.UTF-8
-	sudo locale-gen en_GB
-	sudo locale-gen en_GB.UTF-8
-	sudo locale-gen en_US
-	sudo locale-gen en_US.UTF-8
-	sudo update-locale
+	sudo -E locale-gen nl_BE
+	sudo -E locale-gen nl_BE.UTF-8
+	sudo -E locale-gen en_GB
+	sudo -E locale-gen en_GB.UTF-8
+	sudo -E locale-gen en_US
+	sudo -E locale-gen en_US.UTF-8
+	sudo -E update-locale
 
-	sudo update-locale \
+	sudo -E update-locale \
 	LANG=en_US.UTF-8 \
 	LANGUAGE=en_US.UTF-8 \
 	LC_CTYPE=nl_BE.UTF-8 \
@@ -365,66 +487,66 @@ function i3() {
 	then
 		cd "${TMPDIR:-/tmp}"
 		/usr/lib/apt/apt-helper download-file http://debian.sur5r.net/i3/pool/main/s/sur5r-keyring/sur5r-keyring_2019.02.01_all.deb keyring.deb SHA256:176af52de1a976f103f9809920d80d02411ac5e763f695327de9fa6aff23f416
-		sudo dpkg -i ./keyring.deb
-		echo "deb http://debian.sur5r.net/i3/ $(grep '^DISTRIB_CODENAME=' /etc/lsb-release | cut -f2 -d=) universe" | sudo tee /etc/apt/sources.list.d/sur5r-i3.list
-		sudo apt update
+		sudo -E dpkg -i ./keyring.deb
+		echo "deb http://debian.sur5r.net/i3/ $(grep '^DISTRIB_CODENAME=' /etc/lsb-release | cut -f2 -d=) universe" | sudo -E tee /etc/apt/sources.list.d/sur5r-i3.list
+		sudo -E apt update
 	fi
 
-	sudo apt install -y udiskie compton nitrogen feh xfce4-panel pcmanfm spacefm rofi ssh-askpass-gnome
-	sudo apt install -y "i3" i3blocks i3lock
-	sudo apt install -y dmenu rofi
+	sudo -E apt install -y udiskie compton nitrogen feh xfce4-panel pcmanfm spacefm rofi ssh-askpass-gnome
+	sudo -E apt install -y "i3" i3blocks i3lock
+	sudo -E apt install -y dmenu rofi
 }
 
 
 function openbox() {
 	i3
-	sudo apt install -y "openbox" obconf lxappearance xfce4-panel
+	sudo -E apt install -y "openbox" obconf lxappearance xfce4-panel
 }
 
 function usb_ssd() {
 	# Add usb3 SSD as usb-device instead of uas
 	if [ ! -f /etc/modprobe.d/usb-storage.conf ]; then
-		echo "options usb-storage quirks=174c:55aa:u" | sudo tee /etc/modprobe.d/usb-storage.conf
-		sudo update-initramfs -u
+		echo "options usb-storage quirks=174c:55aa:u" | sudo -E tee /etc/modprobe.d/usb-storage.conf
+		sudo -E update-initramfs -u
 	fi
 }
 
 
 function upgrade() {
-	sudo apt update; sudo apt "upgrade" -y
-	sudo apt install "linux-headers-$(uname -r)" dkms -y
-	sudo /sbin/vboxconfig
-	sudo apt autoremove -y
+	sudo -E apt update; sudo -E apt "upgrade" -y
+	sudo -E apt install "linux-headers-$(uname -r)" dkms -y
+	sudo -E /sbin/vboxconfig
+	sudo -E apt autoremove -y
 }
 
 
 function media() {
 	# Media things, disk burn software
-	sudo apt install -y digikam k3b # darktable
+	sudo -E apt install -y digikam k3b # darktable
 	# Permissions for ripping cds
-	sudo chmod 4711 /usr/bin/wodim; 
-	sudo chmod 4711 /usr/bin/cdrdao
+	sudo -E chmod 4711 /usr/bin/wodim; 
+	sudo -E chmod 4711 /usr/bin/cdrdao
 }
 
 function chat() {
-	sudo snap install slack --classic
-	sudo snap install discord --classic
+	sudo -E snap install slack --classic
+	sudo -E snap install discord --classic
 
 }
 function kde() {
-	sudo apt install -y kronometer ktimer ark
-	sudo apt remove -y konsole akonadi korganizer kaddressbook kmail kjots kalarm kmail amarok
+	sudo -E apt install -y kronometer ktimer ark
+	sudo -E apt remove -y konsole akonadi korganizer kaddressbook kmail kjots kalarm kmail amarok
 	# @todo remove kde pim etc
 }
 
 function uninstall_kde() {
 	# @todo gwenview ?
-	sudo apt remove -y ark okular '*kwallet*' kdevelop kate kwrite kronometer ktimer
-	sudo apt autoremove -y
+	sudo -E apt remove -y ark okular '*kwallet*' kdevelop kate kwrite kronometer ktimer
+	sudo -E apt autoremove -y
 }
 
 function privacy() {
-	# sudo apt install -y torbrowser-launcher
+	# sudo -E apt install -y torbrowser-launcher
 	# @todo add expressvpn
 	_install_deb_from_url "https://s3.amazonaws.com/purevpn-dialer-assets/linux/app/purevpn_1.2.2_amd64.deb"
 }
@@ -432,20 +554,20 @@ function privacy() {
 
 function macbook() {
 	# Realtek drivers for MacBook
-	sudo apt install firmware-b43-installer -y
+	sudo -E apt install firmware-b43-installer -y
 }
 
 
 function etcher() {
-	echo "deb https://deb.etcher.io stable etcher" | sudo tee /etc/apt/sources.list.d/balena-etcher.list
-	sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 379CE192D401AB61
-	sudo apt-get update
-	sudo apt-get install balena-etcher-electron -y
+	echo "deb https://deb.etcher.io stable etcher" | sudo -E tee /etc/apt/sources.list.d/balena-etcher.list
+	sudo -E apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 379CE192D401AB61
+	sudo -E apt-get update
+	sudo -E apt-get install balena-etcher-electron -y
 }
 
 function qt_dev() {
 	# Qt development
-	sudo apt install -y kdevelop qt5-default build-essential mesa-common-dev libglu1-mesa-dev
+	sudo -E apt install -y kdevelop qt5-default build-essential mesa-common-dev libglu1-mesa-dev
 }
 
 
@@ -455,47 +577,49 @@ function jupyter() {
 	npm install -g ijavascript && ijsinstall
 	pip3 install bash_kernel && python3 -m bash_kernel.install
 	pip3 install gnuplot_kernel && python3 -m gnuplot_kernel install --user
+	pip3 install qtconsole pyqt5
 }
 
 function dev() {
-	sudo apt remove -y shellcheck
+	sudo -E apt remove -y shellcheck
 	if ! which shellcheck &>/dev/null; then
 	scversion="stable" # or "v0.4.7", or "latest"
 		wget -qO- "https://storage.googleapis.com/shellcheck/shellcheck-${scversion?}.linux.x86_64.tar.xz" | tar -xJv
-		sudo cp "shellcheck-${scversion}/shellcheck" /usr/bin/
+		sudo -E cp "shellcheck-${scversion}/shellcheck" /usr/bin/
 	fi
-	sudo apt install -y nodejs npm meld
+	sudo -E apt install -y nodejs npm meld
+	npm install -g bash-language-server
 	# Php language server
 	npm install -g intelephense
 
 	if ! which circleci &>/dev/null
 	then
-		curl -fLSs https://circle.ci/cli | sudo bash
+		curl -fLSs https://circle.ci/cli | sudo -E bash
 	fi
 	# Gnu global
-	sudo apt install -y global ctags
+	sudo -E apt install -y global ctags
 }
 
 
 function php() {
-	sudo apt install -y wkhtmltopdf php-cli php-xml php-mbstring php-curl php-zip php-pdo-sqlite php-intl php-zmq
-	sudo apt install -y kcachegrind
-	sudo snap install phpstorm --classic
+	sudo -E apt install -y wkhtmltopdf php-cli php-xml php-mbstring php-curl php-zip php-pdo-sqlite php-intl php-zmq
+	sudo -E apt install -y kcachegrind
+	sudo -E snap install phpstorm --classic
 	pip3 install mycli
 	pip3 install pre-commit
 
 	if ! which composer &>/dev/null
 	then
 		# shellcheck disable=SC2091
-		curl -sS https://getcomposer.org/installer | $(which php) && sudo mv composer.phar /usr/local/bin/composer
+		curl -sS https://getcomposer.org/installer | $(which php) && sudo -E mv composer.phar /usr/local/bin/composer
 	fi
 	# shellcheck disable=SC2091
-	curl -sS https://litipk.github.io/Jupyter-PHP-Installer/dist/jupyter-php-installer.phar >  "${TMPDIR:-/tmp}/jupyter.php"; $(which php)  "${TMPDIR:-/tmp}/jupyter.php" install; rm  "${TMPDIR:-/tmp}/jupyter.php"
+	curl -sS https://litipk.github.io/Jupyter-PHP-Installer/dist/jupyter-php-installer.phar > "${TMPDIR:-/tmp}/jupyter.php"; $(which php) "${TMPDIR:-/tmp}/jupyter.php" install; rm "${TMPDIR:-/tmp}/jupyter.php"
 }
 
 
 function docker() {
-	sudo apt-get install -y \
+	sudo -E apt-get install -y \
 		apt-transport-https \
 		ca-certificates \
 		curl \
@@ -504,47 +628,47 @@ function docker() {
 
 	if ! which ctop &>/dev/null
 	then
-		sudo wget https://github.com/bcicen/ctop/releases/download/v0.7.2/ctop-0.7.2-linux-amd64 -O /usr/local/bin/ctop
-		sudo chmod +x /usr/local/bin/ctop
+		sudo -E wget https://github.com/bcicen/ctop/releases/download/v0.7.2/ctop-0.7.2-linux-amd64 -O /usr/local/bin/ctop
+		sudo -E chmod +x /usr/local/bin/ctop
 	fi
 
 	if ! which docker &>/dev/null
 	then
-		curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-		sudo apt-key fingerprint 0EBFCD88
-		sudo add-apt-repository \
+		curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo -E apt-key add -
+		sudo -E apt-key fingerprint 0EBFCD88
+		sudo -E add-apt-repository \
 			"deb [arch=amd64] https://download.docker.com/linux/ubuntu \
 			$(lsb_release -cs) \
 			stable"
-		sudo apt-get update
-		sudo apt-get install -y docker-ce
-		sudo usermod -aG "docker" "$(whoami)"  
+		sudo -E apt-get update
+		sudo -E apt-get install -y docker-ce
+		sudo -E usermod -aG "docker" "$(whoami)" 
 	fi
 
 	if ! which docker-compose &>/dev/null
 	then
-		sudo curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-		sudo chmod +x /usr/local/bin/docker-compose
+		sudo -E curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+		sudo -E chmod +x /usr/local/bin/docker-compose
 	fi
 
 	# if which podman &>/dev/null
 	# then
 	# 	# Podman
-	# 	sudo apt update
-	# 	sudo apt -y install software-properties-common
-	# 	sudo add-apt-repository -y ppa:projectatomic/ppa
-	# 	sudo apt install podman -y
+	# 	sudo -E apt update
+	# 	sudo -E apt -y install software-properties-common
+	# 	sudo -E add-apt-repository -y ppa:projectatomic/ppa
+	# 	sudo -E apt install podman -y
 	# fi
 
 	cd "${TMPDIR:-/tmp}"
 	curl -L https://github.com/jesseduffield/lazydocker/releases/download/v0.7.1/lazydocker_0.7.1_Linux_x86_64.tar.gz > lazydocker.tgz
 	tar xzf lazydocker.tgz
-	sudo install lazydocker /usr/local/bin/
+	sudo -E install lazydocker /usr/local/bin/
 }
 
 function polybar() {
-	sudo apt install -y build-essential git cmake cmake-data pkg-config python3-sphinx libcairo2-dev libxcb1-dev libxcb-util0-dev libxcb-randr0-dev libxcb-composite0-dev python-xcbgen xcb-proto libxcb-image0-dev libxcb-ewmh-dev libxcb-icccm4-dev
-	sudo apt install -y libxcb-xkb-dev libxcb-xrm-dev libxcb-cursor-dev libasound2-dev libpulse-dev i3-wm libjsoncpp-dev libmpdclient-dev libcurl4-openssl-dev libnl-genl-3-dev
+	sudo -E apt install -y build-essential git cmake cmake-data pkg-config python3-sphinx libcairo2-dev libxcb1-dev libxcb-util0-dev libxcb-randr0-dev libxcb-composite0-dev python-xcbgen xcb-proto libxcb-image0-dev libxcb-ewmh-dev libxcb-icccm4-dev
+	sudo -E apt install -y libxcb-xkb-dev libxcb-xrm-dev libxcb-cursor-dev libasound2-dev libpulse-dev i3-wm libjsoncpp-dev libmpdclient-dev libcurl4-openssl-dev libnl-genl-3-dev
 
 	cd "${TMPDIR:-/tmp}"
 	git clone https://github.com/jaagr/polybar.git
@@ -554,20 +678,20 @@ function polybar() {
 
 function dns() {
 	if [ ! -f /etc/NetworkManager/conf.d/00-use-dnsmasq.conf ]; then
-		sudo tee /etc/NetworkManager/conf.d/00-use-dnsmasq.conf << EOL
+		sudo -E tee /etc/NetworkManager/conf.d/00-use-dnsmasq.conf << EOL
 # This enabled the dnsmasq plugin.
 [main]
 dns=dnsmasq
 EOL
 
-		sudo tee /etc/NetworkManager/dnsmasq.d/00-home-mndy-be.conf << EOL
+		sudo -E tee /etc/NetworkManager/dnsmasq.d/00-home-mndy-be.conf << EOL
 address=/home.mndy.be/192.168.10.120
 addn-hosts=/etc/hosts
 EOL
 
 		# use network manager instead of systemd resolve resolv.conf
-		sudo rm /etc/resolv.conf; sudo ln -s /var/run/NetworkManager/resolv.conf /etc/resolv.conf
-		sudo systemctl restart NetworkManager
+		sudo -E rm /etc/resolv.conf; sudo -E ln -s /var/run/NetworkManager/resolv.conf /etc/resolv.conf
+		sudo -E systemctl restart NetworkManager
 	fi
 }
 
@@ -583,23 +707,23 @@ function sysctl() {
 }
 
 function firewall() {
-	sudo ufw enable
-	yes | sudo ufw reset
-	sudo ufw allow 22/udp
-	sudo ufw allow 22/tcp
+	sudo -E ufw enable
+	yes | sudo -E ufw reset
+	sudo -E ufw allow 22/udp
+	sudo -E ufw allow 22/tcp
 
-	sudo ufw allow 80/udp
-	sudo ufw allow 443/udp
-	sudo ufw allow 80/tcp
-	sudo ufw allow 443/tcp
+	sudo -E ufw allow 80/udp
+	sudo -E ufw allow 443/udp
+	sudo -E ufw allow 80/tcp
+	sudo -E ufw allow 443/tcp
 
 	# pulse over HTTP
-	sudo ufw allow 8080/udp
-	sudo ufw allow 8080/tcp
+	sudo -E ufw allow 8080/udp
+	sudo -E ufw allow 8080/tcp
 
 	# access local hosts through vpn
 	# shellcheck disable=SC2010
-	sudo ip route add 192.168.10.0/24 "dev" "$(ls /sys/class/net | grep "^en*" | head -1)"
+	sudo -E ip route add 192.168.10.0/24 "dev" "$(ls /sys/class/net | grep "^en*" | head -1)"
 }
 
 function git_config() {
@@ -611,10 +735,12 @@ function git_config() {
 function autostart() {
 	mkdir -p ~/.config/autostart
 	cp /usr/share/applications/ulauncher.desktop ~/.config/autostart/
+	cp /usr/share/applications/indicator-kdeconnect.desktop ~/.config/autostart/
 	cp /usr/share/applications/redshift-gtk.desktop ~/.config/autostart/
 	cp /usr/share/applications/com.github.hluk.copyq.desktop ~/.config/autostart/
 	cp /usr/share/applications/nextcloud.desktop ~/.config/autostart/
 	cp ~/dotfiles/.local/share/applications/Compton.desktop ~/.config/autostart/
+	update-desktop-database
 }
 
 set -e
@@ -635,8 +761,8 @@ function _print_usage() {
 	for f in $(declare -F); do
 		f="${f:11}"
 		function_location="$(declare -f -F "$f" | cut -d' ' -f3)"
-		if [[ "${f:0:1}" != "_" ]] &&  [[ "$function_location" == "${BASH_SOURCE[0]}" ]]; then
-			echo "  --${f}"
+		if [[ "${f:0:1}" != "_" ]] && [[ "$function_location" == "${BASH_SOURCE[0]}" ]]; then
+			echo " --${f}"
 		fi
 	done
 }
@@ -648,7 +774,7 @@ else
 	shopt -s extdebug
 	for i in "$@"
 	do
-		function="${i//\-/}"
+		function="$(echo "${i}" | sed -E 's/^-+//g')"
 		starts_with_underscore=0
 		if [[ "${i::1}" == '_' ]]; then
 			starts_with_underscore=1
