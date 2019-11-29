@@ -647,6 +647,10 @@ function gaming() {
 }
 
 
+function fail() {
+	exit 233
+}
+
 ## Gaming section
 function lutris() {
 	_add_repo_or_install_deb 'ppa:lutris-team/lutris' 'lutris'
