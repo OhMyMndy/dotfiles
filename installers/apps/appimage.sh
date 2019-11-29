@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
 
 install_appimage () {
-  url="$1"
-  filename="$2"
-  if [ ! -f /usr/local/bin/$filename ]; then
+  local url="$1"
+  local filename="$2"
+  if [ ! -f "/usr/local/bin/$filename" ]; then
     echo "Installing appimage $2 from url $url"
-    rm /tmp/$filename 2>/dev/null
-    curl -L $url > /tmp/$filename
-    rm /usr/local/bin/$filename 2>/dev/null
-    sudo mv "/tmp/$filename" /usr/local/bin/$filename
+    rm "/tmp/$filename" 2>/dev/null
+    curl -L "$url" > "/tmp/$filename"
+    rm "/usr/local/bin/$filename" 2>/dev/null
+    sudo mv "/tmp/$filename" "/usr/local/bin/$filename"
 
-    chmod a+x /usr/local/bin/$filename
+    chmod a+x "/usr/local/bin/$filename"
   fi
 }
 

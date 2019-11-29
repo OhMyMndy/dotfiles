@@ -1,5 +1,6 @@
 # shellcheck shell=bash
 # shellcheck source-path=../
+# shellcheck disable=2155
 
 # shellcheck source=./z.sh
 source "$HOME/z.sh"
@@ -162,31 +163,23 @@ export VISUAL="vim"
 export EDITOR='vim'
 export TZ='Europe/Brussels'
 export DISABLE_AUTO_TITLE=true
-# Uncomment the following line to enable command auto-correction.
-export ENABLE_CORRECTION="true"
+
+# @see https://github.com/ohmyzsh/ohmyzsh/blob/master/lib/correction.zsh
+export ENABLE_CORRECTION="false"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
 export COMPLETION_WAITING_DOTS="true"
 
 export AUTO_TITLE=false
 
-ARCH=$(uname -m | sed 's/x86_//;s/i[3-6]86/32/')
-export ARCH
-
-_JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on'
-export _JAVA_OPTIONS
-
+export ARCH=$(uname -m | sed 's/x86_//;s/i[3-6]86/32/')
+export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on'
 export CHEATCOLORS=true
 
 
-IP_ADDRESS=$(ip_address)
-export IP_ADDRESS
-
-HOSTNAME="$(hostname)"
-export HOSTNAME
-
-USER="$(whoami)"
-export USER
+export IP_ADDRESS=$(ip_address)
+export HOSTNAME="$(hostname)"
+export USER="$(whoami)"
 
 # ssh-agent omzsh should do the same
 if [ "$(uname -s)" != 'Darwin' ]; then
@@ -249,6 +242,7 @@ then
 fi
 
 # https://stackoverflow.com/questions/6429515/stty-hupcl-ixon-ixoff
+# Disable CTRL-Z
 if [[ -t 0 ]]; then
 	stty -ixon -ixoff
 fi

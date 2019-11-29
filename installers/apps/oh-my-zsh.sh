@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 
+trap "exit" INT
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 if [ ! -d ~/.oh-my-zsh/lib ]; then
     rm -rf ~/.oh-my-zsh/
-    cd /tmp
+    cd /tmp || exit 2
+	# shellcheck disable=SC2216
     yes n | locale
 	wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh
     sed -i.tmp 's:env zsh::g' install.sh
@@ -25,7 +27,7 @@ function installZshPlugin() {
 
 	if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/$pluginDir" ]; then
 		echo "Installing ZSH plugin '$pluginDir'"
-		git clone $pluginUrl ~/.oh-my-zsh/custom/plugins/$pluginDir
+		git clone "$pluginUrl" "$HOME/.oh-my-zsh/custom/plugins/$pluginDir"
 	else
 		echo "ZSH plugin '$pluginDir' is already installed"
 	fi
@@ -33,7 +35,7 @@ function installZshPlugin() {
 }
 
 mkdir -p ~/.oh-my-zsh/custom/themes
-ln -sf $DIR/../../.oh-my-zsh/custom/themes/mandy.zsh-theme ~/.oh-my-zsh/custom/themes/mandy.zsh-theme
+ln -sf "$DIR/../../.oh-my-zsh/custom/themes/mandy.zsh-theme" ~/.oh-my-zsh/custom/themes/mandy.zsh-theme
 
 installZshPlugin "git://github.com/zsh-users/zsh-autosuggestions" "zsh-autosuggestions"
 installZshPlugin "https://github.com/zsh-users/zsh-completions" "zsh-completions"

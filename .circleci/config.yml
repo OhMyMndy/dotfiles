@@ -1,0 +1,29 @@
+
+---
+version: 2
+jobs:
+  build:
+    docker:
+       - image: circleci/php:7.4-cli-buster-node-browsers-legacy
+    steps:
+      - checkout
+
+      - run:
+          name: Install shellcheck
+          command: |
+            scversion="stable"
+            wget -qO- "https://storage.googleapis.com/shellcheck/shellcheck-${scversion?}.linux.x86_64.tar.xz" | tar -xJv
+            sudo cp "shellcheck-${scversion}/shellcheck" /usr/bin/
+
+      - run:
+          name: Shellcheck
+          command: |
+            set +e
+            failed=0
+            for file in $(git ls-files -- '*.sh' ':!:z.sh')
+            do
+              if ! shellcheck -x "$file" -P "$(dirname "$file")"; then
+                failed=1
+              fi
+            done
+            exit $failed

@@ -1,16 +1,19 @@
 #!/usr/bin/env bash
 
+# shellcheck disable=SC2230
+
+trap "exit" INT
+
 
 # The unarchiver
 # Wunderlist
 
 echo "Install all AppStore Apps first!"
 # no solution to automate AppStore installs
-read -p "Press any key to continue... " -n1 -s
-echo  '\n'
+read -r -p "Press any key to continue... " -n1 -s
+echo
 
-which brew
-if [ $? -eq 0 ]; then
+if command -v brew &>/dev/null; then
     ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 fi
 

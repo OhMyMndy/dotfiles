@@ -20,6 +20,9 @@ fontsAdded=0
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 ROOT_DIR="$(git rev-parse --show-toplevel)"
 
+# shellcheck source=./xfce.sh
+source "$DIR/xfce.sh"
+
 function _install_deb_from_url() {
 	local url="$1"
 	local tmp="$(mktemp)"
@@ -61,7 +64,7 @@ function setup() {
 	dns
 	albert
 	autostart
-	git_config
+	git-config
 }
 
 function _green_bold() {
@@ -242,6 +245,7 @@ function general() {
 }
 
 function shutter() {
+	# shellcheck disable=SC1091
 	source /etc/lsb-release
 	# http://ubuntuhandbook.org/index.php/2018/04/fix-edit-option-disabled-shutter-ubuntu-18-04/
 	if [[ $DISTRIB_RELEASE = "18.04" ]]
@@ -287,22 +291,11 @@ function fonts() {
 
 
 function settings-light() {
-	if command -v xfconf-query &>/dev/null
-	then
-		xfconf-query -c xsettings -p /Net/ThemeName -s Adwaita
-		xfconf-query -c xsettings -p /Net/IconThemeName -s Papirus-Light
-		xfconf-query -c xfwm4 -p /general/theme -s Bluebird
-	fi
+	xfce_settings-light
 }
 
 function settings-dark() {
-	if command -v xfconf-query &>/dev/null
-	then
-		xfconf-query -c xsettings -p /Net/ThemeName -s Arc-Dark
-		# xfconf-query -c xsettings -p /Net/IconThemeName -s Pocillo
-		xfconf-query -c xsettings -p /Net/IconThemeName -s Papirus-Dark
-		xfconf-query -c xfwm4 -p /general/theme -s Bluebird
-	fi
+	xfce_settings-dark
 }
 
 
@@ -312,59 +305,7 @@ function settings-xfpanel() {
 
 
 function settings() {
-	if which xfconf-query &>/dev/null; then
-		# Execute executables in Thunar instead of editing them on double click: https://bbs.archlinux.org/viewtopic.php?id=194464
-		xfconf-query --channel thunar --property /misc-exec-shell-scripts-by-default --create --type bool --set true
-
-		# XFT
-		xfconf-query -c xsettings -p /Xft/Antialias -s 1
-		xfconf-query -c xsettings -p /Xft/Hinting -s 1
-		xfconf-query -c xsettings -p /Xft/HintStyle -s "hintslight"
-		xfconf-query -c xsettings -p /Xft/Lcdfilter -s "lcddefault"
-		xfconf-query -c xsettings -p /Xft/RGBA -s "rgb"
-
-
-		xfconf-query -c xsettings -p /Gtk/FontName -s "Lato Medium 10"
-		xfconf-query -c xsettings -p /Gtk/MonospaceFontName -s "Iosevka Nerd Font Mono 10"
-		xfconf-query -c xsettings -p /Gtk/DecorationLayout -s "menu:minimize,maximize,close"
-		
-		xfconf-query -c xsettings -p /Gtk/ButtonImages -s true
-
-		xfconf-query -c xfwm4 -p /general/title_font -s "Lato Medium 10"
-		xfconf-query -c xfwm4 -p /general/button_layout -s "O|HMC"
-		xfconf-query -c xfwm4 -p /general/cycle_preview -s false
-		xfconf-query -c xfwm4 -p /general/mousewheel_rollup -s false
-		xfconf-query -c xfwm4 -p /general/workspace_names -n -t string -t string -t string -t string -s "1" -s "2" -s "3" -s "4"
-		xfconf-query -c xfwm4 -p /general/workspace_count -s 4
-
-
- 		xfconf-query -c xfce4-session -p /compat/LaunchGNOME -s true
-
-		# Notifyd
-		xfconf-query -n -c xfce4-notifyd -p /log-level -t int -s 1
-		xfconf-query -n -c xfce4-notifyd -p /log-level-apps -t int -s 0
-		xfconf-query -n -c xfce4-notifyd -p /notification-log -t bool -s true
-		xfconf-query -n -c xfce4-notifyd -p /notify-location -t int -s 2
-		xfconf-query -n -c xfce4-notifyd -p /primary-monitor -t int -s 0
-		xfconf-query -n -c xfce4-notifyd -p /theme -t string -s Greybird
-
-		# Keyboard
-		xfconf-query -n -c keyboards -p /Default/KeyRepeat/Delay -t int -s 300 
-		xfconf-query -n -c keyboards -p /Default/KeyRepeat/Rate -t int -s 26
-
-		xfconf-query -n -c keyboard-layout -p /Default/XkbDisable -t bool -s false
-		xfconf-query -n -c keyboard-layout -p /Default/XkbLayout -t string -s us
-		xfconf-query -n -c keyboard-layout -p /Default/XkbVariant -t string -s altgr-intl
-
-		# Thunar volman
-		xfconf-query -n -c thunar-volman -p /autoplay-audio-cds/enabled -t bool -s false
-		#xfconf-query -n -c thunar-volman -p /autoplay-audio-cds/command -t string -s "vlc cdda://%d"
-		xfconf-query -n -c thunar-volman -p /autoplay-video-cds/enabled -t bool -s false
-		#xfconf-query -n -c thunar-volman -p /autoplay-video-cds/command -t string -s "vlc dvd://%d"
-		xfconf-query -n -c thunar-volman -p /autorun/enabled -t bool -s true
-	fi
-
-
+	xfce_settings
 	# X11 forwarding over SSH
 	sudo -E sed -i -E 's|.*X11UseLocalhost.*|X11UseLocalhost no|g' /etc/ssh/sshd_config
 	sudo -E sed -i -E 's|.*X11Forwarding.*|X11Forwarding yes|g' /etc/ssh/sshd_config
@@ -372,86 +313,7 @@ function settings() {
 
 
 function keybindings() {
-	if which xfconf-query &>/dev/null; then
-		# Find keyboard shortcuts: xfconf-query -c xfce4-keyboard-shortcuts -l | grep -E '/custom/'
-
-		# # Script to generate the keyboard shortcuts commands from the current setup
-		# key=xfce4-keyboard-shortcuts
-		# results="$(xfconf-query -c "$key" -l | grep -E '/custom/')"
-		# for result in $results;
-		# do
-		# 	value="$(xfconf-query -c "$key" -p "$result")"
-		# 	the_type='string'
-		# 	if [[ $value = 'true' ]] || [[ $value = 'false' ]]; then
-		# 		the_type='bool'
-		# 	fi
-		# 	echo "xfconf-query -n -c \"$key\" -p \"$result\" -s \"$value\" -t \"$the_type\""
-		# done
-
-		# Clear all keyboard shortcuts
-		xfconf-query -c "xfce4-keyboard-shortcuts" -l | xargs -r -i xfconf-query -c "xfce4-keyboard-shortcuts" -p "{}" -r
-
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Alt>F1" -s "xfce4-popup-applicationsmenu" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Alt>F2" -s "xfrun4" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Alt>F2/startup-notify" -s "true" -t "bool"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Alt>F3" -s "xfce4-appfinder" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Alt>F3/startup-notify" -s "true" -t "bool"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Alt>Print" -s "shutter -s" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/override" -s "true" -t "bool"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Primary><Alt>Delete" -s "dm-tool lock" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Primary><Alt>Escape" -s "xkill" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Primary>Escape" -s "xfce4-popup-whiskermenu" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/Print" -s "shutter -f" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Super>e" -s "mousepad" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Super>f" -s "exo-open --launch FileManager" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Super>F1" -s "xfce4-find-cursor" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Super>m" -s "exo-open --launch MailReader" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Super>p" -s "xfce4-display-settings --minimal" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Super>r" -s "xfce4-appfinder" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Super>Return" -s "exo-open --launch TerminalEmulator" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Super>w" -s "exo-open --launch WebBrowser" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/XF86Calculator" -s "mate-calc" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/XF86Display" -s "xfce4-display-settings --minimal" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/XF86Explorer" -s "exo-open --launch FileManager" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/XF86HomePage" -s "exo-open --launch WebBrowser" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/XF86Mail" -s "exo-open --launch MailReader" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/XF86WWW" -s "exo-open --launch WebBrowser" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Alt>F4" -s "close_window_key" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Alt>grave" -s "switch_window_key" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Alt>space" -s "popup_menu_key" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Alt>Tab" -s "cycle_windows_key" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/Down" -s "down_key" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/Escape" -s "cancel_key" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/Left" -s "left_key" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/override" -s "true" -t "bool"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Primary><Alt>d" -s "show_desktop_key" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Primary><Shift><Alt>Left" -s "move_window_left_key" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Primary><Shift><Alt>Right" -s "move_window_right_key" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Primary><Shift><Alt>Up" -s "move_window_up_key" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/Right" -s "right_key" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Shift><Alt>ISO_Left_Tab" -s "cycle_reverse_windows_key" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Shift><Super>ampersand" -s "move_window_workspace_7_key" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Shift><Super>asciicircum" -s "move_window_workspace_6_key" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Shift><Super>asterisk" -s "move_window_workspace_8_key" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Shift><Super>at" -s "move_window_workspace_2_key" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Shift><Super>dollar" -s "move_window_workspace_4_key" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Shift><Super>exclam" -s "move_window_workspace_1_key" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Shift><Super>numbersign" -s "move_window_workspace_3_key" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Shift><Super>parenleft" -s "move_window_workspace_9_key" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Shift><Super>parenright" -s "move_window_workspace_10_key" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Shift><Super>percent" -s "move_window_workspace_5_key" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Super>0" -s "workspace_10_key" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Super>1" -s "workspace_1_key" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Super>2" -s "workspace_2_key" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Super>3" -s "workspace_3_key" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Super>4" -s "workspace_4_key" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Super>5" -s "workspace_5_key" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Super>6" -s "workspace_6_key" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Super>7" -s "workspace_7_key" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Super>8" -s "workspace_8_key" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Super>9" -s "workspace_9_key" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/Up" -s "up_key" -t "string"
-	fi
+	xfce_keybindings
 }
 
 function ulauncher() {
@@ -543,7 +405,7 @@ function kde() {
 	# @todo remove kde pim etc
 }
 
-function uninstall_kde() {
+function uninstall-kde() {
 	# @todo gwenview ?
 	sudo -E apt remove -y ark okular '*kwallet*' kdevelop kate kwrite kronometer ktimer
 	sudo -E apt autoremove -y
@@ -577,7 +439,6 @@ function qt_dev() {
 
 function jupyter() {
 	pip3 install jupyterlab
-	npm config set prefix "$HOME/.local"
 	npm install -g ijavascript && ijsinstall
 	pip3 install bash_kernel && python3 -m bash_kernel.install
 	pip3 install gnuplot_kernel && python3 -m gnuplot_kernel install --user
@@ -587,20 +448,21 @@ function jupyter() {
 function dev() {
 	sudo -E apt remove -y shellcheck
 	if ! which shellcheck &>/dev/null; then
-	scversion="stable" # or "v0.4.7", or "latest"
+		scversion="stable" # or "v0.4.7", or "latest"
 		wget -qO- "https://storage.googleapis.com/shellcheck/shellcheck-${scversion?}.linux.x86_64.tar.xz" | tar -xJv
 		sudo -E cp "shellcheck-${scversion}/shellcheck" /usr/bin/
 	fi
 	sudo -E apt install -y nodejs npm meld
+
+	npm config set prefix "$HOME/.local"
 	npm install -g bash-language-server
-	# Php language server
 	npm install -g intelephense
 
-	if ! which circleci &>/dev/null
-	then
+	if ! which circleci &>/dev/null; then
 		curl -fLSs https://circle.ci/cli | sudo -E bash
 	fi
-	# Gnu global
+	
+	# Gnu global and exuberant ctags
 	sudo -E apt install -y global ctags
 }
 
@@ -612,13 +474,14 @@ function php() {
 	pip3 install mycli
 	pip3 install pre-commit
 
-	if ! which composer &>/dev/null
-	then
+	if ! which composer &>/dev/null; then
 		# shellcheck disable=SC2091
 		curl -sS https://getcomposer.org/installer | $(which php) && sudo -E mv composer.phar /usr/local/bin/composer
 	fi
 	# shellcheck disable=SC2091
-	curl -sS https://litipk.github.io/Jupyter-PHP-Installer/dist/jupyter-php-installer.phar > "${TMPDIR:-/tmp}/jupyter.php"; $(which php) "${TMPDIR:-/tmp}/jupyter.php" install; rm "${TMPDIR:-/tmp}/jupyter.php"
+	curl -sS https://litipk.github.io/Jupyter-PHP-Installer/dist/jupyter-php-installer.phar > "${TMPDIR:-/tmp}/jupyter.php"
+	$(which php) "${TMPDIR:-/tmp}/jupyter.php" install
+	rm "${TMPDIR:-/tmp}/jupyter.php"
 }
 
 
@@ -630,14 +493,12 @@ function docker() {
 		gnupg2 \
 		software-properties-common
 
-	if ! which ctop &>/dev/null
-	then
+	if ! which ctop &>/dev/null; then
 		sudo -E wget https://github.com/bcicen/ctop/releases/download/v0.7.2/ctop-0.7.2-linux-amd64 -O /usr/local/bin/ctop
 		sudo -E chmod +x /usr/local/bin/ctop
 	fi
 
-	if ! which docker &>/dev/null
-	then
+	if ! which docker &>/dev/null; then
 		curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo -E apt-key add -
 		sudo -E apt-key fingerprint 0EBFCD88
 		sudo -E add-apt-repository \
@@ -649,8 +510,7 @@ function docker() {
 		sudo -E usermod -aG "docker" "$(whoami)" 
 	fi
 
-	if ! which docker-compose &>/dev/null
-	then
+	if ! which docker-compose &>/dev/null; then
 		sudo -E curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 		sudo -E chmod +x /usr/local/bin/docker-compose
 	fi
@@ -665,9 +525,11 @@ function docker() {
 	# fi
 
 	cd "${TMPDIR:-/tmp}"
-	curl -L https://github.com/jesseduffield/lazydocker/releases/download/v0.7.1/lazydocker_0.7.1_Linux_x86_64.tar.gz > lazydocker.tgz
-	tar xzf lazydocker.tgz
-	sudo -E install lazydocker /usr/local/bin/
+	if ! which lazydocker &>/dev/null; then
+		curl -L https://github.com/jesseduffield/lazydocker/releases/download/v0.7.1/lazydocker_0.7.1_Linux_x86_64.tar.gz > lazydocker.tgz
+		tar xzf lazydocker.tgz
+		sudo -E install lazydocker /usr/local/bin/
+	fi
 }
 
 function polybar() {
@@ -682,13 +544,13 @@ function polybar() {
 
 function dns() {
 	if [ ! -f /etc/NetworkManager/conf.d/00-use-dnsmasq.conf ]; then
-		sudo -E tee /etc/NetworkManager/conf.d/00-use-dnsmasq.conf << EOL
+		sudo -E tee /etc/NetworkManager/conf.d/00-use-dnsmasq.conf << EOL &>/dev/null
 # This enabled the dnsmasq plugin.
 [main]
 dns=dnsmasq
 EOL
 
-		sudo -E tee /etc/NetworkManager/dnsmasq.d/00-home-mndy-be.conf << EOL
+		sudo -E tee /etc/NetworkManager/dnsmasq.d/00-home-mndy-be.conf << EOL &>/dev/null
 address=/home.mndy.be/192.168.10.120
 addn-hosts=/etc/hosts
 EOL
@@ -701,25 +563,30 @@ EOL
 
 function sysctl() {
 	# @todo add https://askubuntu.com/questions/23674/netbook-freezes-with-high-load-on-every-io-operation to sysctl if IO performance is a problem
-	# @todo add to /etc/sysctl.conf
-#fs.inotify.max_user_watches = 524288
-#net.ipv4.ip_forward=1
-#kernel.printk = 2 4 1 7
-#vm.swappiness = 2
-#vm.max_map_count=262144
-	echo "todo"
+	sudo -E tee /etc/sysctl.d/mandy.conf << EOL &>/dev/null
+# Virtual IPs
+net.ipv4.ip_nonlocal_bind=1
+
+# For IntelliJ products for example
+# See https://confluence.jetbrains.com/display/IDEADEV/Inotify+Watches+Limit
+fs.inotify.max_user_watches = 524288
+
+fs.inotify.max_user_watches = 524288
+net.ipv4.ip_forward=1
+kernel.printk = 2 4 1 7
+vm.swappiness = 2
+vm.max_map_count=262144
+EOL
+
 }
 
 function firewall() {
 	sudo -E ufw enable
 	yes | sudo -E ufw reset
-	sudo -E ufw allow 22/udp
-	sudo -E ufw allow 22/tcp
+	sudo -E ufw allow ssh
 
-	sudo -E ufw allow 80/udp
-	sudo -E ufw allow 443/udp
-	sudo -E ufw allow 80/tcp
-	sudo -E ufw allow 443/tcp
+	sudo -E ufw allow http
+	sudo -E ufw allow https
 
 	# pulse over HTTP
 	sudo -E ufw allow 8080/udp
@@ -730,9 +597,11 @@ function firewall() {
 	sudo -E ip route add 192.168.10.0/24 "dev" "$(ls /sys/class/net | grep "^en*" | head -1)"
 }
 
-function git_config() {
-	git config --global submodule.recurse true
-	git config --global user.name Mandy Schoep
+function git-config() {
+	git config --global --replace-all submodule.recurse true
+	git config --global --replace-all user.name 'Mandy Schoep'
+	git config --global --replace-all fetch.prune true
+	git config --global --replace-all diff.guitool meld
 	echo "Manually execute 'git config --global user.email <email>'"
 }
 
@@ -749,7 +618,7 @@ function autostart() {
 
 set -e
 
-# shellcheck source=../../.functions
+# shellcheck source=../.functions
 source "$ROOT_DIR/.functions"
 set +e
 
@@ -787,7 +656,7 @@ else
 			_print_usage
 			exit 0
 		fi
-		function_location="$(declare -F $function | cut -d' ' -f3)"
+		function_location="$(declare -F "$function" | cut -d' ' -f3)"
 		if [[ -n "$(declare -f -F "$function")" ]] && [[ "$function_location" == "${BASH_SOURCE[0]}" ]] && [ $starts_with_underscore -eq 0 ]; then
 			echo "Executing $function"
 			$function

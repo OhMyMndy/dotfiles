@@ -131,7 +131,9 @@ if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
 	git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plugins/tpm/bin/install_plugins
 fi
 tmux source ~/.tmux.conf
-#shellcheck source=../.tmux/plugins/tpm/bin/install_plugins
+
+# shellcheck disable=SC1091
+# shellcheck source=/dev/null
 source "$HOME/.tmux/plugins/tpm/bin/install_plugins"
 
 
