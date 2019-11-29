@@ -9,7 +9,7 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker:
-          docker_layer_caching: true
+          # docker_layer_caching: true # not available on my plan
 
       - run:
           name: Verify docker
