@@ -24,10 +24,10 @@ EOL
 folder=$(mktemp -d)
 
 finish() {
-    rm -rf "/${folder}/"
+    rm -rf "/${folder:?}/"
 }
 trap finish EXIT
 
 echo "$content" > "$folder/index.php"
 
-php -S 0.0.0.0:12345 -t $folder
+php -S 0.0.0.0:12345 -t "$folder"

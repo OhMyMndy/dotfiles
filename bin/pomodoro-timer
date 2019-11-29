@@ -22,7 +22,7 @@ total_seconds=$(($minutes * 60))
 
 while true; do
 	echo $total_seconds > /tmp/pomodoro_time
-	
+
 	if [ $total_seconds -eq $(($notification * 60)) ]; then
 		notify-send "Almost time to take a break!" "Break in $notification minutes"
 	fi

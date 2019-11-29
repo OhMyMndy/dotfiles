@@ -26,3 +26,8 @@ code --install-extension dracula-theme.theme-dracula
 code --install-extension atlassian.atlascode
 code --install-extension mads-hartmann.bash-ide-vscode
 code --install-extension gruntfuggly.todo-tree
+code --install-extension exiasr.hadolint
+code --install-extension jvandyke.vscode-circleci
+code --install-extension timonwong.shellcheck
+code --install-extension jetmartin.bats
+code --install-extension coolbear.systemd-unit-file

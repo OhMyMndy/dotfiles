@@ -3,4 +3,3 @@
 * Markdown Support
 * Markdown Navigator
 * Override File Language
-

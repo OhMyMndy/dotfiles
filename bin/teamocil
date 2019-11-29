@@ -76,4 +76,3 @@ windows:
       - ' title ""; clear'
       - ' title "Server"; clear; php artisan serve'
       - ' title ""; clear'
-

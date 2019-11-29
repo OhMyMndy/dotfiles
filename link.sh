@@ -28,7 +28,12 @@ mkdir -p ~/dotfiles/.config/Thunar
 link-file "$DIR" ".config/Thunar/uca.xml"
 
 link-file "$DIR" ".vimrc"
-mkdir -p ~/.vim/{sessions,undo-dir,bundle,view}
+mkdir -p ~/.vim/{sessions,undo-dir,bundle,view,autoload}
+
+ln -sf ${DIR}/.vim/autoload/* ~/.vim/autoload/
+# remove broken links
+find ~/.vim/autoload/ -xtype l -delete
+
 link-file "$DIR" ".vim/coc-settings.json"
 
 link-file "$DIR" ".spacemacs"
@@ -114,9 +119,12 @@ mkdir -p ~/.local/share/applications/icons
 
 link-file "$DIR" '.local/share/applications/icons'
 ln -sf ${DIR}/.local/share/applications/*.desktop ~/.local/share/applications/
+# remove broken links
+find ~/.local/share/applications/ -xtype l -delete
 
 mkdir -p ~/.local/share/icons/hicolor/48x48/apps/
-ln -s ${DIR}/.local/share/applications/icons/*.png ~/.local/share/icons/hicolor/48x48/apps/ 2>/dev/null
+ln -s "${DIR}"/.local/share/applications/icons/*.png ~/.local/share/icons/hicolor/48x48/apps/ 2>/dev/null
+find ~/.local/share/applications/icons/ -xtype l -delete
 ##### END DESKTOP FILES #####
 
 
@@ -138,7 +146,7 @@ source "$HOME/.tmux/plugins/tpm/bin/install_plugins"
 
 
 yes | vim +PlugInstall +qall
-vim -c 'CocInstall -sync coc-highlight coc-json coc-html coc-phpls coc-python coc-markdownlint |q'   
+vim -c 'CocInstall -sync coc-highlight coc-json coc-html coc-phpls coc-python coc-markdownlint |q'
 
 bash "$DIR/installers/apps/oh-my-zsh.sh"
 
@@ -147,17 +155,13 @@ create_remmina_desktop_files
 
 # autostart files
 mkdir -p ~/.config/autostart
-ln -s ${DIR}/.config/autostart/*.desktop ~/.config/autostart/ 2>/dev/null
-
-#find /usr/share/applications -iname 'nextcloud.desktop' | xargs -I {} ln -s {} ~/.config/autostart
-#find /usr/share/applications -iname 'albert.desktop' | xargs -I {} ln -s {} ~/.config/autostart
-
-
+ln -s "${DIR}"/.config/autostart/*.desktop ~/.config/autostart/ 2>/dev/null
+find ~/.config/autostart/ -xtype l -delete
 
 if [[ $(uname -o) = 'Android' ]];
 then
 	mkdir -p ~/.config/openbox
-	
+
 	link-file "$DIR" 'termux/.config/openbox' '.config/openbox'
 	link-file "$DIR" 'termux/.vnc' '.vnc'
 

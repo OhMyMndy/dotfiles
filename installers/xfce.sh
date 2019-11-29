@@ -102,7 +102,7 @@ function xfce_settings() {
 		xfconf-query -c xsettings -p /Gtk/FontName -s "Lato Medium 10"
 		xfconf-query -c xsettings -p /Gtk/MonospaceFontName -s "Iosevka Nerd Font Mono 10"
 		xfconf-query -c xsettings -p /Gtk/DecorationLayout -s "menu:minimize,maximize,close"
-		
+
 		xfconf-query -c xsettings -p /Gtk/ButtonImages -s true
 
 		xfconf-query -c xfwm4 -p /general/title_font -s "Lato Medium 10"
@@ -124,7 +124,7 @@ function xfce_settings() {
 		xfconf-query -n -c xfce4-notifyd -p /theme -t string -s Greybird
 
 		# Keyboard
-		xfconf-query -n -c keyboards -p /Default/KeyRepeat/Delay -t int -s 300 
+		xfconf-query -n -c keyboards -p /Default/KeyRepeat/Delay -t int -s 300
 		xfconf-query -n -c keyboards -p /Default/KeyRepeat/Rate -t int -s 26
 
 		xfconf-query -n -c keyboard-layout -p /Default/XkbDisable -t bool -s false
@@ -137,6 +137,10 @@ function xfce_settings() {
 		xfconf-query -n -c thunar-volman -p /autoplay-video-cds/enabled -t bool -s false
 		#xfconf-query -n -c thunar-volman -p /autoplay-video-cds/command -t string -s "vlc dvd://%d"
 		xfconf-query -n -c thunar-volman -p /autorun/enabled -t bool -s true
+	fi
+
+	if command -v xfce4-panel &>/dev/null; then
+		xfce4-panel -r
 	fi
 }
 

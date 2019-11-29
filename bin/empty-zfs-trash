@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-list=`sudo zfs list -o mountpoint -t filesystem | sed 1d`
+list="$(sudo zfs list -o mountpoint -t filesystem | sed 1d)"
 
 for filesystem in $list
 do
-echo "Removing trash from '$filesystem'"
-sudo rm -rf $filesystem/.Trash*
+    echo "Removing trash from '$filesystem'"
+    sudo rm -rf "$filesystem"/.Trash*
 done

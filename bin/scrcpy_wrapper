@@ -53,7 +53,7 @@ while true ; do
 	        *) echo "Unknown flag '$1'"; exit 2; break ;;
 	    esac
 		continue
-	
+
 	fi
 	if [[ "$scrcpy_short_opts_with_argument" = *"${1//-/}"* ]];
 	then
@@ -63,15 +63,15 @@ while true ; do
 		else
 			args="$args $1 $2"
 		fi
-		
-		if [[ $# -ne 0 ]]; then 
+
+		if [[ $# -ne 0 ]]; then
 			shift
 		fi
 	else
 		args="$args $1"
 	fi
-	
-	if [[ $# -eq 0 ]]; then 
+
+	if [[ $# -eq 0 ]]; then
 		break
 	fi
 	shift
@@ -97,7 +97,7 @@ function setup() {
 		run adb shell settings put system accelerometer_rotation 0
 	fi
 	if [[ -v leena ]]; then run adb shell monkey -p de.m_lang.leena 1; fi
-	if [[ -v font_scale ]]; then run adb shell settings put system font_scale "$font_scale"; fi	
+	if [[ -v font_scale ]]; then run adb shell settings put system font_scale "$font_scale"; fi
 
 	if [[ -v disable_animations ]]; then
 		adb shell settings put global window_animation_scale "0.0"

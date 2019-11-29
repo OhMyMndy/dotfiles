@@ -233,7 +233,7 @@ typeset -A ZSH_HIGHLIGHT_PATTERNS
 # To have commands starting with `rm -rf` in red:
 ZSH_HIGHLIGHT_PATTERNS+=('rm -rf *' 'fg=white,bold,bg=red')
 
-# shellcheck source=./.fzf.zsh 
+# shellcheck source=./.fzf.zsh
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 if command -v direnv >/dev/null 2>&1

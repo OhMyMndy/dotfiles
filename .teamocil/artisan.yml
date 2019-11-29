@@ -4,11 +4,10 @@
 
 windows:
   - name: Artisan {{project}}
-    root: {{pwd}}
-    layout: tiled
+    root: "{{pwd}}"
+    # layout: tiled
     layout: 5cfd,274x63,0,0{137x63,0,0,38,136x63,138,0[136x31,138,0,40,136x31,138,32,41]}
     panes:
       - ' title ""; clear'
       - ' title "Server"; clear; php artisan serve'
       - ' title ""; clear'
-

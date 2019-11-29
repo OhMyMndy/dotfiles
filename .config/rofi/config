@@ -25,4 +25,3 @@ rofi.fixed-num-lines: true
 rofi.dpi: 96
 rofi.show-icons: true
 rofi.run-command: zsh -c -i '{cmd}'
-

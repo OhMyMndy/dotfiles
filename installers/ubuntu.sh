@@ -109,7 +109,7 @@ function minimal() {
 	# Esential X tools
 	# kdeconnect
 	sudo -E apt install -y "shutter" redshift-gtk xfce4-terminal xfce4-genmon-plugin chromium-browser seahorse galculator orage ristretto \
-		xsel xclip arandr wmctrl xscreensaver flatpak compton xfce4-appmenu-plugin 
+		xsel xclip arandr wmctrl xscreensaver flatpak compton xfce4-appmenu-plugin
 
 	_add_repo_or_install_deb 'ppa:hluk/copyq' 'copyq' 'https://github.com/hluk/CopyQ/releases/download/v3.9.3/copyq_3.9.3_Debian_10-1_amd64.deb'
 
@@ -173,17 +173,17 @@ function build-tools() {
 
 function vpn() {
 	# Vpn and network manager
-	sudo -E apt install -y openvpn network-manager-openvpn network-manager-openvpn-gnome 
+	sudo -E apt install -y openvpn network-manager-openvpn network-manager-openvpn-gnome
 }
 
 function general() {
 	set -e
 	sudo -E apt update -y
-	
+
 	build-tools
 
 	# System utils
-	sudo -E apt install -y sysfsutils sysstat qdirstat 
+	sudo -E apt install -y sysfsutils sysstat qdirstat
 
 	# Media
 	sudo -E apt install -y vlc quodlibet imagemagick
@@ -217,16 +217,16 @@ function general() {
 	if ! command -v x11docker &>/dev/null; then
 		curl -fsSL https://raw.githubusercontent.com/mviereck/x11docker/master/x11docker | sudo -E bash -s -- --update
 	fi
-		
+
 	_add_repo_or_install_deb 'ppa:lazygit-team/release' 'lazygit'
-	
+
 	_add_repo_or_install_deb 'ppa:webupd8team/indicator-kdeconnect' 'indicator-kdeconnect'
 
 	if ! apt -qq list papirus-icon-theme 2>/dev/null | grep -i -q installed
 	then
 		_add_repo_or_install_deb 'ppa:papirus/papirus' 'papirus-icon-theme'
 	fi
-	
+
 	sudo -E snap install ripgrep --classic
 
 
@@ -234,7 +234,8 @@ function general() {
 	flatpak install flathub com.github.wwmm.pulseeffects -y --user
 
 
-	sudo -E apt remove -y parole mpv 'pidgin*'
+	remove-obsolelete
+
 
 	pip3 install thefuck
 	pip3 install numpy
@@ -242,6 +243,18 @@ function general() {
 	pip3 install httpie
 
 	set +e
+}
+
+function remove-obsolete() {
+	sudo -E apt remove -y parole mpv 'pidgin*'
+	# Remove gnome games
+	sudo -E apt remove -y aisleriot hitori sgt-puzzles lightsoff iagno gnome-games gnome-nibbles \
+		gnome-mines quadrapassel gnome-sudoku gnome-robots swell-foop tali gnome-taquin \
+		gnome-tetravex gnome-chess five-or-more four-in-a-row gnome-klotski gnome-mahjongg
+
+	# Obsolete indicators
+	sudo -E apt remove indicator-session indicator-datetime indicator-keyboard indicator-power -y
+	sudo -E apt autoremove -y
 }
 
 function shutter() {
@@ -263,7 +276,7 @@ function groups() {
 	sudo -E groupadd vboxusers
 	sudo -E groupadd mail
 	sudo -E groupadd sambashare
-	
+
 	sudo -E usermod -aG "docker" mandy
 	sudo -E usermod -aG mail mandy
 	sudo -E usermod -aG disk mandy
@@ -278,12 +291,12 @@ function groups() {
 
 function fonts() {
 	installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/SourceCodePro.zip SourceCodeProNerdFont
-	installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/FantasqueSansMono.zip FantasqueSansMono 
+	installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/FantasqueSansMono.zip FantasqueSansMono
 	installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/DroidSansMono.zip DroidSansMono
 	installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/DejaVuSansMono.zip DejaVuSansMono
 	installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/Iosevka.zip Iosevka
-	installFontsFromZip https://github.com/IBM/plex/releases/download/v1.4.1/OpenType.zip "IBM Plex" 
-	
+	installFontsFromZip https://github.com/IBM/plex/releases/download/v1.4.1/OpenType.zip "IBM Plex"
+
 	if [[ $fontsAdded -eq 1 ]]; then
 		fc-cache -f -v
 	fi
@@ -390,7 +403,7 @@ function media() {
 	# Media things, disk burn software
 	sudo -E apt install -y digikam k3b # darktable
 	# Permissions for ripping cds
-	sudo -E chmod 4711 /usr/bin/wodim; 
+	sudo -E chmod 4711 /usr/bin/wodim;
 	sudo -E chmod 4711 /usr/bin/cdrdao
 }
 
@@ -452,16 +465,28 @@ function dev() {
 		wget -qO- "https://storage.googleapis.com/shellcheck/shellcheck-${scversion?}.linux.x86_64.tar.xz" | tar -xJv
 		sudo -E cp "shellcheck-${scversion}/shellcheck" /usr/bin/
 	fi
+
+	if ! which hadolint &>/dev/null; then
+		cd /tmp || exit 2
+		wget -qO- "https://github.com/hadolint/hadolint/releases/download/v1.17.3/hadolint-Linux-x86_64" > hadolint
+		sudo -E cp "hadolint" /usr/bin/
+		sudo -E chmod +x /usr/bin/hadolint
+	fi
+
+	pip3 install mypy yamllint flake8 autopep8
+	pip3 install pre-commit
+
 	sudo -E apt install -y nodejs npm meld
 
 	npm config set prefix "$HOME/.local"
 	npm install -g bash-language-server
 	npm install -g intelephense
+	npm install -g bats
 
 	if ! which circleci &>/dev/null; then
 		curl -fLSs https://circle.ci/cli | sudo -E bash
 	fi
-	
+
 	# Gnu global and exuberant ctags
 	sudo -E apt install -y global ctags
 }
@@ -472,7 +497,7 @@ function php() {
 	sudo -E apt install -y kcachegrind
 	sudo -E snap install phpstorm --classic
 	pip3 install mycli
-	pip3 install pre-commit
+
 
 	if ! which composer &>/dev/null; then
 		# shellcheck disable=SC2091
@@ -507,7 +532,7 @@ function docker() {
 			stable"
 		sudo -E apt-get update
 		sudo -E apt-get install -y docker-ce
-		sudo -E usermod -aG "docker" "$(whoami)" 
+		sudo -E usermod -aG "docker" "$(whoami)"
 	fi
 
 	if ! which docker-compose &>/dev/null; then
@@ -614,6 +639,17 @@ function autostart() {
 	cp /usr/share/applications/nextcloud.desktop ~/.config/autostart/
 	cp "$ROOT_DIR/.local/share/applications/Compton.desktop" ~/.config/autostart/
 	update-desktop-database
+}
+
+function gaming() {
+	lutris
+	sudo -E apt install -y steam
+}
+
+
+## Gaming section
+function lutris() {
+	_add_repo_or_install_deb 'ppa:lutris-team/lutris' 'lutris'
 }
 
 set -e

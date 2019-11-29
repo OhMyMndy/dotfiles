@@ -96,6 +96,6 @@ Token.Toolbar.Arg.Text = nobold
 
 # Favorite queries.
 [favorite_queries]
-properties = '''select p.id as property_id, e.id as entity_id, p.property_name, p.property_type, e.entity_class, e.entity_table, p.property_description from system_property p 
+properties = '''select p.id as property_id, e.id as entity_id, p.property_name, p.property_type, e.entity_class, e.entity_table, p.property_description from system_property p
 INNER JOIN system_entity e on p.entity_id = e.id WHERE p.property_name LIKE '%$1%''''
 user_by_name = "select * from users where name = '$1'"

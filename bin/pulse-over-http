@@ -20,7 +20,7 @@ tput sgr0
 
 # set volume to max
 pactl set-sink-volume "record-n-play" 100%
-pactl set-sink-mute "record-n-play" 0  
+pactl set-sink-mute "record-n-play" 0
 # Start VLC, serving the sink output as flac stream
 if [[ $format -eq "mp3" ]]; then
 	cvlc -q pulse://record-n-play.monitor --sout "#transcode{acodec=mpga,ab=320,channels=2}:standard{access=http,dst=$IP:8080/audio.mp3}"

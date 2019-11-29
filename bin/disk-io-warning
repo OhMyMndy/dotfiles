@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 threshold="$1"
 
@@ -15,13 +15,9 @@ echo "Treshold: ${threshold}"
 
 IFS=$'\n'
 for disk in $disks; do
-	percentage=$(echo $disk | awk '{print $2}')
-	disk=$(echo $disk | awk '{print $1}')
+	percentage=$(echo "$disk" | awk '{print $2}')
+	disk=$(echo "$disk" | awk '{print $1}')
 
 	echo "percentage $percentage disk $disk"
-
-    sudo iotop -oqqq -n 4 >
-
     notify-send -i dialog-warning.png 'Disk IO Alert' "Disk $disk high IO Usage: $percentage%"
 done
-

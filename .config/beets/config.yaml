@@ -6,11 +6,11 @@ import:
     resume: ask
 plugins: lastgenre fetchart ftintitle smartplaylist random embedart info duplicates web # mpdupdate
 embedart:
-    auto: yes 
+    auto: yes
 
 mpdupdate:
     host: localhost
-    port: 6600 
+    port: 6600
 
 smartplaylist:
     playlist_dir: ~/MyMusic/Playlists/dynamic/

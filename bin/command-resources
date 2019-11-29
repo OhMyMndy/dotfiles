@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-printf "%-20s %-8s %-8s\n" "COMMAND" "%MEM" "%CPU" 
+printf "%-20s %-8s %-8s\n" "COMMAND" "%MEM" "%CPU"
 /bin/ps amcwwwxo "command %mem %cpu" |
 /usr/bin/awk -F" " '
 BEGIN {
@@ -29,5 +29,3 @@ END {
 }
 ' |
 /usr/bin/sort -rn -t '/' -k 2,2 | /usr/bin/tr -d '/' | /usr/bin/head -n 15
-
-

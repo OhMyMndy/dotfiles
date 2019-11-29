@@ -1,28 +1,83 @@
-
 ---
 version: 2
 jobs:
   build:
+    # machine: true
     docker:
-       - image: circleci/php:7.4-cli-buster-node-browsers-legacy
+      # - image: circleci/golang:1.12.12-buster
+      - image: mandy91/dotfiles-build:0.1
     steps:
       - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
 
       - run:
-          name: Install shellcheck
-          command: |
-            scversion="stable"
-            wget -qO- "https://storage.googleapis.com/shellcheck/shellcheck-${scversion?}.linux.x86_64.tar.xz" | tar -xJv
-            sudo cp "shellcheck-${scversion}/shellcheck" /usr/bin/
+          name: Verify docker
+          command: docker --version
 
       - run:
           name: Shellcheck
+          when: always
+          command: |
+            set +e
+
+            exit 0
+
+            failed=0
+            # git ls-files | xargs -r -i bash -c "file \"{}\" | grep -iq Bourne-Again && echo \"{}\"" | xargs -r -i shellcheck -e SC1071,SC1008 -Calways -x "{}" -P "$(dirname "{}}")" | less
+            #
+            for file in $(git ls-files | xargs -r -i bash -c "file \"{}\" | grep -iq Bourne-Again && echo \"{}\"")
+            do
+              if ! shellcheck -e SC1071,SC1008 -x "$file" -P "$(dirname "$file")"; then
+                failed=1
+              fi
+            done
+            exit $failed
+
+
+      - run:
+          name: Hadolint
+          when: always
           command: |
             set +e
             failed=0
-            for file in $(git ls-files -- '*.sh' ':!:z.sh')
+            for file in $(git ls-files -- 'Dockerfile')
             do
-              if ! shellcheck -x "$file" -P "$(dirname "$file")"; then
+              if ! hadolint "$file"; then
+                failed=1
+              fi
+            done
+            exit $failed
+      - run:
+          name: Validate Yaml files
+          when: always
+          command: |
+            set +e
+            failed=0
+            for file in $(git ls-files -- '*.yaml' '*.yml')
+            do
+              if ! yamllint -s -d "line-length: {max: 80, allow-non-breakable-words: true}" "$file"; then
+                failed=1
+              fi
+            done
+            exit $failed
+
+      - run:
+          name: Validate vim
+          when: always
+          command: |
+            vim -u NONE -c 'try | source .vimrc | catch | cq | endtry | q' &>/dev/null
+
+      - run:
+          name: Run tests
+          when: always
+          command: |
+            set +e
+            failed=0
+            for file in $(git ls-files -- '*.bats')
+            do
+              echo "$file"
+              if ! bats "$file"; then
                 failed=1
               fi
             done

@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# shellcheck disable=SC2016
+
+# shellcheck source=../.functions
 source ~/.functions
 
 # Remove lines starting with # and all empty lines

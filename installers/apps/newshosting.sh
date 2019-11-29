@@ -8,4 +8,3 @@ curl -L http://client-index.newshosting.com/nh/2.8.10/linux/newshosting-2.8.10-l
 chmod +x /tmp/newshosting.run
 /tmp/newshosting.run --mode unattended --prefix "$HOME/newshosting"
 rm -f /tmp/newshosting.run
-
