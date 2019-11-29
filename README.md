@@ -1,5 +1,7 @@
 # Dotfiles
 
+[![CircleCI](https://circleci.com/gh/Mandy91/dotfiles.svg?style=svg)](https://circleci.com/gh/Mandy91/dotfiles)
+
 ## Ubuntu
 ```bash
 sudo apt install git vim curl -y
