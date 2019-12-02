@@ -685,3 +685,44 @@ function add_repo_or_install_deb() {
 		fi
 	fi
 }
+
+
+
+function enable-proxy() {
+	read -d '' content <<-EOF
+		{
+		"default":
+			{
+				"httpProxy": "http://$IP_ADDRESS:3128",
+				"httpsProxy": "http://$IP_ADDRESS:3128",
+				"noProxy": "localhost,127.0.0.1"
+			}
+		}
+	EOF
+
+	if [[ -d ~/src/dockerfiles ]]; then
+		$(cd ~/src/dockerfiles; docker-compose up -d squid-cache)
+	fi
+	json -I -f ~/.docker/config.json -e "this.proxies=$content"
+
+	export HTTPS_PROXY=http://$IP_ADDRESS:3128
+	export https_proxy=http://$IP_ADDRESS:3128
+	export HTTP_PROXY=http://$IP_ADDRESS:3128
+	export http_proxy=http://$IP_ADDRESS:3128
+
+	sudo ufw allow 3128/tcp
+}
+
+function disable-proxy() {
+	unset HTTPS_PROXY
+	unset https_proxy
+	unset HTTP_PROXY
+	unset http_proxy
+
+
+	if [[ -d ~/src/dockerfiles ]]; then
+		$(cd ~/src/dockerfiles; docker-compose stop squid-cache)
+	fi
+	json -I -f ~/.docker/config.json -e "this.proxies={}"
+	sudo ufw delete 3128/tcp
+}

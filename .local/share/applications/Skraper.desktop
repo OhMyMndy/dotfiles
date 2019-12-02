@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Skraper
+Comment=Skraper through Wine 64
+StartupWMClass=Tidal
+Exec=wine64 /home/mandy/Skraper/SkraperUI.exe
+StartupNotify=true
+Terminal=false
+Type=Application
+Icon=application
+Categories=Games

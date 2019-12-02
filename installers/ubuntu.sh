@@ -18,6 +18,7 @@ fi
 fontsAdded=0
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cd "$DIR" || exit 1
 ROOT_DIR="$(git rev-parse --show-toplevel)"
 
 # shellcheck source=./xfce.sh
@@ -144,7 +145,9 @@ function minimal() {
  	sudo -E pip3 install git+https://github.com/jeffkaufman/icdiff.git
 
 	# @todo set the gemrc files in place before running gem install
-	#gem install teamocil
+	if [ -f ~/.gemrc ]; then
+		gem install teamocil
+	fi
 	ulauncher
 	bash "$DIR/apps/oh-my-zsh.sh"
 	# Fix for snaps with ZSH
@@ -246,7 +249,7 @@ function general() {
 }
 
 function remove-obsolete() {
-	sudo -E apt remove -y parole mpv 'pidgin*'
+	sudo -E apt remove -y parole mpv 'pidgin*' 'zathura*' evince
 	# Remove gnome games
 	sudo -E apt remove -y aisleriot hitori sgt-puzzles lightsoff iagno gnome-games gnome-nibbles \
 		gnome-mines quadrapassel gnome-sudoku gnome-robots swell-foop tali gnome-taquin \
@@ -472,16 +475,30 @@ function dev() {
 		sudo -E cp "hadolint" /usr/bin/
 		sudo -E chmod +x /usr/bin/hadolint
 	fi
+	sudo -E apt install -y python3-venv python3-pip
 
 	pip3 install mypy yamllint flake8 autopep8
+
+	# python3 version is not in pypi
+	pip install crudini
+
+	if [[ ! -d ~/.mypyls ]]; then
+		python3 -m venv ~/.mypyls
+		~/.mypyls/bin/pip install "https://github.com/matangover/mypyls/archive/master.zip#egg=mypyls[default-mypy]"
+	fi
+
 	pip3 install pre-commit
 
-	sudo -E apt install -y nodejs npm meld
-
+	curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
+	sudo -E apt install -y nodejs meld
+	sudo -E apt install -y jq
+	_add_repo_or_install_deb 'ppa:rmescandon/yq' 'yq'
+	
 	npm config set prefix "$HOME/.local"
 	npm install -g bash-language-server
 	npm install -g intelephense
 	npm install -g bats
+	npm install -g json
 
 	if ! which circleci &>/dev/null; then
 		curl -fLSs https://circle.ci/cli | sudo -E bash
@@ -490,6 +507,7 @@ function dev() {
 	# Gnu global and exuberant ctags
 	sudo -E apt install -y global ctags
 }
+
 
 
 function php() {
@@ -536,7 +554,7 @@ function docker() {
 	fi
 
 	if ! which docker-compose &>/dev/null; then
-		sudo -E curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+		sudo -E curl -L "https://github.com/docker/compose/releases/download/1.25.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 		sudo -E chmod +x /usr/local/bin/docker-compose
 	fi
 
@@ -602,12 +620,11 @@ kernel.printk = 2 4 1 7
 vm.swappiness = 2
 vm.max_map_count=262144
 EOL
-
+sudo sysctl -p
 }
 
 function firewall() {
 	sudo -E ufw enable
-	yes | sudo -E ufw reset
 	sudo -E ufw allow ssh
 
 	sudo -E ufw allow http
@@ -635,20 +652,19 @@ function autostart() {
 	cp /usr/share/applications/ulauncher.desktop ~/.config/autostart/
 	cp /usr/share/applications/indicator-kdeconnect.desktop ~/.config/autostart/
 	cp /usr/share/applications/redshift-gtk.desktop ~/.config/autostart/
-	cp /usr/share/applications/com.github.hluk.copyq.desktop ~/.config/autostart/
+	cp /usr/share/applications/copyq.desktop ~/.config/autostart/
 	cp /usr/share/applications/nextcloud.desktop ~/.config/autostart/
-	cp "$ROOT_DIR/.local/share/applications/Compton.desktop" ~/.config/autostart/
+	glxinfo | grep -i "accelerated: no" &>/dev/null
+	if [[ $? -ne 0 ]]; then
+		cp "$ROOT_DIR/.local/share/applications/Compton.desktop" ~/.config/autostart/
+	fi
 	update-desktop-database
 }
 
 function gaming() {
 	lutris
+	retroarch-config
 	sudo -E apt install -y steam
-}
-
-
-function fail() {
-	exit 233
 }
 
 ## Gaming section
@@ -656,8 +672,74 @@ function lutris() {
 	_add_repo_or_install_deb 'ppa:lutris-team/lutris' 'lutris'
 }
 
-set -e
+function install-game-roms() {
+	if [[ ! -d ~/Games/bios ]]; then
+		cd "${TMPDIR:-/tmp}"
+		curl -L https://archive.org/download/retropiebiosfilesconfiguredforeverysystem_20190904/Retropie%20Bios%20Files%20Configured%20for%20Every%20System.zip > bios.zip
+		mkdir -p ~/Games/bios
+		cd ~/Games/bios
+		unzip "${TMPDIR:-/tmp}/bios.zip"
+		mv Retropie\ Bios\ Files\ Configured\ for\ Every\ System/** .
+		rm -rf Retropie\ Bios\ Files\ Configured\ for\ Every\ System
+		rm "${TMPDIR:-/tmp}/bios.zip"
+	fi
+	cp -r ~/Games/bios/BIOS/** $(_retroarch_system_folders)
+}
 
+function retroarch-config() {
+	# @todo add bios files to the system directories
+
+	_set_retroarch_config fps_show "\"true\""
+	echo "$retroarch_config_files" \
+		| xargs -r -i bash -c 'dir="$(dirname "{}")"; crudini --set --inplace "{}" "" system_directory "\"$dir/system/\""'
+		
+
+	_set_retroarch_coreconfig beetle_psx_dither_mode "\"internal resolution\""
+	_set_retroarch_coreconfig beetle_psx_filter "\"bilinear\""
+	_set_retroarch_coreconfig beetle_psx_internal_color_depth "\"32bpp\""
+	_set_retroarch_coreconfig beetle_psx_internal_resolution "\"4x\""
+	_set_retroarch_coreconfig beetle_psx_renderer "\"opengl\""
+	_set_retroarch_coreconfig beetle_psx_scale_dither "\"enabled\""
+}
+
+function _retroarch_system_folders() {
+	find ~/.config ~/snap ~/.local/share -type f -name 'retroarch.cfg' -and -not -wholename '*/Trash/*' -print0 \
+	 	| xargs -0 -r -i bash -c 'mkdir -p "$(dirname "{}")/system"; echo "$(dirname "{}")/system"'
+}
+
+retroarch_config_files=""
+function _set_retroarch_config() {
+	if [[ $retroarch_config_files = '' ]]; then
+		retroarch_config_files=$(find ~/.config ~/snap ~/.local/share -type f -name 'retroarch.cfg' -and -not -wholename '*/Trash/*')
+	fi
+
+	# create system folders
+	 echo _retroarch_system_folders | xargs -0 -r -i bash -c 'mkdir -p "$(dirname "{}")/system"'
+
+	local key="$1"
+	local value="$2"
+	local retroarch_config_files="$3"
+	echo "$retroarch_config_files" \
+		| xargs -r -i crudini --set --inplace "{}" '' "$key" "$value"
+}
+
+retroarch_core_config_files=""
+function _set_retroarch_coreconfig() {
+	if [[ $retroarch_core_config_files == '' ]]; then
+		retroarch_core_config_files=$(find ~/.config ~/snap ~/.local/share -type f -name 'retroarch-core-options.cfg' -and -not -wholename '*/Trash/*')
+	fi
+	local key="$1"
+	local value="$2"
+	echo "$retroarch_core_config_files" \
+		| xargs -r -i crudini --set --inplace "{}" '' "$key" "$value"
+}
+
+function fail() {
+	exit 233
+}
+
+
+set -e
 # shellcheck source=../.functions
 source "$ROOT_DIR/.functions"
 set +e
