@@ -322,6 +322,10 @@ function settings-xfpanel() {
 
 function settings() {
 	xfce_settings
+
+	# @todo lightdm_settings
+
+	
 	# X11 forwarding over SSH
 	sudo -E sed -i -E 's|.*X11UseLocalhost.*|X11UseLocalhost no|g' /etc/ssh/sshd_config
 	sudo -E sed -i -E 's|.*X11Forwarding.*|X11Forwarding yes|g' /etc/ssh/sshd_config
@@ -620,7 +624,7 @@ kernel.printk = 2 4 1 7
 vm.swappiness = 2
 vm.max_map_count=262144
 EOL
-sudo sysctl -p
+sudo "sysctl" -p
 }
 
 function firewall() {
@@ -655,6 +659,7 @@ function autostart() {
 	cp /usr/share/applications/copyq.desktop ~/.config/autostart/
 	cp /usr/share/applications/nextcloud.desktop ~/.config/autostart/
 	glxinfo | grep -i "accelerated: no" &>/dev/null
+	# shellcheck disable=SC1073,SC2181
 	if [[ $? -ne 0 ]]; then
 		cp "$ROOT_DIR/.local/share/applications/Compton.desktop" ~/.config/autostart/
 	fi
@@ -683,6 +688,7 @@ function install-game-roms() {
 		rm -rf Retropie\ Bios\ Files\ Configured\ for\ Every\ System
 		rm "${TMPDIR:-/tmp}/bios.zip"
 	fi
+	# shellcheck disable=SC2046
 	cp -r ~/Games/bios/BIOS/** $(_retroarch_system_folders)
 }
 
@@ -690,6 +696,7 @@ function retroarch-config() {
 	# @todo add bios files to the system directories
 
 	_set_retroarch_config fps_show "\"true\""
+	# shellcheck disable=SC2016
 	echo "$retroarch_config_files" \
 		| xargs -r -i bash -c 'dir="$(dirname "{}")"; crudini --set --inplace "{}" "" system_directory "\"$dir/system/\""'
 		
@@ -703,6 +710,7 @@ function retroarch-config() {
 }
 
 function _retroarch_system_folders() {
+	# shellcheck disable=SC2016
 	find ~/.config ~/snap ~/.local/share -type f -name 'retroarch.cfg' -and -not -wholename '*/Trash/*' -print0 \
 	 	| xargs -0 -r -i bash -c 'mkdir -p "$(dirname "{}")/system"; echo "$(dirname "{}")/system"'
 }
@@ -714,7 +722,8 @@ function _set_retroarch_config() {
 	fi
 
 	# create system folders
-	 echo _retroarch_system_folders | xargs -0 -r -i bash -c 'mkdir -p "$(dirname "{}")/system"'
+	# shellcheck disable=SC2016
+	echo _retroarch_system_folders | xargs -0 -r -i bash -c 'mkdir -p "$(dirname "{}")/system"'
 
 	local key="$1"
 	local value="$2"

@@ -28,7 +28,7 @@ jobs:
             #
             for file in $(git ls-files | xargs -r -i bash -c "file \"{}\" | grep -iq Bourne-Again && echo \"{}\"")
             do
-              if ! shellcheck -e SC1071,SC1008 -x "$file" -P "$(dirname "$file")"; then
+              if ! shellcheck -x "$file" -P "$(dirname "$file")"; then
                 failed=1
               fi
             done
@@ -76,7 +76,7 @@ jobs:
             failed=0
             for file in $(git ls-files -- '*.bats')
             do
-              echo "$file"
+            cat "$file"
               if ! bats "$file"; then
                 failed=1
               fi

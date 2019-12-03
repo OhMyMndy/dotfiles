@@ -1,0 +1,6 @@
+---
+ignored:
+  - DL3103
+
+trustedRegistries:
+  - docker.io
