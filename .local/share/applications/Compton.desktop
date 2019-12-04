@@ -2,7 +2,7 @@
 Name=Compton
 Comment=Run compton with GLX backend and opengl-swc vsync
 StartupWMClass=Compton (GLX backend)
-Exec=/usr/bin/scompton --config "\$HOME/.config/compton/compton.conf"
+Exec=/usr/bin/compton --config "\$HOME/.config/compton/compton.conf"
 StartupNotify=true
 Terminal=false
 Type=Application
