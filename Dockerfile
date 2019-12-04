@@ -5,7 +5,7 @@ LABEL maintainer "Mandy Schoep <mandyschoep@gmail.com>"
 USER root
 # hadolint ignore=DL3008
 RUN apt-get update \
-    && apt-get install -y vim wget curl python3-pip file --no-install-recommends \
+    && apt-get install -y vim wget curl python3-pip file desktop-file-utils --no-install-recommends \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 

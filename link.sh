@@ -38,6 +38,9 @@ link-file "$DIR" ".vim/coc-settings.json"
 
 link-file "$DIR" ".spacemacs"
 
+
+link-file "$DIR" ".config/compton"
+
 link-file "$DIR" ".config/ulauncher/shortcuts.json"
 link-file "$DIR" ".config/ulauncher/settings.json"
 link-file "$DIR" ".config/ulauncher/extensions.json"

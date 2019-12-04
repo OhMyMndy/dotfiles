@@ -6,4 +6,4 @@ StartupNotify=true
 Terminal=false
 Type=Application
 Icon=jmeter
-Categories=Utility;
+Categories=Development

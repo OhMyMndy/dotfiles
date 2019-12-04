@@ -107,6 +107,8 @@ function minimal() {
 	# Apt tools
 	sudo -E apt install -y apt-file wajig
 
+	sudo -E apt install xmlstarlet
+
 	# Esential X tools
 	# kdeconnect
 	sudo -E apt install -y "shutter" redshift-gtk xfce4-terminal xfce4-genmon-plugin chromium-browser seahorse galculator orage ristretto \

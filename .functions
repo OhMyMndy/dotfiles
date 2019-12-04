@@ -724,5 +724,5 @@ function disable-proxy() {
 		$(cd ~/src/dockerfiles; docker-compose stop squid-cache)
 	fi
 	json -I -f ~/.docker/config.json -e "this.proxies={}"
-	sudo ufw delete 3128/tcp
+	sudo ufw deny 3128/tcp
 }

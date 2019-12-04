@@ -1,1 +1,5 @@
 .git
+.history
+*.log
+*.un~
+node_modules

@@ -1,0 +1,8 @@
+version: "2.3"
+
+services:
+
+  dockerfiles-build:
+    image: mandy91/dotfiles-build:0.1
+    build:
+      context: .

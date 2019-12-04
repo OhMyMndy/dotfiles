@@ -26,12 +26,11 @@ jobs:
             failed=0
             # git ls-files | xargs -r -i bash -c "file \"{}\" | grep -iq Bourne-Again && echo \"{}\"" | xargs -r -i shellcheck -e SC1071,SC1008 -Calways -x "{}" -P "$(dirname "{}}")" | less
             #
-            for file in $(git ls-files | xargs -r -i bash -c "file \"{}\" | grep -iq Bourne-Again && echo \"{}\"")
-            do
+            while read -r file; dos
               if ! shellcheck -x "$file" -P "$(dirname "$file")"; then
                 failed=1
               fi
-            done
+            done <<<$(git ls-files | xargs -r -i bash -c "file \"{}\" | grep -iq Bourne-Again && echo \"{}\"")
             exit $failed
 
 
@@ -41,12 +40,11 @@ jobs:
           command: |
             set +e
             failed=0
-            for file in $(git ls-files -- 'Dockerfile')
-            do
+            while read -r file; do
               if ! hadolint "$file"; then
                 failed=1
               fi
-            done
+            done <<<$(git ls-files -- 'Dockerfile')
             exit $failed
       - run:
           name: Validate Yaml files
@@ -54,12 +52,12 @@ jobs:
           command: |
             set +e
             failed=0
-            for file in $(git ls-files -- '*.yaml' '*.yml')
-            do
+
+            while read -r file; do
               if ! yamllint -s -d "line-length: {max: 80, allow-non-breakable-words: true}" "$file"; then
                 failed=1
               fi
-            done
+            done <<<$(git ls-files -- '*.yaml' '*.yml')
             exit $failed
 
       - run:
@@ -74,11 +72,24 @@ jobs:
           command: |
             set +e
             failed=0
-            for file in $(git ls-files -- '*.bats')
-            do
-            cat "$file"
+
+            while read -r file; do
               if ! bats "$file"; then
                 failed=1
               fi
-            done
+            done <<<$(git ls-files -- '*.bats')
+            exit $failed
+
+      - run:
+          name: Validate Desktop files
+          when: always
+          command: |
+            set +e
+            failed=0
+            # @see https://specifications.freedesktop.org/menu-spec/latest/apa.html
+            while read -r file; do
+              if ! desktop-file-validate "$file"; then
+                failed=1
+              fi
+            done <<<$(git ls-files -- '*.desktop')
             exit $failed

@@ -1,9 +1,9 @@
 [Desktop Entry]
 Name=Chrome Retro
 StartupWMClass=Chrome-retro
-Exec=google-chrome --incognito https://www.myabandonware.com https://romsmania.cc/roms/playstation https://winworldpc.com&&xdotool search --sync --classname Chrome-retro set_window --class Chrome-retro
+Exec=google-chrome --incognito https://www.myabandonware.com https://romsmania.cc/roms/playstation https://winworldpc.com
 StartupNotify=true
 Terminal=false
 Type=Application
 Icon=chromium
-Categories=Utility;Browser;Internet
+Categories=Network

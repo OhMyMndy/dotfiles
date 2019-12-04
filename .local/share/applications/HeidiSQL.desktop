@@ -4,6 +4,5 @@ Exec=wine /opt/heidisql/heidisql.exe
 StartupNotify=true
 Terminal=false
 Type=Application
-Comment=HeidiSQL
 Icon=heidisql
-Categories=Application;Development
+Categories=Development
