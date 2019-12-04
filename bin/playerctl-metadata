@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+data="$(playerctl metadata -p chromium,vlc -f '{{ artist }} - {{ title}} {{ status }}' 2>/dev/null)"
+
+if [[ $data = '' ]]; then
+    echo '-'
+else
+    echo "$data"
+fi
+
+exit 0
