@@ -129,7 +129,19 @@ function minimal() {
 	# Language and spell check
 	sudo -E apt install -y aspell
 
-	git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d
+	#git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d
+
+	if ! which google-chrome &>/dev/null; then
+		_install_deb_from_url https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+	fi
+
+	# Fix for DRM in Chromium becaue winevinecdm is a proprietary piece of code
+	sudo -E ln -fs /opt/google/chrome/WidevineCdm /usr/lib/chromium-browser/WidevineCdm
+
+	# Audio
+	if ! which playerctl &>/dev/null; then
+		_install_deb_from_url https://github.com/altdesktop/playerctl/releases/download/v2.0.2/playerctl-2.0.2_amd64.deb
+	fi
 
 	# Editors
 	sudo -E apt install -y geany vim-gtk3 emacs
@@ -531,6 +543,10 @@ function php() {
 	curl -sS https://litipk.github.io/Jupyter-PHP-Installer/dist/jupyter-php-installer.phar > "${TMPDIR:-/tmp}/jupyter.php"
 	$(which php) "${TMPDIR:-/tmp}/jupyter.php" install
 	rm "${TMPDIR:-/tmp}/jupyter.php"
+
+	# xdebug
+	sudo -E ufw allow 9000/udp
+	sudo -E ufw allow 9000/tcp
 }
 
 
