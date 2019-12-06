@@ -28,6 +28,7 @@ mkdir -p ~/dotfiles/.config/Thunar
 link-file "$DIR" ".config/Thunar/uca.xml"
 
 link-file "$DIR" ".vimrc"
+link-file "$DIR" ".config/nvim"
 mkdir -p ~/.vim/{sessions,undo-dir,bundle,view,autoload}
 
 ln -sf ${DIR}/.vim/autoload/* ~/.vim/autoload/
@@ -149,7 +150,7 @@ source "$HOME/.tmux/plugins/tpm/bin/install_plugins"
 
 
 yes | vim +PlugInstall +qall
-vim -c 'CocInstall -sync coc-highlight coc-json coc-html coc-phpls coc-python coc-markdownlint |q'
+# vim -c 'CocInstall -sync coc-highlight coc-json coc-html coc-phpls coc-python coc-markdownlint |q'
 
 bash "$DIR/installers/apps/oh-my-zsh.sh"
 

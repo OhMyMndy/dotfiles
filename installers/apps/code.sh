@@ -50,6 +50,8 @@ code --install-extension jvandyke.vscode-circleci
 
 # PHP
 code --install-extension mandy91.vscode-phpstan
+code --install-extension felixfbecker.php-pack
+
 
 
 # Typescript

@@ -5,13 +5,14 @@ if empty(glob('~/.vim/autoload/plug.vim'))
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
-let g:ale_completion_enabled = 0
+let g:ale_completion_enabled = 1
+let g:ale_completion_tsserver_autoimport = 1
 
 
 call plug#begin('~/.vim/bundle')
 
 "Plug 'ycm-core/YouCompleteMe'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+"Plug 'neoclide/coc.nvim', {'branch': 'release'}
 "Plug 'chrisbra/Colorizer'
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-obsession'
@@ -35,12 +36,12 @@ Plug 'editorconfig/editorconfig-vim'
 
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+Plug 'junegunn/vader.vim'
 
 
 Plug 'majutsushi/tagbar'
 
-" @todo figure out how to use this
-" Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-fugitive'
 Plug 'mbbill/undotree'
 Plug 'christoomey/vim-tmux-runner'
 Plug 'godlygeek/tabular'
@@ -76,7 +77,9 @@ set clipboard=unnamedplus
 " recursive path from cwd
 set path +=./**
 
-set ttymouse=xterm2
+if ! has('nvim')
+    set ttymouse=xterm2
+endif
 set mouse=a
 
 " Indenting
@@ -122,13 +125,29 @@ map <C-n> :NERDTreeToggle<CR>
 let g:NERDTreeChDirMode=2
 
 
+" ALE
+
+" let g:ale_sign_warning = ''
+
+nnoremap <C-LeftMouse> :ALEGoToDefinition<CR>
+nnoremap <C-p> :ALEFindReferences<CR>
+
+let g:ale_linters= {
+\                   'bash': ['shellcheck'],
+\                   'zsh': ['shellcheck'],
+\                   'markdown': ['markdownlint']
+\                  }
+let g:ale_fixers = {
+\                   'bash': ['shellcheck', 'shell'],
+\                   'zsh': ['shellcheck'],
+\                   'markdown': ['markdownlint', 'prettifier', 'trim_whitespace']
+\                  }
+
+let g:ale_dockerfile_dockerfile_lint_executable = 'hadolint'
+
 " FZF
 
 nnoremap <C-p> :Files<Cr>
-
-" Shellcheck
-let g:ale_fixers = {'bash': ['shellcheck', 'shell'], 'zsh': ['shellcheck']}
-let g:ale_linters= {'bash': ['shellcheck'], 'zsh': ['shellcheck']}
 
 " Switch file tabs
 map <C-PageUp> :tabp<CR>

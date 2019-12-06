@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
-data="$(playerctl metadata -p chromium,vlc -f '{{ artist }} - {{ title}} {{ status }}' 2>/dev/null)"
-
-if [[ $data = '' ]]; then
-    echo '-'
-else
+status="$(playerctl status -p chromium,vlc 2>/dev/null)"
+if [[ $status = 'Playing' ]]; then
+    data="$(playerctl metadata -p chromium,vlc -f '{{ artist }} - {{ title}}' 2>/dev/null)"
     echo "$data"
+else
+    echo '-'
 fi
 
 exit 0

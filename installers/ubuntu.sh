@@ -83,7 +83,7 @@ function minimal() {
 	sudo -E apt install -y file coreutils findutils vlock nnn ack sed tree grep silversearcher-ag
 	sudo -E apt install -y python-pip python3-pip
 	# Misc
-	sudo -E apt install -y git tig gitg zsh less curl rename rsync openssh-server most multitail trash-cli libsecret-tools parallel ruby ntp vim fonts-noto fonts-roboto
+	sudo -E apt install -y git tig gitg zsh less curl rename rsync openssh-server most multitail trash-cli libsecret-tools parallel ruby ntp neovim vim fonts-noto fonts-roboto
 
 	# Terminal multiplexing
 	sudo -E apt install -y byobu tmux
@@ -92,7 +92,7 @@ function minimal() {
 	sudo -E apt install -y iotop htop nload glances
 
 	# Networking tools
-	sudo -E apt install -y nmap iputils-ping dnsutils telnet-ssl mtr-tiny traceroute libnss3-tools netdiscover
+	sudo -E apt install -y nmap iputils-ping dnsutils telnet-ssl mtr-tiny traceroute libnss3-tools netdiscover whois
 	# smbmap, only available in disco+
 
 	# Cron
@@ -179,7 +179,7 @@ function minimal() {
 
 
 function themes() {
-	sudo -E apt install -y arc-theme bluebird-gtk-theme moka-icon-theme xfwm4-themes pocillo-icon-theme
+	sudo -E apt install -y arc-theme bluebird-gtk-theme moka-icon-theme xfwm4-themes pocillo-icon-theme materia-gtk-theme
 }
 
 function build-tools() {
@@ -480,6 +480,7 @@ function jupyter() {
 }
 
 function dev() {
+	sudo -E apt install -y apache2-utils
 	sudo -E apt remove -y shellcheck
 	if ! which shellcheck &>/dev/null; then
 		scversion="stable" # or "v0.4.7", or "latest"
@@ -495,7 +496,7 @@ function dev() {
 	fi
 	sudo -E apt install -y python3-venv python3-pip
 
-	pip3 install mypy yamllint flake8 autopep8
+	pip3 install mypy yamllint flake8 autopep8 vim-vint
 
 	# python3 version is not in pypi
 	pip install crudini
@@ -517,6 +518,8 @@ function dev() {
 	npm install -g intelephense
 	npm install -g bats
 	npm install -g json
+	npm install -g fixjson jsonlint
+	npm install -g eslint
 
 	if ! which circleci &>/dev/null; then
 		curl -fLSs https://circle.ci/cli | sudo -E bash
