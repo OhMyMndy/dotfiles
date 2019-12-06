@@ -5,6 +5,7 @@ expressvpn $@
 
 # Fix for force_vpn_dns not working
 resolve_link="$(readlink /etc/resolv.conf)"
-if [[ $resolve_link =~ "expressvpn" ]]; then
+force_vpn_dns="$(expressvpn preferences force_vpn_dns)"
+if [[ $resolve_link =~ "expressvpn" ]] && [[ $force_vpn_dns = "false" ]]; then
     sudo rm -f /etc/resolv.conf && sudo ln -s /var/run/NetworkManager/resolv.conf /etc/resolv.conf
 fi

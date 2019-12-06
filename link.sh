@@ -175,5 +175,5 @@ fi
 
 if [[ ! -f /etc/sudoers.d/expressvpn ]]; then
 	echo "Adding expressvpn rule to sudoers file"
-	echo "root ALL=(ALL) NOPASSWD: $HOME/bin/expressvpn-mandy" | sudo tee /etc/sudoers.d/expressvpn &>/dev/null
+	echo "%sudo ALL=(root) NOPASSWD: /home/mandy/bin/expressvpn-mandy" | sudo tee /etc/sudoers.d/expressvpn &>/dev/null
 fi
