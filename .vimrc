@@ -132,11 +132,14 @@ let g:NERDTreeChDirMode=2
 nnoremap <C-LeftMouse> :ALEGoToDefinition<CR>
 nnoremap <C-p> :ALEFindReferences<CR>
 
+"\                   'php': ['phpstan', 'phpcs', 'langserver']
 let g:ale_linters= {
-\                   'bash': ['shellcheck'],
+\                   'bash': ['shellcheck', 'sh-language-server'],
 \                   'zsh': ['shellcheck'],
 \                   'markdown': ['markdownlint']
 \                  }
+
+"\                   'php': ['phpstan', 'phpcs', 'langserver']
 let g:ale_fixers = {
 \                   'bash': ['shellcheck', 'shell'],
 \                   'zsh': ['shellcheck'],

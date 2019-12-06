@@ -520,6 +520,7 @@ function dev() {
 	npm install -g json
 	npm install -g fixjson jsonlint
 	npm install -g eslint
+	npm install -g markdownlint-cli
 
 	if ! which circleci &>/dev/null; then
 		curl -fLSs https://circle.ci/cli | sudo -E bash
@@ -542,6 +543,15 @@ function php() {
 		# shellcheck disable=SC2091
 		curl -sS https://getcomposer.org/installer | $(which php) && sudo -E mv composer.phar /usr/local/bin/composer
 	fi
+
+	# @see https://github.com/felixfbecker/php-language-server/issues/611
+	composer require jetbrains/phpstorm-stubs:dev-master
+	composer global require felixfbecker/language-server
+	# run once: composer global run-script --working-dir="$HOME/.composer/vendor/felixfbecker/language-server" parse-stubs
+
+
+	composer global require squizlabs/php_codesniffer
+	composer global require phpstan/phpstan
 	# shellcheck disable=SC2091
 	curl -sS https://litipk.github.io/Jupyter-PHP-Installer/dist/jupyter-php-installer.phar > "${TMPDIR:-/tmp}/jupyter.php"
 	$(which php) "${TMPDIR:-/tmp}/jupyter.php" install

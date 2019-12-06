@@ -22,6 +22,7 @@ mkdir -p ~/.config/{copyq,ulauncher}
 mkdir -p ~/Screenshots
 
 link-file "$DIR" ".config/copyq/copyq.conf"
+link-file "$DIR" ".config/copyq/copyq-commands.ini"
 
 
 mkdir -p ~/dotfiles/.config/Thunar
