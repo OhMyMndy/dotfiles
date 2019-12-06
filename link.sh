@@ -171,3 +171,9 @@ then
 	installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/Iosevka.zip Iosevka
 	cp ~/.local/share/fonts/Iosevka/Iosevka\ Term\ Nerd\ Font\ Complete\ Mono.ttf ~/.termux/font.ttf
 fi
+
+
+if [[ ! -f /etc/sudoers.d/expressvpn ]]; then
+	echo "Adding expressvpn rule to sudoers file"
+	echo "root ALL=(ALL) NOPASSWD: $HOME/bin/expressvpn-mandy" | sudo tee /etc/sudoers.d/expressvpn &>/dev/null
+fi
