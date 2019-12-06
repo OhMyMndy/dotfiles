@@ -726,3 +726,7 @@ function disable-proxy() {
 	json -I -f ~/.docker/config.json -e "this.proxies={}"
 	sudo ufw deny 3128/tcp
 }
+
+function expressvpn() {
+	sudo $(which expressvpn-mandy) $@
+}
