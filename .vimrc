@@ -1,8 +1,9 @@
-set nocompatible
+scriptencoding utf-8
+" set nocompatible
 
 if empty(glob('~/.vim/autoload/plug.vim'))
   silent !curl -fLso ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+  augroup mine | autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
 let g:ale_completion_enabled = 1
@@ -23,6 +24,7 @@ Plug 'vim-airline/vim-airline-themes'
 "Plug 'dense-analysis/ale'
 Plug 'airblade/vim-gitgutter'
 " Plug 'Valloric/YouCompleteMe'
+" Plug 'wellle/context.vim'
 
 
 "Plug 'ctrlpvim/ctrlp.vim'
@@ -53,7 +55,7 @@ call plug#end()
 
 
 colorscheme industry
-set nu
+set number
 syntax on
 
 set wildmenu
@@ -99,7 +101,7 @@ set hidden
 
 set number
 
-if has("persistent_undo")
+if has('persistent_undo')
     set undodir=~/.vim/undo-dir
     set undofile
 endif
@@ -120,7 +122,7 @@ augroup BWCCreateDir
 augroup END
 
 " Nerd tree
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+augroup mine | autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 map <C-n> :NERDTreeToggle<CR>
 let g:NERDTreeChDirMode=2
 
@@ -173,7 +175,7 @@ nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 
 " Gvim settings
-set gfn=Iosevka\ Nerd\ Font\ Mono\ 11
+set guifont=Iosevka\ Nerd\ Font\ Mono\ 11
 
 " Highlighting settings
 highlight DiffAdd    cterm=bold ctermfg=10 ctermbg=17 gui=none guifg=bg guibg=Red
@@ -191,7 +193,7 @@ nnoremap <CR> :noh<CR><CR>
 let g:ctrlp_working_path_mode = 'wra'
 let g:ctrlp_show_hidden = 1
 
-if exists("g:ctrl_user_command")
+if exists('g:ctrl_user_command')
     unlet g:ctrlp_user_command
 endif
 set wildignore+=*.o,*.a,*.so,*.pyc,*.swp,*/.history/*,*/.git/*,*/.idea/*,*.un~

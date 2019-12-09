@@ -31,6 +31,8 @@ RUN pip3 install setuptools
 # hadolint ignore=DL3013
 RUN pip3 install yamllint
 # hadolint ignore=DL3013
+RUN pip3 install vim-vint
+# hadolint ignore=DL3013
 RUN npm install -g markdownlint-cli
 
 

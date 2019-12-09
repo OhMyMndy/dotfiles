@@ -147,8 +147,7 @@ alias va='source ./venv/bin/activate'
 
 if exists thefuck; then eval "$(thefuck --alias)"; fi
 
-if ! exists pbcopy;
-then
+if ! exists pbcopy; then
     alias pbcopy='xsel --clipboard --input'
     alias pbpaste='xsel --clipboard --output'
 fi

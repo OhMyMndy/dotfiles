@@ -61,12 +61,6 @@ jobs:
             exit $failed
 
       - run:
-          name: Validate vim
-          when: always
-          command: |
-            vim -u NONE -c 'try | source .vimrc | catch | cq | endtry | q' &>/dev/null
-
-      - run:
           name: Run tests
           when: always
           command: |
@@ -105,4 +99,17 @@ jobs:
                 failed=1
               fi
             done <<<$(git ls-files -- '*.md')
-            #exit $failed
+            exit $failed
+
+      - run:
+          name: Vint
+          when: always
+          command: |
+            set +e
+            failed=0
+            while read -r file; do
+              if ! vint "$file"; then
+                failed=1
+              fi
+            done <<<$(git ls-files -- '.vimrc' '*.vim')
+            exit $failed

@@ -18,7 +18,7 @@ source "$DIR/.functions"
 source "$DIR/.zshrc" 2>/dev/null
 
 
-mkdir -p ~/.config/{copyq,ulauncher}
+mkdir -p ~/.config/{copyq,ulauncher,Thunar}
 mkdir -p ~/Screenshots
 
 link-file "$DIR" ".config/copyq/copyq.conf"
