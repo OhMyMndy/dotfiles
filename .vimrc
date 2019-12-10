@@ -74,7 +74,12 @@ set backupcopy=yes
 " :w !tee % >/dev/null
 
 cmap w!! w !sudo tee % >/dev/null
-set clipboard=unnamedplus
+" set clipboard=unnamedplus
+nnoremap <C-M-y> "+y
+vnoremap <C-M-y> "+y
+nnoremap <C-M-p> "+gP
+vnoremap <C-M-p> "+gP
+
 
 " recursive path from cwd
 set path +=./**

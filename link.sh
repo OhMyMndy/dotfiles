@@ -14,6 +14,8 @@ trap "exit" INT
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # shellcheck source=.functions
 source "$DIR/.functions"
+# shellcheck source=.autobash
+source "$DIR/.autobash"
 # shellcheck source=.zshrc
 source "$DIR/.zshrc" 2>/dev/null
 

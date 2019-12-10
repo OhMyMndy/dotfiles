@@ -10,10 +10,16 @@ export DEBIAN_FRONTEND=noninteractive
 trap "exit" INT
 
 
-if [ $UID -eq 0 ]; then
+if [[ $UID -eq 0 ]]; then
 	echo "Run this script as non root user please..."
 	exit 99
 fi
+
+if ! which apt-get &>/dev/null; then
+	echo "You are running on a system which does not support apt-get"
+	exit 101
+fi
+
 
 fontsAdded=0
 
@@ -83,7 +89,7 @@ function minimal() {
 	sudo -E apt install -y file coreutils findutils vlock nnn ack sed tree grep silversearcher-ag
 	sudo -E apt install -y python-pip python3-pip
 	# Misc
-	sudo -E apt install -y git tig gitg zsh less curl rename rsync openssh-server most multitail trash-cli libsecret-tools parallel ruby ntp neovim vim fonts-noto fonts-roboto
+	sudo -E apt install -y git tig gitg zsh less curl rename rsync openssh-server most multitail trash-cli libsecret-tools parallel ruby ntp neovim vim  fonts-noto-color-emoji fonts-noto fonts-roboto
 
 	# Terminal multiplexing
 	sudo -E apt install -y byobu tmux
@@ -778,55 +784,5 @@ function fail() {
 	exit 233
 }
 
-
-set -e
-# shellcheck source=../.functions
-source "$ROOT_DIR/.functions"
-set +e
-
-function _print_usage() {
-	shopt -s extdebug
-	IFS=$'\n'
-
-	echo "Usage: $0 [options]"
-	echo
-	echo "Options:"
-	echo
-
-	for f in $(declare -F); do
-		f="${f:11}"
-		function_location="$(declare -f -F "$f" | cut -d' ' -f3)"
-		if [[ "${f:0:1}" != "_" ]] && [[ "$function_location" == "${BASH_SOURCE[0]}" ]]; then
-			echo " --${f}"
-		fi
-	done
-}
-
-
-if [[ $# -eq 0 ]]; then
-	_print_usage
-else
-	shopt -s extdebug
-	for i in "$@"
-	do
-		function="$(echo "${i}" | sed -E 's/^-+//g')"
-		starts_with_underscore=0
-		if [[ "${i::1}" == '_' ]]; then
-			starts_with_underscore=1
-		fi
-		if [[ "$function" == "help" ]]; then
-			_print_usage
-			exit 0
-		fi
-		function_location="$(declare -F "$function" | cut -d' ' -f3)"
-		if [[ -n "$(declare -f -F "$function")" ]] && [[ "$function_location" == "${BASH_SOURCE[0]}" ]] && [ $starts_with_underscore -eq 0 ]; then
-			echo "Executing $function"
-			$function
-		else
-			>&2 echo "Function with name \"$function\" not found!"
-			>&2 echo
-			_print_usage
-			exit 2
-		fi
-	done
-fi
+# shellcheck source=../.autobash
+source "$DIR/../.autobash"
