@@ -1,4 +1,5 @@
-
+test:
+	circleci build
 
 link:
 	./link.sh

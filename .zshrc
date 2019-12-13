@@ -224,6 +224,10 @@ bindkey  "^[[4~"   end-of-line
 [[ "$(tty)" =~ /dev/tty[0-9]* ]] && command -v setupcon &>/dev/null && setupcon
 [[ "$(tty)" =~ /dev/tty[0-9]* ]] && [[ "$(hostname)" =~ macbook ]] && set_macbook_term_size
 
+
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --exclude node_modules --exclude vendor --exclude .mypy-cache'
+
+
 export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE=fg=5
 export ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)
 typeset -A ZSH_HIGHLIGHT_PATTERNS

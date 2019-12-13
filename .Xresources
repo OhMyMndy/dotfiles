@@ -33,7 +33,7 @@ XTerm*VT100.Translations:       #override\n\
 
 ! Black
 #define COLOR0     #000000
-#define COLOR8     #666666
+#define COLOR8     #111111
 
 ! Red
 #define COLOR1     #fb0120

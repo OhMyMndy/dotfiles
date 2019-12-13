@@ -318,7 +318,8 @@ function fonts() {
 	installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/DroidSansMono.zip DroidSansMono
 	installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/DejaVuSansMono.zip DejaVuSansMono
 	installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/Iosevka.zip Iosevka
-	installFontsFromZip https://github.com/IBM/plex/releases/download/v1.4.1/OpenType.zip "IBM Plex"
+	installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/Inconsolata.zip Inconsolata
+	installFontsFromZip https://github.com/IBM/plex/releases/download/v4.0.2/OpenType.zip "IBM Plex"
 
 	if [[ $fontsAdded -eq 1 ]]; then
 		fc-cache -f -v
@@ -500,7 +501,7 @@ function dev() {
 		sudo -E cp "hadolint" /usr/bin/
 		sudo -E chmod +x /usr/bin/hadolint
 	fi
-	sudo -E apt install -y python3-venv python3-pip
+	sudo -E apt install -y python3-venv python3-pip golang-go pandoc
 
 	pip3 install mypy yamllint flake8 autopep8 vim-vint
 
@@ -534,6 +535,12 @@ function dev() {
 
 	# Gnu global and exuberant ctags
 	sudo -E apt install -y global ctags
+
+	if ! which checkmake &>/dev/null; then
+		go get github.com/mrtazz/checkmake
+		cd "$GOPATH/src/github.com/mrtazz/checkmake"
+		sudo make PREFIX=/usr/local clean install    
+	fi
 }
 
 
@@ -597,6 +604,13 @@ function docker() {
 	if ! which docker-compose &>/dev/null; then
 		sudo -E curl -L "https://github.com/docker/compose/releases/download/1.25.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 		sudo -E chmod +x /usr/local/bin/docker-compose
+	fi
+
+	if ! which docker-machine &>/dev/null; then
+		base=https://github.com/docker/machine/releases/download/v0.16.2
+	  	curl -L "$base/docker-machine-$(uname -s)-$(uname -m)" >/tmp/docker-machine
+	  	sudo mv /tmp/docker-machine /usr/local/bin/docker-machine
+	  	sudo chmod +x /usr/local/bin/docker-machine
 	fi
 
 	# if which podman &>/dev/null

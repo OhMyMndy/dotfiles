@@ -6,8 +6,8 @@ if empty(glob('~/.vim/autoload/plug.vim'))
   augroup mine | autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
-let g:ale_completion_enabled = 1
-let g:ale_completion_tsserver_autoimport = 1
+" let g:ale_completion_enabled = 1
+" let g:ale_completion_tsserver_autoimport = 1
 
 
 call plug#begin('~/.vim/bundle')
@@ -17,7 +17,7 @@ call plug#begin('~/.vim/bundle')
 "Plug 'chrisbra/Colorizer'
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-obsession'
-Plug 'StanAngeloff/php.vim'
+"Plug 'StanAngeloff/php.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -49,7 +49,12 @@ Plug 'christoomey/vim-tmux-runner'
 Plug 'godlygeek/tabular'
 Plug 'dense-analysis/ale'
 Plug 'tpope/vim-sleuth'
-
+Plug '907th/vim-auto-save'
+Plug 'scrooloose/nerdcommenter'
+Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
 
 call plug#end()
 
@@ -130,7 +135,21 @@ augroup END
 augroup mine | autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 map <C-n> :NERDTreeToggle<CR>
 let g:NERDTreeChDirMode=2
+let NERDTreeQuitOnOpen=1
 
+" Language server sourcegraph
+let g:LanguageClient_serverCommands = {
+    \ 'go': ['go-langserver'],
+	\ 'php': ['php-language-server.php'],
+	\ 'sh': ['bash-language-server'],
+	\ 'bash': ['bash-language-server']
+    \ }
+
+nnoremap <F5> :call LanguageClient_contextMenu()<CR>
+" Or map each action separately
+nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
+nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
+nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
 
 " ALE
 
@@ -143,7 +162,8 @@ nnoremap <C-p> :ALEFindReferences<CR>
 let g:ale_linters= {
 \                   'bash': ['shellcheck', 'sh-language-server'],
 \                   'zsh': ['shellcheck'],
-\                   'markdown': ['markdownlint']
+\                   'markdown': ['markdownlint'],
+\                   'php': ['langserver', 'phpcs', 'phpstan', 'php']
 \                  }
 
 "\                   'php': ['phpstan', 'phpcs', 'langserver']
@@ -154,14 +174,15 @@ let g:ale_fixers = {
 \                  }
 
 let g:ale_dockerfile_dockerfile_lint_executable = 'hadolint'
-
+let g:ale_php_langserver_use_global = 1
+let g:ale_php_langserver_executable = $HOME.'/.composer/vendor/bin/php-language-server.php'
 " FZF
 
 nnoremap <C-p> :Files<Cr>
 
 " Switch file tabs
-map <C-PageUp> :tabp<CR>
-map <C-PageDown> :tabn<CR>
+map <C-PageUp> :tabn<CR>
+map <C-PageDown> :tabp<CR>
 
 
 " Tagbar
@@ -189,6 +210,11 @@ highlight DiffChange cterm=bold ctermfg=10 ctermbg=17 gui=none guifg=bg guibg=Re
 highlight DiffText   cterm=bold ctermfg=10 ctermbg=88 gui=none guifg=bg guibg=Red
 
 let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#tabs_label = ''
+let g:airline#extensions#tabline#show_splits = 0
+
+" Vim autosave
+let g:auto_save = 1  " enable AutoSave on Vim startup
 
 
 "This unsets the "last search pattern" register by hitting return
