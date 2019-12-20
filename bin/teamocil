@@ -5,8 +5,18 @@ set -e
 config="$1"
 tmp_config="$HOME/.teamocil/_tmp_$config.yml"
 
+if [[ -z "$TMUX_PANE" ]]; then
+    echo "Not in a Tmux session"
+    exit 22
+fi
+
+
+session_name=$(tmux list-panes -t "$TMUX_PANE" -F '#S' | head -n1)
+
 finish() {
-    rm $tmp_config
+    rm "$tmp_config"
+    # Reset session name
+    tmux rename-session "$session_name"
 }
 trap finish EXIT
 
@@ -22,7 +32,7 @@ fi
 # Execute all commands before
 set +e
 IFS=$'\n'
-before_commands=$(cat $tmp_config | grep -E '^#before' | cut -d' ' -f2-)
+before_commands=$(cat "$tmp_config" | grep -E '^#before' | cut -d' ' -f2-)
 for var in ${before_commands}; do
     echo -e "\e[34mExecuting command before: $var\e[39m"
     eval $var
@@ -36,23 +46,22 @@ fi
 
 # Replace all variables {{varname}} in the config file
 unset IFS
-args=() i=0
 for var in $(compgen -e); do
     value="$(echo ${!var} | sed -e 's/[]\/$*.^|[]/\\&/g')"
     key="$(echo ${var} | sed -e 's/[]\/$*.^|[]/\\&/g')"
     pattern="s/{{$key}}/${value}/g"
-    sed -i "$pattern" $tmp_config
+    sed -i "$pattern" "$tmp_config"
 done
 
 # Show messages about unused variables
 IFS=$'\n'
-unused_variables=$(grep -E -o '\{\{[^}]+\}\}' $tmp_config)
+unused_variables=$(grep -E -o '\{\{[^}]+\}\}' "$tmp_config")
 for var in ${unused_variables}; do
     echo -e "\e[33mVariable not found: $var\e[39m"
 done
 
 # Remove all variables which cannot be replaced
-sed -i -e "s#{{[^}]*}}##g" $tmp_config
+sed -i -e "s#{{[^}]*}}##g" "$tmp_config"
 
 shift
 ~/.gem/bin/teamocil "_tmp_$config" $@

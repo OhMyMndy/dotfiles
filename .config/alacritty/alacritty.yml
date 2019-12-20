@@ -638,6 +638,9 @@ key_bindings:
   - { key: Right,    mods: Shift|Alt,   chars: "\x1b[1;4C"                   }
   - { key: Left,     mods: Shift|Alt,   chars: "\x1b[1;4D"                   }
 
+  - { key: Y,        mods: Control|Alt,   chars: "\x1b^Y"                    }
+  - { key: P,        mods: Control|Alt,   chars: "\x1b^P"                    }
+
   - { key: Right,    mods: Control|Shift,   chars: "\x1b[1;6C"               }
   - { key: Left,     mods: Control|Shift,   chars: "\x1b[1;6D"               }
 

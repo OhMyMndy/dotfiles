@@ -24,7 +24,7 @@ Plug 'vim-airline/vim-airline-themes'
 "Plug 'dense-analysis/ale'
 Plug 'airblade/vim-gitgutter'
 " Plug 'Valloric/YouCompleteMe'
-" Plug 'wellle/context.vim'
+Plug 'wellle/context.vim'
 
 
 "Plug 'ctrlpvim/ctrlp.vim'
@@ -42,6 +42,7 @@ Plug 'junegunn/vader.vim'
 
 
 Plug 'majutsushi/tagbar'
+"Plug 'liuchengxu/vista.vim'
 
 Plug 'tpope/vim-fugitive'
 Plug 'mbbill/undotree'

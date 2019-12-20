@@ -249,3 +249,10 @@ fi
 if [[ -t 0 ]]; then
 	stty -ixon -ixoff
 fi
+
+# Hook for desk activation
+[[ -n "$DESK_ENV" ]] && source "$DESK_ENV"
+
+if [[ -f /usr/share/autojump/autojump.sh ]]; then
+    . /usr/share/autojump/autojump.sh
+fi

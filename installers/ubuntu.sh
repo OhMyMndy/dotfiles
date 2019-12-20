@@ -89,7 +89,7 @@ function minimal() {
 	sudo -E apt install -y file coreutils findutils vlock nnn ack sed tree grep silversearcher-ag
 	sudo -E apt install -y python-pip python3-pip
 	# Misc
-	sudo -E apt install -y git tig gitg zsh less curl rename rsync openssh-server most multitail trash-cli libsecret-tools parallel ruby ntp neovim vim  fonts-noto-color-emoji fonts-noto fonts-roboto
+	sudo -E apt install -y git tig gitg zsh autojump less curl rename rsync openssh-server most multitail trash-cli libsecret-tools parallel ruby ntp neovim vim  fonts-noto-color-emoji fonts-noto fonts-roboto
 
 	# Terminal multiplexing
 	sudo -E apt install -y byobu tmux
@@ -388,6 +388,18 @@ function locale() {
 	LC_IDENTIFICATION=nl_BE.UTF-8
 }
 
+function virtualbox() {
+	if [ ! -f /etc/apt/sources.list.d/virtualbox.list ]; then
+		echo "deb [arch=amd64] https://download.virtualbox.org/virtualbox/debian $(grep '^DISTRIB_CODENAME=' /etc/lsb-release | cut -f2 -d=) contrib" | sudo -E tee /etc/apt/sources.list.d/virtualbox.list
+		wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo apt-key add -
+		wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | sudo apt-key add -
+	fi
+	sudo -E apt update -y
+	sudo -E apt remove -y 'virtualbox*'
+	sudo -E pkill -e -f -9 VBox
+	sudo -E apt install -y VirtualBox-6.1
+
+}
 
 function i3() {
 	if [ ! -f /etc/apt/sources.list.d/sur5r-i3.list ];
@@ -456,6 +468,7 @@ function privacy() {
 	# sudo -E apt install -y torbrowser-launcher
 	# @todo add expressvpn
 	_install_deb_from_url "https://s3.amazonaws.com/purevpn-dialer-assets/linux/app/purevpn_1.2.2_amd64.deb"
+	_install_deb_from_url "https://download.expressvpn.xyz/clients/linux/expressvpn_2.3.4-1_amd64.deb"
 }
 
 
@@ -585,7 +598,7 @@ function docker() {
 		software-properties-common
 
 	if ! which ctop &>/dev/null; then
-		sudo -E wget https://github.com/bcicen/ctop/releases/download/v0.7.2/ctop-0.7.2-linux-amd64 -O /usr/local/bin/ctop
+		sudo -E curl -L https://github.com/bcicen/ctop/releases/download/v0.7.2/ctop-0.7.2-linux-amd64 -o /usr/local/bin/ctop
 		sudo -E chmod +x /usr/local/bin/ctop
 	fi
 
@@ -704,16 +717,22 @@ function git-config() {
 
 function autostart() {
 	mkdir -p ~/.config/autostart
-	cp /usr/share/applications/ulauncher.desktop ~/.config/autostart/
-	cp /usr/share/applications/indicator-kdeconnect.desktop ~/.config/autostart/
-	cp /usr/share/applications/redshift-gtk.desktop ~/.config/autostart/
-	cp /usr/share/applications/copyq.desktop ~/.config/autostart/
-	cp /usr/share/applications/nextcloud.desktop ~/.config/autostart/
+
+	ln -s "${ROOT_DIR}"/.config/autostart/*.desktop ~/.config/autostart/ 2>/dev/null
+
+
+	ln -sf /usr/share/applications/ulauncher.desktop ~/.config/autostart/
+	ln -sf /usr/share/applications/indicator-kdeconnect.desktop ~/.config/autostart/
+	ln -sf /usr/share/applications/redshift-gtk.desktop ~/.config/autostart/
+	ln -sf /usr/share/applications/com.github.hluk.copyq.desktop ~/.config/autostart/
+	ln -sf /usr/share/applications/nextcloud.desktop ~/.config/autostart/
+	ln -sf /usr/share/applications/shutter.desktop ~/.config/autostart/
 	glxinfo | grep -i "accelerated: no" &>/dev/null
 	# shellcheck disable=SC1073,SC2181
 	if [[ $? -ne 0 ]]; then
-		cp "$ROOT_DIR/.local/share/applications/Compton.desktop" ~/.config/autostart/
+		ln -sf "$ROOT_DIR/.local/share/applications/Compton.desktop" ~/.config/autostart/
 	fi
+	find ~/.config/autostart/ -xtype l -delete
 	update-desktop-database
 }
 

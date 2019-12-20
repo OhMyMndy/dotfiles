@@ -14,8 +14,7 @@ trap "exit" INT
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # shellcheck source=.functions
 source "$DIR/.functions"
-# shellcheck source=.autobash
-source "$DIR/.autobash"
+
 # shellcheck source=.zshrc
 source "$DIR/.zshrc" 2>/dev/null
 
@@ -26,19 +25,6 @@ mkdir -p ~/Screenshots
 link-file "$DIR" ".config/copyq/copyq.conf"
 link-file "$DIR" ".config/copyq/copyq-commands.ini"
 
-
-mkdir -p ~/dotfiles/.config/Thunar
-link-file "$DIR" ".config/Thunar/uca.xml"
-
-link-file "$DIR" ".vimrc"
-link-file "$DIR" ".config/nvim"
-mkdir -p ~/.vim/{sessions,undo-dir,bundle,view,autoload}
-
-ln -sf ${DIR}/.vim/autoload/* ~/.vim/autoload/
-# remove broken links
-find ~/.vim/autoload/ -xtype l -delete
-
-link-file "$DIR" ".vim/coc-settings.json"
 
 link-file "$DIR" ".spacemacs"
 
@@ -54,8 +40,6 @@ if [ ! -f ~/.Xresources_bak ] && [ -f ~/.Xresources ]; then
 fi
 link-file "$DIR" ".Xresources"
 
-mkdir -p ~/.config/xfce4/
-link-file "$DIR" ".config/xfce4/terminal"
 
 
 mkdir -p ~/.local/share/xfpanel-switch/
@@ -81,7 +65,7 @@ link-file "$DIR" '.config/plasma-localerc'
 link-file "$DIR" '.synergy.conf'
 link-file "$DIR" '.dircolors'
 link-file "$DIR" '.screenrc'
-link-file "$DIR" '.byobu'
+
 link-file "$DIR" '.config/mopidy'
 link-file "$DIR" '.config/htop'
 # link-file "$DIR" '.toprc'
@@ -121,49 +105,20 @@ mkdir -p ~/.config/cmus
 link-file "$DIR" '.config/cmus/rc'
 link-file "$DIR" '.zshrc'
 
-##### START DESKTOP FILES #####
-mkdir -p ~/.local/share/applications/icons
-
-link-file "$DIR" '.local/share/applications/icons'
-ln -sf ${DIR}/.local/share/applications/*.desktop ~/.local/share/applications/
-# remove broken links
-find ~/.local/share/applications/ -xtype l -delete
-
-mkdir -p ~/.local/share/icons/hicolor/48x48/apps/
-ln -s "${DIR}"/.local/share/applications/icons/*.png ~/.local/share/icons/hicolor/48x48/apps/ 2>/dev/null
-find ~/.local/share/applications/icons/ -xtype l -delete
-##### END DESKTOP FILES #####
-
+bash "$DIR/installers/config.sh" --icons
 
 link-file "$DIR" '.mpdconf'
 
-mkdir -p ~/.config/albert/
-link-file "$DIR" '.config/albert/albert.conf'
 
 
-mkdir -p ~/.tmux/plugins
-if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
-	git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plugins/tpm/bin/install_plugins
-fi
-tmux source ~/.tmux.conf
-
-# shellcheck disable=SC1091
-# shellcheck source=/dev/null
-source "$HOME/.tmux/plugins/tpm/bin/install_plugins"
-
-
-yes | vim +PlugInstall +qall
-# vim -c 'CocInstall -sync coc-highlight coc-json coc-html coc-phpls coc-python coc-markdownlint |q'
+bash "$DIR/installers/config.sh" --xfce
+bash "$DIR/installers/config.sh" --vim
+bash "$DIR/installers/config.sh" --tmux
 
 bash "$DIR/installers/apps/oh-my-zsh.sh"
 
 create_remmina_desktop_files
 
-
-# autostart files
-mkdir -p ~/.config/autostart
-ln -s "${DIR}"/.config/autostart/*.desktop ~/.config/autostart/ 2>/dev/null
-find ~/.config/autostart/ -xtype l -delete
 
 if [[ $(uname -o) = 'Android' ]];
 then
