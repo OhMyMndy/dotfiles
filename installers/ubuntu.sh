@@ -129,7 +129,7 @@ function minimal() {
 	sudo -E apt install -y thunar pcmanfm gnome-disk-utility
 
 	# Remote desktop
-	sudo -E apt install -y remmina vinagre xephyr
+	sudo -E apt install -y remmina vinagre xserver-xephyr
 
 
 	# Language and spell check
@@ -209,7 +209,8 @@ function general() {
 	sudo -E apt install -y sysfsutils sysstat qdirstat
 
 	# Media
-	sudo -E apt install -y vlc quodlibet imagemagick
+	sudo -E apt install -y vlc imagemagick flac soundconverter
+ 	sudo -E flatpak install flathub io.github.quodlibet.QuodLibet --system -y
 
 	vpn
 	themes
@@ -257,7 +258,7 @@ function general() {
 	flatpak install flathub com.github.wwmm.pulseeffects -y --user
 
 
-	remove-obsolelete
+	remove-obsolete
 
 
 	pip3 install thefuck
@@ -515,6 +516,8 @@ function dev() {
 		sudo -E chmod +x /usr/bin/hadolint
 	fi
 	sudo -E apt install -y python3-venv python3-pip golang-go pandoc
+	python3 -m pip install --user pipx
+	python3 -m pipx ensurepath
 
 	pip3 install mypy yamllint flake8 autopep8 vim-vint
 
@@ -702,6 +705,10 @@ function firewall() {
 	sudo -E ufw allow 8080/udp
 	sudo -E ufw allow 8080/tcp
 
+	# nomachine
+	sudo -E ufw allow 4000udp
+	sudo -E ufw allow 4000/tcp
+
 	# access local hosts through vpn
 	# shellcheck disable=SC2010
 	sudo -E ip route add 192.168.10.0/24 "dev" "$(ls /sys/class/net | grep "^en*" | head -1)"
@@ -740,6 +747,10 @@ function gaming() {
 	lutris
 	retroarch-config
 	sudo -E apt install -y steam
+	sudo -E curl -sS https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks -o /usr/local/bin/winetricks
+	sudo -E chmod +x /usr/local/bin/winetricks
+	
+	pipx install protontricks
 }
 
 ## Gaming section

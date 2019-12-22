@@ -38,7 +38,7 @@ function vim() {
 
     link-file "$ROOT_DIR" ".vim/coc-settings.json"
 
-    # vim -c 'CocInstall -sync coc-highlight coc-json coc-html coc-phpls coc-python coc-markdownlint |q'
+    # command vim -c 'CocInstall -sync coc-highlight coc-json coc-html coc-phpls coc-python coc-markdownlint |q'
 }
 
 
@@ -48,7 +48,7 @@ function tmux() {
     if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
         git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm && ~/.tmux/plugins/tpm/bin/install_plugins
     fi
-    $(command tmux) source ~/.tmux.conf
+    command tmux source ~/.tmux.conf
 
     # shellcheck disable=SC1091
     # shellcheck source=/dev/null
@@ -62,7 +62,6 @@ function xfce() {
 
     mkdir -p ~/.config/xfce4/
     link-file "$ROOT_DIR" ".config/xfce4/terminal"
-
 }
 
 function icons() {

@@ -26,6 +26,8 @@ link-file "$DIR" ".config/copyq/copyq.conf"
 link-file "$DIR" ".config/copyq/copyq-commands.ini"
 
 
+link-file "$DIR" ".config/Thunar/uca.xml"
+
 link-file "$DIR" ".spacemacs"
 
 

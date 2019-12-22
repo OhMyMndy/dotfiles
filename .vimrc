@@ -1,5 +1,7 @@
 scriptencoding utf-8
-" set nocompatible
+set nocompatible
+set wildmenu
+
 
 if empty(glob('~/.vim/autoload/plug.vim'))
   silent !curl -fLso ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
@@ -60,7 +62,7 @@ Plug 'autozimu/LanguageClient-neovim', {
 call plug#end()
 
 
-colorscheme industry
+colorscheme elflord
 set number
 syntax on
 
@@ -86,9 +88,11 @@ vnoremap <C-M-y> "+y
 nnoremap <C-M-p> "+gP
 vnoremap <C-M-p> "+gP
 
+" Tags
+command! MakeTags !ctags -R .
 
 " recursive path from cwd
-set path +=./**
+set path +=**
 
 if ! has('nvim')
     set ttymouse=xterm2
@@ -109,8 +113,6 @@ set splitright
 
 " Switch between buffers without having to save each buffer
 set hidden
-
-set number
 
 if has('persistent_undo')
     set undodir=~/.vim/undo-dir

@@ -3,15 +3,6 @@
 <action>
 	<icon>Terminal</icon>
 	<name>Open Terminal Here</name>
-	<unique-id>1568718917023981-1</unique-id>
-	<command>exo-open --working-directory %f --launch TerminalEmulator</command>
-	<description>Example for a custom action</description>
-	<patterns>*</patterns>
-	<directories/>
-</action>
-<action>
-	<icon>Terminal</icon>
-	<name>Open Terminal Here</name>
 	<unique-id>1568718917024007-2</unique-id>
 	<command>exo-open --working-directory %d --launch TerminalEmulator</command>
 	<description>Open terminal in containing directory</description>
@@ -52,5 +43,46 @@
 	<other-files/>
 	<text-files/>
 	<video-files/>
+</action>
+<action>
+	<icon>edit-find</icon>
+	<name>Find in this folder</name>
+	<unique-id>1574084457367904-4</unique-id>
+	<command>catfish --path=%d</command>
+	<description>Search for files within this folder</description>
+	<patterns>*</patterns>
+	<directories/>
+</action>
+<action>
+	<icon>folder-black</icon>
+	<name>Folder size</name>
+	<unique-id>1576961520912427-3</unique-id>
+	<command>du -h -d 1 -c %d 2&gt;&amp;1| zenity --text-info --width=600 --height=500</command>
+	<description></description>
+	<patterns>*</patterns>
+	<directories/>
+</action>
+<action>
+	<icon></icon>
+	<name>Folder size</name>
+	<unique-id>1576961514737655-2</unique-id>
+	<command>du -h -d 1 -c %d 2&gt;&amp;1| zenity --text-info --width=600 --height=500</command>
+	<description></description>
+	<patterns>*</patterns>
+	<audio-files/>
+	<image-files/>
+	<other-files/>
+	<text-files/>
+	<video-files/>
+</action>
+<action>
+	<icon>disk-usage-analyzer</icon>
+	<name>Show Disk Usage</name>
+	<unique-id>1533207112427838-15</unique-id>
+	<command>df -h -d 1 %d 2&gt;&amp;1 | zenity --text-info --width=600 --height=200</command>
+	<description></description>
+	<patterns>*</patterns>
+	<startup-notify/>
+	<directories/>
 </action>
 </actions>

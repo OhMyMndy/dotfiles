@@ -1,0 +1,14 @@
+extends: default
+
+rules:
+  # 80 chars should be enough, but don't fail if a line is longer
+  line-length:
+    max: 130
+    level: warning
+    allow-non-breakable-words: true
+  document-start: disable
+  comments-indentation: disable
+
+
+  # don't bother me with this rule
+  #indentation: disable
