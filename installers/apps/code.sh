@@ -1,21 +1,28 @@
 #!/usr/bin/env bash
 
 trap "exit" INT
+set -e
+
+function install() {
+    code --install-extension "$@" >/dev/null
+}
 
 #Vim
-code --install-extension fallenwood.viml
+install fallenwood.viml
 
 # Themes and keybindings
-code --install-extension k--kato.intellij-idea-keybindings
-code --install-extension pkief.material-icon-theme
-code --install-extension equinusocio.vsc-material-theme
-code --install-extension dracula-theme.theme-dracula
+install k--kato.intellij-idea-keybindings
+install pkief.material-icon-theme
+install equinusocio.vsc-material-theme
+install dracula-theme.theme-dracula
+install robbowen.synthwave-vscode
+
 
 # Languages
-code --install-extension naumovs.color-highlight
-code --install-extension redhat.vscode-yaml
-code --install-extension malmaud.tmux
-code --install-extension ms-python.python
+install naumovs.color-highlight
+install redhat.vscode-yaml
+install malmaud.tmux
+install ms-python.python
 
 # 
 
@@ -23,42 +30,43 @@ code --install-extension ms-python.python
 
 
 # Markdown
-code --install-extension chintans98.markdown-jira
-code --install-extension davidanson.vscode-markdownlint
+install chintans98.markdown-jira
+install davidanson.vscode-markdownlint
 
 # Intellisense
-code --install-extension christian-kohler.path-intellisense
-code --install-extension visualstudioexptteam.vscodeintellicode
-code --install-extension esbenp.prettier-vscode
+install christian-kohler.path-intellisense
+install visualstudioexptteam.vscodeintellicode
+install esbenp.prettier-vscode
 
 
-code --install-extension bmewburn.vscode-intelephense-client
+install bmewburn.vscode-intelephense-client
 
-code --install-extension xyz.local-history
+install xyz.local-history
+install mrmlnc.vscode-duplicate
 
 
 
-code --install-extension mads-hartmann.bash-ide-vscode
-code --install-extension gruntfuggly.todo-tree
+install mads-hartmann.bash-ide-vscode
+install gruntfuggly.todo-tree
 
 # Docker
-code --install-extension exiasr.hadolint
-code --install-extension ms-azuretools.vscode-docker
+install exiasr.hadolint
+install ms-azuretools.vscode-docker
 
 # CI
-code --install-extension jvandyke.vscode-circleci
+install jvandyke.vscode-circleci
 
 # PHP
-code --install-extension mandy91.vscode-phpstan
-code --install-extension felixfbecker.php-pack
+install mandy91.vscode-phpstan
+install felixfbecker.php-pack
 
 
 
 # Typescript
-code --install-extension ms-vscode.vscode-typescript-tslint-plugin
+install ms-vscode.vscode-typescript-tslint-plugin
 
 
 # Git
-code --install-extension atlassian.atlascode
-code --install-extension eamodio.gitlens
-code --install-extension donjayamanne.githistory
+install atlassian.atlascode
+install eamodio.gitlens
+install donjayamanne.githistory

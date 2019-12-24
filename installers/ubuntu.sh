@@ -15,8 +15,8 @@ if [[ $UID -eq 0 ]]; then
 	exit 99
 fi
 
-if ! which apt-get &>/dev/null; then
-	echo "You are running on a system which does not support apt-get"
+if ! command -v apt-get &>/dev/null; then
+	echo "You are running on a system command -v does not support apt-get"
 	exit 101
 fi
 
@@ -33,9 +33,12 @@ source "$DIR/xfce.sh"
 function _install_deb_from_url() {
 	local url="$1"
 	local tmp="$(mktemp)"
-	curl -L "$url" >> "$tmp"
+	if ! command -v curl &>/dev/null; then
+		_install curl
+	fi
+	curl -sSL "$url" >> "$tmp"
 	sudo -E dpkg -i "$tmp"
-	sudo -E apt install -f -y
+	sudo -E apt-get -qq install -f -y
 }
 
 function _add_repo_or_install_deb() {
@@ -43,20 +46,98 @@ function _add_repo_or_install_deb() {
 	local package_name="$2"
 	local optional_deb="$3"
 
-	if ! which "$package_name" &>/dev/null; then
-		sudo -E add-apt-repository "$repo" -y
-		sudo -E apt-get update
-		sudo -E apt install -y "$package_name"
+	if ! command -v "$package_name" &>/dev/null; then
+		_add_repository "$repo"
+		_install "$package_name"
 	fi
 
 	# still no package?? remove repo and install deb
-	if ! which "$package_name" &>/dev/null; then
+	if ! command -v "$package_name" &>/dev/null; then
 		sudo -E add-apt-repository --remove "$repo" -y
 		if [[ $optional_deb != '' ]]; then
 			_install_deb_from_url "$optional_deb"
-			sudo -E apt install -f -y
+			sudo -E apt-get -qq install -f -y
 		fi
 	fi
+}
+
+
+function _list_repositories() {
+	grep -rE '^deb'  /etc/apt/sources.list /etc/apt/sources.list.d | grep -Eo 'https?://[^ ]+.*'
+}
+
+function _add_repository() {
+	if ! command -v add-apt-repository &>/dev/null; then
+		_install software-properties-common
+	fi
+	# shellcheck disable=SC2068
+	sudo -E add-apt-repository -y "$@"
+}
+
+function _install() {
+	# echo "Installing '$*' through apt"
+	set -e
+	_update
+	# shellcheck disable=SC2068
+	sudo -E apt-get -qq install -y $@
+	set +e
+}
+
+function _install_flatpak_flathub() {
+	set -e
+	if ! command -v flatpak &>/dev/null; then
+		_install flatpak
+	fi
+
+	yes | sudo -E flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo --system
+	sudo -E flatpak install flathub "$*" --system -y
+	set +e
+}
+
+function _install_pip3() {
+	set -e
+	if ! command -v pip &>/dev/null; then
+		_install python3-pip
+	fi
+	# shellcheck disable=SC2068
+	sudo -E pip3 install -q $@
+	set +e
+}
+
+function _install_pip() {
+	set -e
+	if ! command -v pip &>/dev/null; then
+		_install python-pip
+	fi
+	# shellcheck disable=SC2068
+	sudo -E pip install -q $@
+	set +e
+}
+
+function _install_gem() {
+	if ! command -v gem &>/dev/null; then
+		_install ruby ruby-dev
+	fi
+
+	# shellcheck disable=SC2068
+	gem install --config-file "$ROOT_DIR/.gemrc"  $@
+}
+
+updated=0
+function _update() {
+	if [[ $updated -eq 0 ]]; then
+		sudo -E apt-get -qq update -y
+	fi
+	updated=1
+}
+
+function _remove() {
+	# shellcheck disable=SC2068
+	sudo -E apt-get -qq remove -y $@
+}
+
+function _autoremove() {
+	sudo -E apt-get -qq autoremove -y
 }
 
 
@@ -68,7 +149,7 @@ function setup() {
 	locale
 	settings
 	firewall
-	dns
+	networkmanager
 	albert
 	autostart
 	git-config
@@ -81,63 +162,66 @@ function _green_bold() {
 
 
 function minimal() {
-	sudo -E add-apt-repository -y "deb http://archive.canonical.com/ $(lsb_release -sc) partner"
-
-	sudo -E apt update -y
+	declare -a packages=()
 
 	# minimal
-	sudo -E apt install -y file coreutils findutils vlock nnn ack sed tree grep silversearcher-ag
-	sudo -E apt install -y python-pip python3-pip
+	packages+=(file coreutils findutils vlock nnn ack sed tree grep silversearcher-ag)
+	packages+=(python-pip python3-pip)
+
+	_add_repository -n "deb http://archive.canonical.com/ $(lsb_release -sc) partner"
+
+	_update
+
 	# Misc
-	sudo -E apt install -y git tig gitg zsh autojump less curl rename rsync openssh-server most multitail trash-cli libsecret-tools parallel ruby ntp neovim vim  fonts-noto-color-emoji fonts-noto fonts-roboto
+	packages+=(git tig gitg zsh autojump less curl rename rsync openssh-server most multitail trash-cli libsecret-tools parallel ruby ruby-dev ntp neovim vim-gtk3 fonts-noto-color-emoji fonts-noto fonts-roboto)
 
 	# Terminal multiplexing
-	sudo -E apt install -y byobu tmux
+	packages+=(byobu tmux)
 
 	# System monitoring
-	sudo -E apt install -y iotop htop nload glances
+	packages+=(iotop htop nload glances)
 
 	# Networking tools
-	sudo -E apt install -y nmap iputils-ping dnsutils telnet-ssl mtr-tiny traceroute libnss3-tools netdiscover whois
+	packages+=(nmap iputils-ping dnsutils telnet-ssl mtr-tiny traceroute libnss3-tools netdiscover whois bridge-utils)
 	# smbmap, only available in disco+
 
 	# Cron
-	sudo -E apt install -y cron cronic
+	packages+=(cron cronic)
 
 	# Mailing
-	sudo -E apt install -y msmtp-mta thunderbird
+	packages+=(msmtp-mta thunderbird)
 
 	# Cli browser with inline images
-	sudo -E apt install -y w3m w3m-img
+	packages+=(w3m w3m-img)
 
 	# Apt tools
-	sudo -E apt install -y apt-file wajig
+	packages+=(apt-file wajig)
 
-	sudo -E apt install xmlstarlet
+	packages+=(xmlstarlet)
 
 	# Esential X tools
 	# kdeconnect
-	sudo -E apt install -y "shutter" redshift-gtk xfce4-terminal xfce4-genmon-plugin chromium-browser seahorse galculator orage ristretto \
-		xsel xclip arandr wmctrl xscreensaver flatpak compton xfce4-appmenu-plugin
+	packages+=("shutter" redshift-gtk xfce4-terminal xfce4-genmon-plugin chromium-browser seahorse galculator orage ristretto 
+		xsel xclip arandr wmctrl xscreensaver flatpak compton xfce4-appmenu-plugin)
 
 	_add_repo_or_install_deb 'ppa:hluk/copyq' 'copyq' 'https://github.com/hluk/CopyQ/releases/download/v3.9.3/copyq_3.9.3_Debian_10-1_amd64.deb'
 
 	# File management and disk plugins
-	sudo -E apt install -y cifs-utils exfat-fuse exfat-utils samba hfsprogs cdck ncdu mtp-tools
+	packages+=(cifs-utils exfat-fuse exfat-utils samba hfsprogs cdck ncdu mtp-tools)
 
 	# File management and disk plugins X
-	sudo -E apt install -y thunar pcmanfm gnome-disk-utility
+	packages+=(thunar pcmanfm gnome-disk-utility)
 
 	# Remote desktop
-	sudo -E apt install -y remmina vinagre xserver-xephyr
+	packages+=(remmina vinagre xserver-xephyr)
 
 
 	# Language and spell check
-	sudo -E apt install -y aspell
+	packages+=(aspell)
 
 	#git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d
 
-	if ! which google-chrome &>/dev/null; then
+	if ! command -v google-chrome &>/dev/null; then
 		_install_deb_from_url https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 	fi
 
@@ -145,29 +229,31 @@ function minimal() {
 	sudo -E ln -fs /opt/google/chrome/WidevineCdm /usr/lib/chromium-browser/WidevineCdm
 
 	# Audio
-	if ! which playerctl &>/dev/null; then
+	if ! command -v playerctl &>/dev/null; then
 		_install_deb_from_url https://github.com/altdesktop/playerctl/releases/download/v2.0.2/playerctl-2.0.2_amd64.deb
 	fi
 
 	# Editors
-	sudo -E apt install -y geany vim-gtk3 emacs
+	packages+=(geany vim-gtk3)
 
 	# Archiving
-	sudo -E apt install -y engrampa unzip unrar p7zip-full ecm
+	packages+=(engrampa unzip unrar p7zip-full ecm)
 
 	# Window managing
 	# quicktile dependencies
-	sudo -E apt install -y python python-gtk2 python-xlib python-dbus python-setuptools libpango-1.0
+	packages+=(python python-gtk2 python-xlib python-dbus python-setuptools libpango-1.0)
+
+	_install "${packages[*]}"
 	_install_deb_from_url 'http://ftp.nl.debian.org/debian/pool/main/g/gnome-python-desktop/python-wnck_2.32.0+dfsg-3_amd64.deb'
-	sudo -E pip2 install https://github.com/ssokolow/quicktile/archive/master.zip
+	_install_pip https://github.com/ssokolow/quicktile/archive/master.zip
 
 
- 	sudo -E pip3 install git+https://github.com/jeffkaufman/icdiff.git
+ 	_install_pip3 git+https://github.com/jeffkaufman/icdiff.git
 
-	# @todo set the gemrc files in place before running gem install
-	if [ -f ~/.gemrc ]; then
-		gem install teamocil
-	fi
+	
+
+	_install_gem teamocil
+	
 	ulauncher
 	bash "$DIR/apps/oh-my-zsh.sh"
 	# Fix for snaps with ZSH
@@ -179,51 +265,56 @@ function minimal() {
 	sudo -E snap install code --classic
 	bash "$DIR/apps/code.sh"
 
-
 	sudo -E chsh -s "$(command -v zsh)" mandy
 }
 
-
 function themes() {
-	sudo -E apt install -y arc-theme bluebird-gtk-theme moka-icon-theme xfwm4-themes pocillo-icon-theme materia-gtk-theme
+	declare -a packages=()
+	packages+=(arc-theme bluebird-gtk-theme moka-icon-theme xfwm4-themes pocillo-icon-theme materia-gtk-theme)
+	_install "${packages[*]}" 
 }
 
 function build-tools() {
 	# Build tools
-	sudo -E apt install -y build-essential dkms software-properties-common
-
+	declare -a packages=()
+	packages+=(build-essential dkms software-properties-common)
+	_install "${packages[*]}" 
 }
 
 function vpn() {
 	# Vpn and network manager
-	sudo -E apt install -y openvpn network-manager-openvpn network-manager-openvpn-gnome
+	declare -a packages=()
+	packages+=(openvpn network-manager-openvpn network-manager-openvpn-gnome)
+	_install "${packages[*]}" 
 }
 
 function general() {
 	set -e
-	sudo -E apt update -y
+	_update
 
 	build-tools
 
+	declare -a packages=()
 	# System utils
-	sudo -E apt install -y sysfsutils sysstat qdirstat
+	packages+=(sysfsutils sysstat qdirstat)
 
 	# Media
-	sudo -E apt install -y vlc imagemagick flac soundconverter
- 	sudo -E flatpak install flathub io.github.quodlibet.QuodLibet --system -y
+	packages+=(vlc imagemagick flac soundconverter)
+	
+	_install_flatpak_flathub io.github.quodlibet.QuodLibet
 
 	vpn
 	themes
 
 	# Install android tools adbd for android-sdk icon and adb binary
-	sudo -E apt install -y android-tools-adbd
+	packages+=(android-tools-adbd)
 
 	# PDF
-	sudo -E apt install -y atril # zathura 'zathura*'
+	packages+=(atril) # zathura 'zathura*')
 
 	if [ ! -f /usr/NX/bin/nxplayer ]; then
 		# shellcheck disable=1001
-		_install_deb_from_url "$(curl https://www.nomachine.com/download/download\&id\=6 2>/dev/null | grep -E -o "http.*download.*deb")"
+		_install_deb_from_url "$(curl -sSL https://www.nomachine.com/download/download\&id\=6 2>/dev/null | grep -E -o "http.*download.*deb")"
 	fi
 
 	_add_repo_or_install_deb 'ppa:nextcloud-devs/client' 'nextcloud-client'
@@ -239,46 +330,40 @@ function general() {
 	fi
 
 	if ! command -v x11docker &>/dev/null; then
-		curl -fsSL https://raw.githubusercontent.com/mviereck/x11docker/master/x11docker | sudo -E bash -s -- --update
+		curl -sSL https://raw.githubusercontent.com/mviereck/x11docker/master/x11docker | sudo -E bash -s -- --update
 	fi
 
 	_add_repo_or_install_deb 'ppa:lazygit-team/release' 'lazygit'
 
 	_add_repo_or_install_deb 'ppa:webupd8team/indicator-kdeconnect' 'indicator-kdeconnect'
 
-	if ! apt -qq list papirus-icon-theme 2>/dev/null | grep -i -q installed
+	if ! apt-get -qq list papirus-icon-theme 2>/dev/null | grep -i -q installed
 	then
 		_add_repo_or_install_deb 'ppa:papirus/papirus' 'papirus-icon-theme'
 	fi
 
 	sudo -E snap install ripgrep --classic
 
+	_install_flatpak_flathub com.github.wwmm.pulseeffects
 
-	yes | flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo --user
-	flatpak install flathub com.github.wwmm.pulseeffects -y --user
+	_install "${packages[*]}" 
 
-
-	remove-obsolete
-
-
-	pip3 install thefuck
-	pip3 install numpy
-	pip3 install csvkit
-	pip3 install httpie
+	remove_obsolete
+	_install_pip3 thefuck numpy csvkit httpie
 
 	set +e
 }
 
-function remove-obsolete() {
-	sudo -E apt remove -y parole mpv 'pidgin*' 'zathura*' evince
+function remove_obsolete() {
+	_remove parole mpv 'pidgin*' 'zathura*' evince
 	# Remove gnome games
-	sudo -E apt remove -y aisleriot hitori sgt-puzzles lightsoff iagno gnome-games gnome-nibbles \
+	_remove aisleriot hitori sgt-puzzles lightsoff iagno gnome-games gnome-nibbles \
 		gnome-mines quadrapassel gnome-sudoku gnome-robots swell-foop tali gnome-taquin \
-		gnome-tetravex gnome-chess five-or-more four-in-a-row gnome-klotski gnome-mahjongg
+		gnome-tetravex gnome-chess five-or-more four-in-a-row gnome-klotski gnome-mahjongg emacs
 
 	# Obsolete indicators
-	sudo -E apt remove indicator-session indicator-datetime indicator-keyboard indicator-power -y
-	sudo -E apt autoremove -y
+	_remove indicator-session indicator-datetime indicator-keyboard indicator-power
+	_autoremove
 }
 
 function shutter() {
@@ -291,7 +376,7 @@ function shutter() {
 		_install_deb_from_url "https://launchpad.net/ubuntu/+archive/primary/+files/libgoocanvas3_1.0.0-1_amd64.deb"
 		_install_deb_from_url "https://launchpad.net/ubuntu/+archive/primary/+files/libgoo-canvas-perl_0.06-2ubuntu3_amd64.deb"
 	fi
-	sudo -E apt install "shutter" -y
+	_install "shutter"
 
 }
 
@@ -395,11 +480,11 @@ function virtualbox() {
 		wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo apt-key add -
 		wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | sudo apt-key add -
 	fi
-	sudo -E apt update -y
+	_update
 	sudo -E apt remove -y 'virtualbox*'
 	sudo -E pkill -e -f -9 VBox
-	sudo -E apt install -y VirtualBox-6.1
-
+	packages+=(VirtualBox-6.1)
+	_install "${packages[*]}" 
 }
 
 function i3() {
@@ -409,18 +494,21 @@ function i3() {
 		/usr/lib/apt/apt-helper download-file http://debian.sur5r.net/i3/pool/main/s/sur5r-keyring/sur5r-keyring_2019.02.01_all.deb keyring.deb SHA256:176af52de1a976f103f9809920d80d02411ac5e763f695327de9fa6aff23f416
 		sudo -E dpkg -i ./keyring.deb
 		echo "deb http://debian.sur5r.net/i3/ $(grep '^DISTRIB_CODENAME=' /etc/lsb-release | cut -f2 -d=) universe" | sudo -E tee /etc/apt/sources.list.d/sur5r-i3.list
-		sudo -E apt update
+		_update
 	fi
-
-	sudo -E apt install -y udiskie compton nitrogen feh xfce4-panel pcmanfm spacefm rofi ssh-askpass-gnome
-	sudo -E apt install -y "i3" i3blocks i3lock
-	sudo -E apt install -y dmenu rofi
+	declare -a packages=()
+	packages+=(udiskie compton nitrogen feh xfce4-panel pcmanfm spacefm rofi ssh-askpass-gnome)
+	packages+=("i3" i3blocks i3lock)
+	packages+=(dmenu rofi)
+	_install "${packages[*]}" 
 }
 
 
 function openbox() {
 	i3
-	sudo -E apt install -y "openbox" obconf lxappearance xfce4-panel
+	declare -a packages=()
+	packages+=("openbox" obconf lxappearance xfce4-panel)
+	_install "${packages[*]}" 
 }
 
 function usb_ssd() {
@@ -433,16 +521,18 @@ function usb_ssd() {
 
 
 function upgrade() {
-	sudo -E apt update; sudo -E apt "upgrade" -y
+	_update; sudo -E apt "upgrade" -y
 	sudo -E apt install "linux-headers-$(uname -r)" dkms -y
 	sudo -E /sbin/vboxconfig
-	sudo -E apt autoremove -y
+	_autoremove
 }
 
 
 function media() {
+	declare -a packages=()
 	# Media things, disk burn software
-	sudo -E apt install -y digikam k3b # darktable
+	packages+=(digikam k3b darktable)
+	_install "${packages[*]}" 
 	# Permissions for ripping cds
 	sudo -E chmod 4711 /usr/bin/wodim;
 	sudo -E chmod 4711 /usr/bin/cdrdao
@@ -454,19 +544,19 @@ function chat() {
 
 }
 function kde() {
-	sudo -E apt install -y kronometer ktimer ark
-	sudo -E apt remove -y konsole akonadi korganizer kaddressbook kmail kjots kalarm kmail amarok
+	packages+=(kronometer ktimer ark)
+	_remove konsole akonadi korganizer kaddressbook kmail kjots kalarm kmail amarok
 	# @todo remove kde pim etc
 }
 
 function uninstall-kde() {
 	# @todo gwenview ?
-	sudo -E apt remove -y ark okular '*kwallet*' kdevelop kate kwrite kronometer ktimer
-	sudo -E apt autoremove -y
+	_remove ark okular '*kwallet*' kdevelop kate kwrite kronometer ktimer
+	_autoremove
 }
 
 function privacy() {
-	# sudo -E apt install -y torbrowser-launcher
+	# packages+=(torbrowser-launcher)
 	# @todo add expressvpn
 	_install_deb_from_url "https://s3.amazonaws.com/purevpn-dialer-assets/linux/app/purevpn_1.2.2_amd64.deb"
 	_install_deb_from_url "https://download.expressvpn.xyz/clients/linux/expressvpn_2.3.4-1_amd64.deb"
@@ -475,51 +565,54 @@ function privacy() {
 
 function macbook() {
 	# Realtek drivers for MacBook
-	sudo -E apt install firmware-b43-installer -y
+	_install firmware-b43-installer
 }
 
 
 function etcher() {
 	echo "deb https://deb.etcher.io stable etcher" | sudo -E tee /etc/apt/sources.list.d/balena-etcher.list
 	sudo -E apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 379CE192D401AB61
-	sudo -E apt-get update
-	sudo -E apt-get install balena-etcher-electron -y
+	_update
+	_install balena-etcher-electron -y
 }
 
 function qt_dev() {
 	# Qt development
-	sudo -E apt install -y kdevelop qt5-default build-essential mesa-common-dev libglu1-mesa-dev
+	declare -a packages=()
+	packages+=(kdevelop qt5-default build-essential mesa-common-dev libglu1-mesa-dev)
+	_install "${packages[*]}" 
 }
 
 
 function jupyter() {
-	pip3 install jupyterlab
+	_install_pip3 jupyterlab
 	npm install -g ijavascript && ijsinstall
-	pip3 install bash_kernel && python3 -m bash_kernel.install
-	pip3 install gnuplot_kernel && python3 -m gnuplot_kernel install --user
-	pip3 install qtconsole pyqt5
+	_install_pip3 bash_kernel && python3 -m bash_kernel.install
+	_install_pip3 gnuplot_kernel && python3 -m gnuplot_kernel install --user
+	_install_pip3 qtconsole pyqt5
 }
 
 function dev() {
-	sudo -E apt install -y apache2-utils
-	sudo -E apt remove -y shellcheck
-	if ! which shellcheck &>/dev/null; then
+	declare -a packages=()
+	packages+=(apache2-utils)
+	_remove shellcheck
+	if ! command -v shellcheck &>/dev/null; then
 		scversion="stable" # or "v0.4.7", or "latest"
 		wget -qO- "https://storage.googleapis.com/shellcheck/shellcheck-${scversion?}.linux.x86_64.tar.xz" | tar -xJv
 		sudo -E cp "shellcheck-${scversion}/shellcheck" /usr/bin/
 	fi
 
-	if ! which hadolint &>/dev/null; then
+	if ! command -v hadolint &>/dev/null; then
 		cd /tmp || exit 2
 		wget -qO- "https://github.com/hadolint/hadolint/releases/download/v1.17.3/hadolint-Linux-x86_64" > hadolint
 		sudo -E cp "hadolint" /usr/bin/
 		sudo -E chmod +x /usr/bin/hadolint
 	fi
-	sudo -E apt install -y python3-venv python3-pip golang-go pandoc
+	packages+=(python3-venv python3-pip golang-go pandoc)
 	python3 -m pip install --user pipx
 	python3 -m pipx ensurepath
 
-	pip3 install mypy yamllint flake8 autopep8 vim-vint
+	_install_pip3 mypy yamllint flake8 autopep8 vim-vint
 
 	# python3 version is not in pypi
 	pip install crudini
@@ -529,11 +622,11 @@ function dev() {
 		~/.mypyls/bin/pip install "https://github.com/matangover/mypyls/archive/master.zip#egg=mypyls[default-mypy]"
 	fi
 
-	pip3 install pre-commit
+	_install_pip3 pre-commit
 
-	curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
-	sudo -E apt install -y nodejs meld
-	sudo -E apt install -y jq
+	curl -sSL https://deb.nodesource.com/setup_12.x | sudo -E bash -
+	packages+=(nodejs meld)
+	packages+=(jq)
 	_add_repo_or_install_deb 'ppa:rmescandon/yq' 'yq'
 	
 	npm config set prefix "$HOME/.local"
@@ -545,32 +638,36 @@ function dev() {
 	npm install -g eslint
 	npm install -g markdownlint-cli
 
-	if ! which circleci &>/dev/null; then
-		curl -fLSs https://circle.ci/cli | sudo -E bash
+	if ! command -v circleci &>/dev/null; then
+		curl -sSL https://circle.ci/cli | sudo -E bash
 	fi
 
 	# Gnu global and exuberant ctags
-	sudo -E apt install -y global ctags
+	packages+=(global ctags)
 
-	if ! which checkmake &>/dev/null; then
+	if ! command -v checkmake &>/dev/null; then
 		go get github.com/mrtazz/checkmake
 		cd "$GOPATH/src/github.com/mrtazz/checkmake"
 		sudo make PREFIX=/usr/local clean install    
 	fi
+
+	_install "${packages[*]}" 
 }
 
 
 
 function php() {
-	sudo -E apt install -y wkhtmltopdf php-cli php-xml php-mbstring php-curl php-zip php-pdo-sqlite php-intl php-zmq
-	sudo -E apt install -y kcachegrind
+	declare -a packages=()
+	packages+=(wkhtmltopdf php-cli php-xml php-mbstring php-curl php-zip php-pdo-sqlite php-intl php-zmq)
+	packages+=(kcachegrind)
+	_install "${packages[*]}" 
 	sudo -E snap install phpstorm --classic
-	pip3 install mycli
+	_install_pip3 mycli
 
 
-	if ! which composer &>/dev/null; then
+	if ! command -v composer &>/dev/null; then
 		# shellcheck disable=SC2091
-		curl -sS https://getcomposer.org/installer | $(which php) && sudo -E mv composer.phar /usr/local/bin/composer
+		curl -sSL https://getcomposer.org/installer | $(command -v php) && sudo -E mv composer.phar /usr/local/bin/composer
 	fi
 
 	# @see https://github.com/felixfbecker/php-language-server/issues/611
@@ -582,8 +679,8 @@ function php() {
 	composer global require squizlabs/php_codesniffer
 	composer global require phpstan/phpstan
 	# shellcheck disable=SC2091
-	curl -sS https://litipk.github.io/Jupyter-PHP-Installer/dist/jupyter-php-installer.phar > "${TMPDIR:-/tmp}/jupyter.php"
-	$(which php) "${TMPDIR:-/tmp}/jupyter.php" install
+	curl -sSL https://litipk.github.io/Jupyter-PHP-Installer/dist/jupyter-php-installer.phar > "${TMPDIR:-/tmp}/jupyter.php"
+	$(command -v php) "${TMPDIR:-/tmp}/jupyter.php" install
 	rm "${TMPDIR:-/tmp}/jupyter.php"
 
 	# xdebug
@@ -593,70 +690,70 @@ function php() {
 
 
 function docker() {
-	sudo -E apt-get install -y \
-		apt-transport-https \
+	_install apt-transport-https \
 		ca-certificates \
 		curl \
 		gnupg2 \
 		software-properties-common
 
-	if ! which ctop &>/dev/null; then
-		sudo -E curl -L https://github.com/bcicen/ctop/releases/download/v0.7.2/ctop-0.7.2-linux-amd64 -o /usr/local/bin/ctop
+	if ! command -v ctop &>/dev/null; then
+		sudo -E curl -sSL https://github.com/bcicen/ctop/releases/download/v0.7.2/ctop-0.7.2-linux-amd64 -o /usr/local/bin/ctop
 		sudo -E chmod +x /usr/local/bin/ctop
 	fi
 
-	if ! which docker &>/dev/null; then
-		curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo -E apt-key add -
+	if ! command -v docker &>/dev/null; then
+		curl -sSL https://download.docker.com/linux/ubuntu/gpg | sudo -E apt-key add -
 		sudo -E apt-key fingerprint 0EBFCD88
 		sudo -E add-apt-repository \
 			"deb [arch=amd64] https://download.docker.com/linux/ubuntu \
 			$(lsb_release -cs) \
 			stable"
-		sudo -E apt-get update
-		sudo -E apt-get install -y docker-ce
+		_update
+		_install docker-ce
 		sudo -E usermod -aG "docker" "$(whoami)"
 	fi
 
-	if ! which docker-compose &>/dev/null; then
-		sudo -E curl -L "https://github.com/docker/compose/releases/download/1.25.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+	if ! command -v docker-compose &>/dev/null; then
+		sudo -E curl -sSL "https://github.com/docker/compose/releases/download/1.25.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 		sudo -E chmod +x /usr/local/bin/docker-compose
 	fi
 
-	if ! which docker-machine &>/dev/null; then
+	if ! command -v docker-machine &>/dev/null; then
 		base=https://github.com/docker/machine/releases/download/v0.16.2
-	  	curl -L "$base/docker-machine-$(uname -s)-$(uname -m)" >/tmp/docker-machine
+	  	curl -sSL "$base/docker-machine-$(uname -s)-$(uname -m)" >/tmp/docker-machine
 	  	sudo mv /tmp/docker-machine /usr/local/bin/docker-machine
 	  	sudo chmod +x /usr/local/bin/docker-machine
 	fi
 
-	# if which podman &>/dev/null
+	# if command -v podman &>/dev/null
 	# then
 	# 	# Podman
-	# 	sudo -E apt update
+	# 	_update
 	# 	sudo -E apt -y install software-properties-common
-	# 	sudo -E add-apt-repository -y ppa:projectatomic/ppa
+	# 	_add_repository ppa:projectatomic/ppa
 	# 	sudo -E apt install podman -y
 	# fi
 
 	cd "${TMPDIR:-/tmp}"
-	if ! which lazydocker &>/dev/null; then
-		curl -L https://github.com/jesseduffield/lazydocker/releases/download/v0.7.1/lazydocker_0.7.1_Linux_x86_64.tar.gz > lazydocker.tgz
+	if ! command -v lazydocker &>/dev/null; then
+		curl -sSL https://github.com/jesseduffield/lazydocker/releases/download/v0.7.1/lazydocker_0.7.1_Linux_x86_64.tar.gz > lazydocker.tgz
 		tar xzf lazydocker.tgz
 		sudo -E install lazydocker /usr/local/bin/
 	fi
 }
 
 function polybar() {
-	sudo -E apt install -y build-essential git cmake cmake-data pkg-config python3-sphinx libcairo2-dev libxcb1-dev libxcb-util0-dev libxcb-randr0-dev libxcb-composite0-dev python-xcbgen xcb-proto libxcb-image0-dev libxcb-ewmh-dev libxcb-icccm4-dev
-	sudo -E apt install -y libxcb-xkb-dev libxcb-xrm-dev libxcb-cursor-dev libasound2-dev libpulse-dev i3-wm libjsoncpp-dev libmpdclient-dev libcurl4-openssl-dev libnl-genl-3-dev
-
+	declare -a packages=()
+	packages+=(build-essential git cmake cmake-data pkg-config python3-sphinx libcairo2-dev libxcb1-dev libxcb-util0-dev libxcb-randr0-dev libxcb-composite0-dev python-xcbgen xcb-proto libxcb-image0-dev libxcb-ewmh-dev libxcb-icccm4-dev)
+	packages+=(libxcb-xkb-dev libxcb-xrm-dev libxcb-cursor-dev libasound2-dev libpulse-dev i3-wm libjsoncpp-dev libmpdclient-dev libcurl4-openssl-dev libnl-genl-3-dev)
+	_install "${packages[*]}" 
 	cd "${TMPDIR:-/tmp}"
 	git clone https://github.com/jaagr/polybar.git
 	cd polybar && ./build.sh --all-features --gcc --install-config --auto
 }
 
 
-function dns() {
+function networkmanager() {
 	if [ ! -f /etc/NetworkManager/conf.d/00-use-dnsmasq.conf ]; then
 		sudo -E tee /etc/NetworkManager/conf.d/00-use-dnsmasq.conf << EOL &>/dev/null
 # This enabled the dnsmasq plugin.
@@ -673,6 +770,11 @@ EOL
 		sudo -E rm /etc/resolv.conf; sudo -E ln -s /var/run/NetworkManager/resolv.conf /etc/resolv.conf
 		sudo -E systemctl restart NetworkManager
 	fi
+
+	sudo -E tee /etc/NetworkManager/conf.d/00-ignore-docker-and-vbox.conf << EOL &>/dev/null
+[keyfile]
+unmanaged-devices=interface-name:docker0;interface-name:vboxnet*;interface-name:br-*
+EOL
 }
 
 function sysctl() {
@@ -746,8 +848,9 @@ function autostart() {
 function gaming() {
 	lutris
 	retroarch-config
-	sudo -E apt install -y steam
-	sudo -E curl -sS https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks -o /usr/local/bin/winetricks
+	packages+=(steam)
+	_install "${packages[*]}" 
+	sudo -E curl -sSL https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks -o /usr/local/bin/winetricks
 	sudo -E chmod +x /usr/local/bin/winetricks
 	
 	pipx install protontricks
@@ -761,7 +864,7 @@ function lutris() {
 function install-game-roms() {
 	if [[ ! -d ~/Games/bios ]]; then
 		cd "${TMPDIR:-/tmp}"
-		curl -L https://archive.org/download/retropiebiosfilesconfiguredforeverysystem_20190904/Retropie%20Bios%20Files%20Configured%20for%20Every%20System.zip > bios.zip
+		curl -sSL https://archive.org/download/retropiebiosfilesconfiguredforeverysystem_20190904/Retropie%20Bios%20Files%20Configured%20for%20Every%20System.zip > bios.zip
 		mkdir -p ~/Games/bios
 		cd ~/Games/bios
 		unzip "${TMPDIR:-/tmp}/bios.zip"

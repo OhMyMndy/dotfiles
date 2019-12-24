@@ -1,5 +1,4 @@
 scriptencoding utf-8
-set nocompatible
 set wildmenu
 
 
@@ -18,15 +17,15 @@ call plug#begin('~/.vim/bundle')
 "Plug 'neoclide/coc.nvim', {'branch': 'release'}
 "Plug 'chrisbra/Colorizer'
 Plug 'tpope/vim-sensible'
-Plug 'tpope/vim-obsession'
+"Plug 'tpope/vim-obsession'
 "Plug 'StanAngeloff/php.vim'
 Plug 'scrooloose/nerdtree'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
+"Plug 'vim-airline/vim-airline'
+"Plug 'vim-airline/vim-airline-themes'
 "Plug 'dense-analysis/ale'
 Plug 'airblade/vim-gitgutter'
 " Plug 'Valloric/YouCompleteMe'
-Plug 'wellle/context.vim'
+"Plug 'wellle/context.vim'
 
 
 "Plug 'ctrlpvim/ctrlp.vim'
@@ -35,25 +34,25 @@ Plug 'wellle/context.vim'
 Plug 'sheerun/vim-polyglot'
 
 
-Plug 'editorconfig/editorconfig-vim'
+"Plug 'editorconfig/editorconfig-vim'
 "Plug 'vim-voom/VOoM'
 
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-Plug 'junegunn/vader.vim'
+"Plug 'junegunn/vader.vim'
 
 
-Plug 'majutsushi/tagbar'
+"Plug 'majutsushi/tagbar'
 "Plug 'liuchengxu/vista.vim'
 
-Plug 'tpope/vim-fugitive'
+"Plug 'tpope/vim-fugitive'
 Plug 'mbbill/undotree'
-Plug 'christoomey/vim-tmux-runner'
-Plug 'godlygeek/tabular'
+"Plug 'christoomey/vim-tmux-runner'
+"Plug 'godlygeek/tabular'
 Plug 'dense-analysis/ale'
-Plug 'tpope/vim-sleuth'
+"Plug 'tpope/vim-sleuth'
 Plug '907th/vim-auto-save'
-Plug 'scrooloose/nerdcommenter'
+"Plug 'scrooloose/nerdcommenter'
 Plug 'autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
     \ 'do': 'bash install.sh',

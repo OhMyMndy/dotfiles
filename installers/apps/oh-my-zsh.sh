@@ -25,11 +25,9 @@ function installZshPlugin() {
 	pluginUrl="$1"
 	pluginDir="$2"
 
-	if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/$pluginDir" ]; then
+	if [[ ! -d "$HOME/.oh-my-zsh/custom/plugins/$pluginDir" ]]; then
 		echo "Installing ZSH plugin '$pluginDir'"
 		git clone "$pluginUrl" "$HOME/.oh-my-zsh/custom/plugins/$pluginDir"
-	else
-		echo "ZSH plugin '$pluginDir' is already installed"
 	fi
 
 }
