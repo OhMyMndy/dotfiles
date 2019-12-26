@@ -165,6 +165,9 @@ export DISABLE_AUTO_TITLE=true
 
 # @see https://github.com/ohmyzsh/ohmyzsh/blob/master/lib/correction.zsh
 export ENABLE_CORRECTION="false"
+unsetopt correct_all
+
+
 
 # Uncomment the following line to display red dots whilst waiting for completion.
 export COMPLETION_WAITING_DOTS="true"
@@ -194,6 +197,12 @@ if [ "$(uname -s)" != 'Darwin' ]; then
 
     export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock
 fi
+
+
+if [ "$(uname -s)" = 'Darwin' ]; then
+    export DISPLAY="$HOSTNAME:0"
+fi
+
 
 
 export NVM_DIR="$HOME/.nvm"
