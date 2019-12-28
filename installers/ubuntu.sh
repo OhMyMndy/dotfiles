@@ -202,7 +202,8 @@ function minimal() {
 	# Esential X tools
 	# kdeconnect
 	packages+=("shutter" redshift-gtk xfce4-terminal xfce4-genmon-plugin chromium-browser seahorse galculator orage ristretto 
-		xsel xclip arandr wmctrl xscreensaver flatpak compton xfce4-appmenu-plugin)
+		xsel xclip arandr wmctrl xscreensaver flatpak compton xfce4-appmenu-plugin caffeine)
+
 
 	_add_repo_or_install_deb 'ppa:hluk/copyq' 'copyq' 'https://github.com/hluk/CopyQ/releases/download/v3.9.3/copyq_3.9.3_Debian_10-1_amd64.deb'
 
@@ -628,7 +629,7 @@ function dev() {
 	packages+=(nodejs meld)
 	packages+=(jq)
 	_add_repo_or_install_deb 'ppa:rmescandon/yq' 'yq'
-	
+
 	npm config set prefix "$HOME/.local"
 	npm install -g bash-language-server
 	npm install -g intelephense
@@ -725,7 +726,19 @@ function docker() {
 	  	sudo chmod +x /usr/local/bin/docker-machine
 	fi
 
-	# if command -v podman &>/dev/null
+	if [[ ! -f /etc/docker/daemon.json ]]; then
+		sudo -E tee /etc/docker/daemon.json << EOL &>/dev/null
+{
+"log-driver": "json-file",
+"log-opts": {
+    "max-size": "10m",    
+    "max-file": "3"    
+    }
+} 
+EOL
+	fi
+
+	# if which podman &>/dev/null
 	# then
 	# 	# Podman
 	# 	_update
@@ -832,6 +845,7 @@ function autostart() {
 
 	ln -sf /usr/share/applications/ulauncher.desktop ~/.config/autostart/
 	ln -sf /usr/share/applications/indicator-kdeconnect.desktop ~/.config/autostart/
+	ln -sf /usr/share/applications/caffeine-indicator.desktop ~/.config/autostart/
 	ln -sf /usr/share/applications/redshift-gtk.desktop ~/.config/autostart/
 	ln -sf /usr/share/applications/com.github.hluk.copyq.desktop ~/.config/autostart/
 	ln -sf /usr/share/applications/nextcloud.desktop ~/.config/autostart/
