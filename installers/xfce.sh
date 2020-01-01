@@ -109,8 +109,8 @@ function xfce_settings() {
 		xfconf-query -c xfwm4 -p /general/button_layout -s "O|HMC"
 		xfconf-query -c xfwm4 -p /general/cycle_preview -s false
 		xfconf-query -c xfwm4 -p /general/mousewheel_rollup -s false
-		xfconf-query -c xfwm4 -p /general/workspace_names -n -t string -t string -t string -t string -s "1" -s "2" -s "3" -s "4"
-		xfconf-query -c xfwm4 -p /general/workspace_count -s 4
+		xfconf-query -c xfwm4 -p /general/workspace_names -n -t string -t string -t string -t string -t string -t string -t string -t string -t string -t string -s "1" -s "2" -s "3" -s "4" -s "5" -s "6" -s "7" -s "8" -s "9" -s "10"
+		xfconf-query -c xfwm4 -p /general/workspace_count -s 10
 
 
  		xfconf-query -c xfce4-session -p /compat/LaunchGNOME -s true
@@ -162,4 +162,54 @@ function xfce_settings-light() {
 		xfconf-query -c xsettings -p /Net/IconThemeName -s Papirus-Light
 		xfconf-query -c xfwm4 -p /general/theme -s Bluebird
 	fi
+}
+
+
+function wm_i3() {
+	sed -Ei 's#Hidden=.*#Hidden=true#g' ~/.config/autostart/xfwm4.desktop
+	sed -Ei 's#Hidden=.*#Hidden=true#g' ~/.config/autostart/xfdesktop.desktop
+	sed -Ei 's#Hidden=.*#Hidden=false#g' ~/.config/autostart/i3.desktop
+	pkill -e xfdesktop
+	pkill -e xfce4-panel
+	pkill -e xfwm4
+	pkill -e i3
+	pkill -e polybar
+	i3 -c ~/.config/i3/config &>/dev/null &
+	sleep 2
+	compton --config ~/.config/compton/compton.conf &>/dev/null &
+	polybar -r top &>/dev/null &
+
+	move_windows_to_workspace
+}
+
+function move_windows_to_workspace() {
+
+	i3-msg '[class="Google-chrome"]' move to workspace 1
+	i3-msg '[class="Chromium"]' move to workspace 1
+
+	i3-msg '[class="Alacritty"]' move to workspace 2
+
+	i3-msg '[class="Code"]' move to workspace 4
+	i3-msg '[class="PhpStorm"]' move to workspace 4
+
+
+	i3-msg '[class="discord"]' move to workspace 6
+	i3-msg '[class="Slack"]' move to workspace 6
+
+
+	i3-msg '[class="Xfdesktop"]' move to workspace 9
+	
+}
+
+function wm_xfwm() {
+	sed -Ei 's#Hidden=.*#Hidden=true#g' ~/.config/autostart/i3.desktop
+	sed -Ei 's#Hidden=.*#Hidden=false#g' ~/.config/autostart/xfdesktop.desktop
+	sed -Ei 's#Hidden=.*#Hidden=false#g' ~/.config/autostart/xfwm4.desktop 
+
+	pkill -e i3
+	pkill -e polybar
+	pkill -e compton
+	
+	xfwm4 &>/dev/null &
+	xfce4-panel &>/dev/null &
 }

@@ -595,6 +595,7 @@ function jupyter() {
 
 function dev() {
 	declare -a packages=()
+	sudo -E snap install snapcraft --classic
 	packages+=(apache2-utils)
 	_remove shellcheck
 	if ! command -v shellcheck &>/dev/null; then
@@ -653,6 +654,10 @@ function dev() {
 	fi
 
 	_install "${packages[*]}" 
+	sudo -E snap install multipass --classic
+	sudo -E snap install lxd
+	sudo -E lxd init --auto
+	sudo usermod -aG lxd "$(whoami)"
 }
 
 
@@ -756,6 +761,8 @@ EOL
 }
 
 function polybar() {
+	sudo snap install polybar-git
+	return
 	declare -a packages=()
 	packages+=(build-essential git cmake cmake-data pkg-config python3-sphinx libcairo2-dev libxcb1-dev libxcb-util0-dev libxcb-randr0-dev libxcb-composite0-dev python-xcbgen xcb-proto libxcb-image0-dev libxcb-ewmh-dev libxcb-icccm4-dev)
 	packages+=(libxcb-xkb-dev libxcb-xrm-dev libxcb-cursor-dev libasound2-dev libpulse-dev i3-wm libjsoncpp-dev libmpdclient-dev libcurl4-openssl-dev libnl-genl-3-dev)
