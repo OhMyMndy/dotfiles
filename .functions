@@ -742,4 +742,4 @@ function run-sourcegraph() {
 }
 
 
-
+alias polybar=/snap/polybar-git/current/usr/local/bin/polybar
