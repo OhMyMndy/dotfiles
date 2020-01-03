@@ -1,4 +1,6 @@
+set encoding=UTF-8
 scriptencoding utf-8
+
 set wildmenu
 
 
@@ -17,6 +19,8 @@ call plug#begin('~/.vim/bundle')
 "Plug 'neoclide/coc.nvim', {'branch': 'release'}
 "Plug 'chrisbra/Colorizer'
 Plug 'tpope/vim-sensible'
+Plug 'ryanoasis/vim-devicons'
+
 "Plug 'tpope/vim-obsession'
 "Plug 'StanAngeloff/php.vim'
 Plug 'scrooloose/nerdtree'

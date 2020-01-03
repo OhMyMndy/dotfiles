@@ -9,6 +9,24 @@
 #
 # Please see https://i3wm.org/docs/userguide.html for a complete reference!
 
+set_from_resource $black       color0  #000000
+set_from_resource $darkred     color1  #fb0120
+set_from_resource $red         color9  #fb0120
+set_from_resource $darkgreen   color2  #52e75c
+set_from_resource $green       color10 #52e75c
+set_from_resource $darkyellow  color3  #fe5004
+set_from_resource $yellow      color11 #fe5004
+set_from_resource $darkblue    color4  #24c5e8
+set_from_resource $blue        color12 #24c5e8
+set_from_resource $darkmagenta color5  #e254c6
+set_from_resource $magenta     color13 #e254c6
+set_from_resource $darkcyan    color6  #58dac1
+set_from_resource $cyan        color14 #58dac1
+set_from_resource $darkwhite   color7  #eaeaea
+set_from_resource $white       color15 #ffffff
+
+
+
 set $mod Mod4
 
 # Font for window titles. Will also be used by the bar unless a different font
@@ -74,7 +92,8 @@ bindsym $mod+h split h
 bindsym $mod+v split v
 
 # enter fullscreen mode for the focused container
-bindsym $mod+f fullscreen toggle
+bindsym $mod+Shift+f fullscreen toggle
+bindsym $mod+f exec --no-startup-id thunar
 
 # change container layout (stacked, tabbed, toggle split)
 bindsym $mod+s layout stacking
@@ -210,27 +229,27 @@ bindsym $mod+x border normal 2
 
 
 # window colors
-#                       border       background   text         indicator
-client.focused          #1a1b21      #31ff7f      #101010      #ff68d1
-client.unfocused        #101010      #1a1b21      #ffffff      #101010
-client.focused_inactive #101010      #1a1b21      #ffffff      #101010
-client.urgent           #39c2ed      #39c2ed      #101010      #ff68d1
+#                       BORDER      BACKGROUND  TEXT        INDICATOR   CHILD_BORDER
+client.focused          $black      $darkgreen  $black      $black
+client.unfocused        $black      $black      $white      $black
+client.focused_inactive $black      $black      $white      $black
+client.urgent           $blue       $blue       $black      $magenta
 
 # Default workspaces
-assign [class="WunderList"]                                                             $workspace5
-assign [class="1Password"]                                                              $workspace5
-assign [class="Google-chrome"]                                                          $workspace1
-assign [class="Chromium"]                                                               $workspace1
-assign [class="Vmplayer"]                                                               $workspace8
-assign [class="TeamViewer"]                                                             $workspace8
-assign [class=".*phpstorm"]                                                             $workspace4
-assign [class="jetbrains-idea-ce"]                                                      $workspace9
-assign [class="Rambox"]                                                                 $workspace6
+#assign [class="WunderList"]                                                             $workspace5
+#assign [class="1Password"]                                                              $workspace5
+#assign [class="Google-chrome"]                                                          $workspace1
+#assign [class="Chromium"]                                                               $workspace1
+#assign [class="Vmplayer"]                                                               $workspace8
+#assign [class="TeamViewer"]                                                             $workspace8
+#assign [class=".*phpstorm"]                                                             $workspace4
+#assign [class="jetbrains-idea-ce"]                                                      $workspace9
+#assign [class="Rambox"]                                                                 $workspace6
 assign [class="Slack"]                                                                  $workspace6
-assign [class="Thunar"]                                                                 $workspace3
-assign [class="Atom"]                                                                   $workspace9
-assign [title=".*byobu.*"]                                                              $workspace2
-assign [class="quodlibet"]                                                              $workspace10
+# assign [class="Thunar"]                                                                 $workspace3
+#assign [class="Atom"]                                                                   $workspace9
+#assign [title=".*byobu.*"]                                                              $workspace2
+#assign [class="quodlibet"]                                                              $workspace10
 
 
 hide_edge_borders smart
@@ -260,7 +279,7 @@ for_window [class="nitrogen"]                                                   
 
 # source: https://github.com/Airblader/dotfiles-manjaro/blob/master/.i3/config
 #for_window [class="(?i)VirtualBox" title="(?i)Manager"]                                floating enable
-#for_window [class="(?i)VirtualBox"]                                                    floating enable
+for_window [class="(?i)VirtualBox"]                                                    floating enable
 
 #for_window [class="(?i).*xterm.*"]                                                      border pixel 0
 for_window [class="(?i).*jetbrains.*"]                                                  border pixel 2
@@ -288,6 +307,7 @@ for_window [class="Nxclient.bin"]                                               
 for_window [class="Nxplayer.bin"]                                                       floating enable, border pixel 2
 for_window [class="Shutter"]                                                            floating enable, border normal 2
 for_window [class="feh"]                                                                floating enable, border normal 2
+for_window [class="scrcpy"]                                                             floating enable, border normal 2
 
 # Custom bindsym
 bindsym $mod+Shift+greater move workspace to output right

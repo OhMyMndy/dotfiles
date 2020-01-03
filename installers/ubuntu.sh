@@ -104,6 +104,16 @@ function _install_pip3() {
 	set +e
 }
 
+function _install_snap() {
+	set -e
+	if ! command -v snap &>/dev/null; then
+		_install snapd
+	fi
+	# shellcheck disable=SC2068
+	sudo -E snap install $@
+	set +e
+}
+
 function _install_pip() {
 	set -e
 	if ! command -v pip &>/dev/null; then
@@ -173,7 +183,7 @@ function minimal() {
 	_update
 
 	# Misc
-	packages+=(git tig gitg zsh autojump less curl rename rsync openssh-server most multitail trash-cli libsecret-tools parallel ruby ruby-dev ntp neovim vim-gtk3 fonts-noto-color-emoji fonts-noto fonts-roboto)
+	packages+=(git tig gitg zsh autojump less curl rename rsync openssh-server most multitail trash-cli zenity libsecret-tools parallel ruby ruby-dev ntp neovim vim-gtk3 fonts-noto-color-emoji fonts-noto fonts-roboto)
 
 	# Terminal multiplexing
 	packages+=(byobu tmux)
@@ -263,7 +273,7 @@ function minimal() {
 	grep -qF -- "$LINE" "$FILE" || echo "$LINE" | sudo -E tee "$FILE"
 
 
-	sudo -E snap install code --classic
+	_install_snap code --classic
 	bash "$DIR/apps/code.sh"
 
 	sudo -E chsh -s "$(command -v zsh)" mandy
@@ -343,7 +353,7 @@ function general() {
 		_add_repo_or_install_deb 'ppa:papirus/papirus' 'papirus-icon-theme'
 	fi
 
-	sudo -E snap install ripgrep --classic
+	_install_snap ripgrep --classic
 
 	_install_flatpak_flathub com.github.wwmm.pulseeffects
 
@@ -368,6 +378,7 @@ function remove_obsolete() {
 }
 
 function shutter() {
+	unset -f shutter
 	# shellcheck disable=SC1091
 	source /etc/lsb-release
 	# http://ubuntuhandbook.org/index.php/2018/04/fix-edit-option-disabled-shutter-ubuntu-18-04/
@@ -445,6 +456,7 @@ function keybindings() {
 }
 
 function ulauncher() {
+	unset -f ulauncher
 	_add_repo_or_install_deb 'ppa:agornostal/ulauncher' 'ulauncher' 'https://github.com/Ulauncher/Ulauncher/releases/download/5.4.0/ulauncher_5.4.0_all.deb'
 }
 
@@ -476,6 +488,7 @@ function locale() {
 }
 
 function virtualbox() {
+	unset -f virtualbox
 	if [ ! -f /etc/apt/sources.list.d/virtualbox.list ]; then
 		echo "deb [arch=amd64] https://download.virtualbox.org/virtualbox/debian $(grep '^DISTRIB_CODENAME=' /etc/lsb-release | cut -f2 -d=) contrib" | sudo -E tee /etc/apt/sources.list.d/virtualbox.list
 		wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo apt-key add -
@@ -489,6 +502,7 @@ function virtualbox() {
 }
 
 function i3() {
+	unset -f i3
 	if [ ! -f /etc/apt/sources.list.d/sur5r-i3.list ];
 	then
 		cd "${TMPDIR:-/tmp}"
@@ -506,6 +520,7 @@ function i3() {
 
 
 function openbox() {
+	unset -f openbox
 	i3
 	declare -a packages=()
 	packages+=("openbox" obconf lxappearance xfce4-panel)
@@ -540,8 +555,8 @@ function media() {
 }
 
 function chat() {
-	sudo -E snap install slack --classic
-	sudo -E snap install discord --classic
+	_install_snap slack --classic
+	_install_snap discord --classic
 
 }
 function kde() {
@@ -586,6 +601,7 @@ function qt_dev() {
 
 
 function jupyter() {
+	unset -f jupyter
 	_install_pip3 jupyterlab
 	npm install -g ijavascript && ijsinstall
 	_install_pip3 bash_kernel && python3 -m bash_kernel.install
@@ -596,7 +612,7 @@ function jupyter() {
 function dev() {
 	declare -a packages=()
 	sudo -E snap install snapcraft --classic
-	packages+=(apache2-utils)
+	packages+=(apache2-utils multitail)
 	_remove shellcheck
 	if ! command -v shellcheck &>/dev/null; then
 		scversion="stable" # or "v0.4.7", or "latest"
@@ -639,9 +655,13 @@ function dev() {
 	npm install -g fixjson jsonlint
 	npm install -g eslint
 	npm install -g markdownlint-cli
+	npm install -g @marp-team/marp-cli
 
 	if ! command -v circleci &>/dev/null; then
 		curl -sSL https://circle.ci/cli | sudo -E bash
+		sudo groupadd -g 3434 circleci
+		sudo useradd -u 3434 -g circleci circleci 
+		sudo usermod -aG docker circleci
 	fi
 
 	# Gnu global and exuberant ctags
@@ -663,11 +683,16 @@ function dev() {
 
 
 function php() {
+	unset -f php
+	
 	declare -a packages=()
 	packages+=(wkhtmltopdf php-cli php-xml php-mbstring php-curl php-zip php-pdo-sqlite php-intl php-zmq)
 	packages+=(kcachegrind)
+
 	_install "${packages[*]}" 
-	sudo -E snap install phpstorm --classic
+
+	_install_snap phpstorm --classic
+
 	_install_pip3 mycli
 
 
@@ -676,8 +701,18 @@ function php() {
 		curl -sSL https://getcomposer.org/installer | $(command -v php) && sudo -E mv composer.phar /usr/local/bin/composer
 	fi
 
+
+	if ! command -v phive &>/dev/null; then
+		wget -O phive.phar https://phar.io/releases/phive.phar
+		wget -O phive.phar.asc https://phar.io/releases/phive.phar.asc
+		gpg --keyserver pool.sks-keyservers.net --recv-keys 0x9D8A98B29B2D5D79
+		gpg --verify phive.phar.asc phive.phar
+		chmod +x phive.phar
+		sudo mv phive.phar /usr/local/bin/phive
+	fi
+
 	# @see https://github.com/felixfbecker/php-language-server/issues/611
-	composer require jetbrains/phpstorm-stubs:dev-master
+	composer global require jetbrains/phpstorm-stubs:dev-master
 	composer global require felixfbecker/language-server
 	# run once: composer global run-script --working-dir="$HOME/.composer/vendor/felixfbecker/language-server" parse-stubs
 
@@ -696,6 +731,7 @@ function php() {
 
 
 function docker() {
+	unset -f docker
 	_install apt-transport-https \
 		ca-certificates \
 		curl \
@@ -761,7 +797,8 @@ EOL
 }
 
 function polybar() {
-	sudo snap install polybar-git
+	unset -f polybar
+	sudo snap install polybar-git --edge
 	return
 	declare -a packages=()
 	packages+=(build-essential git cmake cmake-data pkg-config python3-sphinx libcairo2-dev libxcb1-dev libxcb-util0-dev libxcb-randr0-dev libxcb-composite0-dev python-xcbgen xcb-proto libxcb-image0-dev libxcb-ewmh-dev libxcb-icccm4-dev)
@@ -798,6 +835,7 @@ EOL
 }
 
 function sysctl() {
+	unset -f sysctl
 	# @todo add https://askubuntu.com/questions/23674/netbook-freezes-with-high-load-on-every-io-operation to sysctl if IO performance is a problem
 	sudo -E tee /etc/sysctl.d/mandy.conf << EOL &>/dev/null
 # Virtual IPs
@@ -813,7 +851,14 @@ kernel.printk = 2 4 1 7
 vm.swappiness = 2
 vm.max_map_count=262144
 EOL
-sudo "sysctl" -p
+
+	sudo -E tee /etc/sysctl.d/mandy-keepalive.conf << EOL &>/dev/null
+net.ipv4.tcp_keepalive_time = 60
+net.ipv4.tcp_keepalive_intvl = 5
+net.ipv4.tcp_keepalive_probes = 3
+EOL
+
+	sudo "sysctl" -p /etc/sysctl.d/*.conf 
 }
 
 function firewall() {
@@ -879,6 +924,7 @@ function gaming() {
 
 ## Gaming section
 function lutris() {
+	unset -f lutris
 	_add_repo_or_install_deb 'ppa:lutris-team/lutris' 'lutris'
 }
 

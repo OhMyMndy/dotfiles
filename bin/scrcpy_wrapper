@@ -3,16 +3,17 @@
 # Based on https://gist.github.com/vshymanskyy/a44ff7af2848653e91f269910cb9d50f
 
 adb_args=""
+adb_device=""
 
 function connect() {
 	devices="$(scrcpy.adb devices | sed -n '1!p' | grep -Eo '[a-zA-Z0-9.:]+' | grep -v device | tr '\n' '|' | sed 's/.$//')"
-	if [[ $devices != *"|"* ]]; then
-		adb_args="-s $devices"
+	if [[ $devices != *"|"* ]] && [[ $devices != '' ]]; then
+		adb_device="-s $devices"
 		return
 	fi
 	chosen_device="$(zenity --forms --title "More than one device found" --text "Choose your device" --add-combo "Device" --combo-values $devices)"
 	if [[ $chosen_device != '' ]]; then
-		adb_args="-s $chosen_device"
+		adb_device="-s $chosen_device"
 	else
 		ip_address="$(zenity --entry --text="Enter the IP address you want to connect to")"
 		result="$(scrcpy.adb connect "$ip_address")"
@@ -56,7 +57,7 @@ getopt --long density:,font-scale:,null-keyboard,landscape,leena,disable-animati
 
 
 connect
-echo "$adb_args" grep -Eo -m 1 '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+' &>/dev/null
+echo "$adb_args $adb_device" | grep -Eo -m 1 '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+' &>/dev/null
 is_ip_device=$?
 
 set -e
@@ -103,32 +104,32 @@ while true ; do
 done
 
 
-original_ime="$(run scrcpy.adb $adb_args shell settings get secure default_input_method)"
+original_ime="$(run scrcpy.adb $adb_device shell settings get secure default_input_method)"
 
-original_wm_density="$(run scrcpy.adb $adb_args shell wm density | tail -1 | grep -Eo '[0-9]+')"
-original_font_scale="$(run scrcpy.adb $adb_args shell settings get system font_scale)"
-original_user_rotation="$(run scrcpy.adb $adb_args shell settings get system user_rotation)"
-original_accelerometer_rotation="$(run scrcpy.adb $adb_args shell settings get system accelerometer_rotation)"
+original_wm_density="$(run scrcpy.adb $adb_device shell wm density | tail -1 | grep -Eo '[0-9]+')"
+original_font_scale="$(run scrcpy.adb $adb_device shell settings get system font_scale)"
+original_user_rotation="$(run scrcpy.adb $adb_device shell settings get system user_rotation)"
+original_accelerometer_rotation="$(run scrcpy.adb $adb_device shell settings get system accelerometer_rotation)"
 
-original_transition_animation_scale="$(run scrcpy.adb $adb_args shell settings get global transition_animation_scale)"
-original_window_animation_scale="$(run scrcpy.adb $adb_args shell settings get global transition_animation_scale)"
-original_animator_duration_scale="$(run scrcpy.adb $adb_args shell settings get global animator_duration_scale)"
+original_transition_animation_scale="$(run scrcpy.adb $adb_device shell settings get global transition_animation_scale)"
+original_window_animation_scale="$(run scrcpy.adb $adb_device shell settings get global transition_animation_scale)"
+original_animator_duration_scale="$(run scrcpy.adb $adb_device shell settings get global animator_duration_scale)"
 
 function setup() {
 	# Disable Keyboard
-	if [[ -v null_keyboard ]]; then run scrcpy.adb $adb_args shell ime set com.wparam.nullkeyboard/.NullKeyboard; fi
-	if [[ -v density ]]; then run scrcpy.adb $adb_args shell wm density "$density"; fi
+	if [[ -v null_keyboard ]]; then run scrcpy.adb $adb_device shell ime set com.wparam.nullkeyboard/.NullKeyboard; fi
+	if [[ -v density ]]; then run scrcpy.adb $adb_device shell wm density "$density"; fi
 	if [[ -v landscape ]]; then
-		run scrcpy.adb $adb_args shell settings put system user_rotation 3
-		run scrcpy.adb $adb_args shell settings put system accelerometer_rotation 0
+		run scrcpy.adb $adb_device shell settings put system user_rotation 3
+		run scrcpy.adb $adb_device shell settings put system accelerometer_rotation 0
 	fi
-	if [[ -v leena ]]; then run scrcpy.adb $adb_args shell monkey -p de.m_lang.leena 1; fi
-	if [[ -v font_scale ]]; then run scrcpy.adb $adb_args shell settings put system font_scale "$font_scale"; fi
+	if [[ -v leena ]]; then run scrcpy.adb $adb_device shell monkey -p de.m_lang.leena 1; fi
+	if [[ -v font_scale ]]; then run scrcpy.adb $adb_device shell settings put system font_scale "$font_scale"; fi
 
 	if [[ -v disable_animations ]]; then
-		adb shell $adb_args settings put global window_animation_scale "0.0"
-		adb shell $adb_args settings put global transition_animation_scale "0.0"
-		adb shell $adb_args settings put global animator_duration_scale "0.0"
+		adb shell $adb_device settings put global window_animation_scale "0.0"
+		adb shell $adb_device settings put global transition_animation_scale "0.0"
+		adb shell $adb_device settings put global animator_duration_scale "0.0"
 	fi
 }
 
@@ -138,17 +139,17 @@ function restore() {
 	then
 		restored=1
 		echo
-		adb $adb_args shell ime set "$original_ime"
-		adb $adb_args shell wm density "$original_wm_density"
+		adb $adb_device shell ime set "$original_ime"
+		adb $adb_device shell wm density "$original_wm_density"
 
 		if [[ -v leena ]]; then adb shell am force-stop de.m_lang.leena; fi
-		adb $adb_args shell settings put system user_rotation "$original_user_rotation"
-		adb $adb_args shell settings put system accelerometer_rotation "$original_accelerometer_rotation"
-		adb $adb_args shell settings put system font_scale "$original_font_scale"
+		adb $adb_device shell settings put system user_rotation "$original_user_rotation"
+		adb $adb_device shell settings put system accelerometer_rotation "$original_accelerometer_rotation"
+		adb $adb_device shell settings put system font_scale "$original_font_scale"
 
-		adb $adb_args shell settings put global window_animation_scale "$original_window_animation_scale"
-		adb $adb_args shell settings put global transition_animation_scale "$original_transition_animation_scale"
-		adb $adb_args shell settings put global animator_duration_scale "$original_animator_duration_scale"
+		adb $adb_device shell settings put global window_animation_scale "$original_window_animation_scale"
+		adb $adb_device shell settings put global transition_animation_scale "$original_transition_animation_scale"
+		adb $adb_device shell settings put global animator_duration_scale "$original_animator_duration_scale"
 	fi
 }
 
@@ -156,8 +157,8 @@ trap restore  0 1 2 3 6 14 15
 
 setup
 
-echo "Args send to scrcpy: $args $adb_args"
+echo "Args send to scrcpy: $args $adb_device $adb_args"
 
 # shellcheck disable=SC2086
-scrcpy $args $adb_args
+scrcpy $args $adb_args $adb_device
 restore

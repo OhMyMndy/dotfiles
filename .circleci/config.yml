@@ -10,10 +10,26 @@ jobs:
       - checkout
       - setup_remote_docker #:
           # docker_layer_caching: true # not available on my plan
+      
+      - run:
+          name: Set up docker
+          command: |
+            # @see https://stackoverflow.com/questions/45796661/docker-permission-denied-while-trying-to-connect-to-docker-daemon-with-local-ci/45796662#45796662
+            if [[ $CIRCLE_SHELL_ENV == *"localbuild"* ]]; then
+              echo "export s=sudo" >> $BASH_ENV
+              echo "export docker='sudo docker'" >> $BASH_ENV
+            else
+              echo "export s=" >> $BASH_ENV
+              echo "export docker='docker'" >> $BASH_ENV
+            fi
 
       - run:
+          name: Test in docker container
+          command: |
+            $docker run --rm alpine:latest echo hi
+      - run:
           name: Verify docker
-          command: docker --version
+          command: $docker --version
 
       - run:
           name: Shellcheck

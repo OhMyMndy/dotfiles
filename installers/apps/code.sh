@@ -23,9 +23,7 @@ install naumovs.color-highlight
 install redhat.vscode-yaml
 install malmaud.tmux
 install ms-python.python
-
-# 
-
+install jetmartin.bats
 
 
 
