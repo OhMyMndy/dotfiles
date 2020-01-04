@@ -168,7 +168,11 @@ function xfce_settings-light() {
 function wm_i3() {
 	sed -Ei 's#Hidden=.*#Hidden=true#g' ~/.config/autostart/xfwm4.desktop
 	sed -Ei 's#Hidden=.*#Hidden=true#g' ~/.config/autostart/xfdesktop.desktop
+	# sed -Ei 's#Hidden=.*#Hidden=true#g' ~/.config/autostart/xfce4-panel.desktop
+
 	sed -Ei 's#Hidden=.*#Hidden=false#g' ~/.config/autostart/i3.desktop
+	# cp ~/.local/share/applications/Polybar.desktop ~/.config/autostart/
+
 	pkill -e xfdesktop
 	pkill -e xfce4-panel
 	pkill -e xfwm4
@@ -183,7 +187,6 @@ function wm_i3() {
 }
 
 function move_windows_to_workspace() {
-
 	i3-msg '[class="Google-chrome"]' move to workspace 1
 	i3-msg '[class="Chromium"]' move to workspace 1
 
@@ -198,13 +201,14 @@ function move_windows_to_workspace() {
 
 
 	i3-msg '[class="Xfdesktop"]' move to workspace 9
-	
 }
 
 function wm_xfwm() {
 	sed -Ei 's#Hidden=.*#Hidden=true#g' ~/.config/autostart/i3.desktop
 	sed -Ei 's#Hidden=.*#Hidden=false#g' ~/.config/autostart/xfdesktop.desktop
-	sed -Ei 's#Hidden=.*#Hidden=false#g' ~/.config/autostart/xfwm4.desktop 
+	sed -Ei 's#Hidden=.*#Hidden=false#g' ~/.config/autostart/xfwm4.desktop
+	sed -Ei 's#Hidden=.*#Hidden=false#g' ~/.config/autostart/xfce4-panel.desktop
+	rm ~/.config/autostart/Polybar.desktop
 
 	pkill -e i3
 	pkill -e polybar

@@ -111,6 +111,7 @@ bindsym $mod+a focus parent
 
 # focus the child container
 #bindsym $mod+d focus child
+bindsym $mod+u exec --no-startup-id ulauncher-toggle
 
 
 set $workspace1 "1"
@@ -308,6 +309,8 @@ for_window [class="Nxplayer.bin"]                                               
 for_window [class="Shutter"]                                                            floating enable, border normal 2
 for_window [class="feh"]                                                                floating enable, border normal 2
 for_window [class="scrcpy"]                                                             floating enable, border normal 2
+# Emoji
+for_window [title="Emoji Choice"]                                                       floating enable, border normal 2
 
 # Custom bindsym
 bindsym $mod+Shift+greater move workspace to output right
