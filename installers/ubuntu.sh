@@ -310,7 +310,7 @@ function general() {
 	packages+=(sysfsutils sysstat qdirstat)
 
 	# Media
-	packages+=(vlc imagemagick flac soundconverter)
+	packages+=(vlc imagemagick flac soundconverter picard)
 	
 	_install_flatpak_flathub io.github.quodlibet.QuodLibet
 
@@ -358,6 +358,9 @@ function general() {
 	_install_flatpak_flathub com.github.wwmm.pulseeffects
 
 	_install "${packages[*]}" 
+
+
+	ibus_typing_booster
 
 	remove_obsolete
 	_install_pip3 thefuck numpy csvkit httpie
@@ -556,9 +559,10 @@ function media() {
 
 function chat() {
 	_install_snap slack --classic
-	_install_snap discord --classic
-
+	# Use deb to make use of fonts-noto-color-emoji
+	_install_deb_from_url https://discordapp.com/api/download?platform=linux&format=deb
 }
+
 function kde() {
 	packages+=(kronometer ktimer ark)
 	_remove konsole akonadi korganizer kaddressbook kmail kjots kalarm kmail amarok
@@ -584,6 +588,18 @@ function macbook() {
 	_install firmware-b43-installer
 }
 
+
+function ibus_typing_booster() {
+	_install ibus libibus-1.0-dev hunspell hunspell-nl hunspell-en-gb hunspell-en-us hunspell-no
+	if [[ ! -f /usr/lib/ibus/ibus-engine-typing-booster ]]; then
+		cd /tmp
+		git clone git://github.com/mike-fabian/ibus-typing-booster.git
+		cd ibus-typing-booster
+		./autogen.sh
+		make
+		sudo make install
+	fi
+}
 
 function etcher() {
 	echo "deb https://deb.etcher.io stable etcher" | sudo -E tee /etc/apt/sources.list.d/balena-etcher.list
@@ -887,6 +903,14 @@ function git-config() {
 	git config --global --replace-all fetch.prune true
 	git config --global --replace-all diff.guitool meld
 	echo "Manually execute 'git config --global user.email <email>'"
+}
+
+function ibus_config() {
+	dconf write /desktop/ibus/general/hotkey/triggers "['<Super>i']"
+	dconf write /desktop/ibus/general/preload-engines "['xkb:us:altgr-intl:eng']"
+	# dconf write /desktop/ibus/general/version "'1.5.17'"
+	dconf write /desktop/ibus/panel/emoji/font "'Noto Color Emoji 16'"
+	dconf write /desktop/ibus/panel/show 2
 }
 
 function autostart() {

@@ -171,17 +171,26 @@ function wm_i3() {
 	# sed -Ei 's#Hidden=.*#Hidden=true#g' ~/.config/autostart/xfce4-panel.desktop
 
 	sed -Ei 's#Hidden=.*#Hidden=false#g' ~/.config/autostart/i3.desktop
+
 	# cp ~/.local/share/applications/Polybar.desktop ~/.config/autostart/
+	#sed -Ei 's#Hidden=.*#Hidden=false#g' ~/.config/autostart/Polybar.desktop
+
+	cp ~/.local/share/applications/Compton.desktop ~/.config/autostart/
+	sed -Ei 's#Hidden=.*#Hidden=false#g' ~/.config/autostart/Compton.desktop
+
 
 	pkill -e xfdesktop
-	pkill -e xfce4-panel
+	# pkill -e xfce4-panel
 	pkill -e xfwm4
-	pkill -e i3
 	pkill -e polybar
+	pkill -e i3
+	# pkill -e polybar
 	i3 -c ~/.config/i3/config &>/dev/null &
 	sleep 2
 	compton --config ~/.config/compton/compton.conf &>/dev/null &
-	polybar -r top &>/dev/null &
+	# polybar -r top &>/dev/null &
+
+	xfce4-panel &>/dev/null &
 
 	move_windows_to_workspace
 }

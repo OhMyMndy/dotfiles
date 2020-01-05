@@ -32,6 +32,7 @@ link-file "$DIR" ".spacemacs"
 
 
 link-file "$DIR" ".config/compton"
+link-file "$DIR" ".config/MusicBrainz"
 
 link-file "$DIR" ".config/ulauncher/shortcuts.json"
 link-file "$DIR" ".config/ulauncher/settings.json"
@@ -138,4 +139,12 @@ fi
 if [[ ! -f /etc/sudoers.d/expressvpn ]]; then
 	echo "Adding expressvpn rule to sudoers file"
 	echo "%sudo ALL=(root) NOPASSWD: /home/mandy/bin/expressvpn-mandy" | sudo tee /etc/sudoers.d/expressvpn &>/dev/null
+fi
+
+if [[ ! -d ~/src/splatmoji ]]; then
+	mkdir -p ~/src
+	git clone https://github.com/cspeterson/splatmoji.git
+	cd splatmoji
+	curl 'https://raw.githubusercontent.com/muan/emojilib/master/emojis.json' | importers/emojilib2tsv - > data/emoji.tsv
+	curl 'https://raw.githubusercontent.com/w33ble/emoticon-data/master/emoticons.json' | importers/w33ble2tsv - > data/emoticons.tsv
 fi

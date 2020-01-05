@@ -94,6 +94,7 @@ bindsym $mod+v split v
 # enter fullscreen mode for the focused container
 bindsym $mod+Shift+f fullscreen toggle
 bindsym $mod+f exec --no-startup-id thunar
+bindsym $mod+slashxec --no-startup-id /home/mandy/src/splatmoji/splatmoji type
 
 # change container layout (stacked, tabbed, toggle split)
 bindsym $mod+s layout stacking
@@ -311,6 +312,9 @@ for_window [class="feh"]                                                        
 for_window [class="scrcpy"]                                                             floating enable, border normal 2
 # Emoji
 for_window [title="Emoji Choice"]                                                       floating enable, border normal 2
+for_window [class="Pavucontrol"]                                                        floating enable, border normal 2
+for_window [class="Pulseeffects"]                                                        floating enable, border normal 2
+for_window [class="Thunar"]                                                        floating enable, border normal 2
 
 # Custom bindsym
 bindsym $mod+Shift+greater move workspace to output right
@@ -332,4 +336,3 @@ bindsym XF86AudioPlay exec mpc toggle
 bindsym XF86AudioPause exec mpc toggle
 bindsym XF86AudioNext exec mpc next
 bindsym XF86AudioPrev exec mpc prev
-
