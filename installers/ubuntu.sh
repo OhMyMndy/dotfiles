@@ -560,7 +560,7 @@ function media() {
 function chat() {
 	_install_snap slack --classic
 	# Use deb to make use of fonts-noto-color-emoji
-	_install_deb_from_url https://discordapp.com/api/download?platform=linux&format=deb
+	_install_deb_from_url https://discordapp.com/api/download?platform=linux\&format=deb
 }
 
 function kde() {

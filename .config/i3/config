@@ -32,7 +32,7 @@ set $mod Mod4
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
 #font pango:FantasqueSansMono Nerd Font Regular 9
-font pango:IBM Plex Sans Text 9
+font pango:IBM Plex Sans Text 10
 
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
@@ -332,7 +332,10 @@ bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute $(pactl list shor
 
 
 # Media player controls
-bindsym XF86AudioPlay exec mpc toggle
-bindsym XF86AudioPause exec mpc toggle
-bindsym XF86AudioNext exec mpc next
-bindsym XF86AudioPrev exec mpc prev
+bindsym XF86AudioPlay exec playerctl -a play-pause
+bindsym XF86AudioPause exec playerctl -a play-pause
+bindsym XF86AudioNext exec playerctl -a next
+bindsym XF86AudioPrev exec playerctl -a previous
+
+
+exec_ always --no-startup-id feh --bg-center "$(xfconf-query -c xfce4-desktop -p /backdrop/screen0/monitor0/workspace0/last-image | tail -1)"

@@ -87,9 +87,6 @@ if [[ -f $HOME/bin/commands-to-aliases ]]; then
     source "$HOME/.aliases"
 fi
 
-# export PATH=$HOME/.config/composer/vendor/bin:$HOME/.composer/vendor/bin:$HOME/.local/bin:/usr/share/doc/git/contrib/diff-highlight:/usr/local/go/bin:$HOME/.go/bin:$HOME/bin:$HOME/bin/appimages:/usr/bin/local:$PATH
-export PATH="$HOME/bin:$HOME/.go/bin:$PATH:$HOME/.gem/bin:$HOME/.local/bin:$HOME/.composer/vendor/bin"
-
 export GEM_HOME=$HOME/.gem
 export GEM_PATH=$HOME/.gem
 

@@ -123,6 +123,9 @@ bash "$DIR/installers/apps/oh-my-zsh.sh"
 
 create_remmina_desktop_files
 
+if [[ ! -f /etc/profile.d/homedir-path.sh ]]; then
+	sudo ln -sf "$DIR/profile.d/homedir-path.sh" /etc/profile.d/homedir-path.sh
+fi
 
 if [[ $(uname -o) = 'Android' ]];
 then
