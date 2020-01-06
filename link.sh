@@ -146,6 +146,7 @@ fi
 
 if [[ ! -d ~/src/splatmoji ]]; then
 	mkdir -p ~/src
+	cd ~/src
 	git clone https://github.com/cspeterson/splatmoji.git
 	cd splatmoji
 	curl 'https://raw.githubusercontent.com/muan/emojilib/master/emojis.json' | importers/emojilib2tsv - > data/emoji.tsv

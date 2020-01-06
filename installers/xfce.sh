@@ -185,12 +185,12 @@ function wm_i3() {
 	pkill -e polybar
 	pkill -e i3
 	# pkill -e polybar
-	i3 -c ~/.config/i3/config &>/dev/null &
+	nohup i3 -c ~/.config/i3/config &>/dev/null & disown
 	sleep 2
-	compton --config ~/.config/compton/compton.conf &>/dev/null &
+	nohup compton --config ~/.config/compton/compton.conf &>/dev/null & disown
 	# polybar -r top &>/dev/null &
 
-	xfce4-panel &>/dev/null &
+	nohup xfce4-panel &>/dev/null & disown
 
 	move_windows_to_workspace
 }
@@ -203,13 +203,15 @@ function move_windows_to_workspace() {
 
 	i3-msg '[class="Code"]' move to workspace 4
 	i3-msg '[class="PhpStorm"]' move to workspace 4
+	i3-msg '[class="(?i).*jetbrains.*"]' move to workspace 4
 
 
 	i3-msg '[class="discord"]' move to workspace 6
 	i3-msg '[class="Slack"]' move to workspace 6
+	i3-msg '[class="Skype"]' move to workspace 6
 
 
-	i3-msg '[class="Xfdesktop"]' move to workspace 9
+	i3-msg '[class="Xfdesktop"]' move to scratchpad
 }
 
 function wm_xfwm() {
@@ -223,6 +225,6 @@ function wm_xfwm() {
 	pkill -e polybar
 	pkill -e compton
 	
-	xfwm4 &>/dev/null &
-	xfce4-panel &>/dev/null &
+	nohup xfwm4 &>/dev/null & disown
+	nohup xfce4-panel &>/dev/null & disown
 }

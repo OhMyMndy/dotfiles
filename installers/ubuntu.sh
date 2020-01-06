@@ -204,6 +204,9 @@ function minimal() {
 	# Cli browser with inline images
 	packages+=(w3m w3m-img)
 
+	# Spelling
+	packages+=(hyphen-en-gb hyphen-nl hunspell aspell-nl hunspell-nl aspell-en hunspell-en-gb hunspell-en-us hunspell-no aspell-no)
+
 	# Apt tools
 	packages+=(apt-file wajig)
 
@@ -590,15 +593,15 @@ function macbook() {
 
 
 function ibus_typing_booster() {
-	_install ibus libibus-1.0-dev hunspell hunspell-nl hunspell-en-gb hunspell-en-us hunspell-no
-	if [[ ! -f /usr/lib/ibus/ibus-engine-typing-booster ]]; then
-		cd /tmp
-		git clone git://github.com/mike-fabian/ibus-typing-booster.git
-		cd ibus-typing-booster
-		./autogen.sh
-		make
-		sudo make install
-	fi
+	_install ibus libibus-1.0-dev hyphen-en-gb hyphen-nl hunspell aspell-nl hunspell-nl aspell-en hunspell-en-gb hunspell-en-us hunspell-no aspell-no
+	# if [[ ! -d /usr/lib/ibus/ibus-engine-typing-booster ]]; then
+	# 	cd /tmp
+	# 	git clone git://github.com/mike-fabian/ibus-typing-booster.git
+	# 	cd ibus-typing-booster
+	# 	./autogen.sh
+	# 	make
+	# 	sudo make install
+	# fi
 }
 
 function etcher() {
@@ -650,6 +653,7 @@ function dev() {
 
 	# python3 version is not in pypi
 	pip install crudini
+	pip install spybar
 
 	if [[ ! -d ~/.mypyls ]]; then
 		python3 -m venv ~/.mypyls
@@ -921,7 +925,7 @@ function autostart() {
 
 	ln -sf /usr/share/applications/ulauncher.desktop ~/.config/autostart/
 	ln -sf /usr/share/applications/indicator-kdeconnect.desktop ~/.config/autostart/
-	ln -sf /usr/share/applications/caffeine-indicator.desktop ~/.config/autostart/
+	#ln -sf /usr/share/applications/caffeine-indicator.desktop ~/.config/autostart/
 	ln -sf /usr/share/applications/redshift-gtk.desktop ~/.config/autostart/
 	ln -sf /usr/share/applications/com.github.hluk.copyq.desktop ~/.config/autostart/
 	ln -sf /usr/share/applications/nextcloud.desktop ~/.config/autostart/

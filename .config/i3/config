@@ -94,7 +94,7 @@ bindsym $mod+v split v
 # enter fullscreen mode for the focused container
 bindsym $mod+Shift+f fullscreen toggle
 bindsym $mod+f exec --no-startup-id thunar
-bindsym $mod+slashxec --no-startup-id /home/mandy/src/splatmoji/splatmoji type
+bindsym $mod+slash exec --no-startup-id /home/mandy/src/splatmoji/splatmoji type
 
 # change container layout (stacked, tabbed, toggle split)
 bindsym $mod+s layout stacking
@@ -125,6 +125,18 @@ set $workspace7 "7"
 set $workspace8 "8"
 set $workspace9 "9"
 set $workspace10 "10"
+
+#set $workspace1 "1: "
+#set $workspace2 "2: "
+#set $workspace3 "3: "
+#set $workspace4 "4: "
+#set $workspace5 "5: "
+#set $workspace6 "6: "
+#set $workspace7 "7: "
+#set $workspace8 "8: "
+#set $workspace9 "9: "
+#set $workspace10 "10: "
+
 
 
 # move focused container to workspace
@@ -252,6 +264,7 @@ assign [class="Slack"]                                                          
 #assign [class="Atom"]                                                                   $workspace9
 #assign [title=".*byobu.*"]                                                              $workspace2
 #assign [class="quodlibet"]                                                              $workspace10
+assign [class="Xfdesktop"]                                                              scratchpad
 
 
 hide_edge_borders smart
@@ -276,6 +289,11 @@ for_window [class="vlc"]                                                        
 for_window [class="xscreensaver.*"]                                                     floating enable, border normal 2
 for_window [class="Nm-connection-editor"]                                               floating enable, border normal 2
 for_window [class="nitrogen"]                                                           floating enable, border normal 2
+for_window [class="pavucontrol"]                                                        floating enable, border normal 2
+for_window [class="Xfce4-panel"]                                                        floating enable, border normal 2
+for_window [class="gnome-language-selector"]                                            floating enable, border normal 2
+for_window [class="qdirstat"]                                                           floating enable, border normal 2
+for_window [class="Xfpanel-switch.py"]                                                  floating enable, border normal 2
 
 # for_window [class="^jetbrains-.+"][window_type=dialog] focus
 
