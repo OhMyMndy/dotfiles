@@ -1,5 +1,9 @@
+
+if [[ -f /usr/share/source-highlight/src-hilite-lesspipe.sh ]]; then
+    export LESSOPEN="| /usr/share/source-highlight/src-hilite-lesspipe.sh %s"
+fi
+
 export LESS="-RSI"
-#export LESSOPEN='|~/.lessfilter %s'
 
 #export LESS_TERMCAP_mb=$'\E[01;31m'      # begin blinking
 #export LESS_TERMCAP_md=$'\E[01;31m'      # begin bold

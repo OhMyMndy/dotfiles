@@ -205,7 +205,7 @@ function minimal() {
 	packages+=(w3m w3m-img)
 
 	# Spelling
-	packages+=(hyphen-en-gb hyphen-nl hunspell aspell-nl hunspell-nl aspell-en hunspell-en-gb hunspell-en-us hunspell-no aspell-no)
+	packages+=(hyphen-en-gb hyphen-nl hunspell aspell-nl hunspell-nl aspell-en hunspell-en-gb hunspell-en-us hunspell-no aspell-no libgspell-1-1 libgtkspell0 python3-hunspell python-hunspell)
 
 	# Apt tools
 	packages+=(apt-file wajig)
@@ -215,9 +215,10 @@ function minimal() {
 	# Esential X tools
 	# kdeconnect
 	packages+=("shutter" redshift-gtk xfce4-terminal xfce4-genmon-plugin chromium-browser seahorse galculator orage ristretto 
-		xsel xclip arandr wmctrl xscreensaver flatpak compton xfce4-appmenu-plugin caffeine)
+		xsel xclip arandr wmctrl xscreensaver flatpak compton  caffeine)
 
-
+	_remove xfce4-appmenu-plugin
+	
 	_add_repo_or_install_deb 'ppa:hluk/copyq' 'copyq' 'https://github.com/hluk/CopyQ/releases/download/v3.9.3/copyq_3.9.3_Debian_10-1_amd64.deb'
 
 	# File management and disk plugins
@@ -631,7 +632,7 @@ function jupyter() {
 function dev() {
 	declare -a packages=()
 	sudo -E snap install snapcraft --classic
-	packages+=(apache2-utils multitail)
+	packages+=(apache2-utils multitail virt-what)
 	_remove shellcheck
 	if ! command -v shellcheck &>/dev/null; then
 		scversion="stable" # or "v0.4.7", or "latest"
@@ -814,6 +815,11 @@ EOL
 		tar xzf lazydocker.tgz
 		sudo -E install lazydocker /usr/local/bin/
 	fi
+
+	if ! command -v dry &>/dev/null; then
+		curl -sSf https://moncho.github.io/dry/dryup.sh | sudo sh
+		sudo chmod 755 /usr/local/bin/dry
+	fi
 }
 
 function polybar() {
@@ -843,8 +849,20 @@ address=/home.mndy.be/192.168.10.120
 addn-hosts=/etc/hosts
 EOL
 
+		sudo -E tee /etc/NetworkManager/dnsmasq.d/00-nextdns.conf << EOL &>/dev/null
+no-resolv
+bogus-priv
+strict-order
+server=2a07:a8c1::
+server=45.90.30.0
+server=2a07:a8c0::
+server=45.90.28.0
+add-cpe-id=cef6e6
+EOL
+
+
 		# use network manager instead of systemd resolve resolv.conf
-		sudo -E rm /etc/resolv.conf; sudo -E ln -s /var/run/NetworkManager/resolv.conf /etc/resolv.conf
+		sudo -E rm /etc/resolv.conf; sudo -E ln -s /var/run/NeuworkManager/resolv.conf /etc/resolv.conf
 		sudo -E systemctl restart NetworkManager
 	fi
 
@@ -937,6 +955,12 @@ function autostart() {
 	fi
 	find ~/.config/autostart/ -xtype l -delete
 	update-desktop-database
+}
+
+function audit() {
+	_install "auditd"
+	sudo curl -Lss https://raw.githubusercontent.com/Neo23x0/auditd/3082efe116292a2e2b59b0acc171a74bccc38d90/audit.rules -o /etc/audit/rules.d/audit.rules
+	sudo augenrules --load
 }
 
 function gaming() {

@@ -16,6 +16,9 @@ install pkief.material-icon-theme
 install equinusocio.vsc-material-theme
 install dracula-theme.theme-dracula
 install robbowen.synthwave-vscode
+install lkytal.flatui
+install mbetacchini.massimo-theme
+
 
 
 # Languages
@@ -42,6 +45,7 @@ install bmewburn.vscode-intelephense-client
 install xyz.local-history
 install mrmlnc.vscode-duplicate
 
+install sourcegraph.sourcegraph
 
 
 install mads-hartmann.bash-ide-vscode
