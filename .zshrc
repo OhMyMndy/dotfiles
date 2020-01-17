@@ -17,6 +17,9 @@ detect_os
 # Compleat https://limpet.net/mbrubeck/2009/10/30/compleat.html``
 # sysadmin-util https://github.com/skx/sysadmin-util
 
+export FZF_TAB_OPTS="--ansi"
+export FZF_COMPLETION_OPTS="${FZF_TAB_OPTS}"
+
 plugins=(
     adb # only works with adb command in path
     colored-man-pages
@@ -26,7 +29,7 @@ plugins=(
     docker
     docker-compose
     extract
-    fzf
+    fzf-tab
     git
     httpie
     jira
@@ -142,6 +145,9 @@ alias ssh='TERM=xterm ssh'
 alias ve='python3 -m venv ./venv'
 alias va='source ./venv/bin/activate'
 
+# Snapcraft aliases
+alias snapcraft-docker='docker run -v "$PWD":/build -w /build snapcore/snapcraft:stable snapcraft'
+
 if exists thefuck; then eval "$(thefuck --alias)"; fi
 
 if ! exists pbcopy; then
@@ -175,6 +181,8 @@ export ARCH=$(uname -m | sed 's/x86_//;s/i[3-6]86/32/')
 export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on'
 export CHEATCOLORS=true
 
+export COMPOSE_DOCKER_CLI_BUILD=1
+export DOCKER_BUILDKIT=1
 
 export IP_ADDRESS=$(ip_address)
 export HOSTNAME="$(hostname)"

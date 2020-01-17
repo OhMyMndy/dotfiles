@@ -2,7 +2,7 @@ set encoding=UTF-8
 scriptencoding utf-8
 
 set wildmenu
-
+let mapleader = ','
 
 if empty(glob('~/.vim/autoload/plug.vim'))
   silent !curl -fLso ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
@@ -61,6 +61,9 @@ Plug 'autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
     \ 'do': 'bash install.sh',
     \ }
+
+
+Plug 'severin-lemaignan/vim-minimap'
 
 call plug#end()
 
@@ -159,7 +162,11 @@ nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
 
 " ALE
 
-" let g:ale_sign_warning = ''
+" let g:ale_sign_warning = '.'
+" let g:ale_sign_error = '.'
+
+highlight ALEWarning ctermbg=Red
+
 
 nnoremap <C-LeftMouse> :ALEGoToDefinition<CR>
 nnoremap <C-p> :ALEFindReferences<CR>
@@ -266,10 +273,10 @@ if exists('veonim')
 endif
 
 " Highlighting settings
-highlight DiffAdd    cterm=bold ctermfg=10 ctermbg=17 gui=none guifg=bg guibg=Red
-highlight DiffDelete cterm=bold ctermfg=10 ctermbg=17 gui=none guifg=bg guibg=Red
-highlight DiffChange cterm=bold ctermfg=10 ctermbg=17 gui=none guifg=bg guibg=Red
-highlight DiffText   cterm=bold ctermfg=10 ctermbg=88 gui=none guifg=bg guibg=Red
+"highlight DiffAdd    cterm=bold ctermfg=10 ctermbg=17 gui=none guifg=bg guibg=Red
+"highlight DiffDelete cterm=bold ctermfg=10 ctermbg=17 gui=none guifg=bg guibg=Red
+"highlight DiffChange cterm=bold ctermfg=10 ctermbg=17 gui=none guifg=bg guibg=Red
+"highlight DiffText   cterm=bold ctermfg=10 ctermbg=88 gui=none guifg=bg guibg=Red
 
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#tabs_label = ''

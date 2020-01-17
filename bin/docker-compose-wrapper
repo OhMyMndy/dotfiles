@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+command="$@"
+
+TEMP="$(getopt -l "file:" "f:" -- "$@")"
+eval set -- "$TEMP"
+
+file=
+while true; do
+  case $1 in
+    -f | --file ) file="$OPTARG"; shift 2;;
+    -- ) shift; break ;;
+    * ) break ;;
+  esac
+done
+
+if [[ -n $file ]]; then
+    cd "$("dirname $file")" || exit 99
+fi
+
+
+exec docker-compose $command

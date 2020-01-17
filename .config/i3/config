@@ -278,6 +278,7 @@ for_window [title=".*floating.*"]                                               
 
 
 for_window [window_role="pop-up"]                                                       floating enable, border normal 2
+for_window [window_role="page-info"]                                                    floating enable, border normal 2
 for_window [window_role="bubble"]                                                       floating enable, border normal 2
 for_window [window_role="task_dialog"]                                                  floating enable, border normal 2
 for_window [window_role="Preferences"]                                                  floating enable, border normal 2

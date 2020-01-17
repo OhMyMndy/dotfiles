@@ -40,6 +40,9 @@ installZshPlugin "https://github.com/zsh-users/zsh-completions" "zsh-completions
 installZshPlugin "https://github.com/zsh-users/zsh-syntax-highlighting.git" "zsh-syntax-highlighting"
 installZshPlugin "https://github.com/junegunn/fzf.git" "fzf"
 installZshPlugin "https://github.com/marzocchi/zsh-notify.git" "notify"
+installZshPlugin "https://github.com/Aloxaf/fzf-tab" "fzf-tab"
 ~/.oh-my-zsh/custom/plugins/fzf/install --bin
 
-installZshPlugin "https://github.com/Treri/fzf-zsh.git" "fzf-zsh"
+find ~/.oh-my-zsh/plugins -maxdepth 1 -type d ! -path . -print0 | xargs -0 -r -i bash -c "cd {}; git pull"
+
+# installZshPlugin "https://github.com/Treri/fzf-zsh.git" "fzf-zsh"

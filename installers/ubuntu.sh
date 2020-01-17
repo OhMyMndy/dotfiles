@@ -179,7 +179,7 @@ function minimal() {
 	packages+=(python-pip python3-pip)
 
 	_add_repository -n "deb http://archive.canonical.com/ $(lsb_release -sc) partner"
-
+ 	_add_repository ppa:git-core/ppa
 	_update
 
 	# Misc
@@ -666,6 +666,9 @@ function dev() {
 	curl -sSL https://deb.nodesource.com/setup_12.x | sudo -E bash -
 	packages+=(nodejs meld)
 	packages+=(jq)
+
+	# Vscode dependencies
+	packages+=(libsecret-1-dev libx11-dev libxkbfile-dev)
 	_add_repo_or_install_deb 'ppa:rmescandon/yq' 'yq'
 
 	npm config set prefix "$HOME/.local"
@@ -677,6 +680,8 @@ function dev() {
 	npm install -g eslint
 	npm install -g markdownlint-cli
 	npm install -g @marp-team/marp-cli
+	npm install -g yarn
+	npm install -g gulp
 
 	if ! command -v circleci &>/dev/null; then
 		curl -sSL https://circle.ci/cli | sudo -E bash
@@ -779,6 +784,11 @@ function docker() {
 	if ! command -v docker-compose &>/dev/null; then
 		sudo -E curl -sSL "https://github.com/docker/compose/releases/download/1.25.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 		sudo -E chmod +x /usr/local/bin/docker-compose
+	fi
+
+	if ! command -v dockerize &>/dev/null; then
+		sudo -E curl -sSL "https://github.com/jwilder/dockerize/releases/download/v0.6.1/dockerize-linux-amd64-v0.6.1.tar.gz" -o /usr/local/bin/dockerize
+		sudo -E chmod +x /usr/local/bin/dockerize
 	fi
 
 	if ! command -v docker-machine &>/dev/null; then
