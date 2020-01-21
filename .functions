@@ -741,5 +741,13 @@ function run-sourcegraph() {
 		sourcegraph/server:3.10.4
 }
 
+function set_autostart_hidden() {
+	LINE='Hidden='
+	FILE="$HOME/.config/autostart/$1"
+	if [[ -f $FILE ]]; then
+		grep -qF -- "$LINE" "$FILE" || echo "$LINE$2" >> "$FILE"
+		sed -Ei "s#Hidden=.*#Hidden=$2#g" "$FILE"
+	fi
+}
 
 alias polybar=/snap/polybar-git/current/usr/local/bin/polybar

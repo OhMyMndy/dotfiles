@@ -10,7 +10,7 @@ Xft.lcdfilter: lcddefault
 
 XTerm*renderFont: true
 
-XTerm*faceName: Iosevka\ Nerd\ Font\ Mono:style=Regular
+XTerm*faceName: JetBrainsMono\ Nerd\ Font\ Mono":style=Regular
 XTerm*faceSize: 11
 XTerm*eightBitInput: false
 XTerm*selectToClipboard:false

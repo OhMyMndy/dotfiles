@@ -134,8 +134,12 @@ then
 	link-file "$DIR" 'termux/.config/openbox' '.config/openbox'
 	link-file "$DIR" 'termux/.vnc' '.vnc'
 
-	installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/Iosevka.zip Iosevka
-	cp ~/.local/share/fonts/Iosevka/Iosevka\ Term\ Nerd\ Font\ Complete\ Mono.ttf ~/.termux/font.ttf
+	# installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/Iosevka.zip Iosevka
+	# cp ~/.local/share/fonts/Iosevka/Iosevka\ Term\ Nerd\ Font\ Complete\ Mono.ttf ~/.termux/font.ttf
+
+	mkdir -p "$HOME/.local/share/fonts/Jetbrains Mono"
+	curl -LsS https://github.com/JetBrains/JetBrainsMono/raw/8f764465dd71567dca8c547fbac23663cedd867c/ttf-nerdfont-patched/JetBrains%20Mono%20Regular%20Nerd%20Font%20Complete%20Mono.ttf -o "$HOME/.local/share/fonts/Jetbrains Mono/Jetbrains Mono Regular Nerd Font Complete Mono.ttf"
+	cp "$HOME/.local/share/fonts/Jetbrains Mono/Jetbrains Mono Regular Nerd Font Complete Mono.ttf" ~/.termux/font.ttf
 fi
 
 

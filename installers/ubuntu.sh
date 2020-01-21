@@ -215,7 +215,7 @@ function minimal() {
 	# Esential X tools
 	# kdeconnect
 	packages+=("shutter" redshift-gtk xfce4-terminal xfce4-genmon-plugin chromium-browser seahorse galculator orage ristretto 
-		xsel xclip arandr wmctrl xscreensaver flatpak compton  caffeine)
+		xsel xclip arandr wmctrl xscreensaver flatpak compton)
 
 	_remove xfce4-appmenu-plugin
 	
@@ -425,7 +425,11 @@ function fonts() {
 	installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/Iosevka.zip Iosevka
 	installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/Inconsolata.zip Inconsolata
 	installFontsFromZip https://github.com/IBM/plex/releases/download/v4.0.2/OpenType.zip "IBM Plex"
-
+	if [[ ! -d "$HOME/.local/share/fonts/Jetbrains Mono" ]]; then
+		mkdir -p "$HOME/.local/share/fonts/Jetbrains Mono"
+		curl -LsS https://github.com/JetBrains/JetBrainsMono/raw/8f764465dd71567dca8c547fbac23663cedd867c/ttf-nerdfont-patched/JetBrains%20Mono%20Regular%20Nerd%20Font%20Complete%20Mono.ttf -o "$HOME/.local/share/fonts/Jetbrains Mono/Jetbrains Mono Regular Nerd Font Complete Mono.ttf"
+		fontsAdded=1
+	fi
 	if [[ $fontsAdded -eq 1 ]]; then
 		fc-cache -f -v
 	fi

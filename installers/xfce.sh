@@ -100,7 +100,7 @@ function xfce_settings() {
 
 
 		xfconf-query -c xsettings -p /Gtk/FontName -s "IBM Plex Sans Medium 10"
-		xfconf-query -c xsettings -p /Gtk/MonospaceFontName -s "Iosevka Nerd Font Mono 10"
+		xfconf-query -c xsettings -p /Gtk/MonospaceFontName -s "JetBrainsMono Nerd Font Mono 10"
 		xfconf-query -c xsettings -p /Gtk/DecorationLayout -s "menu:minimize,maximize,close"
 
 		xfconf-query -c xsettings -p /Gtk/ButtonImages -s true
@@ -166,17 +166,24 @@ function xfce_settings-light() {
 
 
 function wm_i3() {
-	sed -Ei 's#Hidden=.*#Hidden=true#g' ~/.config/autostart/xfwm4.desktop
-	sed -Ei 's#Hidden=.*#Hidden=true#g' ~/.config/autostart/xfdesktop.desktop
-	# sed -Ei 's#Hidden=.*#Hidden=true#g' ~/.config/autostart/xfce4-panel.desktop
+	if [[ ! -f /usr/share/applications/i3.desktop ]]; then
+		echo "i3 has no desktop file! Aborting...";
+		exit 99;
+	fi
 
-	sed -Ei 's#Hidden=.*#Hidden=false#g' ~/.config/autostart/i3.desktop
+	set_autostart_hidden xfwm4.desktop true
+	set_autostart_hidden xfdesktop.desktop true
+
+	if [[ ! -f ~/.config/autostart/i3.desktop ]]; then
+		cp /usr/share/applications/i3.desktop ~/.config/autostart/
+	fi
+	set_autostart_hidden i3.desktop false
 
 	# cp ~/.local/share/applications/Polybar.desktop ~/.config/autostart/
 	#sed -Ei 's#Hidden=.*#Hidden=false#g' ~/.config/autostart/Polybar.desktop
 
 	cp ~/.local/share/applications/Compton.desktop ~/.config/autostart/
-	sed -Ei 's#Hidden=.*#Hidden=false#g' ~/.config/autostart/Compton.desktop
+	set_autostart_hidden Compton.desktop false
 
 
 	pkill -e xfdesktop
@@ -215,10 +222,10 @@ function move_windows_to_workspace() {
 }
 
 function wm_xfwm() {
-	sed -Ei 's#Hidden=.*#Hidden=true#g' ~/.config/autostart/i3.desktop
-	sed -Ei 's#Hidden=.*#Hidden=false#g' ~/.config/autostart/xfdesktop.desktop
-	sed -Ei 's#Hidden=.*#Hidden=false#g' ~/.config/autostart/xfwm4.desktop
-	sed -Ei 's#Hidden=.*#Hidden=false#g' ~/.config/autostart/xfce4-panel.desktop
+	set_autostart_hidden i3.desktop true
+	set_autostart_hidden xfdesktop.desktop false
+	set_autostart_hidden xfwm4.desktop false
+	set_autostart_hidden xfce4-panel.desktop false
 	rm ~/.config/autostart/Polybar.desktop
 
 	pkill -e i3
