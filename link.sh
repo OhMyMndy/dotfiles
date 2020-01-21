@@ -123,7 +123,7 @@ bash "$DIR/installers/apps/oh-my-zsh.sh"
 
 create_remmina_desktop_files
 
-if [[ ! -f /etc/profile.d/homedir-path.sh ]]; then
+if command -v sudo &>/dev/null && [[ ! -f /etc/profile.d/homedir-path.sh ]]; then
 	sudo ln -sf "$DIR/profile.d/homedir-path.sh" /etc/profile.d/homedir-path.sh
 fi
 
@@ -133,6 +133,7 @@ then
 
 	link-file "$DIR" 'termux/.config/openbox' '.config/openbox'
 	link-file "$DIR" 'termux/.vnc' '.vnc'
+	link-file "$DIR" 'termux/bin' 'termux_bin'
 
 	# installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/Iosevka.zip Iosevka
 	# cp ~/.local/share/fonts/Iosevka/Iosevka\ Term\ Nerd\ Font\ Complete\ Mono.ttf ~/.termux/font.ttf
@@ -143,7 +144,7 @@ then
 fi
 
 
-if [[ ! -f /etc/sudoers.d/expressvpn ]]; then
+if command -v sudo &>/dev/null && [[ ! -f /etc/sudoers.d/expressvpn ]]; then
 	echo "Adding expressvpn rule to sudoers file"
 	echo "%sudo ALL=(root) NOPASSWD: /home/mandy/bin/expressvpn-mandy" | sudo tee /etc/sudoers.d/expressvpn &>/dev/null
 fi

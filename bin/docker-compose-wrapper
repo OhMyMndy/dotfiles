@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 command="$@"
-
+set -e
 TEMP="$(getopt -l "file:" "f:" -- "$@")"
 eval set -- "$TEMP"
 
@@ -15,8 +15,23 @@ while true; do
 done
 
 if [[ -n $file ]]; then
-    cd "$("dirname $file")" || exit 99
+    cd "$("dirname $file")" || exit 99;
+    command="${command/-f[ ]*$file/}"
+    command="${command/--file[ ]*$file/}"
 fi
 
+tmpfile="$(tempfile -d "$PWD")"
+finish() {
+    rm -f "$tmpfile"
+}
+trap finish 0 1 2 3 6 14 15
 
-exec docker-compose $command
+if [[ -z $file ]]; then
+  file=docker-compose.yml
+  command="${command/-f[ ]*docker-compose.yml/}"
+  command="${command/--file[ ]*docker-compose.yml/}"
+fi
+
+env $(grep -v '^#' .env | xargs) bash "${file}.sh" > "$tmpfile"
+
+exec docker-compose -f "$tmpfile" $command

@@ -43,6 +43,7 @@ installZshPlugin "https://github.com/marzocchi/zsh-notify.git" "notify"
 installZshPlugin "https://github.com/Aloxaf/fzf-tab" "fzf-tab"
 ~/.oh-my-zsh/custom/plugins/fzf/install --bin
 
-find ~/.oh-my-zsh/plugins -maxdepth 1 -type d ! -path . -print0 | xargs -0 -r -i bash -c "cd {}; git pull"
+cd ~/.oh-my-zsh/ && git pull
+find ~/.oh-my-zsh/custom/plugins -maxdepth 1 -type d ! -path . -print0 | xargs -0 -r -i bash -c "cd {}; git pull"
 
 # installZshPlugin "https://github.com/Treri/fzf-zsh.git" "fzf-zsh"
