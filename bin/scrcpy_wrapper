@@ -127,9 +127,9 @@ function setup() {
 	if [[ -v font_scale ]]; then run scrcpy.adb $adb_device shell settings put system font_scale "$font_scale"; fi
 
 	if [[ -v disable_animations ]]; then
-		adb shell $adb_device settings put global window_animation_scale "0.0"
-		adb shell $adb_device settings put global transition_animation_scale "0.0"
-		adb shell $adb_device settings put global animator_duration_scale "0.0"
+		run scrcpy.adb $adb_device shell settings put global window_animation_scale "0.0"
+		run scrcpy.adb $adb_device shell settings put global transition_animation_scale "0.0"
+		run scrcpy.adb $adb_device shell settings put global animator_duration_scale "0.0"
 	fi
 }
 

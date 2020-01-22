@@ -166,18 +166,11 @@ function xfce_settings-light() {
 
 
 function wm_i3() {
-	if [[ ! -f /usr/share/applications/i3.desktop ]]; then
-		echo "i3 has no desktop file! Aborting...";
-		exit 99;
-	fi
-
+	
 	set_autostart_hidden xfwm4.desktop true
 	set_autostart_hidden xfdesktop.desktop true
 
-	if [[ ! -f ~/.config/autostart/i3.desktop ]]; then
-		cp /usr/share/applications/i3.desktop ~/.config/autostart/
-	fi
-	set_autostart_hidden i3.desktop false
+	xfconf-query --channel xfce4-session --property /sessions/Failsafe/Client0_Command --type string --set "i3" --force-array
 
 	# cp ~/.local/share/applications/Polybar.desktop ~/.config/autostart/
 	#sed -Ei 's#Hidden=.*#Hidden=false#g' ~/.config/autostart/Polybar.desktop
@@ -222,7 +215,6 @@ function move_windows_to_workspace() {
 }
 
 function wm_xfwm() {
-	set_autostart_hidden i3.desktop true
 	set_autostart_hidden xfdesktop.desktop false
 	set_autostart_hidden xfwm4.desktop false
 	set_autostart_hidden xfce4-panel.desktop false
@@ -232,6 +224,7 @@ function wm_xfwm() {
 	pkill -e polybar
 	pkill -e compton
 	
+	xfconf-query --channel xfce4-session --property /sessions/Failsafe/Client0_Command --type string --set "xfwm4" --force-array
 	nohup xfwm4 &>/dev/null & disown
 	nohup xfce4-panel &>/dev/null & disown
 }

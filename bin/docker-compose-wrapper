@@ -33,5 +33,5 @@ if [[ -z $file ]]; then
 fi
 
 env $(grep -v '^#' .env | xargs) bash "${file}.sh" > "$tmpfile"
-
-exec docker-compose -f "$tmpfile" $command
+docker-compose -f "$tmpfile" $command
+exit $?
