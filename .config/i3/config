@@ -344,4 +344,4 @@ bindsym XF86AudioNext exec playerctl -a next
 bindsym XF86AudioPrev exec playerctl -a previous
 
 
-exec_ always --no-startup-id feh --bg-center "$$(xfconf-query -c xfce4-desktop -p /backdrop/screen0/monitor0/workspace0/last-image | tail -1)"
+exec_always --no-startup-id feh --bg-center "$(xfconf-query -c xfce4-desktop -p /backdrop/screen0/monitor0/workspace0/last-image | tail -1)"

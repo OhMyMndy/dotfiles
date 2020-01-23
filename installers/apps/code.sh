@@ -7,6 +7,12 @@ function install() {
     code --install-extension "$@" >/dev/null
 }
 
+# @see https://itnext.io/why-i-wrote-33-vscode-extensions-and-how-i-manage-them-cb61df05e154
+
+# Project management
+install fabiospampinato.vscode-projects-plus
+install fabiospampinato.vscode-terminals
+
 #Vim
 install fallenwood.viml
 
@@ -54,6 +60,8 @@ install gruntfuggly.todo-tree
 # Docker
 install exiasr.hadolint
 install ms-azuretools.vscode-docker
+install ms-vscode-remote.remote-containers
+install ms-vscode-remote.remote-ssh
 
 # CI
 install jvandyke.vscode-circleci
@@ -72,3 +80,6 @@ install ms-vscode.vscode-typescript-tslint-plugin
 install atlassian.atlascode
 install eamodio.gitlens
 install donjayamanne.githistory
+
+
+install jomeinaster.bracket-peek

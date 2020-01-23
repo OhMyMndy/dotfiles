@@ -956,8 +956,7 @@ function autostart() {
 
 
 	ln -sf /usr/share/applications/ulauncher.desktop ~/.config/autostart/
-	ln -sf /usr/share/applications/indicator-kdeconnect.desktop ~/.config/autostart/
-	#ln -sf /usr/share/applications/caffeine-indicator.desktop ~/.config/autostart/
+	# ln -sf /usr/share/applications/indicator-kdeconnect.desktop ~/.config/autostart/
 	ln -sf /usr/share/applications/redshift-gtk.desktop ~/.config/autostart/
 	ln -sf /usr/share/applications/com.github.hluk.copyq.desktop ~/.config/autostart/
 	ln -sf /usr/share/applications/nextcloud.desktop ~/.config/autostart/

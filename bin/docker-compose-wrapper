@@ -1,23 +1,20 @@
 #!/usr/bin/env bash
 
-command="$@"
-set -e
-TEMP="$(getopt -l "file:" "f:" -- "$@")"
-eval set -- "$TEMP"
-
-file=
-while true; do
-  case $1 in
-    -f | --file ) file="$OPTARG"; shift 2;;
-    -- ) shift; break ;;
-    * ) break ;;
-  esac
+for arg do
+  shift
+  if [[ "$file" == "-f" ]]; then
+    file="$arg"
+  fi
+  if [[ "$arg" = "-f" ]] || [[ "$arg" = "--file" ]]; then
+    shift
+    file="-f"
+    continue
+  fi
+  set -- "$@" "$arg"
 done
 
 if [[ -n $file ]]; then
-    cd "$("dirname $file")" || exit 99;
-    command="${command/-f[ ]*$file/}"
-    command="${command/--file[ ]*$file/}"
+    cd "$(dirname "$file")" || exit 99;
 fi
 
 tmpfile="$(tempfile -d "$PWD")"
@@ -28,10 +25,14 @@ trap finish 0 1 2 3 6 14 15
 
 if [[ -z $file ]]; then
   file=docker-compose.yml
-  command="${command/-f[ ]*docker-compose.yml/}"
-  command="${command/--file[ ]*docker-compose.yml/}"
 fi
 
-env $(grep -v '^#' .env | xargs) bash "${file}.sh" > "$tmpfile"
-docker-compose -f "$tmpfile" $command
+if [[ -f "${file}.sh" ]]; then
+    env $(grep -v '^#' .env | xargs) bash "${file}.sh" > "$tmpfile"
+    docker-compose -f "$tmpfile" "$@"
+    exit $?
+fi
+
+set -x
+docker-compose "$@"
 exit $?

@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Scrcpy landscape
 StartupWMClass=Scrcpy
-Exec=sh -c "\$HOME/bin/scrcpy_wrapper --disable-animations --density 300 --landscape --null-keyboard -S -b 20M"
+Exec=sh -c "\$HOME/bin/scrcpy_wrapper --disable-animations --landscape --null-keyboard -S -b 20M"
 StartupNotify=true
 Terminal=false
 Type=Application
