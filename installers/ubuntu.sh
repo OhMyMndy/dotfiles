@@ -183,7 +183,7 @@ function minimal() {
 	_update
 
 	# Misc
-	packages+=(git tig gitg zsh autojump less curl rename rsync openssh-server most multitail trash-cli zenity libsecret-tools parallel ruby ruby-dev ntp neovim vim-gtk3 fonts-noto-color-emoji fonts-noto fonts-roboto)
+	packages+=(git git-extras tig gitg zsh autojump less curl rename rsync openssh-server most multitail trash-cli zenity libsecret-tools parallel ruby ruby-dev ntp neovim vim-gtk3 fonts-noto-color-emoji fonts-noto fonts-roboto)
 
 	# Terminal multiplexing
 	packages+=(byobu tmux)
@@ -317,6 +317,7 @@ function general() {
 	packages+=(vlc imagemagick flac soundconverter picard)
 	
 	_install_flatpak_flathub io.github.quodlibet.QuodLibet
+	_install_flatpak_flathub org.gnome.design.Contrast
 
 	vpn
 	themes
@@ -427,7 +428,7 @@ function fonts() {
 	installFontsFromZip https://github.com/IBM/plex/releases/download/v4.0.2/OpenType.zip "IBM Plex"
 	if [[ ! -d "$HOME/.local/share/fonts/Jetbrains Mono" ]]; then
 		mkdir -p "$HOME/.local/share/fonts/Jetbrains Mono"
-		curl -LsS https://github.com/JetBrains/JetBrainsMono/raw/8f764465dd71567dca8c547fbac23663cedd867c/ttf-nerdfont-patched/JetBrains%20Mono%20Regular%20Nerd%20Font%20Complete%20Mono.ttf -o "$HOME/.local/share/fonts/Jetbrains Mono/Jetbrains Mono Regular Nerd Font Complete Mono.ttf"
+		curl -LsS https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/JetBrainsMono/Regular/complete/JetBrains%20Mono%20Regular%20Nerd%20Font%20Complete%20Mono.ttf -o "$HOME/.local/share/fonts/Jetbrains Mono/Jetbrains Mono Regular Nerd Font Complete Mono.ttf"
 		fontsAdded=1
 	fi
 	if [[ $fontsAdded -eq 1 ]]; then
@@ -715,8 +716,12 @@ function dev() {
 function php() {
 	unset -f php
 	
+	_add_repository ppa:ondrej/php
+
+
 	declare -a packages=()
-	packages+=(wkhtmltopdf php-cli php-xml php-mbstring php-curl php-zip php-pdo-sqlite php-intl php-zmq)
+	packages+=(wkhtmltopdf php7.4-cli php7.4-opcache php7.4-zip php7.4-curl php7.4-yaml)
+	packages+=(php7.4-phpdbg php7.4-xml php7.4-mbstring php7.4-curl php7.4-zip php7.4-pdo-sqlite php7.4-intl php7.4-zmq)
 	packages+=(kcachegrind)
 
 	_install "${packages[*]}" 
@@ -726,20 +731,20 @@ function php() {
 	_install_pip3 mycli
 
 
-	if ! command -v composer &>/dev/null; then
+	# if ! command -v composer &>/dev/null; then
 		# shellcheck disable=SC2091
 		curl -sSL https://getcomposer.org/installer | $(command -v php) && sudo -E mv composer.phar /usr/local/bin/composer
-	fi
+	# fi
 
 
-	if ! command -v phive &>/dev/null; then
+	# if ! command -v phive &>/dev/null; then
 		wget -O phive.phar https://phar.io/releases/phive.phar
 		wget -O phive.phar.asc https://phar.io/releases/phive.phar.asc
 		gpg --keyserver pool.sks-keyservers.net --recv-keys 0x9D8A98B29B2D5D79
 		gpg --verify phive.phar.asc phive.phar
 		chmod +x phive.phar
 		sudo mv phive.phar /usr/local/bin/phive
-	fi
+	# fi
 
 	# @see https://github.com/felixfbecker/php-language-server/issues/611
 	composer global require jetbrains/phpstorm-stubs:dev-master
@@ -747,8 +752,9 @@ function php() {
 	# run once: composer global run-script --working-dir="$HOME/.composer/vendor/felixfbecker/language-server" parse-stubs
 
 
-	composer global require squizlabs/php_codesniffer
-	composer global require phpstan/phpstan
+	sudo -E phive install -g --trust-gpg-keys squizlabs/php_codesniffer  
+	sudo -E phive install -g --trust-gpg-keys phpstan/phpstan
+
 	# shellcheck disable=SC2091
 	curl -sSL https://litipk.github.io/Jupyter-PHP-Installer/dist/jupyter-php-installer.phar > "${TMPDIR:-/tmp}/jupyter.php"
 	$(command -v php) "${TMPDIR:-/tmp}/jupyter.php" install
@@ -802,17 +808,26 @@ function docker() {
 	  	sudo chmod +x /usr/local/bin/docker-machine
 	fi
 
-	if [[ ! -f /etc/docker/daemon.json ]]; then
+	# if [[ ! -f /etc/docker/daemon.json ]]; then
 		sudo -E tee /etc/docker/daemon.json << EOL &>/dev/null
 {
-"log-driver": "json-file",
-"log-opts": {
-    "max-size": "10m",    
-    "max-file": "3"    
-    }
+	"log-driver": "json-file",
+	"log-opts": {
+	    "max-size": "4m",    
+	    "max-file": "3"    
+    },
+	"dns": ["1.1.1.1", "1.0.0.1"],
+	"init": true,
+	"default-ulimits": {
+		"core": {
+			"Name": "core",
+			"Hard": 0,
+			"Soft": 0
+		}
+	}
 } 
 EOL
-	fi
+	# fi
 
 	# if which podman &>/dev/null
 	# then
@@ -897,17 +912,22 @@ net.ipv4.ip_nonlocal_bind=1
 # See https://confluence.jetbrains.com/display/IDEADEV/Inotify+Watches+Limit
 fs.inotify.max_user_watches = 524288
 
-fs.inotify.max_user_watches = 524288
 net.ipv4.ip_forward=1
 kernel.printk = 2 4 1 7
 vm.swappiness = 2
 vm.max_map_count=262144
+# Do not produce core dumps
+fs.suid_dumpable = 0
 EOL
 
 	sudo -E tee /etc/sysctl.d/mandy-keepalive.conf << EOL &>/dev/null
 net.ipv4.tcp_keepalive_time = 60
 net.ipv4.tcp_keepalive_intvl = 5
 net.ipv4.tcp_keepalive_probes = 3
+EOL
+
+	sudo -E tee /etc/security/limits.d/99-no-core-dumps.conf << EOL &>/dev/null
+* hard core 0
 EOL
 
 	sudo "sysctl" -p /etc/sysctl.d/*.conf 
