@@ -34,6 +34,8 @@ install malmaud.tmux
 install ms-python.python
 install jetmartin.bats
 
+install streetsidesoftware.code-spell-checker
+install mcright.auto-save
 
 
 # Markdown

@@ -246,7 +246,10 @@ client.urgent           $blue       $blue       $black      $magenta
 #assign [class=".*phpstorm"]                                                             $workspace4
 #assign [class="jetbrains-idea-ce"]                                                      $workspace9
 #assign [class="Rambox"]                                                                 $workspace6
+
+assign [class="Discord"]                                                                  $workspace6
 assign [class="Slack"]                                                                  $workspace6
+
 # assign [class="Thunar"]                                                                 $workspace3
 #assign [class="Atom"]                                                                   $workspace9
 #assign [title=".*byobu.*"]                                                              $workspace2
@@ -271,7 +274,7 @@ for_window [window_role="task_dialog"]                                          
 for_window [window_role="Preferences"]                                                  floating enable, border normal 2
 for_window [window_type="dialog"]                                                       floating enable, border normal 2
 for_window [window_type="menu"]                                                         floating enable, border normal 2
-for_window [class="TeamViewer"]                                                         floating enable, border pixel 2
+for_window [class="TeamViewer"]                                                         floating enable, border normal 2
 for_window [class="vokoscreen"]                                                         floating enable, border normal 2
 for_window [class="vlc"]                                                                floating enable, border normal 2
 for_window [class="xscreensaver.*"]                                                     floating enable, border normal 2
@@ -283,7 +286,9 @@ for_window [class="gnome-language-selector"]                                    
 for_window [class="qdirstat"]                                                           floating enable, border normal 2
 for_window [class="Xfpanel-switch.py"]                                                  floating enable, border normal 2
 
-# for_window [class="^jetbrains-.+"][window_type=dialog] focus
+# Chromium apps have integrated window decoration
+for_window [window_role="pop-up"][class=Chromium-browser]                               floating enable, border pixel 0
+
 
 # source: https://github.com/Airblader/dotfiles-manjaro/blob/master/.i3/config
 #for_window [class="(?i)VirtualBox" title="(?i)Manager"]                                floating enable
@@ -298,7 +303,6 @@ for_window [class="Gnome-disk"]                                                 
 for_window [class="Gnome-font-viewer"]                                                  border pixel 2
 for_window [class="File-roller"]                                                        border pixel 0
 for_window [class="Marker"]                                                             border pixel 0
-#for_window [class="Remmina"]                                                            border pixel 0
 for_window [class="Xfce4-terminal"]                                                     border pixel 2
 for_window [class="WunderList"]                                                         floating disabled, border normal 2
 for_window [class="1Password"]                                                          floating disabled, border normal 2
@@ -319,8 +323,8 @@ for_window [class="scrcpy"]                                                     
 # Emoji
 for_window [title="Emoji Choice"]                                                       floating enable, border normal 2
 for_window [class="Pavucontrol"]                                                        floating enable, border normal 2
-for_window [class="Pulseeffects"]                                                        floating enable, border normal 2
-for_window [class="Thunar"]                                                        floating enable, border normal 2
+for_window [class="Pulseeffects"]                                                       floating enable, border normal 2
+for_window [class="Thunar"]                                                             floating enable, border normal 2
 
 # Custom bindsym
 bindsym $mod+Shift+greater move workspace to output right
