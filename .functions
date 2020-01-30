@@ -5,6 +5,8 @@
 
 alias cls='clear && echo -en "\e[3J"'
 
+export TMPDIR="${TMPDIR:-/tmp}"
+
 # Utility function to check if $1 command exists
 # Use example: if exists ls; then echo "Command exists."; else echo "Command does not exist."; fi
 exists() {

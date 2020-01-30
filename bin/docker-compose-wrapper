@@ -17,7 +17,7 @@ if [[ -n $file ]]; then
     cd "$(dirname "$file")" || exit 99;
 fi
 
-tmpfile="$(tempfile -d "$PWD")"
+tmpfile="$(mktemp -p "$PWD")"
 finish() {
     rm -f "$tmpfile"
 }

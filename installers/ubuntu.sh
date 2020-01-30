@@ -29,6 +29,8 @@ ROOT_DIR="$(git rev-parse --show-toplevel)"
 
 # shellcheck source=./xfce.sh
 source "$DIR/xfce.sh"
+# shellcheck source=../.functions
+source "$ROOT_DIR/.functions"
 
 function _install_deb_from_url() {
 	local url="$1"
@@ -370,6 +372,10 @@ function general() {
 	remove_obsolete
 	_install_pip3 thefuck numpy csvkit httpie
 
+	install_deb_from_url https://github.com/TheAssassin/AppImageLauncher/releases/download/v2.1.0/appimagelauncher_2.1.0-travis897.d1be7e7.bionic_amd64.deb
+
+	sudo -E curl -LsS https://dystroy.org/broot/download/x86_64-linux/broot -o /usr/local/bin/broot
+	sudo -E chmod +x /usr/local/bin/broot
 	set +e
 }
 
@@ -517,7 +523,7 @@ function i3() {
 	unset -f i3
 	if [ ! -f /etc/apt/sources.list.d/sur5r-i3.list ];
 	then
-		cd "${TMPDIR:-/tmp}"
+		cd "${TMPDIR}"
 		/usr/lib/apt/apt-helper download-file http://debian.sur5r.net/i3/pool/main/s/sur5r-keyring/sur5r-keyring_2019.02.01_all.deb keyring.deb SHA256:176af52de1a976f103f9809920d80d02411ac5e763f695327de9fa6aff23f416
 		sudo -E dpkg -i ./keyring.deb
 		echo "deb http://debian.sur5r.net/i3/ $(grep '^DISTRIB_CODENAME=' /etc/lsb-release | cut -f2 -d=) universe" | sudo -E tee /etc/apt/sources.list.d/sur5r-i3.list
@@ -570,6 +576,11 @@ function chat() {
 	_install_snap slack --classic
 	# Use deb to make use of fonts-noto-color-emoji
 	_install_deb_from_url https://discordapp.com/api/download?platform=linux\&format=deb
+
+	if ! command -v Station.AppImage &>/dev/null; then
+		curl -LSs https://github.com/getstation/desktop-app-releases/releases/download/1.63.4/Station-1.63.4-x86_64.AppImage -o ~/.local/bin/Station.AppImage
+		chmod +x ~/.local/bin/Station.AppImage
+	fi
 }
 
 function kde() {
@@ -756,9 +767,9 @@ function php() {
 	sudo -E phive install -g --trust-gpg-keys phpstan/phpstan
 
 	# shellcheck disable=SC2091
-	curl -sSL https://litipk.github.io/Jupyter-PHP-Installer/dist/jupyter-php-installer.phar > "${TMPDIR:-/tmp}/jupyter.php"
-	$(command -v php) "${TMPDIR:-/tmp}/jupyter.php" install
-	rm "${TMPDIR:-/tmp}/jupyter.php"
+	curl -sSL https://litipk.github.io/Jupyter-PHP-Installer/dist/jupyter-php-installer.phar > "${TMPDIR}/jupyter.php"
+	$(command -v php) "${TMPDIR}/jupyter.php" install
+	rm "${TMPDIR}/jupyter.php"
 
 	# xdebug
 	sudo -E ufw allow 9000/udp
@@ -808,26 +819,7 @@ function docker() {
 	  	sudo chmod +x /usr/local/bin/docker-machine
 	fi
 
-	# if [[ ! -f /etc/docker/daemon.json ]]; then
-		sudo -E tee /etc/docker/daemon.json << EOL &>/dev/null
-{
-	"log-driver": "json-file",
-	"log-opts": {
-	    "max-size": "4m",    
-	    "max-file": "3"    
-    },
-	"dns": ["1.1.1.1", "1.0.0.1"],
-	"init": true,
-	"default-ulimits": {
-		"core": {
-			"Name": "core",
-			"Hard": 0,
-			"Soft": 0
-		}
-	}
-} 
-EOL
-	# fi
+	sudo -E cp "$ROOT_DIR/etc/docker/daemon.json" /etc/docker/daemon.json
 
 	# if which podman &>/dev/null
 	# then
@@ -838,7 +830,7 @@ EOL
 	# 	sudo -E apt install podman -y
 	# fi
 
-	cd "${TMPDIR:-/tmp}"
+	cd "${TMPDIR}"
 	if ! command -v lazydocker &>/dev/null; then
 		curl -sSL https://github.com/jesseduffield/lazydocker/releases/download/v0.7.1/lazydocker_0.7.1_Linux_x86_64.tar.gz > lazydocker.tgz
 		tar xzf lazydocker.tgz
@@ -859,7 +851,7 @@ function polybar() {
 	packages+=(build-essential git cmake cmake-data pkg-config python3-sphinx libcairo2-dev libxcb1-dev libxcb-util0-dev libxcb-randr0-dev libxcb-composite0-dev python-xcbgen xcb-proto libxcb-image0-dev libxcb-ewmh-dev libxcb-icccm4-dev)
 	packages+=(libxcb-xkb-dev libxcb-xrm-dev libxcb-cursor-dev libasound2-dev libpulse-dev i3-wm libjsoncpp-dev libmpdclient-dev libcurl4-openssl-dev libnl-genl-3-dev)
 	_install "${packages[*]}" 
-	cd "${TMPDIR:-/tmp}"
+	cd "${TMPDIR}"
 	git clone https://github.com/jaagr/polybar.git
 	cd polybar && ./build.sh --all-features --gcc --install-config --auto
 }
@@ -910,14 +902,20 @@ net.ipv4.ip_nonlocal_bind=1
 
 # For IntelliJ products for example
 # See https://confluence.jetbrains.com/display/IDEADEV/Inotify+Watches+Limit
-fs.inotify.max_user_watches = 524288
+fs.inotify.max_user_watches=524288
 
 net.ipv4.ip_forward=1
-kernel.printk = 2 4 1 7
-vm.swappiness = 2
+kernel.printk=2 4 1 7
+
+# See https://success.docker.com/article/node-using-swap-memory-instead-of-host-memory
+#vm.swappiness=0
+#vm.overcommit_memory=1
+
+vm.swappiness=2
+
 vm.max_map_count=262144
 # Do not produce core dumps
-fs.suid_dumpable = 0
+fs.suid_dumpable=0
 EOL
 
 	sudo -E tee /etc/sysctl.d/mandy-keepalive.conf << EOL &>/dev/null
@@ -930,7 +928,7 @@ EOL
 * hard core 0
 EOL
 
-	sudo "sysctl" -p /etc/sysctl.d/*.conf 
+	sudo "sysctl" --system
 }
 
 function firewall() {
@@ -1015,14 +1013,14 @@ function lutris() {
 
 function install-game-roms() {
 	if [[ ! -d ~/Games/bios ]]; then
-		cd "${TMPDIR:-/tmp}"
+		cd "${TMPDIR}"
 		curl -sSL https://archive.org/download/retropiebiosfilesconfiguredforeverysystem_20190904/Retropie%20Bios%20Files%20Configured%20for%20Every%20System.zip > bios.zip
 		mkdir -p ~/Games/bios
 		cd ~/Games/bios
-		unzip "${TMPDIR:-/tmp}/bios.zip"
+		unzip "${TMPDIR}/bios.zip"
 		mv Retropie\ Bios\ Files\ Configured\ for\ Every\ System/** .
 		rm -rf Retropie\ Bios\ Files\ Configured\ for\ Every\ System
-		rm "${TMPDIR:-/tmp}/bios.zip"
+		rm "${TMPDIR}/bios.zip"
 	fi
 	# shellcheck disable=SC2046
 	cp -r ~/Games/bios/BIOS/** $(_retroarch_system_folders)

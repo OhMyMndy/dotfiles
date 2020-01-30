@@ -1,0 +1,16 @@
+{
+	"log-driver": "json-file",
+	"log-opts": {
+	    "max-size": "4m",    
+	    "max-file": "3"    
+    },
+	"dns": ["1.1.1.1", "1.0.0.1"],
+	"init": true,
+	"default-ulimits": {
+		"core": {
+			"Name": "core",
+			"Hard": 0,
+			"Soft": 0
+		}
+	}
+}

@@ -90,10 +90,10 @@ if [[ -f $HOME/bin/commands-to-aliases ]]; then
     source "$HOME/.aliases"
 fi
 
-export GEM_HOME=$HOME/.gem
-export GEM_PATH=$HOME/.gem
+export GEM_HOME="$HOME/.gem"
+export GEM_PATH="$HOME/.gem"
 
-export GOPATH=$HOME/go
+export GOPATH="$HOME/go"
 
 
 if [[ -f $HOME/.lessrc ]]; then
@@ -177,7 +177,7 @@ export COMPLETION_WAITING_DOTS="true"
 
 export AUTO_TITLE=false
 
-export ARCH=$(uname -m | sed 's/x86_//;s/i[3-6]86/32/')
+export ARCH_BITS=$(uname -m | sed 's/x86_//;s/i[3-6]86/32/')
 export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on'
 export CHEATCOLORS=true
 
@@ -269,4 +269,8 @@ fi
 
 if [[ -f /usr/share/autojump/autojump.sh ]]; then
     . /usr/share/autojump/autojump.sh
+fi
+
+if [[ -f /home/mandy/.config/broot/launcher/bash/br ]]; then
+    source /home/mandy/.config/broot/launcher/bash/br
 fi
