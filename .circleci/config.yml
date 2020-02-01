@@ -45,8 +45,7 @@ jobs:
 
             $docker create -v "${CIRCLE_WORKING_DIRECTORY}" --name $VOLUME_NAME alpine:3.4 /bin/true >/dev/null
             $docker cp ${CIRCLE_WORKING_DIRECTORY} ${VOLUME_NAME}:"$(dirname "${CIRCLE_WORKING_DIRECTORY}")" >/dev/null
-            # xeffyr/termux:latest 
-            $docker run --rm --volumes-from ${VOLUME_NAME} --entrypoint sh mandy91/termux:arm64 -c "set -x; echo githubusercontent.com >> /system/etc/static-dns-hosts.txt; /system/bin/update-static-dns >/dev/null 2>&1; apt-get update -qq; apt-get install -qq -y bash; bash ${CIRCLE_WORKING_DIRECTORY}/installers/auto.sh"
+            $docker run --rm --volumes-from ${VOLUME_NAME} --entrypoint sh xeffyr/termux:latest -c "set -x; echo githubusercontent.com >> /system/etc/static-dns-hosts.txt; /system/bin/update-static-dns >/dev/null 2>&1; apt-get update -qq; apt-get install -qq -y bash; bash ${CIRCLE_WORKING_DIRECTORY}/installers/auto.sh"
             return=$?
 
             $docker stop ${VOLUME_NAME} &>/dev/null
