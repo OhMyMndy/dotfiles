@@ -50,103 +50,104 @@ jobs:
 
             $docker stop ${VOLUME_NAME} &>/dev/null
             $docker rm ${VOLUME_NAME} &>/dev/null
-            exit $?
-            exit 3
-      # - run:
-      #     name: Shellcheck
-      #     # when: always
-      #     command: |
-      #       set +e
 
-      #       exit 0
+            exit 0
+            #exit $?
+      - run:
+          name: Shellcheck
+          # when: always
+          command: |
+            set +e
 
-      #       failed=0
-      #       # git ls-files | xargs -r -i bash -c "file \"{}\" | grep -iq Bourne-Again && echo \"{}\"" | xargs -r -i shellcheck -e SC1071,SC1008 -Calways -x "{}" -P "$(dirname "{}}")" | less
-      #       #
-      #       while read -r file; dos
-      #         if ! shellcheck -x "$file" -P "$(dirname "$file")"; then
-      #           failed=1
-      #         fi
-      #       done <<<$(git ls-files | xargs -r -i bash -c "file \"{}\" | grep -iq Bourne-Again && echo \"{}\"")
-      #       exit $failed
+            exit 0
+
+            failed=0
+            # git ls-files | xargs -r -i bash -c "file \"{}\" | grep -iq Bourne-Again && echo \"{}\"" | xargs -r -i shellcheck -e SC1071,SC1008 -Calways -x "{}" -P "$(dirname "{}}")" | less
+            #
+            while read -r file; dos
+              if ! shellcheck -x "$file" -P "$(dirname "$file")"; then
+                failed=1
+              fi
+            done <<<$(git ls-files | xargs -r -i bash -c "file \"{}\" | grep -iq Bourne-Again && echo \"{}\"")
+            exit $failed
 
 
-      # - run:
-      #     name: Hadolint
-      #     # when: always
-      #     command: |
-      #       set +e
-      #       failed=0
-      #       while read -r file; do
-      #         if ! hadolint "$file"; then
-      #           failed=1
-      #         fi
-      #       done <<<$(git ls-files -- 'Dockerfile')
-      #       exit $failed
-      # - run:
-      #     name: Validate Yaml files
-      #     # when: always
-      #     command: |
-      #       set +e
-      #       failed=0
+      - run:
+          name: Hadolint
+          # when: always
+          command: |
+            set +e
+            failed=0
+            while read -r file; do
+              if ! hadolint "$file"; then
+                failed=1
+              fi
+            done <<<$(git ls-files -- 'Dockerfile')
+            exit $failed
+      - run:
+          name: Validate Yaml files
+          # when: always
+          command: |
+            set +e
+            failed=0
 
-      #       while read -r file; do
-      #         if ! yamllint -s -d "line-length: {max: 80, allow-non-breakable-words: true}" "$file"; then
-      #           failed=1
-      #         fi
-      #       done <<<$(git ls-files -- '*.yaml' '*.yml')
-      #       exit $failed
+            while read -r file; do
+              if ! yamllint -s -d "line-length: {max: 80, allow-non-breakable-words: true}" "$file"; then
+                failed=1
+              fi
+            done <<<$(git ls-files -- '*.yaml' '*.yml')
+            exit $failed
 
-      # - run:
-      #     name: Run tests
-      #     # when: always
-      #     command: |
-      #       set +e
-      #       failed=0
+      - run:
+          name: Run tests
+          # when: always
+          command: |
+            set +e
+            failed=0
 
-      #       while read -r file; do
-      #         if ! bats "$file"; then
-      #           failed=1
-      #         fi
-      #       done <<<$(git ls-files -- '*.bats')
-      #       exit $failed
+            while read -r file; do
+              if ! bats "$file"; then
+                failed=1
+              fi
+            done <<<$(git ls-files -- '*.bats')
+            exit $failed
 
-      # - run:
-      #     name: Validate Desktop files
-      #     # when: always
-      #     command: |
-      #       set +e
-      #       failed=0
-      #       # @see https://specifications.freedesktop.org/menu-spec/latest/apa.html
-      #       while read -r file; do
-      #         if ! desktop-file-validate "$file"; then
-      #           failed=1
-      #         fi
-      #       done <<<$(git ls-files -- '*.desktop')
-      #       exit $failed
+      - run:
+          name: Validate Desktop files
+          # when: always
+          command: |
+            set +e
+            failed=0
+            # @see https://specifications.freedesktop.org/menu-spec/latest/apa.html
+            while read -r file; do
+              if ! desktop-file-validate "$file"; then
+                failed=1
+              fi
+            done <<<$(git ls-files -- '*.desktop')
+            exit $failed
 
-      # - run:
-      #     name: Markdownlint
-      #     # when: always
-      #     command: |
-      #       set +e
-      #       failed=0
-      #       while read -r file; do
-      #         if ! markdownlint "$file"; then
-      #           failed=1
-      #         fi
-      #       done <<<$(git ls-files -- '*.md')
-      #       exit $failed
+      - run:
+          name: Markdownlint
+          # when: always
+          command: |
+            set +e
+            failed=0
+            while read -r file; do
+              if ! markdownlint "$file"; then
+                failed=1
+              fi
+            done <<<$(git ls-files -- '*.md')
+            exit $failed
 
-      # - run:
-      #     name: Vint
-      #     # when: always
-      #     command: |
-      #       set +e
-      #       failed=0
-      #       while read -r file; do
-      #         if ! vint "$file"; then
-      #           failed=1
-      #         fi
-      #       done <<<$(git ls-files -- '.vimrc' '*.vim')
-      #       exit $failed
+      - run:
+          name: Vint
+          # when: always
+          command: |
+            set +e
+            failed=0
+            while read -r file; do
+              if ! vint "$file"; then
+                failed=1
+              fi
+            done <<<$(git ls-files -- '.vimrc' '*.vim')
+            exit $failed
