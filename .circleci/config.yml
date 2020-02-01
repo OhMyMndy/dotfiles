@@ -100,17 +100,22 @@ jobs:
 
       - run:
           name: Run tests
-          # when: always
           command: |
             set +e
-            failed=0
+            VOLUME_NAME=ubuntu_test
+     
+            $docker stop ${VOLUME_NAME} &>/dev/null
+            $docker rm ${VOLUME_NAME} &>/dev/null
+            
+            $docker cp ${CIRCLE_WORKING_DIRECTORY} ${VOLUME_NAME}:"$(dirname "${CIRCLE_WORKING_DIRECTORY}")" >/dev/null
+            $docker run --rm --volumes-from ${VOLUME_NAME} --entrypoint sh ubuntu:18.04 -c "bats ${CIRCLE_WORKING_DIRECTORY}/tests/installers/ubuntu.bats"
+            return=$?
 
-            while read -r file; do
-              if ! bats "$file"; then
-                failed=1
-              fi
-            done <<<$(git ls-files -- '*.bats')
-            exit $failed
+            $docker stop ${VOLUME_NAME} &>/dev/null
+            $docker rm ${VOLUME_NAME} &>/dev/null
+
+            exit 0
+            #exit $?
 
       - run:
           name: Validate Desktop files
