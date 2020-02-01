@@ -3,19 +3,16 @@
 # shellcheck disable=SC2230
 # shellcheck disable=SC2155
 
-if [ $UID -eq 0 ]; then
+if [[ $UID -eq 0 ]]; then
 	echo "Run this script as non root user please..."
 	exit 99
 fi
 
-trap "exit" INT
-
 set -eu
-
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-# shellcheck source=.functions
-source "$DIR/.functions"
-
+cd "$DIR" || exit 1
+# shellcheck source=./.base-script.sh"
+source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/.base-script.sh"
 
 mkdir -p ~/.config/{copyq,ulauncher,Thunar}
 mkdir -p ~/Screenshots
@@ -126,7 +123,7 @@ if command -v sudo &>/dev/null && [[ ! -f /etc/profile.d/homedir-path.sh ]]; the
 	sudo ln -sf "$DIR/profile.d/homedir-path.sh" /etc/profile.d/homedir-path.sh
 fi
 
-if pidof com.android.phone &>/dev/null;
+if is_android
 then
 	mkdir -p ~/.config/openbox
 

@@ -1,15 +1,10 @@
 #!/usr/bin/env bash
 
-set -u
-trap "exit" INT
-
+set -eu
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-
-
-ROOT_DIR="$(git rev-parse --show-toplevel)"
-
-# shellcheck source=../../.functions
-source "$ROOT_DIR/.functions"
+cd "$DIR" || exit 1
+# shellcheck source=../../.base-script.sh
+source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/../../.base-script.sh"
 
 if [ ! -d ~/.oh-my-zsh/lib ]; then
     rm -rf ~/.oh-my-zsh/
@@ -49,9 +44,9 @@ installZshPlugin "https://github.com/zsh-users/zsh-syntax-highlighting.git" "zsh
 installZshPlugin "https://github.com/junegunn/fzf.git" "fzf"
 installZshPlugin "https://github.com/marzocchi/zsh-notify.git" "notify"
 installZshPlugin "https://github.com/Aloxaf/fzf-tab" "fzf-tab"
-~/.oh-my-zsh/custom/plugins/fzf/install --bin
+if [[ ! -f "$HOME/.fzf/bin/fzf" ]]; then
+	~/.oh-my-zsh/custom/plugins/fzf/install --bin
+fi
 
-cd ~/.oh-my-zsh/ && git pull >/dev/null
+cd ~/.oh-my-zsh/ && git pull -q
 find ~/.oh-my-zsh/custom/plugins -maxdepth 1 -type d ! -path . -print0 | xargs -0 -r -i bash -c "cd {}; git pull -q"
-
-# installZshPlugin "https://github.com/Treri/fzf-zsh.git" "fzf-zsh"

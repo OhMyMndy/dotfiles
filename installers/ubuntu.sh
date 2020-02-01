@@ -1,28 +1,22 @@
 #!/usr/bin/env bash
 
-set -u
 # shellcheck disable=SC2230
 # shellcheck disable=SC2155
-
-export DEBIAN_FRONTEND=noninteractive
-
 # to test this script: `docker run --rm -v "${PWD}:${PWD}:ro" -it "ubuntu-mandy:0.1-20.04" -c "$PWD/installers/ubuntu.sh --ulauncher"`
-
-trap "exit" INT
-
 
 if [[ $UID -eq 0 ]]; then
 	echo "Run this script as non root user please..."
 	exit 99
 fi
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-cd "$DIR" || exit 1
-ROOT_DIR="$(git rev-parse --show-toplevel)"
 
 fontsAdded=0
-# shellcheck source=../.functions
-source "$ROOT_DIR/.functions"
+set -eu
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cd "$DIR" || exit 1
+# shellcheck source=../.base-script.sh
+source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/../.base-script.sh"
+
 
 if ! is_ubuntu; then
 	echo "You are running on a non Ubuntu system"
@@ -30,10 +24,10 @@ if ! is_ubuntu; then
 fi
 
 
-
-
 # shellcheck source=./xfce.sh
 source "$DIR/xfce.sh"
+
+export DEBIAN_FRONTEND=noninteractive
 
 
 function _install_deb_from_url() {

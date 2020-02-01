@@ -2,16 +2,11 @@
 
 # shellcheck disable=SC2230
 
-trap "exit" INT
-
+set -eu
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd "$DIR" || exit 1
-ROOT_DIR="$(git rev-parse --show-toplevel)"
-
-
-# shellcheck source=../.functions
-source "$ROOT_DIR/.functions"
-
+# shellcheck source=../.base-script.sh"
+source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/../.base-script.sh"
 if ! is_mac; then
 	echo "You are running on a non Mac system"
 	exit 101

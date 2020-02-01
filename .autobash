@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
-set -e
 
-if [[ $AUTOBASH_DIR != '' ]]; then
+{
+set +u
+if [[ -n $AUTOBASH_DIR ]]; then
     return
 fi
+}
 
 AUTOBASH_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 

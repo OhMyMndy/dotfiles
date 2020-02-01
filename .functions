@@ -730,10 +730,10 @@ function disable-proxy() {
 	sudo ufw deny 3128/tcp
 }
 
-function expressvpn() {
-	# shellcheck disable=2068
-	sudo $(which expressvpn-mandy) $@
-}
+# function expressvpn() {
+# 	# shellcheck disable=2068
+# 	sudo $(which expressvpn-mandy) $@
+# }
 
 function run-sourcegraph() {
 	docker run -d --publish 7080:7080 \
@@ -770,7 +770,7 @@ function is_mac() {
 	[[ $(uname) = 'Darwin' ]]
 }
 
-# @todo where is the home folder PATH file?q
+
 if is_android ; then
 	_home_dir() {
 		local DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
