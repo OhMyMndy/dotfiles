@@ -7,6 +7,7 @@ alias cls='clear && echo -en "\e[3J"'
 
 export TMPDIR="${TMPDIR:-/tmp}"
 
+
 # Utility function to check if $1 command exists
 # Use example: if exists ls; then echo "Command exists."; else echo "Command does not exist."; fi
 exists() {
@@ -216,7 +217,7 @@ function installZshPlugin() {
 
 	if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/$pluginDir" ]; then
 		echo "Installing ZSH plugin '$pluginDir'"
-		git clone "$pluginUrl" ~/.oh-my-zsh/custom/plugins/"$pluginDir"
+		git clone -q "$pluginUrl" ~/.oh-my-zsh/custom/plugins/"$pluginDir"
 	else
 		echo "ZSH plugin '$pluginDir' is already installed"
 	fi
@@ -751,5 +752,33 @@ function set_autostart_hidden() {
 		sed -Ei "s#Hidden=.*#Hidden=$2#g" "$FILE"
 	fi
 }
+
+function is_ubuntu() {
+	[[ $(lsb_release -s -i 2>/dev/null) = 'Ubuntu' ]]
+}
+
+function is_android() {
+	#pidof com.android.phone &>/dev/null
+	[[ $(uname -o) = 'Android' ]]
+}
+
+function is_linux() {
+	[[ $(uname) = 'Linux' ]]
+}
+
+function is_mac() {
+	[[ $(uname) = 'Darwin' ]]
+}
+
+# @todo where is the home folder PATH file?q
+if is_android ; then
+	_home_dir() {
+		local DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+		source "$DIR/profile.d/homedir-path.sh"
+	}
+	_home_dir
+	unset _home_dir
+	
+fi
 
 alias polybar=/snap/polybar-git/current/usr/local/bin/polybar

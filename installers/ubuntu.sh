@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+set -u
 # shellcheck disable=SC2230
 # shellcheck disable=SC2155
 
@@ -15,22 +16,25 @@ if [[ $UID -eq 0 ]]; then
 	exit 99
 fi
 
-if ! command -v apt-get &>/dev/null; then
-	echo "You are running on a system command -v does not support apt-get"
-	exit 101
-fi
-
-
-fontsAdded=0
-
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd "$DIR" || exit 1
 ROOT_DIR="$(git rev-parse --show-toplevel)"
 
-# shellcheck source=./xfce.sh
-source "$DIR/xfce.sh"
+fontsAdded=0
 # shellcheck source=../.functions
 source "$ROOT_DIR/.functions"
+
+if ! is_ubuntu; then
+	echo "You are running on a non Ubuntu system"
+	exit 101
+fi
+
+
+
+
+# shellcheck source=./xfce.sh
+source "$DIR/xfce.sh"
+
 
 function _install_deb_from_url() {
 	local url="$1"
@@ -783,7 +787,8 @@ function docker() {
 		ca-certificates \
 		curl \
 		gnupg2 \
-		software-properties-common
+		software-properties-common \
+		qemu-user-static
 
 	if ! command -v ctop &>/dev/null; then
 		sudo -E curl -sSL https://github.com/bcicen/ctop/releases/download/v0.7.2/ctop-0.7.2-linux-amd64 -o /usr/local/bin/ctop
@@ -852,7 +857,7 @@ function polybar() {
 	packages+=(libxcb-xkb-dev libxcb-xrm-dev libxcb-cursor-dev libasound2-dev libpulse-dev i3-wm libjsoncpp-dev libmpdclient-dev libcurl4-openssl-dev libnl-genl-3-dev)
 	_install "${packages[*]}" 
 	cd "${TMPDIR}"
-	git clone https://github.com/jaagr/polybar.git
+	git clone -q https://github.com/jaagr/polybar.git
 	cd polybar && ./build.sh --all-features --gcc --install-config --auto
 }
 
@@ -883,7 +888,7 @@ EOL
 
 
 		# use network manager instead of systemd resolve resolv.conf
-		sudo -E rm /etc/resolv.conf; sudo -E ln -s /var/run/NeuworkManager/resolv.conf /etc/resolv.conf
+		sudo -E rm /etc/resolv.conf; sudo -E ln -s /var/run/NetworkManager/resolv.conf /etc/resolv.conf
 		sudo -E systemctl restart NetworkManager
 	fi
 

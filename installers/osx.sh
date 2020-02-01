@@ -4,15 +4,21 @@
 
 trap "exit" INT
 
-
-# The unarchiver
-# Wunderlist
-
-trap "exit" INT
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cd "$DIR" || exit 1
+ROOT_DIR="$(git rev-parse --show-toplevel)"
 
 
-which brew &>/dev/null
-if [ $? -ne 0 ]; then
+# shellcheck source=../.functions
+source "$ROOT_DIR/.functions"
+
+if ! is_mac; then
+	echo "You are running on a non Mac system"
+	exit 101
+fi
+
+
+if which brew &>/dev/null; then
     ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 fi
 
@@ -63,5 +69,6 @@ brew install sshfs
 brew install scrcpy
 
 brew upgrade
-brew cleanup 
+brew cleanup
+
 rm -f -r /Library/Caches/Homebrew/*

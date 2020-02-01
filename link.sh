@@ -10,13 +10,11 @@ fi
 
 trap "exit" INT
 
+set -eu
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # shellcheck source=.functions
 source "$DIR/.functions"
-
-# shellcheck source=.zshrc
-source "$DIR/.zshrc" 2>/dev/null
 
 
 mkdir -p ~/.config/{copyq,ulauncher,Thunar}
@@ -89,17 +87,18 @@ if [ ! -d ~/bin_bak ] && [ -d ~/bin ]; then
 	mv -f ~/bin ~/bin_bak
 fi
 link-file "$DIR" 'bin'
-chmod +x -R ~/bin/
-rm -rf ~/bin/bin
-
-
-if ! which fzf >/dev/null 2>&1
-then
-	git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-	yes | ~/.fzf/install
+# chmod +x -R ~/bin/ &>/dev/null
+if [[ -d ~/bin/bin ]]; then
+	rm -rf ~/bin/bin
 fi
-mkdir -p ~/.tmux
-ln -sf ~/.byobu/.tmux.conf ~/.tmux.conf
+
+
+if ! command -v fzf &>/dev/null && ! is_android
+then
+	git clone --depth 1 -q https://github.com/junegunn/fzf.git ~/.fzf
+	yes | ~/.fzf/install >/dev/null
+fi
+
 
 link-file "$DIR" '.functions'
 link-file "$DIR" '.ncmpcpp'
@@ -127,7 +126,7 @@ if command -v sudo &>/dev/null && [[ ! -f /etc/profile.d/homedir-path.sh ]]; the
 	sudo ln -sf "$DIR/profile.d/homedir-path.sh" /etc/profile.d/homedir-path.sh
 fi
 
-if [[ $(uname -o) = 'Android' ]];
+if pidof com.android.phone &>/dev/null;
 then
 	mkdir -p ~/.config/openbox
 
@@ -152,7 +151,7 @@ fi
 if [[ ! -d ~/src/splatmoji ]]; then
 	mkdir -p ~/src
 	cd ~/src
-	git clone https://github.com/cspeterson/splatmoji.git
+	git clone -q https://github.com/cspeterson/splatmoji.git
 	cd splatmoji
 	curl 'https://raw.githubusercontent.com/muan/emojilib/master/emojis.json' | importers/emojilib2tsv - > data/emoji.tsv
 	curl 'https://raw.githubusercontent.com/w33ble/emoticon-data/master/emoticons.json' | importers/w33ble2tsv - > data/emoticons.tsv

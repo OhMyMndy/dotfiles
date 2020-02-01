@@ -189,7 +189,7 @@ export HOSTNAME="$(hostname)"
 export USER="$(whoami)"
 
 # ssh-agent omzsh should do the same
-if [ "$(uname -s)" != 'Darwin' ]; then
+if is_linux; then
     # export SUDO_ASKPASS=/usr/libexec/openssh/gnome-ssh-askpass
 
     # Launch SSH agent if not running
@@ -204,7 +204,7 @@ if [ "$(uname -s)" != 'Darwin' ]; then
 fi
 
 
-if [ "$(uname -s)" = 'Darwin' ]; then
+if is_mac; then
     export DISPLAY="$HOSTNAME:0"
 fi
 
