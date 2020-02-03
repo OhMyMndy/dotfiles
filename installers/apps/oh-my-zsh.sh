@@ -1,17 +1,20 @@
 #!/usr/bin/env bash
 
-trap "exit" INT
-
+set -eu
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cd "$DIR" || exit 1
+# shellcheck source=../../.base-script.sh
+source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/../../.base-script.sh"
 
 if [ ! -d ~/.oh-my-zsh/lib ]; then
     rm -rf ~/.oh-my-zsh/
-    cd /tmp || exit 2
+
+    cd "${TMPDIR}" || exit 2
 	# shellcheck disable=SC2216
     yes n | locale
 	wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh
-    sed -i.tmp 's:env zsh::g' install.sh
-    sh install.sh
+    sed -i -E 's#exec zsh.*##g' install.sh
+    yes | bash install.sh
     rm install.sh
 fi
 
@@ -27,7 +30,7 @@ function installZshPlugin() {
 
 	if [[ ! -d "$HOME/.oh-my-zsh/custom/plugins/$pluginDir" ]]; then
 		echo "Installing ZSH plugin '$pluginDir'"
-		git clone "$pluginUrl" "$HOME/.oh-my-zsh/custom/plugins/$pluginDir"
+		git clone -q "$pluginUrl" "$HOME/.oh-my-zsh/custom/plugins/$pluginDir"
 	fi
 
 }
@@ -41,9 +44,9 @@ installZshPlugin "https://github.com/zsh-users/zsh-syntax-highlighting.git" "zsh
 installZshPlugin "https://github.com/junegunn/fzf.git" "fzf"
 installZshPlugin "https://github.com/marzocchi/zsh-notify.git" "notify"
 installZshPlugin "https://github.com/Aloxaf/fzf-tab" "fzf-tab"
-~/.oh-my-zsh/custom/plugins/fzf/install --bin
+if [[ ! -f "$HOME/.fzf/bin/fzf" ]]; then
+	~/.oh-my-zsh/custom/plugins/fzf/install --bin
+fi
 
-cd ~/.oh-my-zsh/ && git pull
-find ~/.oh-my-zsh/custom/plugins -maxdepth 1 -type d ! -path . -print0 | xargs -0 -r -i bash -c "cd {}; git pull"
-
-# installZshPlugin "https://github.com/Treri/fzf-zsh.git" "fzf-zsh"
+cd ~/.oh-my-zsh/ && git pull -q
+find ~/.oh-my-zsh/custom/plugins -maxdepth 1 -type d ! -path . -print0 | xargs -0 -r -i bash -c "cd {}; git pull -q"

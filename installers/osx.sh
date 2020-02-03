@@ -2,17 +2,18 @@
 
 # shellcheck disable=SC2230
 
-trap "exit" INT
+set -eu
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cd "$DIR" || exit 1
+# shellcheck source=../.base-script.sh"
+source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/../.base-script.sh"
+if ! is_mac; then
+	echo "You are running on a non Mac system"
+	exit 101
+fi
 
 
-# The unarchiver
-# Wunderlist
-
-trap "exit" INT
-
-
-which brew &>/dev/null
-if [ $? -ne 0 ]; then
+if which brew &>/dev/null; then
     ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 fi
 
@@ -63,5 +64,6 @@ brew install sshfs
 brew install scrcpy
 
 brew upgrade
-brew cleanup 
+brew cleanup
+
 rm -f -r /Library/Caches/Homebrew/*

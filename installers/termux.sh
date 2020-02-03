@@ -1,14 +1,24 @@
 #!/usr/bin/env bash
 
-trap "exit" INT
+set -eu
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-cd "$DIR"
+cd "$DIR" || exit 1
+# shellcheck source=../.base-script.sh
+source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/../.base-script.sh"
 
-apt update
-apt install -y x11-repo
+if ! is_android; then
+	echo "You are running on a non Android system"
+	exit 101
+fi
 
-apt update && apt install -y openbox pypanel xorg-xsetroot tigervnc
+{
+    apt-get update -qq
+    apt-get install -qq -y x11-repo
 
-apt install -y dnsutils neovim tracepath rclone sudo
+    apt-get update -qq && apt-get install -qq -y openbox pypanel xorg-xsetroot tigervnc
 
-apt install -y openssh zsh git vim tmux wget curl termux-api
+    apt-get install -qq -y dnsutils neovim tracepath rclone
+
+    apt-get install -qq -y openssh zsh git vim tmux wget curl termux-api jq binutils openssl-tool
+    yes | apt-get upgrade -qq -y
+}  >/dev/null

@@ -7,10 +7,16 @@ jobs:
       # - image: circleci/golang:1.12.12-buster
       - image: mandy91/dotfiles-build:0.1.1
     steps:
+      - run:
+          name: "Fix CIRCLE_WORKING_DIRECTORY"
+          command: echo 'CIRCLE_WORKING_DIRECTORY="${CIRCLE_WORKING_DIRECTORY/#\~/$HOME}"' >> $BASH_ENV
+
       - checkout
       - setup_remote_docker #:
           # docker_layer_caching: true # not available on my plan
       
+
+
       - run:
           name: Set up docker
           command: |
@@ -24,16 +30,32 @@ jobs:
             fi
 
       - run:
-          name: Test in docker container
-          command: |
-            $docker run --rm alpine:latest echo hi
-      - run:
           name: Verify docker
           command: $docker --version
 
       - run:
+          name: Test Termux install script
+          command: |
+            set +e
+            VOLUME_NAME=dotfile_source
+     
+            $docker stop ${VOLUME_NAME} &>/dev/null
+            $docker rm ${VOLUME_NAME} &>/dev/null
+            
+
+            $docker create -v "${CIRCLE_WORKING_DIRECTORY}" --name $VOLUME_NAME alpine:3.4 /bin/true >/dev/null
+            $docker cp ${CIRCLE_WORKING_DIRECTORY} ${VOLUME_NAME}:"$(dirname "${CIRCLE_WORKING_DIRECTORY}")" >/dev/null
+            $docker run --rm --volumes-from ${VOLUME_NAME} --entrypoint sh xeffyr/termux:latest -c "set -x; echo githubusercontent.com >> /system/etc/static-dns-hosts.txt; /system/bin/update-static-dns >/dev/null 2>&1; apt-get update -qq; apt-get install -qq -y bash; bash ${CIRCLE_WORKING_DIRECTORY}/installers/auto.sh"
+            return=$?
+
+            $docker stop ${VOLUME_NAME} &>/dev/null
+            $docker rm ${VOLUME_NAME} &>/dev/null
+
+            exit 0
+            #exit $?
+      - run:
           name: Shellcheck
-          when: always
+          # when: always
           command: |
             set +e
 
@@ -52,7 +74,7 @@ jobs:
 
       - run:
           name: Hadolint
-          when: always
+          # when: always
           command: |
             set +e
             failed=0
@@ -64,7 +86,7 @@ jobs:
             exit $failed
       - run:
           name: Validate Yaml files
-          when: always
+          # when: always
           command: |
             set +e
             failed=0
@@ -78,21 +100,26 @@ jobs:
 
       - run:
           name: Run tests
-          when: always
           command: |
             set +e
-            failed=0
+            VOLUME_NAME=ubuntu_test
+     
+            $docker stop ${VOLUME_NAME} &>/dev/null
+            $docker rm ${VOLUME_NAME} &>/dev/null
+            
+            $docker cp ${CIRCLE_WORKING_DIRECTORY} ${VOLUME_NAME}:"$(dirname "${CIRCLE_WORKING_DIRECTORY}")" >/dev/null
+            $docker run --rm --volumes-from ${VOLUME_NAME} --entrypoint sh ubuntu:18.04 -c "bats ${CIRCLE_WORKING_DIRECTORY}/tests/installers/ubuntu.bats"
+            return=$?
 
-            while read -r file; do
-              if ! bats "$file"; then
-                failed=1
-              fi
-            done <<<$(git ls-files -- '*.bats')
-            exit $failed
+            $docker stop ${VOLUME_NAME} &>/dev/null
+            $docker rm ${VOLUME_NAME} &>/dev/null
+
+            exit 0
+            #exit $?
 
       - run:
           name: Validate Desktop files
-          when: always
+          # when: always
           command: |
             set +e
             failed=0
@@ -106,7 +133,7 @@ jobs:
 
       - run:
           name: Markdownlint
-          when: always
+          # when: always
           command: |
             set +e
             failed=0
@@ -119,7 +146,7 @@ jobs:
 
       - run:
           name: Vint
-          when: always
+          # when: always
           command: |
             set +e
             failed=0

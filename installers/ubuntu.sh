@@ -2,35 +2,33 @@
 
 # shellcheck disable=SC2230
 # shellcheck disable=SC2155
-
-export DEBIAN_FRONTEND=noninteractive
-
 # to test this script: `docker run --rm -v "${PWD}:${PWD}:ro" -it "ubuntu-mandy:0.1-20.04" -c "$PWD/installers/ubuntu.sh --ulauncher"`
-
-trap "exit" INT
-
 
 if [[ $UID -eq 0 ]]; then
 	echo "Run this script as non root user please..."
 	exit 99
 fi
 
-if ! command -v apt-get &>/dev/null; then
-	echo "You are running on a system command -v does not support apt-get"
+
+fontsAdded=0
+set -eu
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cd "$DIR" || exit 1
+# shellcheck source=../.base-script.sh
+source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/../.base-script.sh"
+
+
+if ! is_ubuntu; then
+	echo "You are running on a non Ubuntu system"
 	exit 101
 fi
 
 
-fontsAdded=0
-
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-cd "$DIR" || exit 1
-ROOT_DIR="$(git rev-parse --show-toplevel)"
-
 # shellcheck source=./xfce.sh
 source "$DIR/xfce.sh"
-# shellcheck source=../.functions
-source "$ROOT_DIR/.functions"
+
+export DEBIAN_FRONTEND=noninteractive
+
 
 function _install_deb_from_url() {
 	local url="$1"
@@ -783,7 +781,8 @@ function docker() {
 		ca-certificates \
 		curl \
 		gnupg2 \
-		software-properties-common
+		software-properties-common \
+		qemu-user-static
 
 	if ! command -v ctop &>/dev/null; then
 		sudo -E curl -sSL https://github.com/bcicen/ctop/releases/download/v0.7.2/ctop-0.7.2-linux-amd64 -o /usr/local/bin/ctop
@@ -852,7 +851,7 @@ function polybar() {
 	packages+=(libxcb-xkb-dev libxcb-xrm-dev libxcb-cursor-dev libasound2-dev libpulse-dev i3-wm libjsoncpp-dev libmpdclient-dev libcurl4-openssl-dev libnl-genl-3-dev)
 	_install "${packages[*]}" 
 	cd "${TMPDIR}"
-	git clone https://github.com/jaagr/polybar.git
+	git clone -q https://github.com/jaagr/polybar.git
 	cd polybar && ./build.sh --all-features --gcc --install-config --auto
 }
 
@@ -883,7 +882,7 @@ EOL
 
 
 		# use network manager instead of systemd resolve resolv.conf
-		sudo -E rm /etc/resolv.conf; sudo -E ln -s /var/run/NeuworkManager/resolv.conf /etc/resolv.conf
+		sudo -E rm /etc/resolv.conf; sudo -E ln -s /var/run/NetworkManager/resolv.conf /etc/resolv.conf
 		sudo -E systemctl restart NetworkManager
 	fi
 
