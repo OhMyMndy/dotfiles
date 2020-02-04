@@ -28,6 +28,10 @@ function xfce_keybindings() {
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Alt>F3" -s "xfce4-appfinder" -t "string"
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Alt>F3/startup-notify" -s "true" -t "bool"
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Alt>Print" -s "shutter -s" -t "string"
+
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Super>d" -s "rofi -show" -t "string"
+
+
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/override" -s "true" -t "bool"
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Primary><Alt>Delete" -s "dm-tool lock" -t "string"
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Primary><Alt>Escape" -s "xkill" -t "string"
@@ -222,8 +226,14 @@ function wm_xfwm() {
 
 	pkill -e i3
 	pkill -e polybar
-	pkill -e compton
-	
+
+	# restart ulauncher to rebind Meta+Space
+	pkill -e -f ulauncher
+	nohup ulauncher  &>/dev/null & disown
+	nohup copyq  &>/dev/null & disown
+
+	nohup compton --config ~/.config/compton/compton.conf &>/dev/null & disown
+
 	xfconf-query --channel xfce4-session --property /sessions/Failsafe/Client0_Command --type string --set "xfwm4" --force-array
 	nohup xfwm4 &>/dev/null & disown
 	nohup xfce4-panel &>/dev/null & disown

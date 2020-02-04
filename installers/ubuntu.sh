@@ -183,7 +183,7 @@ function minimal() {
 	_update
 
 	# Misc
-	packages+=(git git-extras tig gitg zsh autojump less curl rename rsync openssh-server most multitail trash-cli zenity libsecret-tools parallel ruby ruby-dev ntp neovim vim-gtk3 fonts-noto-color-emoji fonts-noto fonts-roboto)
+	packages+=(git git-extras tig gitg zsh iproute2 man pv autojump less curl rename rsync openssh-server most multitail trash-cli zenity libsecret-tools parallel ruby ruby-dev ntp neovim vim-gtk3 fonts-noto-color-emoji fonts-noto fonts-roboto)
 
 	# Terminal multiplexing
 	packages+=(byobu tmux)
@@ -519,14 +519,15 @@ function virtualbox() {
 
 function i3() {
 	unset -f i3
-	if [ ! -f /etc/apt/sources.list.d/sur5r-i3.list ];
-	then
-		cd "${TMPDIR}"
-		/usr/lib/apt/apt-helper download-file http://debian.sur5r.net/i3/pool/main/s/sur5r-keyring/sur5r-keyring_2019.02.01_all.deb keyring.deb SHA256:176af52de1a976f103f9809920d80d02411ac5e763f695327de9fa6aff23f416
-		sudo -E dpkg -i ./keyring.deb
-		echo "deb http://debian.sur5r.net/i3/ $(grep '^DISTRIB_CODENAME=' /etc/lsb-release | cut -f2 -d=) universe" | sudo -E tee /etc/apt/sources.list.d/sur5r-i3.list
-		_update
-	fi
+	sudo -E rm /etc/apt/sources.list.d/sur5r-i3.list
+	# if [ ! -f /etc/apt/sources.list.d/sur5r-i3.list ];
+	# then
+	# 	cd "${TMPDIR}"
+	# 	/usr/lib/apt/apt-helper download-file http://debian.sur5r.net/i3/pool/main/s/sur5r-keyring/sur5r-keyring_2019.02.01_all.deb keyring.deb SHA256:176af52de1a976f103f9809920d80d02411ac5e763f695327de9fa6aff23f416
+	# 	sudo -E dpkg -i ./keyring.deb
+	# 	echo "deb http://debian.sur5r.net/i3/ $(grep '^DISTRIB_CODENAME=' /etc/lsb-release | cut -f2 -d=) universe" | sudo -E tee /etc/apt/sources.list.d/sur5r-i3.list
+	# 	_update
+	# fi
 	declare -a packages=()
 	packages+=(udiskie compton nitrogen feh xfce4-panel pcmanfm spacefm rofi ssh-askpass-gnome)
 	packages+=("i3" i3blocks i3lock)
@@ -646,7 +647,7 @@ function jupyter() {
 function dev() {
 	declare -a packages=()
 	sudo -E snap install snapcraft --classic
-	packages+=(apache2-utils multitail virt-what)
+	packages+=(apache2-utils multitail virt-what proot chroot)
 	_remove shellcheck
 	if ! command -v shellcheck &>/dev/null; then
 		scversion="stable" # or "v0.4.7", or "latest"

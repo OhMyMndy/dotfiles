@@ -1,7 +1,30 @@
 #!/usr/bin/env bash
 
+
+if ! command -v docker-compose &>/dev/null; then
+  >&2 echo "No docker-compose found!"
+  exit 1
+fi
+
+docker_compose_commands=("$(docker-compose commands 2>&1 | grep -Eo '^\s*[a-z]*' | tr '\n' ' ')")
+
+command=''
 for arg do
   shift
+
+  # if we have a command, set it
+  if [[ " ${docker_compose_commands[*]} " =~  ${arg} ]] && [[ "$command" = '' ]]; then
+    command="${arg}"
+    set -- "$@" "$arg"
+    continue
+  fi
+
+  # Do not do anything when we have a command, -f can be used multiple times (`logs --tail -f` for example)
+  if [[ "$command" != '' ]]; then
+    set -- "$@" "$arg"
+    continue
+  fi
+
   if [[ "$file" == "-f" ]]; then
     file="$arg"
   fi
@@ -28,11 +51,11 @@ if [[ -z $file ]]; then
 fi
 
 if [[ -f "${file}.sh" ]]; then
+    # shellcheck disable=2046
     env $(grep -v '^#' .env | xargs) bash "${file}.sh" > "$tmpfile"
     docker-compose -f "$tmpfile" "$@"
     exit $?
 fi
 
-set -x
 docker-compose "$@"
 exit $?
