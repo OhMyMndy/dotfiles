@@ -5,7 +5,7 @@
 # shellcheck source=./z.sh
 source "$HOME/z.sh"
 export ZSH=$HOME/.oh-my-zsh
-export ZSH_THEME="mandy"
+export ZSH_THEME="mandy-pride"
 
 #zstyle ':completion:*' use-cache yes
 
@@ -17,27 +17,18 @@ detect_os
 # Compleat https://limpet.net/mbrubeck/2009/10/30/compleat.html``
 # sysadmin-util https://github.com/skx/sysadmin-util
 
-export FZF_TAB_OPTS="--ansi"
+export FZF_TAB_OPTS=("--ansi")
 export FZF_COMPLETION_OPTS="${FZF_TAB_OPTS}"
 
 plugins=(
-    adb # only works with adb command in path
     colored-man-pages
     command-not-found
     cp # This plugin defines a cpv function that uses rsync so that you get the features and security of this command.
     copydir # Copies the path of your current folder to the system clipboard.
-    docker
-    docker-compose
     extract
     fzf-tab
-    git
     httpie
     jira
-    notify
-    nmap # https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins/nmap
-    rsync # rsync-copy rsync-move rsync-update rsync-synchronize
-    systemd # The systemd plugin provides many useful aliases for systemd. https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins/systemd
-    sudo
     z
     zsh-autosuggestions
     zsh-syntax-highlighting
@@ -51,6 +42,18 @@ elif [ "$OS" = "Fedora" ]; then
     plugins+=(fedora)
 fi
 
+if exists adb; then plugins+=(adb); fi
+if exists nmap; then plugins+=(nmap); fi
+if exists git; then plugins+=(git); fi
+if exists docker; then plugins+=(docker); fi
+if exists docker-compose; then plugins+=(docker-compose); fi
+if exists vagrant; then plugins+=(vagrant); fi
+if exists rsync; then plugins+=(rsync); fi
+if exists sudo; then plugins+=(sudo); fi
+if is_linux && ! is_android; then 
+    plugins+=(notify)
+    plugins+=(systemd) # The systemd plugin provides many useful aliases for systemd. https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins/systemd);
+fi
 
 # Autoload zsh commands
 # autoload -Uz compinit
@@ -93,7 +96,7 @@ fi
 export GEM_HOME="$HOME/.gem"
 export GEM_PATH="$HOME/.gem"
 
-export GOPATH="$HOME/go"
+export GOPATH="$HOME/.go"
 
 
 if [[ -f $HOME/.lessrc ]]; then
@@ -146,7 +149,7 @@ alias ve='python3 -m venv ./venv'
 alias va='source ./venv/bin/activate'
 
 # Snapcraft aliases
-alias snapcraft-docker='docker run -v "$PWD":/build -w /build snapcore/snapcraft:stable snapcraft'
+alias snapcraft-docker='docker run --rm -v "$PWD":/build --init -w /build snapcore/snapcraft:stable bash -c "apt update -qq apt upgrade -y -qq; snapcraft"'
 
 if exists thefuck; then eval "$(thefuck --alias)"; fi
 
@@ -189,7 +192,7 @@ export HOSTNAME="$(hostname)"
 export USER="$(whoami)"
 
 # ssh-agent omzsh should do the same
-if is_linux; then
+if is_linux && exists ssh-agent && ! is_android; then
     # export SUDO_ASKPASS=/usr/libexec/openssh/gnome-ssh-askpass
 
     # Launch SSH agent if not running
@@ -220,7 +223,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 
-if [ "$TERM" = "linux" ]; then
+if [[ $TERM = "linux" ]]; then
   set_term_colors
 fi
 
@@ -235,7 +238,7 @@ bindkey  "^[[4~"   end-of-line
 #bindkey '^[[1;5C' forward-word
 #bindkey '^[[1;5D' backward-word
 
-[[ "$(tty)" =~ /dev/tty[0-9]* ]] && command -v setupcon &>/dev/null && setupcon
+[[ "$(tty)" =~ /dev/tty[0-9]* ]] && exists setupcon && setupcon
 [[ "$(tty)" =~ /dev/tty[0-9]* ]] && [[ "$(hostname)" =~ macbook ]] && set_macbook_term_size
 
 
@@ -248,13 +251,12 @@ typeset -A ZSH_HIGHLIGHT_PATTERNS
 
 #shellcheck disable=SC2190
 # To have commands starting with `rm -rf` in red:
-ZSH_HIGHLIGHT_PATTERNS+=('rm -rf *' 'fg=white,bold,bg=red')
+ZSH_HIGHLIGHT_PATTERNS+=('rm -rf *' 'fg=red,bold')
 
 # shellcheck source=./.fzf.zsh
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-if command -v direnv >/dev/null 2>&1
-then
+if exists direnv; then
 	eval "$(direnv hook zsh)"
 fi
 
@@ -274,3 +276,9 @@ fi
 if [[ -f /home/mandy/.config/broot/launcher/bash/br ]]; then
     source /home/mandy/.config/broot/launcher/bash/br
 fi
+
+
+# Syntax highlighting colors
+ZSH_HIGHLIGHT_STYLES[arg0]=fg=blue
+ZSH_HIGHLIGHT_STYLES[suffix-alias]=fg=blue,underline
+ZSH_HIGHLIGHT_STYLES[precommand]=fg=blue,underline

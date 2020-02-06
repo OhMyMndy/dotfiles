@@ -37,6 +37,7 @@ function installZshPlugin() {
 
 mkdir -p ~/.oh-my-zsh/custom/themes
 ln -sf "$DIR/../../.oh-my-zsh/custom/themes/mandy.zsh-theme" ~/.oh-my-zsh/custom/themes/mandy.zsh-theme
+ln -sf "$DIR/../../.oh-my-zsh/custom/themes/mandy-pride.zsh-theme" ~/.oh-my-zsh/custom/themes/mandy-pride.zsh-theme
 
 installZshPlugin "git://github.com/zsh-users/zsh-autosuggestions" "zsh-autosuggestions"
 installZshPlugin "https://github.com/zsh-users/zsh-completions" "zsh-completions"

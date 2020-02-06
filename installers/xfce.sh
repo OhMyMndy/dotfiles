@@ -30,6 +30,7 @@ function xfce_keybindings() {
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Alt>Print" -s "shutter -s" -t "string"
 
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Super>d" -s "rofi -show" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Super>Escape" -s "xkill" -t "string"
 
 
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/override" -s "true" -t "bool"
@@ -222,6 +223,7 @@ function wm_xfwm() {
 	set_autostart_hidden xfdesktop.desktop false
 	set_autostart_hidden xfwm4.desktop false
 	set_autostart_hidden xfce4-panel.desktop false
+	set_autostart_hidden i3.desktop true
 	rm ~/.config/autostart/Polybar.desktop
 
 	pkill -e i3
@@ -229,7 +231,11 @@ function wm_xfwm() {
 
 	# restart ulauncher to rebind Meta+Space
 	pkill -e -f ulauncher
-	nohup ulauncher  &>/dev/null & disown
+	nohup ulauncher &>/dev/null & disown
+	
+	pkill -e -f quicktile
+	nohup quicktile --daemonize &>/dev/null & disown
+
 	nohup copyq  &>/dev/null & disown
 
 	nohup compton --config ~/.config/compton/compton.conf &>/dev/null & disown

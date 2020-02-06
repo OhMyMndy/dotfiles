@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 
-set -eu
+set -eu -o functrace
 
 this_command=''
 previous_command=''
 trap 'previous_command=$this_command; this_command=$BASH_COMMAND' DEBUG
-finish() {
+___finish() {
 	>&2 echo "Error while executing '$previous_command' in $0"
 	exit $?
 }
-trap "finish" ERR
+trap "___finish" ERR
 trap "exit" INT
 
 if command -v git &> /dev/null; then

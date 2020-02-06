@@ -13,12 +13,29 @@ fi
 
 {
     apt-get update -qq
-    apt-get install -qq -y x11-repo
+    #apt-get install -qq -y x11-repo
 
-    apt-get update -qq && apt-get install -qq -y openbox pypanel xorg-xsetroot tigervnc
+    #apt-get update -qq && apt-get install -qq -y openbox pypanel xorg-xsetroot tigervnc
 
-    apt-get install -qq -y dnsutils neovim tracepath rclone
+    apt-get install -qq -y dnsutils neovim tracepath rclone libnotify iproute2
 
-    apt-get install -qq -y openssh zsh git vim tmux wget curl termux-api jq binutils openssl-tool
+    apt-get install -qq -y openssh zsh git vim tmux wget curl ruby termux-api jq binutils openssl-tool proot
     yes | apt-get upgrade -qq -y
 }  >/dev/null
+
+echo "deb [trusted=yes] https://yadominjinta.github.io/files/ termux extras" > "$PREFIX/etc/apt/sources.list.d/atilo.list"
+pkg in atilo
+
+
+if ! exists startubuntults ; then
+    atilo install ubuntults
+    sed -Ei 's/(^export PROOT_NO_SECCOMP.*)/#\1/g' "$(command -v startubuntults)"
+    startubuntults "apt update -qq; apt upgrade -y -qq; apt install -y -qq git"
+fi
+
+
+if ! exists startubuntu ; then
+    atilo install ubuntu
+    sed -Ei 's/(^export PROOT_NO_SECCOMP.*)/#\1/g' "$(command -v startubuntu)"
+    startubuntults "apt update -qq; apt upgrade -y -qq; apt install -y -qq git"
+fi

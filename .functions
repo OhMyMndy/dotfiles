@@ -664,7 +664,7 @@ function install_deb_from_url() {
 	local tmp="$(mktemp)"
 	curl -L "$url" >> "$tmp"
 	sudo dpkg -i "$tmp"
-	sudo apt install -f -y
+	sudo apt install -f -y -qq
 }
 
 
@@ -675,8 +675,8 @@ function add_repo_or_install_deb() {
 
 	if ! which "$package_name" &>/dev/null; then
 		sudo add-apt-repository "$repo" -y
-		sudo apt-get update
-		sudo apt install -y "$package_name"
+		sudo apt-get update -y -qq
+		sudo apt install -y -qq "$package_name"
 	fi
 
 	# still no package?? remove repo and install deb
@@ -684,7 +684,7 @@ function add_repo_or_install_deb() {
 		sudo add-apt-repository --remove "$repo" -y
 		if [[ $optional_deb != '' ]]; then
 			_install_deb_from_url "$optional_deb"
-			sudo apt install -f -y
+			sudo apt install -f -y -qq
 		fi
 	fi
 }
@@ -770,13 +770,15 @@ function is_mac() {
 	[[ $(uname) = 'Darwin' ]]
 }
 
-if test -n "$BASH" ; then __this_script="$BASH_SOURCE"
+if test -n "$BASH" ; then __this_script=$BASH_SOURCE
 elif test -n "$TMOUT"; then __this_script=${.sh.file}
 elif test -n "$ZSH_NAME" ; then __this_script=${(%):-%x}
 elif test ${0##*/} = dash; then x=$(lsof -p $$ -Fn0 | tail -1); __this_script=${x#n}
 else __this_script="$0"
 fi
 
+if [[ -L $__this_script ]]; then
+__this_script="$(readlink "$__this_script")"
 # if is_android ; then
 	_home_dir() {
 		local DIR="$( cd "$( dirname "$__this_script}" )" && pwd )"
@@ -786,6 +788,7 @@ fi
 	unset _home_dir
 	
 # fi
+fi
 
 
 alias polybar=/snap/polybar-git/current/usr/local/bin/polybar

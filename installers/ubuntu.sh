@@ -33,7 +33,7 @@ export DEBIAN_FRONTEND=noninteractive
 function _install_deb_from_url() {
 	local url="$1"
 	local tmp="$(mktemp)"
-	if ! command -v curl &>/dev/null; then
+	if ! exists curl; then
 		_install curl
 	fi
 	curl -sSL "$url" >> "$tmp"
@@ -67,7 +67,7 @@ function _list_repositories() {
 }
 
 function _add_repository() {
-	if ! command -v add-apt-repository &>/dev/null; then
+	if ! exists add-apt-repository; then
 		_install software-properties-common
 	fi
 	# shellcheck disable=SC2068
@@ -85,7 +85,7 @@ function _install() {
 
 function _install_flatpak_flathub() {
 	set -e
-	if ! command -v flatpak &>/dev/null; then
+	if ! exists flatpak; then
 		_install flatpak
 	fi
 
@@ -96,7 +96,7 @@ function _install_flatpak_flathub() {
 
 function _install_pip3() {
 	set -e
-	if ! command -v pip &>/dev/null; then
+	if ! command -v pip3 &>/dev/null; then
 		_install python3-pip
 	fi
 	# shellcheck disable=SC2068
@@ -104,9 +104,25 @@ function _install_pip3() {
 	set +e
 }
 
+function _install_pipx() {
+	set -e
+	if ! exists pipx; then
+		_install_pip3 pipx
+	fi
+	if ! python3 -m venv -h &>/dev/null; then
+		_install python3-venv
+	fi
+	pipx ensurepath &>/dev/null
+	echo "$@" | tr -d '\n' | xargs -d' ' -r -i sudo -E pip3 uninstall -q -y {} &>/dev/null | true
+	echo "$@" | tr -d '\n' | xargs -d' ' -r -i pip3 uninstall -q -y {} &>/dev/null | true
+	# shellcheck disable=SC2068
+	echo "$@" | tr -d '\n' | xargs -d' ' -r -i pipx install {} --pip-args=-q
+	set +e
+}
+
 function _install_snap() {
 	set -e
-	if ! command -v snap &>/dev/null; then
+	if ! exists snap; then
 		_install snapd
 	fi
 	# shellcheck disable=SC2068
@@ -116,7 +132,7 @@ function _install_snap() {
 
 function _install_pip() {
 	set -e
-	if ! command -v pip &>/dev/null; then
+	if ! exists pip; then
 		_install python-pip
 	fi
 	# shellcheck disable=SC2068
@@ -125,7 +141,7 @@ function _install_pip() {
 }
 
 function _install_gem() {
-	if ! command -v gem &>/dev/null; then
+	if ! exists gem; then
 		_install ruby ruby-dev
 	fi
 
@@ -136,7 +152,7 @@ function _install_gem() {
 updated=0
 function _update() {
 	if [[ $updated -eq 0 ]]; then
-		sudo -E apt-get -qq update -y
+		sudo -E apt-get update -y -qq
 	fi
 	updated=1
 }
@@ -230,13 +246,14 @@ function minimal() {
 	# Remote desktop
 	packages+=(remmina vinagre xserver-xephyr)
 
-
+	# Mouse and keyboard
+	packages+=(imwheel)
 	# Language and spell check
 	packages+=(aspell)
 
 	#git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d
 
-	if ! command -v google-chrome &>/dev/null; then
+	if ! exists google-chrome; then
 		_install_deb_from_url https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 	fi
 
@@ -244,7 +261,7 @@ function minimal() {
 	sudo -E ln -fs /opt/google/chrome/WidevineCdm /usr/lib/chromium-browser/WidevineCdm
 
 	# Audio
-	if ! command -v playerctl &>/dev/null; then
+	if ! exists playerctl; then
 		_install_deb_from_url https://github.com/altdesktop/playerctl/releases/download/v2.0.2/playerctl-2.0.2_amd64.deb
 	fi
 
@@ -335,13 +352,13 @@ function general() {
 
 	_add_repo_or_install_deb 'ppa:nextcloud-devs/client' 'nextcloud-client'
 
-	if ! command -v bat &>/dev/null; then
+	if ! exists bat; then
 		_install_deb_from_url https://github.com/sharkdp/bat/releases/download/v0.11.0/bat_0.11.0_amd64.deb
 	fi
 
 	_add_repo_or_install_deb 'ppa:mmstick76/alacritty' 'alacritty'
 
-	if ! command -v fd &>/dev/null; then
+	if ! exists fd; then
 		_install_deb_from_url https://github.com/sharkdp/fd/releases/download/v7.4.0/fd_7.4.0_amd64.deb
 	fi
 
@@ -423,18 +440,15 @@ function groups() {
 }
 
 function fonts() {
-	installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/SourceCodePro.zip SourceCodeProNerdFont
-	installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/FantasqueSansMono.zip FantasqueSansMono
-	installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/DroidSansMono.zip DroidSansMono
-	installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/DejaVuSansMono.zip DejaVuSansMono
-	installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/Iosevka.zip Iosevka
-	installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/Inconsolata.zip Inconsolata
+	installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/SourceCodePro.zip SourceCodeProNerdFont
+	installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/FantasqueSansMono.zip FantasqueSansMono
+	installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/DroidSansMono.zip DroidSansMono
+	installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/DejaVuSansMono.zip DejaVuSansMono
+	installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/Iosevka.zip Iosevka
+	installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/Inconsolata.zip Inconsolata
+	installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/JetBrainsMono.zip JetBrainsMono
 	installFontsFromZip https://github.com/IBM/plex/releases/download/v4.0.2/OpenType.zip "IBM Plex"
-	if [[ ! -d "$HOME/.local/share/fonts/Jetbrains Mono" ]]; then
-		mkdir -p "$HOME/.local/share/fonts/Jetbrains Mono"
-		curl -LsS https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/JetBrainsMono/Regular/complete/JetBrains%20Mono%20Regular%20Nerd%20Font%20Complete%20Mono.ttf -o "$HOME/.local/share/fonts/Jetbrains Mono/Jetbrains Mono Regular Nerd Font Complete Mono.ttf"
-		fontsAdded=1
-	fi
+
 	if [[ $fontsAdded -eq 1 ]]; then
 		fc-cache -f -v
 	fi
@@ -554,7 +568,7 @@ function usb_ssd() {
 
 
 function upgrade() {
-	_update; sudo -E apt "upgrade" -y
+	_update; sudo -E apt "upgrade" -y -qq
 	sudo -E apt install "linux-headers-$(uname -r)" dkms -y
 	sudo -E /sbin/vboxconfig
 	_autoremove
@@ -638,7 +652,7 @@ function qt_dev() {
 function jupyter() {
 	unset -f jupyter
 	_install_pip3 jupyterlab
-	npm install -g ijavascript && ijsinstall
+	npm install -g --silent ijavascript && ijsinstall
 	_install_pip3 bash_kernel && python3 -m bash_kernel.install
 	_install_pip3 gnuplot_kernel && python3 -m gnuplot_kernel install --user
 	_install_pip3 qtconsole pyqt5
@@ -647,29 +661,26 @@ function jupyter() {
 function dev() {
 	declare -a packages=()
 	sudo -E snap install snapcraft --classic
-	packages+=(apache2-utils multitail virt-what proot chroot)
+	packages+=(apache2-utils multitail virt-what proot)
 	_remove shellcheck
-	if ! command -v shellcheck &>/dev/null; then
+	if ! exists shellcheck; then
 		scversion="stable" # or "v0.4.7", or "latest"
 		wget -qO- "https://storage.googleapis.com/shellcheck/shellcheck-${scversion?}.linux.x86_64.tar.xz" | tar -xJv
 		sudo -E cp "shellcheck-${scversion}/shellcheck" /usr/bin/
 	fi
 
-	if ! command -v hadolint &>/dev/null; then
+	if ! exists hadolint; then
 		cd /tmp || exit 2
 		wget -qO- "https://github.com/hadolint/hadolint/releases/download/v1.17.3/hadolint-Linux-x86_64" > hadolint
 		sudo -E cp "hadolint" /usr/bin/
 		sudo -E chmod +x /usr/bin/hadolint
 	fi
 	packages+=(python3-venv python3-pip golang-go pandoc)
-	python3 -m pip install --user pipx
-	python3 -m pipx ensurepath
-
-	_install_pip3 mypy yamllint flake8 autopep8 vim-vint
+	_install_pipx mypy yamllint flake8 autopep8 vim-vint spybar
+	_install_pip3 dockerfile
 
 	# python3 version is not in pypi
 	pip install crudini
-	pip install spybar
 
 	if [[ ! -d ~/.mypyls ]]; then
 		python3 -m venv ~/.mypyls
@@ -678,27 +689,32 @@ function dev() {
 
 	_install_pip3 pre-commit
 
-	curl -sSL https://deb.nodesource.com/setup_12.x | sudo -E bash -
-	packages+=(nodejs meld)
+	curl -sSL https://deb.nodesource.com/setup_12.x | sudo -E bash - &>/dev/null
+	packages+=(nodejs build-essential meld)
 	packages+=(jq)
+	if ! exists yq; then
+		sudo -E curl -LsS https://github.com/mikefarah/yq/releases/download/3.0.1/yq_linux_amd64 -o /usr/local/bin/yq
+		sudo -E chmod +x /usr/local/bin/yq
+	fi
 
 	# Vscode dependencies
 	packages+=(libsecret-1-dev libx11-dev libxkbfile-dev)
 	_add_repo_or_install_deb 'ppa:rmescandon/yq' 'yq'
 
+	npm config set loglevel error
 	npm config set prefix "$HOME/.local"
-	npm install -g bash-language-server
-	npm install -g intelephense
-	npm install -g bats
-	npm install -g json
-	npm install -g fixjson jsonlint
-	npm install -g eslint
-	npm install -g markdownlint-cli
-	npm install -g @marp-team/marp-cli
-	npm install -g yarn
-	npm install -g gulp
+	npm install -g --silent bash-language-server
+	npm install -g --silent intelephense
+	npm install -g --silent bats
+	npm install -g --silent json
+	npm install -g --silent fixjson jsonlint
+	npm install -g --silent eslint
+	npm install -g --silent markdownlint-cli
+	npm install -g --silent @marp-team/marp-cli
+	npm install -g --silent yarn
+	npm install -g --silent gulp
 
-	if ! command -v circleci &>/dev/null; then
+	if ! exists circleci; then
 		curl -sSL https://circle.ci/cli | sudo -E bash
 		sudo groupadd -g 3434 circleci
 		sudo useradd -u 3434 -g circleci circleci 
@@ -708,7 +724,7 @@ function dev() {
 	# Gnu global and exuberant ctags
 	packages+=(global ctags)
 
-	if ! command -v checkmake &>/dev/null; then
+	if ! exists checkmake; then
 		go get github.com/mrtazz/checkmake
 		cd "$GOPATH/src/github.com/mrtazz/checkmake"
 		sudo make PREFIX=/usr/local clean install    
@@ -741,13 +757,13 @@ function php() {
 	_install_pip3 mycli
 
 
-	# if ! command -v composer &>/dev/null; then
+	# if ! exists composer; then
 		# shellcheck disable=SC2091
 		curl -sSL https://getcomposer.org/installer | $(command -v php) && sudo -E mv composer.phar /usr/local/bin/composer
 	# fi
 
 
-	# if ! command -v phive &>/dev/null; then
+	# if ! exists phive; then
 		wget -O phive.phar https://phar.io/releases/phive.phar
 		wget -O phive.phar.asc https://phar.io/releases/phive.phar.asc
 		gpg --keyserver pool.sks-keyservers.net --recv-keys 0x9D8A98B29B2D5D79
@@ -785,12 +801,12 @@ function docker() {
 		software-properties-common \
 		qemu-user-static
 
-	if ! command -v ctop &>/dev/null; then
+	if ! exists ctop; then
 		sudo -E curl -sSL https://github.com/bcicen/ctop/releases/download/v0.7.2/ctop-0.7.2-linux-amd64 -o /usr/local/bin/ctop
 		sudo -E chmod +x /usr/local/bin/ctop
 	fi
 
-	if ! command -v docker &>/dev/null; then
+	if ! exists docker; then
 		curl -sSL https://download.docker.com/linux/ubuntu/gpg | sudo -E apt-key add -
 		sudo -E apt-key fingerprint 0EBFCD88
 		sudo -E add-apt-repository \
@@ -802,17 +818,17 @@ function docker() {
 		sudo -E usermod -aG "docker" "$(whoami)"
 	fi
 
-	if ! command -v docker-compose &>/dev/null; then
+	if ! exists docker-compose; then
 		sudo -E curl -sSL "https://github.com/docker/compose/releases/download/1.25.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 		sudo -E chmod +x /usr/local/bin/docker-compose
 	fi
 
-	if ! command -v dockerize &>/dev/null; then
+	if ! exists dockerize; then
 		sudo -E curl -sSL "https://github.com/jwilder/dockerize/releases/download/v0.6.1/dockerize-linux-amd64-v0.6.1.tar.gz" -o /usr/local/bin/dockerize
 		sudo -E chmod +x /usr/local/bin/dockerize
 	fi
 
-	if ! command -v docker-machine &>/dev/null; then
+	if ! exists docker-machine; then
 		base=https://github.com/docker/machine/releases/download/v0.16.2
 	  	curl -sSL "$base/docker-machine-$(uname -s)-$(uname -m)" >/tmp/docker-machine
 	  	sudo mv /tmp/docker-machine /usr/local/bin/docker-machine
@@ -831,13 +847,13 @@ function docker() {
 	# fi
 
 	cd "${TMPDIR}"
-	if ! command -v lazydocker &>/dev/null; then
+	if ! exists lazydocker; then
 		curl -sSL https://github.com/jesseduffield/lazydocker/releases/download/v0.7.1/lazydocker_0.7.1_Linux_x86_64.tar.gz > lazydocker.tgz
 		tar xzf lazydocker.tgz
 		sudo -E install lazydocker /usr/local/bin/
 	fi
 
-	if ! command -v dry &>/dev/null; then
+	if ! exists dry; then
 		curl -sSf https://moncho.github.io/dry/dryup.sh | sudo sh
 		sudo chmod 755 /usr/local/bin/dry
 	fi

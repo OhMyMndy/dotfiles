@@ -24,6 +24,7 @@ link-file "$DIR" ".config/copyq/copyq-commands.ini"
 link-file "$DIR" ".config/Thunar/uca.xml"
 
 link-file "$DIR" ".spacemacs"
+link-file "$DIR" ".imwheelrc"
 
 
 link-file "$DIR" ".config/compton"
@@ -90,7 +91,7 @@ if [[ -d ~/bin/bin ]]; then
 fi
 
 
-if ! command -v fzf &>/dev/null && ! is_android
+if ! exists fzf && ! is_android
 then
 	git clone --depth 1 -q https://github.com/junegunn/fzf.git ~/.fzf
 	yes | ~/.fzf/install >/dev/null
@@ -119,7 +120,7 @@ bash "$DIR/installers/apps/oh-my-zsh.sh"
 
 create_remmina_desktop_files
 
-if command -v sudo &>/dev/null && [[ ! -f /etc/profile.d/homedir-path.sh ]]; then
+if exists sudo && [[ ! -f /etc/profile.d/homedir-path.sh ]]; then
 	sudo ln -sf "$DIR/profile.d/homedir-path.sh" /etc/profile.d/homedir-path.sh
 fi
 
@@ -140,7 +141,7 @@ then
 fi
 
 
-if command -v sudo &>/dev/null && [[ ! -f /etc/sudoers.d/expressvpn ]]; then
+if exists sudo && [[ ! -f /etc/sudoers.d/expressvpn ]]; then
 	echo "Adding expressvpn rule to sudoers file"
 	echo "%sudo ALL=(root) NOPASSWD: /home/mandy/bin/expressvpn-mandy" | sudo tee /etc/sudoers.d/expressvpn &>/dev/null
 fi

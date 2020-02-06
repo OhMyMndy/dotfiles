@@ -1,0 +1,21 @@
+# Speed up scrolling for chromium and pass unchanged for zoom
+"^chromium-browser$"
+    None, Up, Right, 4
+    None, Down, Thumb1, 4
+    Shift_L,   Up,   Left, 2
+    Shift_L,   Down,   Right, 2
+    #Shift_L,   Up,   Right, 10
+    #Shift_L,   Down, Thumb1, 10
+    Control_L, Up,   Control_L|Up
+    Control_L, Down, Control_L|Down
+
+
+"^Thunar$"
+    None, Up, Right, 4
+    None, Down, Thumb1, 4
+    Shift_L,   Up,   Left, 2
+    Shift_L,   Down,   Right, 2
+    #Shift_L,   Up,   Right, 10
+    #Shift_L,   Down, Thumb1, 10
+    Control_L, Up,   Control_L|Up
+    Control_L, Down, Control_L|Down

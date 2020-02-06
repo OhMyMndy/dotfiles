@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=0.9.4
+Type=Application
+Name=Imwheel
+Comment=
+Exec=imwheel -d
+StartupNotify=false
+Terminal=false
+Hidden=false
