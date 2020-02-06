@@ -24,7 +24,7 @@ function vim() {
 
         link-file "$ROOT_DIR" ".vim/coc-settings.json"
 
-        find ~/.vim/bundle -maxdepth 1 -type d ! -path . -print0 | xargs -0 -r -i bash -c "cd {}/.git 2>/dev/null && cd .. && git pull -q" | true
+        find ~/.vim/bundle -maxdepth 1 -type d ! -path . -print0 | xargs -0 -r -i bash -c "cd {}/.git 2>/dev/null && cd .. && git pull -q"
         # command vim -c 'CocInstall -sync coc-highlight coc-json coc-html coc-phpls coc-python coc-markdownlint |q'
     }
 }
@@ -46,7 +46,7 @@ function tmux() {
         # shellcheck disable=SC1091
         # shellcheck source=/dev/null
         "$HOME/.tmux/plugins/tpm/bin/install_plugins" >/dev/null
-        command tmux source ~/.tmux.conf &>/dev/null | true
+        command tmux source ~/.tmux.conf &>/dev/null
     }
 }
 

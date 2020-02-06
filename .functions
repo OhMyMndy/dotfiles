@@ -389,7 +389,9 @@ remove_wine_desktop_files() {
 }
 
 create_remmina_desktop_files() {
-	rm ~/.local/share/applications/remmina-connection-* 2>/dev/null
+	find ~/.local/share/applications/ -type f -name 'remmina-connection-*' | while read -r file; do
+		rm "$file"
+	done
 	if [ ! -d ~/.remmina ]; then
 		return
 	fi
