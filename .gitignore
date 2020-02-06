@@ -10,14 +10,14 @@
 *.last-run
 .tmux/plugins/*
 .vim/bundle/*
-.oh-my-zsh/custom/plugins
+# .oh-my-zsh/custom/plugins
 sublime-text-2
 sublime-text-3
 *.vscode
 .history/*
 *node_modules*
 heidisql
-.oh-my-zsh
+# .oh-my-zsh
 .DS_Store
 .idea
 __pycache__
