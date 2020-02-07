@@ -102,6 +102,26 @@ detect_os() {
 }
 
 
+cpu_architecture() {
+	if exists uname; then
+		uname -m
+	fi
+}
+
+cpu_architecture_simple() {
+	cpu_architecture="$(cpu_architecture)"
+	if [[ $cpu_architecture = 'x86_64' ]]; then
+		echo "amd64"
+	elif [[ $cpu_architecture = 'i686' ]]; then
+		echo "i386"		
+	elif [[ $cpu_architecture = 'aarch64' ]]; then
+		echo "arm64"
+	elif [[ $cpu_architecture = 'aarch32' ]]; then
+		echo "armhf"
+	fi
+	
+}
+
 # @see https://github.com/kepkin/dev-shell-essentials/blob/master/highlight.sh
 highlight() {
 	declare -A fg_color_map

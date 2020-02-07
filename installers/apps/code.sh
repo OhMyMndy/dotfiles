@@ -10,6 +10,27 @@ function install() {
     code --install-extension "$@" >/dev/null
 }
 
+function write_setting() {
+    settings_file="$HOME/.config/Code/User/settings.json"
+    if [[ ! -f $settings_file ]]; then
+        mkdir -p "$(dirname "$settings_file")"
+        echo "{}" > "$settings_file"
+    fi
+    
+    json -f "$settings_file" -I -e "$@"
+}
+
+function settings() {
+    write_setting "this['git.autofetch'] = true"
+    write_setting "this['terminal.integrated.minimumContrastRatio'] = 9"
+    write_setting "this['terminal.integrated.drawBoldTextInBrightColors'] = false"
+    write_setting "this['files.exclude'] = { \"**/.*.un~\": true, \"**/.history/**\": true }"
+    write_setting "this['files.watcherExclude'] = { \"**/.*.un~\": true, \"**/.history/**\": true }"
+    write_setting "this['shellcheck.customArgs'] = [ '-x' ]"
+}
+
+settings
+
 # @see https://itnext.io/why-i-wrote-33-vscode-extensions-and-how-i-manage-them-cb61df05e154
 
 # Project management

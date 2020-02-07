@@ -14,15 +14,6 @@
 	<video-files/>
 </action>
 <action>
-	<icon>filefind</icon>
-	<name>Find in this folder</name>
-	<unique-id>1568718917024050-3</unique-id>
-	<command>catfish --path=%f</command>
-	<description>Search for files within this folder</description>
-	<patterns>*</patterns>
-	<directories/>
-</action>
-<action>
 	<icon>document-print</icon>
 	<name>Print file/s</name>
 	<unique-id>1568718917024059-4</unique-id>
@@ -63,9 +54,9 @@
 	<directories/>
 </action>
 <action>
-	<icon></icon>
+	<icon>folder-black</icon>
 	<name>Folder size</name>
-	<unique-id>1576961514737655-2</unique-id>
+	<unique-id>1581078102031631-1</unique-id>
 	<command>du -h -d 1 -c %d 2&gt;&amp;1| zenity --text-info --width=600 --height=500</command>
 	<description></description>
 	<patterns>*</patterns>
