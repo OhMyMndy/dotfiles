@@ -41,6 +41,16 @@ function _install_deb_from_url() {
 	sudo -E apt-get -qq install -f -y
 }
 
+function _is_x_package() {
+	{
+		set +e; sudo -E apt-rdepends $@ 2>/dev/null| grep 'Depends: libx11' &>/dev/null 
+}
+}
+
+function _is_installed() {
+	apt list -qq "$@" 2>/dev/null | grep 'installed' &>/dev/null
+}
+
 function _add_repo_or_install_deb() {
 	local repo="$1"
 	local package_name="$2"
@@ -73,6 +83,12 @@ function _add_repository() {
 	# shellcheck disable=SC2068
 	sudo -E add-apt-repository -y "$@"
 }
+
+install_x=0
+function no-x() {
+	install_x=1
+}
+
 
 function _install() {
 	# echo "Installing '$*' through apt"
@@ -224,7 +240,7 @@ function minimal() {
 	packages+=(hyphen-en-gb hyphen-nl hunspell aspell-nl hunspell-nl aspell-en hunspell-en-gb hunspell-en-us hunspell-no aspell-no libgspell-1-1 libgtkspell0 python3-hunspell python-hunspell)
 
 	# Apt tools
-	packages+=(apt-file wajig)
+	packages+=(apt-file wajig apt-rdepends gnome-software)
 
 	packages+=(xmlstarlet)
 
@@ -235,10 +251,10 @@ function minimal() {
 
 	_remove xfce4-appmenu-plugin
 	
-	_add_repo_or_install_deb 'ppa:hluk/copyq' 'copyq' 'https://github.com/hluk/CopyQ/releases/download/v3.9.3/copyq_3.9.3_Debian_10-1_amd64.deb'
+	_add_repo_or_install_deb 'ppa:hluk/copyq' 'copyq' "https://github.com/hluk/CopyQ/releases/download/v3.9.3/copyq_3.9.3_Debian_10-1_$(cpu_architecture_simple).deb"
 
 	# File management and disk plugins
-	packages+=(cifs-utils exfat-fuse exfat-utils samba hfsprogs cdck ncdu mtp-tools)
+	packages+=(cifs-utils exfat-fuse exfat-utils samba hfsprogs cdck ncdu mtp-tools ranger)
 
 	# File management and disk plugins X
 	packages+=(thunar pcmanfm gnome-disk-utility)
@@ -254,7 +270,7 @@ function minimal() {
 	#git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d
 
 	if ! exists google-chrome; then
-		_install_deb_from_url https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+		_install_deb_from_url "https://dl.google.com/linux/direct/google-chrome-stable_current_$(cpu_architecture_simple).deb"
 	fi
 
 	# Fix for DRM in Chromium becaue winevinecdm is a proprietary piece of code
@@ -262,7 +278,7 @@ function minimal() {
 
 	# Audio
 	if ! exists playerctl; then
-		_install_deb_from_url https://github.com/altdesktop/playerctl/releases/download/v2.0.2/playerctl-2.0.2_amd64.deb
+		_install_deb_from_url "https://github.com/altdesktop/playerctl/releases/download/v2.0.2/playerctl-2.0.2_$(cpu_architecture_simple).deb"
 	fi
 
 	# Editors
@@ -276,8 +292,8 @@ function minimal() {
 	packages+=(python python-gtk2 python-xlib python-dbus python-setuptools libpango-1.0)
 
 	_install "${packages[*]}"
-	_install_deb_from_url 'http://ftp.nl.debian.org/debian/pool/main/g/gnome-python-desktop/python-wnck_2.32.0+dfsg-3_amd64.deb'
-	_install_pip https://github.com/ssokolow/quicktile/archive/master.zip
+	# _install_deb_from_url "http://ftp.nl.debian.org/debian/pool/main/g/gnome-python-desktop/python-wnck_2.32.0+dfsg-3_$(cpu_architecture_simple).deb"
+	# _install_pip https://github.com/ssokolow/quicktile/archive/master.zip
 
 
  	_install_pip3 git+https://github.com/jeffkaufman/icdiff.git
@@ -353,13 +369,13 @@ function general() {
 	_add_repo_or_install_deb 'ppa:nextcloud-devs/client' 'nextcloud-client'
 
 	if ! exists bat; then
-		_install_deb_from_url https://github.com/sharkdp/bat/releases/download/v0.11.0/bat_0.11.0_amd64.deb
+		_install_deb_from_url "https://github.com/sharkdp/bat/releases/download/v0.11.0/bat_0.11.0_$(cpu_architecture_simple).deb"
 	fi
 
 	_add_repo_or_install_deb 'ppa:mmstick76/alacritty' 'alacritty'
 
 	if ! exists fd; then
-		_install_deb_from_url https://github.com/sharkdp/fd/releases/download/v7.4.0/fd_7.4.0_amd64.deb
+		_install_deb_from_url "https://github.com/sharkdp/fd/releases/download/v7.4.0/fd_7.4.0_$(cpu_architecture_simple).deb"
 	fi
 
 	if ! command -v x11docker &>/dev/null; then
@@ -387,7 +403,7 @@ function general() {
 	remove_obsolete
 	_install_pip3 thefuck numpy csvkit httpie
 
-	install_deb_from_url https://github.com/TheAssassin/AppImageLauncher/releases/download/v2.1.0/appimagelauncher_2.1.0-travis897.d1be7e7.bionic_amd64.deb
+	install_deb_from_url "https://github.com/TheAssassin/AppImageLauncher/releases/download/v2.1.0/appimagelauncher_2.1.0-travis897.d1be7e7.bionic_$(cpu_architecture_simple).deb"
 
 	sudo -E curl -LsS https://dystroy.org/broot/download/x86_64-linux/broot -o /usr/local/bin/broot
 	sudo -E chmod +x /usr/local/bin/broot
@@ -414,8 +430,8 @@ function shutter() {
 	if [[ $DISTRIB_RELEASE = "18.04" ]]
 	then
 		_install_deb_from_url "https://launchpad.net/ubuntu/+archive/primary/+files/libgoocanvas-common_1.0.0-1_all.deb"
-		_install_deb_from_url "https://launchpad.net/ubuntu/+archive/primary/+files/libgoocanvas3_1.0.0-1_amd64.deb"
-		_install_deb_from_url "https://launchpad.net/ubuntu/+archive/primary/+files/libgoo-canvas-perl_0.06-2ubuntu3_amd64.deb"
+		_install_deb_from_url "https://launchpad.net/ubuntu/+archive/primary/+files/libgoocanvas3_1.0.0-1_$(cpu_architecture_simple).deb"
+		_install_deb_from_url "https://launchpad.net/ubuntu/+archive/primary/+files/libgoo-canvas-perl_0.06-2ubuntu3_$(cpu_architecture_simple).deb"
 	fi
 	_install "shutter"
 
@@ -520,15 +536,20 @@ function locale() {
 function virtualbox() {
 	unset -f virtualbox
 	if [ ! -f /etc/apt/sources.list.d/virtualbox.list ]; then
-		echo "deb [arch=amd64] https://download.virtualbox.org/virtualbox/debian $(grep '^DISTRIB_CODENAME=' /etc/lsb-release | cut -f2 -d=) contrib" | sudo -E tee /etc/apt/sources.list.d/virtualbox.list
+		echo "deb [arch=$(cpu_architecture_simple)] https://download.virtualbox.org/virtualbox/debian $(grep '^DISTRIB_CODENAME=' /etc/lsb-release | cut -f2 -d=) contrib" | sudo -E tee /etc/apt/sources.list.d/virtualbox.list
 		wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo apt-key add -
 		wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | sudo apt-key add -
 	fi
 	_update
-	sudo -E apt remove -y 'virtualbox*'
-	sudo -E pkill -e -f -9 VBox
+	_remove 'virtualbox*'
+	sudo -E pkill -e -f -9 VBox | true
 	packages+=(VirtualBox-6.1)
 	_install "${packages[*]}" 
+	vagrant
+}
+
+function vagrant() {
+	_install_deb_from_url https://releases.hashicorp.com/vagrant/2.2.7/vagrant_2.2.7_x86_64.deb
 }
 
 function i3() {
@@ -543,7 +564,8 @@ function i3() {
 	# 	_update
 	# fi
 	declare -a packages=()
-	packages+=(udiskie compton nitrogen feh xfce4-panel pcmanfm spacefm rofi ssh-askpass-gnome)
+	_remove spacefm
+	packages+=(udiskie compton nitrogen feh xfce4-panel pcmanfm rofi ssh-askpass-gnome)
 	packages+=("i3" i3blocks i3lock)
 	packages+=(dmenu rofi)
 	_install "${packages[*]}" 
@@ -611,8 +633,8 @@ function uninstall-kde() {
 function privacy() {
 	# packages+=(torbrowser-launcher)
 	# @todo add expressvpn
-	_install_deb_from_url "https://s3.amazonaws.com/purevpn-dialer-assets/linux/app/purevpn_1.2.2_amd64.deb"
-	_install_deb_from_url "https://download.expressvpn.xyz/clients/linux/expressvpn_2.3.4-1_amd64.deb"
+	_install_deb_from_url "https://s3.amazonaws.com/purevpn-dialer-assets/linux/app/purevpn_1.2.2_$(cpu_architecture_simple).deb"
+	_install_deb_from_url "https://download.expressvpn.xyz/clients/linux/expressvpn_2.3.4-1_$(cpu_architecture_simple).deb"
 }
 
 
@@ -660,7 +682,9 @@ function jupyter() {
 
 function dev() {
 	declare -a packages=()
+	if exists snap && ! exists snapcraft; then
 	sudo -E snap install snapcraft --classic
+	fi
 	packages+=(apache2-utils multitail virt-what proot)
 	_remove shellcheck
 	if ! exists shellcheck; then
@@ -693,13 +717,12 @@ function dev() {
 	packages+=(nodejs build-essential meld)
 	packages+=(jq)
 	if ! exists yq; then
-		sudo -E curl -LsS https://github.com/mikefarah/yq/releases/download/3.0.1/yq_linux_amd64 -o /usr/local/bin/yq
+		sudo -E curl -LsS "https://github.com/mikefarah/yq/releases/download/3.0.1/yq_linux_$(cpu_architecture_simple)" -o /usr/local/bin/yq
 		sudo -E chmod +x /usr/local/bin/yq
 	fi
 
 	# Vscode dependencies
 	packages+=(libsecret-1-dev libx11-dev libxkbfile-dev)
-	_add_repo_or_install_deb 'ppa:rmescandon/yq' 'yq'
 
 	npm config set loglevel error
 	npm config set prefix "$HOME/.local"
@@ -731,10 +754,12 @@ function dev() {
 	fi
 
 	_install "${packages[*]}" 
-	sudo -E snap install multipass --classic
-	sudo -E snap install lxd
-	sudo -E lxd init --auto
-	sudo usermod -aG lxd "$(whoami)"
+	if exists snap; then
+		sudo -E snap install multipass --classic
+		sudo -E snap install lxd
+		sudo -E lxd init --auto
+		sudo usermod -aG lxd "$(whoami)"
+	fi
 }
 
 
@@ -802,7 +827,7 @@ function docker() {
 		qemu-user-static
 
 	if ! exists ctop; then
-		sudo -E curl -sSL https://github.com/bcicen/ctop/releases/download/v0.7.2/ctop-0.7.2-linux-amd64 -o /usr/local/bin/ctop
+		sudo -E curl -sSL "https://github.com/bcicen/ctop/releases/download/v0.7.2/ctop-0.7.2-linux-$(cpu_architecture_simple)" -o /usr/local/bin/ctop
 		sudo -E chmod +x /usr/local/bin/ctop
 	fi
 
@@ -810,7 +835,7 @@ function docker() {
 		curl -sSL https://download.docker.com/linux/ubuntu/gpg | sudo -E apt-key add -
 		sudo -E apt-key fingerprint 0EBFCD88
 		sudo -E add-apt-repository \
-			"deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+			"deb [arch=$(cpu_architecture_simple)] https://download.docker.com/linux/ubuntu \
 			$(lsb_release -cs) \
 			stable"
 		_update
@@ -824,7 +849,7 @@ function docker() {
 	fi
 
 	if ! exists dockerize; then
-		sudo -E curl -sSL "https://github.com/jwilder/dockerize/releases/download/v0.6.1/dockerize-linux-amd64-v0.6.1.tar.gz" -o /usr/local/bin/dockerize
+		sudo -E curl -sSL "https://github.com/jwilder/dockerize/releases/download/v0.6.1/dockerize-linux-$(cpu_architecture_simple)-v0.6.1.tar.gz" -o /usr/local/bin/dockerize
 		sudo -E chmod +x /usr/local/bin/dockerize
 	fi
 
@@ -986,7 +1011,7 @@ function ibus_config() {
 function autostart() {
 	mkdir -p ~/.config/autostart
 
-	ln -s "${ROOT_DIR}"/.config/autostart/*.desktop ~/.config/autostart/ 2>/dev/null
+	ln -s "${ROOT_DIR}"/.config/autostart/*.desktop ~/.config/autostart/ 2>/dev/null | true
 
 
 	ln -sf /usr/share/applications/ulauncher.desktop ~/.config/autostart/
@@ -995,9 +1020,8 @@ function autostart() {
 	ln -sf /usr/share/applications/com.github.hluk.copyq.desktop ~/.config/autostart/
 	ln -sf /usr/share/applications/nextcloud.desktop ~/.config/autostart/
 	ln -sf /usr/share/applications/shutter.desktop ~/.config/autostart/
-	glxinfo | grep -i "accelerated: no" &>/dev/null
 	# shellcheck disable=SC1073,SC2181
-	if [[ $? -ne 0 ]]; then
+	if glxinfo | grep -i "accelerated: no" &>/dev/null; then
 		ln -sf "$ROOT_DIR/.local/share/applications/Compton.desktop" ~/.config/autostart/
 	fi
 	find ~/.config/autostart/ -xtype l -delete
