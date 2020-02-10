@@ -115,7 +115,7 @@ function xfce_settings() {
 		xfconf-query -c xfwm4 -p /general/cycle_preview -s false
 		xfconf-query -c xfwm4 -p /general/mousewheel_rollup -s false
 		xfconf-query -c xfwm4 -p /general/workspace_names -n -t string -t string -t string -t string -t string -t string -t string -t string -t string -t string -s "1" -s "2" -s "3" -s "4" -s "5" -s "6" -s "7" -s "8" -s "9" -s "10"
-		xfconf-query -c xfwm4 -p /general/workspace_count -s 10
+		xfconf-query -c xfwm4 -p /general/workspace_count -s 4
 
 
  		xfconf-query -c xfce4-session -p /compat/LaunchGNOME -s true
