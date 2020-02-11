@@ -292,7 +292,7 @@ function installFontsFromZip() {
 
 	if [ ! -d "$fontName" ]; then
 		rm -f "${TMPDIR:-/tmp}/$fontName.zip"
-			curl -fLo "${TMPDIR:-/tmp}/$fontName.zip" "$fontUrl"
+		curl -LsSo "${TMPDIR:-/tmp}/$fontName.zip" "$fontUrl"
 		unzip "${TMPDIR:-/tmp}/$fontName.zip" -d "$fontName"
 		fontsAdded=1
 		deleteWindowsFonts

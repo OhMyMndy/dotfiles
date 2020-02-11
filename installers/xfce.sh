@@ -30,6 +30,7 @@ function xfce_keybindings() {
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Alt>Print" -s "shutter -s" -t "string"
 
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Super>d" -s "rofi -show" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Super>slash" -s "$HOME/src/splatmoji/splatmoji type" -t "string"
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Super>Escape" -s "xkill" -t "string"
 
 

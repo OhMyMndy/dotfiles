@@ -220,8 +220,8 @@ function minimal() {
 	# Cli browser with inline images
 	packages+=(w3m w3m-img)
 
-	# Spelling
-	packages+=(hyphen-en-gb hyphen-nl hunspell aspell-nl hunspell-nl aspell-en hunspell-en-gb hunspell-en-us hunspell-no aspell-no libgspell-1-1 libgtkspell0 python3-hunspell python-hunspell)
+	# Spelling  python-hunspell
+	packages+=(hyphen-en-gb hyphen-nl hunspell aspell-nl hunspell-nl aspell-en hunspell-en-gb hunspell-en-us hunspell-no aspell-no libgspell-1-1 libgtkspell0 python3-hunspell )
 
 	# Apt tools
 	packages+=(apt-file wajig)
@@ -229,9 +229,9 @@ function minimal() {
 	packages+=(xmlstarlet)
 
 	# Esential X tools
-	# kdeconnect
-	packages+=("shutter" redshift-gtk xfce4-terminal xfce4-genmon-plugin chromium-browser seahorse galculator orage ristretto 
-		xsel xclip arandr wmctrl xscreensaver flatpak compton)
+	# kdeconnect   shutter
+	packages+=(redshift-gtk xfce4-terminal xfce4-genmon-plugin chromium-browser seahorse galculator orage ristretto 
+		xsel xclip arandr wmctrl xscreensaver flatpak compton rofi xdotool)
 
 	_remove xfce4-appmenu-plugin
 	
@@ -258,7 +258,7 @@ function minimal() {
 	fi
 
 	# Fix for DRM in Chromium becaue winevinecdm is a proprietary piece of code
-	sudo -E ln -fs /opt/google/chrome/WidevineCdm /usr/lib/chromium-browser/WidevineCdm
+#	sudo -E ln -fs /opt/google/chrome/WidevineCdm /usr/lib/chromium-browser/WidevineCdm
 
 	# Audio
 	if ! exists playerctl; then
@@ -268,16 +268,16 @@ function minimal() {
 	# Editors
 	packages+=(geany vim-gtk3)
 
-	# Archiving
-	packages+=(engrampa unzip unrar p7zip-full ecm)
+	# Archiving    ecm
+	packages+=(engrampa unzip unrar p7zip) # of p7zip-full on 1804
 
 	# Window managing
 	# quicktile dependencies
 	packages+=(python python-gtk2 python-xlib python-dbus python-setuptools libpango-1.0)
 
 	_install "${packages[*]}"
-	_install_deb_from_url 'http://ftp.nl.debian.org/debian/pool/main/g/gnome-python-desktop/python-wnck_2.32.0+dfsg-3_amd64.deb'
-	_install_pip https://github.com/ssokolow/quicktile/archive/master.zip
+	# _install_deb_from_url 'http://ftp.nl.debian.org/debian/pool/main/g/gnome-python-desktop/python-wnck_2.32.0+dfsg-3_amd64.deb'
+	# _install_pip https://github.com/ssokolow/quicktile/archive/master.zip
 
 
  	_install_pip3 git+https://github.com/jeffkaufman/icdiff.git
@@ -302,7 +302,8 @@ function minimal() {
 
 function themes() {
 	declare -a packages=()
-	packages+=(arc-theme bluebird-gtk-theme moka-icon-theme xfwm4-themes pocillo-icon-theme materia-gtk-theme)
+	# xfwm4-themes pocillo-icon-theme materia-gtk-theme
+	packages+=(arc-theme bluebird-gtk-theme moka-icon-theme)
 	_install "${packages[*]}" 
 }
 
@@ -368,7 +369,7 @@ function general() {
 
 	_add_repo_or_install_deb 'ppa:lazygit-team/release' 'lazygit'
 
-	_add_repo_or_install_deb 'ppa:webupd8team/indicator-kdeconnect' 'indicator-kdeconnect'
+	# _add_repo_or_install_deb 'ppa:webupd8team/indicator-kdeconnect' 'indicator-kdeconnect'
 
 	if ! apt-get -qq list papirus-icon-theme 2>/dev/null | grep -i -q installed
 	then
@@ -382,7 +383,7 @@ function general() {
 	_install "${packages[*]}" 
 
 
-	ibus_typing_booster
+	# ibus_typing_booster
 
 	remove_obsolete
 	_install_pip3 thefuck numpy csvkit httpie
@@ -570,7 +571,9 @@ function usb_ssd() {
 function upgrade() {
 	_update; sudo -E apt "upgrade" -y -qq
 	sudo -E apt install "linux-headers-$(uname -r)" dkms -y
-	sudo -E /sbin/vboxconfig
+	if [[ -f /sbin/vboxconfig ]]; then
+		sudo -E /sbin/vboxconfig
+	fi
 	_autoremove
 }
 
@@ -588,12 +591,13 @@ function media() {
 function chat() {
 	_install_snap slack --classic
 	# Use deb to make use of fonts-noto-color-emoji
-	_install_deb_from_url https://discordapp.com/api/download?platform=linux\&format=deb
+	_install_deb_from_url https://discordapp.com/api/download?platform=linux\&format=deb | true
+	sudo -E apt install -qq -y -f
 
-	if ! command -v Station.AppImage &>/dev/null; then
-		curl -LSs https://github.com/getstation/desktop-app-releases/releases/download/1.63.4/Station-1.63.4-x86_64.AppImage -o ~/.local/bin/Station.AppImage
-		chmod +x ~/.local/bin/Station.AppImage
-	fi
+	# if ! command -v Station.AppImage &>/dev/null; then
+	# 	curl -LSs https://github.com/getstation/desktop-app-releases/releases/download/1.63.4/Station-1.63.4-x86_64.AppImage -o ~/.local/bin/Station.AppImage
+	# 	chmod +x ~/.local/bin/Station.AppImage
+	# fi
 }
 
 function kde() {
@@ -675,7 +679,9 @@ function dev() {
 		sudo -E cp "hadolint" /usr/bin/
 		sudo -E chmod +x /usr/bin/hadolint
 	fi
-	packages+=(python3-venv python3-pip golang-go pandoc)
+	packages+=(python3-dev python3-pip python3-venv python3-wheel golang-go pandoc)
+	_install "${packages[*]}"
+	packages=()
 	_install_pipx mypy yamllint flake8 autopep8 vim-vint spybar
 	_install_pip3 dockerfile
 
@@ -689,7 +695,7 @@ function dev() {
 
 	_install_pip3 pre-commit
 
-	curl -sSL https://deb.nodesource.com/setup_12.x | sudo -E bash - &>/dev/null
+	curl -sSL https://deb.nodesource.com/setup_12.x | sudo -E bash - >/dev/null
 	packages+=(nodejs build-essential meld)
 	packages+=(jq)
 	if ! exists yq; then
@@ -700,7 +706,8 @@ function dev() {
 	# Vscode dependencies
 	packages+=(libsecret-1-dev libx11-dev libxkbfile-dev)
 	_add_repo_or_install_deb 'ppa:rmescandon/yq' 'yq'
-
+	
+	_install nodejs
 	npm config set loglevel error
 	npm config set prefix "$HOME/.local"
 	npm install -g --silent bash-language-server
@@ -799,24 +806,25 @@ function docker() {
 		curl \
 		gnupg2 \
 		software-properties-common \
-		qemu-user-static
+		qemu-user-static \
+		docker.io
 
 	if ! exists ctop; then
 		sudo -E curl -sSL https://github.com/bcicen/ctop/releases/download/v0.7.2/ctop-0.7.2-linux-amd64 -o /usr/local/bin/ctop
 		sudo -E chmod +x /usr/local/bin/ctop
 	fi
 
-	if ! exists docker; then
-		curl -sSL https://download.docker.com/linux/ubuntu/gpg | sudo -E apt-key add -
-		sudo -E apt-key fingerprint 0EBFCD88
-		sudo -E add-apt-repository \
-			"deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-			$(lsb_release -cs) \
-			stable"
-		_update
-		_install docker-ce
-		sudo -E usermod -aG "docker" "$(whoami)"
-	fi
+	# if ! exists docker; then
+	# 	curl -sSL https://download.docker.com/linux/ubuntu/gpg | sudo -E apt-key add -
+	# 	sudo -E apt-key fingerprint 0EBFCD88
+	# 	sudo -E add-apt-repository \
+	# 		"deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+	# 		$(lsb_release -cs) \
+	# 		stable"
+	# 	_update
+	# 	_install docker-ce
+	# 	sudo -E usermod -aG "docker" "$(whoami)"
+	# fi
 
 	if ! exists docker-compose; then
 		sudo -E curl -sSL "https://github.com/docker/compose/releases/download/1.25.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
