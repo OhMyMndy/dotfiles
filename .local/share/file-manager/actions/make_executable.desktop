@@ -1,0 +1,29 @@
+[Desktop Entry]
+Type=Action
+Name=Run Slideshow
+Name[ru]=Запустить слайдшоу
+Icon=image-x-generic
+Profiles=viewnior_on_folder;viewnior_on_images;gpicview_on_folder;gpicview_on_images;
+
+[X-Action-Profile viewnior_on_folder]
+TryExec=viewnior
+Exec=viewnior --fullscreen --slideshow %f
+MimeTypes=inode/directory;
+
+[X-Action-Profile viewnior_on_images]
+TryExec=viewnior
+Exec=viewnior --fullscreen --slideshow %F
+MimeTypes=image/*;
+SelectionCount=>1
+
+[X-Action-Profile gpicview_on_folder]
+TryExec=gpicview
+Exec=gpicview --slideshow %f
+MimeTypes=inode/directory;
+
+[X-Action-Profile gpicview_on_images]
+TryExec=gpicview
+#Bug: gpicview shows other images after selected
+Exec=gpicview --slideshow %F
+MimeTypes=image/*;
+SelectionCount=>1

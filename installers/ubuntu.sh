@@ -41,6 +41,16 @@ function _install_deb_from_url() {
 	sudo -E apt-get -qq install -f -y
 }
 
+function _is_x_package() {
+	{
+		set +e; sudo -E apt-rdepends $@ 2>/dev/null| grep 'Depends: libx11' &>/dev/null 
+}
+}
+
+function _is_installed() {
+	apt list -qq "$@" 2>/dev/null | grep 'installed' &>/dev/null
+}
+
 function _add_repo_or_install_deb() {
 	local repo="$1"
 	local package_name="$2"
@@ -74,6 +84,12 @@ function _add_repository() {
 	sudo -E add-apt-repository -y "$@"
 }
 
+install_x=0
+function no-x() {
+	install_x=1
+}
+
+
 function _install() {
 	# echo "Installing '$*' through apt"
 	set -e
@@ -100,7 +116,7 @@ function _install_pip3() {
 		_install python3-pip
 	fi
 	# shellcheck disable=SC2068
-	sudo -E pip3 install -q $@
+	python3 -m pip install --user $@  >/dev/null
 	set +e
 }
 
@@ -114,9 +130,9 @@ function _install_pipx() {
 	fi
 	pipx ensurepath &>/dev/null
 	echo "$@" | tr -d '\n' | xargs -d' ' -r -i sudo -E pip3 uninstall -q -y {} &>/dev/null | true
-	echo "$@" | tr -d '\n' | xargs -d' ' -r -i pip3 uninstall -q -y {} &>/dev/null | true
+	echo "$@" | tr -d '\n' | xargs -d' ' -r -i python3 -m pip uninstall --user -q -y {} &>/dev/null | true
 	# shellcheck disable=SC2068
-	echo "$@" | tr -d '\n' | xargs -d' ' -r -i pipx install {} --pip-args=-q
+	echo "$@" | tr -d '\n' | xargs -d' ' -r -i pipx install {} --pip-args=-q  >/dev/null
 	set +e
 }
 
@@ -160,6 +176,11 @@ function _update() {
 function _remove() {
 	# shellcheck disable=SC2068
 	sudo -E apt-get -qq remove -y $@
+}
+
+function _purge() {
+	# shellcheck disable=SC2068
+	sudo -E apt-get -qq purge -y $@
 }
 
 function _autoremove() {
@@ -224,21 +245,21 @@ function minimal() {
 	packages+=(hyphen-en-gb hyphen-nl hunspell aspell-nl hunspell-nl aspell-en hunspell-en-gb hunspell-en-us hunspell-no aspell-no libgspell-1-1 libgtkspell0 python3-hunspell )
 
 	# Apt tools
-	packages+=(apt-file wajig)
+	packages+=(apt-file wajig apt-rdepends gnome-software)
 
 	packages+=(xmlstarlet)
 
 	# Esential X tools
 	# kdeconnect   shutter
-	packages+=(redshift-gtk xfce4-terminal xfce4-genmon-plugin chromium-browser seahorse galculator orage ristretto 
-		xsel xclip arandr wmctrl xscreensaver flatpak compton rofi xdotool ssh-askpass)
+	packages+=(flameshot redshift-gtk xfce4-terminal xfce4-genmon-plugin xfdashboard chromium-browser seahorse galculator orage ristretto 
+		xsel xclip arandr wmctrl xscreensaver flatpak compton catfish rofi xdotool ssh-askpass)
 
-	_remove xfce4-appmenu-plugin
+	_purge xfce4-appmenu-plugin
 	
-	_add_repo_or_install_deb 'ppa:hluk/copyq' 'copyq' 'https://github.com/hluk/CopyQ/releases/download/v3.9.3/copyq_3.9.3_Debian_10-1_amd64.deb'
+	_add_repo_or_install_deb 'ppa:hluk/copyq' 'copyq' "https://github.com/hluk/CopyQ/releases/download/v3.9.3/copyq_3.9.3_Debian_10-1_$(cpu_architecture_simple).deb"
 
 	# File management and disk plugins
-	packages+=(cifs-utils exfat-fuse exfat-utils samba hfsprogs cdck ncdu mtp-tools)
+	packages+=(cifs-utils exfat-fuse exfat-utils samba hfsprogs cdck ncdu mtp-tools ranger)
 
 	# File management and disk plugins X
 	packages+=(thunar pcmanfm gnome-disk-utility)
@@ -254,7 +275,7 @@ function minimal() {
 	#git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d
 
 	if ! exists google-chrome; then
-		_install_deb_from_url https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+		_install_deb_from_url "https://dl.google.com/linux/direct/google-chrome-stable_current_$(cpu_architecture_simple).deb"
 	fi
 
 	# Fix for DRM in Chromium becaue winevinecdm is a proprietary piece of code
@@ -262,7 +283,7 @@ function minimal() {
 
 	# Audio
 	if ! exists playerctl; then
-		_install_deb_from_url https://github.com/altdesktop/playerctl/releases/download/v2.0.2/playerctl-2.0.2_amd64.deb
+		_install_deb_from_url "https://github.com/altdesktop/playerctl/releases/download/v2.0.2/playerctl-2.0.2_$(cpu_architecture_simple).deb"
 	fi
 
 	# Editors
@@ -276,7 +297,7 @@ function minimal() {
 	packages+=(python python-gtk2 python-xlib python-dbus python-setuptools libpango-1.0)
 
 	_install "${packages[*]}"
-	# _install_deb_from_url 'http://ftp.nl.debian.org/debian/pool/main/g/gnome-python-desktop/python-wnck_2.32.0+dfsg-3_amd64.deb'
+	# _install_deb_from_url "http://ftp.nl.debian.org/debian/pool/main/g/gnome-python-desktop/python-wnck_2.32.0+dfsg-3_$(cpu_architecture_simple).deb"
 	# _install_pip https://github.com/ssokolow/quicktile/archive/master.zip
 
 
@@ -344,7 +365,7 @@ function general() {
 	packages+=(android-tools-adbd)
 
 	# PDF
-	packages+=(atril) # zathura 'zathura*')
+	packages+=(atril)
 
 	if [ ! -f /usr/NX/bin/nxplayer ]; then
 		# shellcheck disable=1001
@@ -354,13 +375,14 @@ function general() {
 	_add_repo_or_install_deb 'ppa:nextcloud-devs/client' 'nextcloud-client'
 
 	if ! exists bat; then
-		_install_deb_from_url https://github.com/sharkdp/bat/releases/download/v0.11.0/bat_0.11.0_amd64.deb
+		_install_deb_from_url "https://github.com/sharkdp/bat/releases/download/v0.11.0/bat_0.11.0_$(cpu_architecture_simple).deb"
 	fi
 
 	_add_repo_or_install_deb 'ppa:mmstick76/alacritty' 'alacritty'
 
+	# @todo change to fd-find for 19.04+
 	if ! exists fd; then
-		_install_deb_from_url https://github.com/sharkdp/fd/releases/download/v7.4.0/fd_7.4.0_amd64.deb
+		_install_deb_from_url "https://github.com/sharkdp/fd/releases/download/v7.4.0/fd_7.4.0_$(cpu_architecture_simple).deb"
 	fi
 
 	if ! command -v x11docker &>/dev/null; then
@@ -388,9 +410,9 @@ function general() {
 	remove_obsolete
 	_install_pip3 thefuck numpy csvkit httpie
 
-	install_deb_from_url https://github.com/TheAssassin/AppImageLauncher/releases/download/v2.1.0/appimagelauncher_2.1.0-travis897.d1be7e7.bionic_amd64.deb
+	install_deb_from_url "https://github.com/TheAssassin/AppImageLauncher/releases/download/v2.1.0/appimagelauncher_2.1.0-travis897.d1be7e7.bionic_$(cpu_architecture_simple).deb"
 
-	sudo -E curl -LsS https://dystroy.org/broot/download/x86_64-linux/broot -o /usr/local/bin/broot
+	sudo -E curl -LsS "https://dystroy.org/broot/download/$(cpu_architecture)-linux/broot" -o /usr/local/bin/broot
 	sudo -E chmod +x /usr/local/bin/broot
 	set +e
 }
@@ -415,8 +437,8 @@ function shutter() {
 	if [[ $DISTRIB_RELEASE = "18.04" ]]
 	then
 		_install_deb_from_url "https://launchpad.net/ubuntu/+archive/primary/+files/libgoocanvas-common_1.0.0-1_all.deb"
-		_install_deb_from_url "https://launchpad.net/ubuntu/+archive/primary/+files/libgoocanvas3_1.0.0-1_amd64.deb"
-		_install_deb_from_url "https://launchpad.net/ubuntu/+archive/primary/+files/libgoo-canvas-perl_0.06-2ubuntu3_amd64.deb"
+		_install_deb_from_url "https://launchpad.net/ubuntu/+archive/primary/+files/libgoocanvas3_1.0.0-1_$(cpu_architecture_simple).deb"
+		_install_deb_from_url "https://launchpad.net/ubuntu/+archive/primary/+files/libgoo-canvas-perl_0.06-2ubuntu3_$(cpu_architecture_simple).deb"
 	fi
 	_install "shutter"
 
@@ -521,15 +543,20 @@ function locale() {
 function virtualbox() {
 	unset -f virtualbox
 	if [ ! -f /etc/apt/sources.list.d/virtualbox.list ]; then
-		echo "deb [arch=amd64] https://download.virtualbox.org/virtualbox/debian $(grep '^DISTRIB_CODENAME=' /etc/lsb-release | cut -f2 -d=) contrib" | sudo -E tee /etc/apt/sources.list.d/virtualbox.list
+		echo "deb [arch=$(cpu_architecture_simple)] https://download.virtualbox.org/virtualbox/debian $(grep '^DISTRIB_CODENAME=' /etc/lsb-release | cut -f2 -d=) contrib" | sudo -E tee /etc/apt/sources.list.d/virtualbox.list
 		wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo apt-key add -
 		wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | sudo apt-key add -
 	fi
 	_update
-	sudo -E apt remove -y 'virtualbox*'
-	sudo -E pkill -e -f -9 VBox
+	_remove 'virtualbox*'
+	sudo -E pkill -e -f -9 VBox | true
 	packages+=(VirtualBox-6.1)
 	_install "${packages[*]}" 
+	vagrant
+}
+
+function vagrant() {
+	_install_deb_from_url "https://releases.hashicorp.com/vagrant/2.2.7/vagrant_2.2.7_$(cpu_architecture).deb"
 }
 
 function i3() {
@@ -544,7 +571,8 @@ function i3() {
 	# 	_update
 	# fi
 	declare -a packages=()
-	packages+=(udiskie compton nitrogen feh xfce4-panel pcmanfm spacefm rofi ssh-askpass-gnome)
+	_remove spacefm
+	packages+=(udiskie compton nitrogen feh xfce4-panel pcmanfm rofi ssh-askpass-gnome)
 	packages+=("i3" i3blocks i3lock)
 	packages+=(dmenu rofi)
 	_install "${packages[*]}" 
@@ -594,8 +622,13 @@ function chat() {
 	_install_deb_from_url https://discordapp.com/api/download?platform=linux\&format=deb | true
 	sudo -E apt install -qq -y -f
 
+	if ! exists slack-term; then
+		sudo curl -LsS https://github.com/erroneousboat/slack-term/releases/download/v0.4.1/slack-term-linux-amd64 -o /usr/local/bin/slack-term
+		sudo chmod +x /usr/local/bin/slack-term
+	fi
+
 	# if ! command -v Station.AppImage &>/dev/null; then
-	# 	curl -LSs https://github.com/getstation/desktop-app-releases/releases/download/1.63.4/Station-1.63.4-x86_64.AppImage -o ~/.local/bin/Station.AppImage
+	# 	curl -LSs "https://github.com/getstation/desktop-app-releases/releases/download/1.63.4/Station-1.63.4-$(cpu_architecture).AppImage" -o ~/.local/bin/Station.AppImage
 	# 	chmod +x ~/.local/bin/Station.AppImage
 	# fi
 }
@@ -615,8 +648,8 @@ function uninstall-kde() {
 function privacy() {
 	# packages+=(torbrowser-launcher)
 	# @todo add expressvpn
-	_install_deb_from_url "https://s3.amazonaws.com/purevpn-dialer-assets/linux/app/purevpn_1.2.2_amd64.deb"
-	_install_deb_from_url "https://download.expressvpn.xyz/clients/linux/expressvpn_2.3.4-1_amd64.deb"
+	_install_deb_from_url "https://s3.amazonaws.com/purevpn-dialer-assets/linux/app/purevpn_1.2.2_$(cpu_architecture_simple).deb"
+	_install_deb_from_url "https://download.expressvpn.xyz/clients/linux/expressvpn_2.3.4-1_$(cpu_architecture_simple).deb"
 }
 
 
@@ -664,24 +697,27 @@ function jupyter() {
 
 function dev() {
 	declare -a packages=()
+	if exists snap && ! exists snapcraft; then
 	sudo -E snap install snapcraft --classic
+	fi
 	packages+=(apache2-utils multitail virt-what proot)
 	_remove shellcheck
 	if ! exists shellcheck; then
 		scversion="stable" # or "v0.4.7", or "latest"
-		wget -qO- "https://storage.googleapis.com/shellcheck/shellcheck-${scversion?}.linux.x86_64.tar.xz" | tar -xJv
+		wget -qO- "https://storage.googleapis.com/shellcheck/shellcheck-${scversion?}.linux.$(cpu_architecture).tar.xz" | tar -xJv
 		sudo -E cp "shellcheck-${scversion}/shellcheck" /usr/bin/
 	fi
 
 	if ! exists hadolint; then
 		cd /tmp || exit 2
-		wget -qO- "https://github.com/hadolint/hadolint/releases/download/v1.17.3/hadolint-Linux-x86_64" > hadolint
+		wget -qO- "https://github.com/hadolint/hadolint/releases/download/v1.17.3/hadolint-Linux-$(cpu_architecture)" > hadolint
 		sudo -E cp "hadolint" /usr/bin/
 		sudo -E chmod +x /usr/bin/hadolint
 	fi
-	packages+=(python3-dev python3-pip python3-venv python3-wheel golang-go pandoc)
+	packages+=(python4-venv python3-dev python3-pip python3-venv python3-wheel golang-go pandoc)
 	_install "${packages[*]}"
 	packages=()
+
 	_install_pipx mypy yamllint flake8 autopep8 vim-vint spybar
 	_install_pip3 dockerfile
 
@@ -699,27 +735,24 @@ function dev() {
 	packages+=(nodejs build-essential meld)
 	packages+=(jq)
 	if ! exists yq; then
-		sudo -E curl -LsS https://github.com/mikefarah/yq/releases/download/3.0.1/yq_linux_amd64 -o /usr/local/bin/yq
+		sudo -E curl -LsS "https://github.com/mikefarah/yq/releases/download/3.0.1/yq_linux_$(cpu_architecture_simple)" -o /usr/local/bin/yq
 		sudo -E chmod +x /usr/local/bin/yq
 	fi
 
 	# Vscode dependencies
 	packages+=(libsecret-1-dev libx11-dev libxkbfile-dev)
-	_add_repo_or_install_deb 'ppa:rmescandon/yq' 'yq'
-	
-	_install nodejs
 	npm config set loglevel error
 	npm config set prefix "$HOME/.local"
-	npm install -g --silent bash-language-server
-	npm install -g --silent intelephense
-	npm install -g --silent bats
-	npm install -g --silent json
-	npm install -g --silent fixjson jsonlint
-	npm install -g --silent eslint
-	npm install -g --silent markdownlint-cli
-	npm install -g --silent @marp-team/marp-cli
-	npm install -g --silent yarn
-	npm install -g --silent gulp
+	npm install -g --silent bash-language-server >/dev/null
+	npm install -g --silent intelephense >/dev/null
+	npm install -g --silent bats >/dev/null
+	npm install -g --silent json >/dev/null
+	npm install -g --silent fixjson jsonlint >/dev/null
+	npm install -g --silent eslint >/dev/null
+	npm install -g --silent markdownlint-cli >/dev/null
+	npm install -g --silent @marp-team/marp-cli >/dev/null
+	npm install -g --silent yarn >/dev/null
+	npm install -g --silent gulp >/dev/null
 
 	if ! exists circleci; then
 		curl -sSL https://circle.ci/cli | sudo -E bash
@@ -738,10 +771,12 @@ function dev() {
 	fi
 
 	_install "${packages[*]}" 
-	sudo -E snap install multipass --classic
-	sudo -E snap install lxd
-	sudo -E lxd init --auto
-	sudo usermod -aG lxd "$(whoami)"
+	if exists snap; then
+		sudo -E snap install multipass --classic
+		sudo -E snap install lxd
+		sudo -E lxd init --auto
+		sudo usermod -aG lxd "$(whoami)"
+	fi
 }
 
 
@@ -810,21 +845,21 @@ function docker() {
 		docker.io
 
 	if ! exists ctop; then
-		sudo -E curl -sSL https://github.com/bcicen/ctop/releases/download/v0.7.2/ctop-0.7.2-linux-amd64 -o /usr/local/bin/ctop
+		sudo -E curl -sSL "https://github.com/bcicen/ctop/releases/download/v0.7.2/ctop-0.7.2-linux-$(cpu_architecture_simple)" -o /usr/local/bin/ctop
 		sudo -E chmod +x /usr/local/bin/ctop
 	fi
 
-	# if ! exists docker; then
-	# 	curl -sSL https://download.docker.com/linux/ubuntu/gpg | sudo -E apt-key add -
-	# 	sudo -E apt-key fingerprint 0EBFCD88
-	# 	sudo -E add-apt-repository \
-	# 		"deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-	# 		$(lsb_release -cs) \
-	# 		stable"
-	# 	_update
-	# 	_install docker-ce
-	# 	sudo -E usermod -aG "docker" "$(whoami)"
-	# fi
+	if ! exists docker; then
+		# curl -sSL https://download.docker.com/linux/ubuntu/gpg | sudo -E apt-key add -
+		# sudo -E apt-key fingerprint 0EBFCD88
+		# sudo -E add-apt-repository \
+		# 	"deb [arch=$(cpu_architecture_simple)] https://download.docker.com/linux/ubuntu \
+		# 	$(lsb_release -cs) \
+		# 	stable"
+		_update
+		_install docker.io
+		sudo -E usermod -aG "docker" "$(whoami)"
+	fi
 
 	if ! exists docker-compose; then
 		sudo -E curl -sSL "https://github.com/docker/compose/releases/download/1.25.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
@@ -832,7 +867,7 @@ function docker() {
 	fi
 
 	if ! exists dockerize; then
-		sudo -E curl -sSL "https://github.com/jwilder/dockerize/releases/download/v0.6.1/dockerize-linux-amd64-v0.6.1.tar.gz" -o /usr/local/bin/dockerize
+		sudo -E curl -sSL "https://github.com/jwilder/dockerize/releases/download/v0.6.1/dockerize-linux-$(cpu_architecture_simple)-v0.6.1.tar.gz" -o /usr/local/bin/dockerize
 		sudo -E chmod +x /usr/local/bin/dockerize
 	fi
 
@@ -856,7 +891,7 @@ function docker() {
 
 	cd "${TMPDIR}"
 	if ! exists lazydocker; then
-		curl -sSL https://github.com/jesseduffield/lazydocker/releases/download/v0.7.1/lazydocker_0.7.1_Linux_x86_64.tar.gz > lazydocker.tgz
+		curl -sSL "https://github.com/jesseduffield/lazydocker/releases/download/v0.7.1/lazydocker_0.7.1_Linux_$(cpu_architecture).tar.gz" > lazydocker.tgz
 		tar xzf lazydocker.tgz
 		sudo -E install lazydocker /usr/local/bin/
 	fi
@@ -994,7 +1029,7 @@ function ibus_config() {
 function autostart() {
 	mkdir -p ~/.config/autostart
 
-	ln -s "${ROOT_DIR}"/.config/autostart/*.desktop ~/.config/autostart/ 2>/dev/null
+	ln -s "${ROOT_DIR}"/.config/autostart/*.desktop ~/.config/autostart/ 2>/dev/null | true
 
 
 	ln -sf /usr/share/applications/ulauncher.desktop ~/.config/autostart/
@@ -1003,9 +1038,8 @@ function autostart() {
 	ln -sf /usr/share/applications/com.github.hluk.copyq.desktop ~/.config/autostart/
 	ln -sf /usr/share/applications/nextcloud.desktop ~/.config/autostart/
 	ln -sf /usr/share/applications/shutter.desktop ~/.config/autostart/
-	glxinfo | grep -i "accelerated: no" &>/dev/null
 	# shellcheck disable=SC1073,SC2181
-	if [[ $? -ne 0 ]]; then
+	if glxinfo | grep -i "accelerated: no" &>/dev/null; then
 		ln -sf "$ROOT_DIR/.local/share/applications/Compton.desktop" ~/.config/autostart/
 	fi
 	find ~/.config/autostart/ -xtype l -delete
