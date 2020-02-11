@@ -116,7 +116,7 @@ function _install_pip3() {
 		_install python3-pip
 	fi
 	# shellcheck disable=SC2068
-	sudo -E pip3 install -q $@
+	python3 -m pip install --user $@  >/dev/null
 	set +e
 }
 
@@ -130,9 +130,9 @@ function _install_pipx() {
 	fi
 	pipx ensurepath &>/dev/null
 	echo "$@" | tr -d '\n' | xargs -d' ' -r -i sudo -E pip3 uninstall -q -y {} &>/dev/null | true
-	echo "$@" | tr -d '\n' | xargs -d' ' -r -i pip3 uninstall -q -y {} &>/dev/null | true
+	echo "$@" | tr -d '\n' | xargs -d' ' -r -i python3 -m pip uninstall --user -q -y {} &>/dev/null | true
 	# shellcheck disable=SC2068
-	echo "$@" | tr -d '\n' | xargs -d' ' -r -i pipx install {} --pip-args=-q
+	echo "$@" | tr -d '\n' | xargs -d' ' -r -i pipx install {} --pip-args=-q  >/dev/null
 	set +e
 }
 
@@ -176,6 +176,11 @@ function _update() {
 function _remove() {
 	# shellcheck disable=SC2068
 	sudo -E apt-get -qq remove -y $@
+}
+
+function _purge() {
+	# shellcheck disable=SC2068
+	sudo -E apt-get -qq purge -y $@
 }
 
 function _autoremove() {
@@ -245,11 +250,10 @@ function minimal() {
 	packages+=(xmlstarlet)
 
 	# Esential X tools
-	# kdeconnect
-	packages+=("shutter" redshift-gtk xfce4-terminal xfce4-genmon-plugin chromium-browser seahorse galculator orage ristretto 
-		xsel xclip arandr wmctrl xscreensaver flatpak compton)
+	packages+=(flameshot redshift-gtk xfce4-terminal xfce4-genmon-plugin xfdashboard chromium-browser seahorse galculator orage ristretto 
+		xsel xclip arandr wmctrl xscreensaver flatpak compton catfish)
 
-	_remove xfce4-appmenu-plugin
+	_purge xfce4-appmenu-plugin
 	
 	_add_repo_or_install_deb 'ppa:hluk/copyq' 'copyq' "https://github.com/hluk/CopyQ/releases/download/v3.9.3/copyq_3.9.3_Debian_10-1_$(cpu_architecture_simple).deb"
 
@@ -359,7 +363,7 @@ function general() {
 	packages+=(android-tools-adbd)
 
 	# PDF
-	packages+=(atril) # zathura 'zathura*')
+	packages+=(atril)
 
 	if [ ! -f /usr/NX/bin/nxplayer ]; then
 		# shellcheck disable=1001
@@ -374,6 +378,7 @@ function general() {
 
 	_add_repo_or_install_deb 'ppa:mmstick76/alacritty' 'alacritty'
 
+	# @todo change to fd-find for 19.04+
 	if ! exists fd; then
 		_install_deb_from_url "https://github.com/sharkdp/fd/releases/download/v7.4.0/fd_7.4.0_$(cpu_architecture_simple).deb"
 	fi
@@ -405,7 +410,7 @@ function general() {
 
 	install_deb_from_url "https://github.com/TheAssassin/AppImageLauncher/releases/download/v2.1.0/appimagelauncher_2.1.0-travis897.d1be7e7.bionic_$(cpu_architecture_simple).deb"
 
-	sudo -E curl -LsS https://dystroy.org/broot/download/x86_64-linux/broot -o /usr/local/bin/broot
+	sudo -E curl -LsS "https://dystroy.org/broot/download/$(cpu_architecture)-linux/broot" -o /usr/local/bin/broot
 	sudo -E chmod +x /usr/local/bin/broot
 	set +e
 }
@@ -549,7 +554,7 @@ function virtualbox() {
 }
 
 function vagrant() {
-	_install_deb_from_url https://releases.hashicorp.com/vagrant/2.2.7/vagrant_2.2.7_x86_64.deb
+	_install_deb_from_url "https://releases.hashicorp.com/vagrant/2.2.7/vagrant_2.2.7_$(cpu_architecture).deb"
 }
 
 function i3() {
@@ -612,10 +617,15 @@ function chat() {
 	# Use deb to make use of fonts-noto-color-emoji
 	_install_deb_from_url https://discordapp.com/api/download?platform=linux\&format=deb
 
-	if ! command -v Station.AppImage &>/dev/null; then
-		curl -LSs https://github.com/getstation/desktop-app-releases/releases/download/1.63.4/Station-1.63.4-x86_64.AppImage -o ~/.local/bin/Station.AppImage
-		chmod +x ~/.local/bin/Station.AppImage
+	if ! exists slack-term; then
+		sudo curl -LsS https://github.com/erroneousboat/slack-term/releases/download/v0.4.1/slack-term-linux-amd64 -o /usr/local/bin/slack-term
+		sudo chmod +x /usr/local/bin/slack-term
 	fi
+
+	# if ! command -v Station.AppImage &>/dev/null; then
+	# 	curl -LSs "https://github.com/getstation/desktop-app-releases/releases/download/1.63.4/Station-1.63.4-$(cpu_architecture).AppImage" -o ~/.local/bin/Station.AppImage
+	# 	chmod +x ~/.local/bin/Station.AppImage
+	# fi
 }
 
 function kde() {
@@ -689,17 +699,20 @@ function dev() {
 	_remove shellcheck
 	if ! exists shellcheck; then
 		scversion="stable" # or "v0.4.7", or "latest"
-		wget -qO- "https://storage.googleapis.com/shellcheck/shellcheck-${scversion?}.linux.x86_64.tar.xz" | tar -xJv
+		wget -qO- "https://storage.googleapis.com/shellcheck/shellcheck-${scversion?}.linux.$(cpu_architecture).tar.xz" | tar -xJv
 		sudo -E cp "shellcheck-${scversion}/shellcheck" /usr/bin/
 	fi
 
 	if ! exists hadolint; then
 		cd /tmp || exit 2
-		wget -qO- "https://github.com/hadolint/hadolint/releases/download/v1.17.3/hadolint-Linux-x86_64" > hadolint
+		wget -qO- "https://github.com/hadolint/hadolint/releases/download/v1.17.3/hadolint-Linux-$(cpu_architecture)" > hadolint
 		sudo -E cp "hadolint" /usr/bin/
 		sudo -E chmod +x /usr/bin/hadolint
 	fi
 	packages+=(python3-venv python3-pip golang-go pandoc)
+	_install "${packages[*]}" 
+	packages=()
+
 	_install_pipx mypy yamllint flake8 autopep8 vim-vint spybar
 	_install_pip3 dockerfile
 
@@ -713,7 +726,7 @@ function dev() {
 
 	_install_pip3 pre-commit
 
-	curl -sSL https://deb.nodesource.com/setup_12.x | sudo -E bash - &>/dev/null
+	curl -sSL https://deb.nodesource.com/setup_12.x | sudo -E bash - >/dev/null
 	packages+=(nodejs build-essential meld)
 	packages+=(jq)
 	if ! exists yq; then
@@ -726,16 +739,16 @@ function dev() {
 
 	npm config set loglevel error
 	npm config set prefix "$HOME/.local"
-	npm install -g --silent bash-language-server
-	npm install -g --silent intelephense
-	npm install -g --silent bats
-	npm install -g --silent json
-	npm install -g --silent fixjson jsonlint
-	npm install -g --silent eslint
-	npm install -g --silent markdownlint-cli
-	npm install -g --silent @marp-team/marp-cli
-	npm install -g --silent yarn
-	npm install -g --silent gulp
+	npm install -g --silent bash-language-server >/dev/null
+	npm install -g --silent intelephense >/dev/null
+	npm install -g --silent bats >/dev/null
+	npm install -g --silent json >/dev/null
+	npm install -g --silent fixjson jsonlint >/dev/null
+	npm install -g --silent eslint >/dev/null
+	npm install -g --silent markdownlint-cli >/dev/null
+	npm install -g --silent @marp-team/marp-cli >/dev/null
+	npm install -g --silent yarn >/dev/null
+	npm install -g --silent gulp >/dev/null
 
 	if ! exists circleci; then
 		curl -sSL https://circle.ci/cli | sudo -E bash
@@ -832,14 +845,14 @@ function docker() {
 	fi
 
 	if ! exists docker; then
-		curl -sSL https://download.docker.com/linux/ubuntu/gpg | sudo -E apt-key add -
-		sudo -E apt-key fingerprint 0EBFCD88
-		sudo -E add-apt-repository \
-			"deb [arch=$(cpu_architecture_simple)] https://download.docker.com/linux/ubuntu \
-			$(lsb_release -cs) \
-			stable"
+		# curl -sSL https://download.docker.com/linux/ubuntu/gpg | sudo -E apt-key add -
+		# sudo -E apt-key fingerprint 0EBFCD88
+		# sudo -E add-apt-repository \
+		# 	"deb [arch=$(cpu_architecture_simple)] https://download.docker.com/linux/ubuntu \
+		# 	$(lsb_release -cs) \
+		# 	stable"
 		_update
-		_install docker-ce
+		_install docker.io
 		sudo -E usermod -aG "docker" "$(whoami)"
 	fi
 
@@ -873,7 +886,7 @@ function docker() {
 
 	cd "${TMPDIR}"
 	if ! exists lazydocker; then
-		curl -sSL https://github.com/jesseduffield/lazydocker/releases/download/v0.7.1/lazydocker_0.7.1_Linux_x86_64.tar.gz > lazydocker.tgz
+		curl -sSL "https://github.com/jesseduffield/lazydocker/releases/download/v0.7.1/lazydocker_0.7.1_Linux_$(cpu_architecture).tar.gz" > lazydocker.tgz
 		tar xzf lazydocker.tgz
 		sudo -E install lazydocker /usr/local/bin/
 	fi
