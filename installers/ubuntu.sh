@@ -241,8 +241,8 @@ function minimal() {
 	# Cli browser with inline images
 	packages+=(w3m w3m-img)
 
-	# Spelling
-	packages+=(hyphen-en-gb hyphen-nl hunspell aspell-nl hunspell-nl aspell-en hunspell-en-gb hunspell-en-us hunspell-no aspell-no libgspell-1-1 libgtkspell0 python3-hunspell python-hunspell)
+	# Spelling  python-hunspell
+	packages+=(hyphen-en-gb hyphen-nl hunspell aspell-nl hunspell-nl aspell-en hunspell-en-gb hunspell-en-us hunspell-no aspell-no libgspell-1-1 libgtkspell0 python3-hunspell )
 
 	# Apt tools
 	packages+=(apt-file wajig apt-rdepends gnome-software)
@@ -250,8 +250,9 @@ function minimal() {
 	packages+=(xmlstarlet)
 
 	# Esential X tools
+	# kdeconnect   shutter
 	packages+=(flameshot redshift-gtk xfce4-terminal xfce4-genmon-plugin xfdashboard chromium-browser seahorse galculator orage ristretto 
-		xsel xclip arandr wmctrl xscreensaver flatpak compton catfish)
+		xsel xclip arandr wmctrl xscreensaver flatpak compton catfish rofi xdotool ssh-askpass)
 
 	_purge xfce4-appmenu-plugin
 	
@@ -278,7 +279,7 @@ function minimal() {
 	fi
 
 	# Fix for DRM in Chromium becaue winevinecdm is a proprietary piece of code
-	sudo -E ln -fs /opt/google/chrome/WidevineCdm /usr/lib/chromium-browser/WidevineCdm
+#	sudo -E ln -fs /opt/google/chrome/WidevineCdm /usr/lib/chromium-browser/WidevineCdm
 
 	# Audio
 	if ! exists playerctl; then
@@ -288,8 +289,8 @@ function minimal() {
 	# Editors
 	packages+=(geany vim-gtk3)
 
-	# Archiving
-	packages+=(engrampa unzip unrar p7zip-full ecm)
+	# Archiving    ecm
+	packages+=(engrampa unzip unrar p7zip) # of p7zip-full on 1804
 
 	# Window managing
 	# quicktile dependencies
@@ -322,7 +323,8 @@ function minimal() {
 
 function themes() {
 	declare -a packages=()
-	packages+=(arc-theme bluebird-gtk-theme moka-icon-theme xfwm4-themes pocillo-icon-theme materia-gtk-theme)
+	# xfwm4-themes pocillo-icon-theme materia-gtk-theme
+	packages+=(arc-theme bluebird-gtk-theme moka-icon-theme)
 	_install "${packages[*]}" 
 }
 
@@ -389,7 +391,7 @@ function general() {
 
 	_add_repo_or_install_deb 'ppa:lazygit-team/release' 'lazygit'
 
-	_add_repo_or_install_deb 'ppa:webupd8team/indicator-kdeconnect' 'indicator-kdeconnect'
+	# _add_repo_or_install_deb 'ppa:webupd8team/indicator-kdeconnect' 'indicator-kdeconnect'
 
 	if ! apt-get -qq list papirus-icon-theme 2>/dev/null | grep -i -q installed
 	then
@@ -403,7 +405,7 @@ function general() {
 	_install "${packages[*]}" 
 
 
-	ibus_typing_booster
+	# ibus_typing_booster
 
 	remove_obsolete
 	_install_pip3 thefuck numpy csvkit httpie
@@ -597,7 +599,9 @@ function usb_ssd() {
 function upgrade() {
 	_update; sudo -E apt "upgrade" -y -qq
 	sudo -E apt install "linux-headers-$(uname -r)" dkms -y
-	sudo -E /sbin/vboxconfig
+	if [[ -f /sbin/vboxconfig ]]; then
+		sudo -E /sbin/vboxconfig
+	fi
 	_autoremove
 }
 
@@ -615,7 +619,8 @@ function media() {
 function chat() {
 	_install_snap slack --classic
 	# Use deb to make use of fonts-noto-color-emoji
-	_install_deb_from_url https://discordapp.com/api/download?platform=linux\&format=deb
+	_install_deb_from_url https://discordapp.com/api/download?platform=linux\&format=deb | true
+	sudo -E apt install -qq -y -f
 
 	if ! exists slack-term; then
 		sudo curl -LsS https://github.com/erroneousboat/slack-term/releases/download/v0.4.1/slack-term-linux-amd64 -o /usr/local/bin/slack-term
@@ -709,8 +714,8 @@ function dev() {
 		sudo -E cp "hadolint" /usr/bin/
 		sudo -E chmod +x /usr/bin/hadolint
 	fi
-	packages+=(python3-venv python3-pip golang-go pandoc)
-	_install "${packages[*]}" 
+	packages+=(python4-venv python3-dev python3-pip python3-venv python3-wheel golang-go pandoc)
+	_install "${packages[*]}"
 	packages=()
 
 	_install_pipx mypy yamllint flake8 autopep8 vim-vint spybar
@@ -736,7 +741,6 @@ function dev() {
 
 	# Vscode dependencies
 	packages+=(libsecret-1-dev libx11-dev libxkbfile-dev)
-
 	npm config set loglevel error
 	npm config set prefix "$HOME/.local"
 	npm install -g --silent bash-language-server >/dev/null
@@ -837,7 +841,8 @@ function docker() {
 		curl \
 		gnupg2 \
 		software-properties-common \
-		qemu-user-static
+		qemu-user-static \
+		docker.io
 
 	if ! exists ctop; then
 		sudo -E curl -sSL "https://github.com/bcicen/ctop/releases/download/v0.7.2/ctop-0.7.2-linux-$(cpu_architecture_simple)" -o /usr/local/bin/ctop

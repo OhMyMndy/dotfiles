@@ -93,7 +93,7 @@ if [[ -d ~/bin/bin ]]; then
 fi
 
 
-if ! exists fzf && ! is_android
+if [[ ! -d ~/.fzf ]] && ! is_android
 then
 	git clone --depth 1 -q https://github.com/junegunn/fzf.git ~/.fzf
 	yes | ~/.fzf/install >/dev/null
@@ -153,6 +153,6 @@ if [[ ! -d ~/src/splatmoji ]]; then
 	cd ~/src
 	git clone -q https://github.com/cspeterson/splatmoji.git
 	cd splatmoji
-	curl 'https://raw.githubusercontent.com/muan/emojilib/master/emojis.json' | importers/emojilib2tsv - > data/emoji.tsv
-	curl 'https://raw.githubusercontent.com/w33ble/emoticon-data/master/emoticons.json' | importers/w33ble2tsv - > data/emoticons.tsv
+	#curl 'https://raw.githubusercontent.com/muan/emojilib/master/emojis.json' | importers/emojilib2tsv - > data/emoji.tsv
+	#curl 'https://raw.githubusercontent.com/w33ble/emoticon-data/master/emoticons.json' | importers/w33ble2tsv - > data/emoticons.tsv
 fi
