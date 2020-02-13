@@ -17,19 +17,23 @@ function write_setting() {
         echo "{}" > "$settings_file"
     fi
     
-    json -f "$settings_file" -I -e "$@"
+    if exists json; then
+        json -f "$settings_file" -I -e "$@"
+    fi
 }
 
 function settings() {
     write_setting "this['git.autofetch'] = true"
+    write_setting "this['workbench.iconTheme'] = 'vscode-icons'"
     write_setting "this['terminal.integrated.minimumContrastRatio'] = 9"
     write_setting "this['terminal.integrated.drawBoldTextInBrightColors'] = false"
     write_setting "this['files.exclude'] = { \"**/.*.un~\": true, \"**/.history/**\": true }"
     write_setting "this['files.watcherExclude'] = { \"**/.*.un~\": true, \"**/.history/**\": true }"
     write_setting "this['shellcheck.customArgs'] = [ '-x' ]"
+    write_setting "this['bashIde.path'] = '$HOME/.local/bin/bash-language-server'"
+    write_setting "this['shellcheck.executablePath'] = '/usr/bin/shellcheck'"
 }
 
-settings
 
 # @see https://itnext.io/why-i-wrote-33-vscode-extensions-and-how-i-manage-them-cb61df05e154
 
@@ -109,3 +113,6 @@ install donjayamanne.githistory
 
 
 install jomeinaster.bracket-peek
+
+
+settings

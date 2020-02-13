@@ -50,7 +50,12 @@ if [[ -z $file ]]; then
   file=docker-compose.yml
 fi
 
-if [[ -f "${file}.sh" ]]; then
+if [[ -f "${file//.yml/}.py" ]]; then
+    # shellcheck disable=2046
+    env $(grep -v '^#' .env | xargs) python3 "${file//.yml}.py" > "$tmpfile"
+    docker-compose -f "$tmpfile" "$@"
+    exit $?
+elif [[ -f "${file}.sh" ]]; then
     # shellcheck disable=2046
     env $(grep -v '^#' .env | xargs) bash "${file}.sh" > "$tmpfile"
     docker-compose -f "$tmpfile" "$@"
