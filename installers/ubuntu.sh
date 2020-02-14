@@ -93,9 +93,23 @@ function no-x() {
 function _install() {
 	# echo "Installing '$*' through apt"
 	set -e
-	_update
+	new_args="$@"
+	# if [[ $install_x -eq 1 ]]; then
+	# 	# _update
+	# 	args=$(echo "$@" | tr ' ' '\n')
+	# 	new_args=$args
+	# 	for i in $args
+	# 	do
+	# 		if _is_x_package "$i"; then
+	# 			echo "$i is x package"
+	# 			new_args=${new_args//$i/}
+	# 		fi
+	# 	done
+	# 	args=$(echo "$new_args" | tr '\n' ' ')
+	# fi
+
 	# shellcheck disable=SC2068
-	sudo -E apt-get -qq install -y $@
+	sudo -E apt-get -qq install -y $new_args
 	set +e
 }
 
@@ -132,7 +146,7 @@ function _install_pipx() {
 	echo "$@" | tr -d '\n' | xargs -d' ' -r -i sudo -E pip3 uninstall -q -y {} &>/dev/null | true
 	echo "$@" | tr -d '\n' | xargs -d' ' -r -i python3 -m pip uninstall --user -q -y {} &>/dev/null | true
 	# shellcheck disable=SC2068
-	echo "$@" | tr -d '\n' | xargs -d' ' -r -i pipx install {} --pip-args=-q  >/dev/null
+	echo "$@" | tr -d '\n' | xargs -d' ' -r -i pipx install {} --include-deps --pip-args=-q  >/dev/null
 	set +e
 }
 
@@ -429,21 +443,6 @@ function remove_obsolete() {
 	_autoremove
 }
 
-function shutter() {
-	unset -f shutter
-	# shellcheck disable=SC1091
-	source /etc/lsb-release
-	# http://ubuntuhandbook.org/index.php/2018/04/fix-edit-option-disabled-shutter-ubuntu-18-04/
-	if [[ $DISTRIB_RELEASE = "18.04" ]]
-	then
-		_install_deb_from_url "https://launchpad.net/ubuntu/+archive/primary/+files/libgoocanvas-common_1.0.0-1_all.deb"
-		_install_deb_from_url "https://launchpad.net/ubuntu/+archive/primary/+files/libgoocanvas3_1.0.0-1_$(cpu_architecture_simple).deb"
-		_install_deb_from_url "https://launchpad.net/ubuntu/+archive/primary/+files/libgoo-canvas-perl_0.06-2ubuntu3_$(cpu_architecture_simple).deb"
-	fi
-	_install "shutter"
-
-}
-
 function groups() {
 	sudo -E groupadd "docker"
 	sudo -E groupadd vboxusers
@@ -714,12 +713,12 @@ function dev() {
 		sudo -E cp "hadolint" /usr/bin/
 		sudo -E chmod +x /usr/bin/hadolint
 	fi
-	packages+=(python4-venv python3-dev python3-pip python3-venv python3-wheel golang-go pandoc)
+	packages+=(python3-venv python3-dev python3-pip python3-venv python3-wheel golang-go pandoc)
 	_install "${packages[*]}"
 	packages=()
 
-	_install_pipx mypy yamllint flake8 autopep8 vim-vint spybar
-	_install_pip3 dockerfile
+	_install_pipx mypy yamllint flake8 autopep8 vim-vint spybar jupyter
+	_install_pip3 dockerfile 
 
 	# python3 version is not in pypi
 	pip install crudini
@@ -842,7 +841,8 @@ function docker() {
 		gnupg2 \
 		software-properties-common \
 		qemu-user-static \
-		docker.io
+		docker.io \
+		lxcfs
 
 	if ! exists ctop; then
 		sudo -E curl -sSL "https://github.com/bcicen/ctop/releases/download/v0.7.2/ctop-0.7.2-linux-$(cpu_architecture_simple)" -o /usr/local/bin/ctop
@@ -1033,11 +1033,9 @@ function autostart() {
 
 
 	ln -sf /usr/share/applications/ulauncher.desktop ~/.config/autostart/
-	# ln -sf /usr/share/applications/indicator-kdeconnect.desktop ~/.config/autostart/
 	ln -sf /usr/share/applications/redshift-gtk.desktop ~/.config/autostart/
 	ln -sf /usr/share/applications/com.github.hluk.copyq.desktop ~/.config/autostart/
 	ln -sf /usr/share/applications/nextcloud.desktop ~/.config/autostart/
-	ln -sf /usr/share/applications/shutter.desktop ~/.config/autostart/
 	# shellcheck disable=SC1073,SC2181
 	if glxinfo | grep -i "accelerated: no" &>/dev/null; then
 		ln -sf "$ROOT_DIR/.local/share/applications/Compton.desktop" ~/.config/autostart/

@@ -813,4 +813,32 @@ __this_script="$(readlink "$__this_script")"
 fi
 
 
+# MEMORY RELATED FUNCTIONS
+if is_linux && exists awk && exists bc; then
+	function total_memory_in_kb() {
+		grep MemTotal /proc/meminfo | grep -Eo '[0-9]+' | tr -d '\n\r'
+	}
+
+	function total_memory_in_mb() {
+		bc <<< "(($(total_memory_in_kb)) / 1024)"
+	}
+
+	function total_memory_in_gb() {
+		bc <<< "(($(total_memory_in_mb)) / 1024)"
+	}
+
+	function percentage_of_memory_in_kb() {
+		bc <<< "(($(total_memory_in_kb)) / 100) * $1" | awk '{printf "%d\n", $0}'
+	}
+
+	function percentage_of_memory_in_mb() {
+		bc <<< "(($(total_memory_in_mb)) / 100) * $1" | awk '{printf "%d\n", $0}'
+	}
+
+	function percentage_of_memory_in_gb() {
+		bc <<< "scale=1;(($(total_memory_in_gb)) / 100) * $1" | awk '{printf "%.1f\n", $0}'
+	}
+fi
+
+
 alias polybar=/snap/polybar-git/current/usr/local/bin/polybar

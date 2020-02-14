@@ -6,4 +6,4 @@ Comment=
 Exec=imwheel -d --focus
 StartupNotify=false
 Terminal=false
-Hidden=false
+Hidden=true
