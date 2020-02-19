@@ -234,7 +234,7 @@ function minimal() {
 	_update
 
 	# Misc
-	packages+=(git git-extras tig gitg zsh iproute2 man pv autojump less curl rename rsync openssh-server most multitail trash-cli zenity libsecret-tools parallel ruby ruby-dev ntp neovim vim-gtk3 fonts-noto-color-emoji fonts-noto fonts-roboto)
+	packages+=(git git-extras tig gitg zsh iproute2 man pv autojump less curl rename rsync rclone openssh-server most multitail trash-cli zenity libsecret-tools parallel ruby ruby-dev ntp neovim vim-gtk3 fonts-noto-color-emoji fonts-noto fonts-roboto)
 
 	# Terminal multiplexing
 	packages+=(byobu tmux)
@@ -243,7 +243,7 @@ function minimal() {
 	packages+=(iotop htop nload glances)
 
 	# Networking tools
-	packages+=(nmap iputils-ping dnsutils telnet-ssl mtr-tiny traceroute libnss3-tools netdiscover whois bridge-utils)
+	packages+=(nmap iputils-ping dnsutils telnet-ssl mtr-tiny traceroute libnss3-tools netdiscover whois bridge-utils trickle)
 	# smbmap, only available in disco+
 
 	# Cron
@@ -917,39 +917,36 @@ function polybar() {
 
 
 function networkmanager() {
-	if [ ! -f /etc/NetworkManager/conf.d/00-use-dnsmasq.conf ]; then
 		sudo -E tee /etc/NetworkManager/conf.d/00-use-dnsmasq.conf << EOL &>/dev/null
 # This enabled the dnsmasq plugin.
 [main]
 dns=dnsmasq
 EOL
 
-		sudo -E tee /etc/NetworkManager/dnsmasq.d/00-home-mndy-be.conf << EOL &>/dev/null
-address=/home.mndy.be/192.168.10.120
-addn-hosts=/etc/hosts
-EOL
+		sudo -E rm -f /etc/NetworkManager/dnsmasq.d/00-home-mndy-be.conf
 
-		sudo -E tee /etc/NetworkManager/dnsmasq.d/00-nextdns.conf << EOL &>/dev/null
-no-resolv
-bogus-priv
-strict-order
-server=2a07:a8c1::
-server=45.90.30.0
-server=2a07:a8c0::
-server=45.90.28.0
-add-cpe-id=cef6e6
-EOL
-
-
-		# use network manager instead of systemd resolve resolv.conf
-		sudo -E rm /etc/resolv.conf; sudo -E ln -s /var/run/NetworkManager/resolv.conf /etc/resolv.conf
-		sudo -E systemctl restart NetworkManager
-	fi
+# 		sudo -E tee /etc/NetworkManager/dnsmasq.d/00-nextdns.conf << EOL &>/dev/null
+# no-resolv
+# bogus-priv
+# strict-order
+# server=2a07:a8c1::
+# server=45.90.30.0
+# server=2a07:a8c0::
+# server=45.90.28.0
+# add-cpe-id=cef6e6
+# EOL
 
 	sudo -E tee /etc/NetworkManager/conf.d/00-ignore-docker-and-vbox.conf << EOL &>/dev/null
 [keyfile]
-unmanaged-devices=interface-name:docker0;interface-name:vboxnet*;interface-name:br-*
+unmanaged-devices=interface-name:docker0;interface-name:vboxnet*;interface-name:br-*;interface-name:veth*;interface-name:docker_gwbridge
 EOL
+
+	# use network manager instead of systemd resolve resolv.conf
+	if [[ -f /var/run/NetworkManager/resolv.conf ]]; then
+		sudo -E rm /etc/resolv.conf
+		sudo -E ln -s /var/run/NetworkManager/resolv.conf /etc/resolv.conf
+	fi
+	sudo -E systemctl restart NetworkManager
 }
 
 function sysctl() {

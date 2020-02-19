@@ -839,6 +839,3 @@ if is_linux && exists awk && exists bc; then
 		bc <<< "scale=1;(($(total_memory_in_gb)) / 100) * $1" | awk '{printf "%.1f\n", $0}'
 	}
 fi
-
-
-alias polybar=/snap/polybar-git/current/usr/local/bin/polybar

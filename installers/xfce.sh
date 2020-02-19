@@ -203,6 +203,9 @@ function wm_i3() {
 }
 
 function move_windows_to_workspace() {
+
+	wmctrl -l | grep -i phpstorm | cut -f1 -d' ' | xargs -r -i wmctrl -i -r {} -t 0 
+
 	i3-msg '[class="Google-chrome"]' move to workspace 1
 	i3-msg '[class="Chromium"]' move to workspace 1
 

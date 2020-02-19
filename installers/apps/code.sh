@@ -1,13 +1,17 @@
 #!/usr/bin/env bash
 
-set -eu
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd "$DIR" || exit 1
 # shellcheck source=../../.base-script.sh
-source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/../../.base-script.sh"
+source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/../../.base-script.sh" 2>/dev/null
 
 function install() {
-    code --install-extension "$@" >/dev/null
+    if command -v code &>/dev/null; then
+        code --install-extension "$@" >/dev/null
+    fi
+    if command -v code-server &>/dev/null; then
+        code-server --install-extension "$@" >/dev/null
+    fi
 }
 
 function write_setting() {
@@ -17,7 +21,7 @@ function write_setting() {
         echo "{}" > "$settings_file"
     fi
     
-    if exists json; then
+    if  command -v json &>/dev/null; then
         json -f "$settings_file" -I -e "$@"
     fi
 }
