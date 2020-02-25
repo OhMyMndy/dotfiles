@@ -17,7 +17,9 @@ function write_setting() {
         echo "{}" > "$settings_file"
     fi
     
-    json -f "$settings_file" -I -e "$@"
+    if exists json; then
+        json -f "$settings_file" -I -e "$@"
+    fi
 }
 
 function settings() {

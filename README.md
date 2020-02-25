@@ -5,9 +5,13 @@
 ## Ubuntu
 
 ```bash
-sudo apt install git vim curl -y
+sudo apt-get update -qq; sudo apt-get install git vim curl -y -qq
 cd ~
 git clone -q https://github.com/mandy91/dotfiles.git
+
+~/dotfiles/link.sh
+~/dotfiles/installers/ubuntu.sh --minimal --general --locale --upgrade --autostart --settings --settings-light
+~/dotfiles/link.sh
 ```
 
 ## Termux

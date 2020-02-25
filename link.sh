@@ -92,7 +92,7 @@ if [[ -d ~/bin/bin ]]; then
 fi
 
 
-if ! exists fzf && ! is_android
+if [[ ! -d ~/.fzf ]] && ! is_android
 then
 	git clone --depth 1 -q https://github.com/junegunn/fzf.git ~/.fzf
 	yes | ~/.fzf/install >/dev/null
