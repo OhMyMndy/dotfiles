@@ -626,6 +626,7 @@ link-file() {
 		fi
 
 		rm -rf "$target"
+		mkdir -p "$(dirname "$target")"
 		ln -sf "$source" "$target"
 }
 
