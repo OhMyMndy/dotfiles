@@ -28,7 +28,7 @@ function write_setting() {
 
 function settings() {
     write_setting "this['git.autofetch'] = true"
-    write_setting "this['workbench.iconTheme'] = 'vscode-icons'"
+    write_setting "this['workbench.iconTheme'] = 'material-icon-theme'"
     write_setting "this['terminal.integrated.minimumContrastRatio'] = 9"
     write_setting "this['terminal.integrated.drawBoldTextInBrightColors'] = false"
     write_setting "this['files.exclude'] = { \"**/.*.un~\": true, \"**/.history/**\": true }"

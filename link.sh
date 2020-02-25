@@ -25,6 +25,9 @@ link-file "$DIR" ".config/copyq/copyq-commands.ini"
 # cp ~/{,dotfiles/}.config/Thunar/uca.xml
 link-file "$DIR" ".config/Thunar/uca.xml"
 
+link-file "$DIR" ".config/neofetch/config.conf"
+link-file "$DIR" ".config/tilda"
+
 link-file "$DIR" ".spacemacs"
 link-file "$DIR" ".imwheelrc"
 

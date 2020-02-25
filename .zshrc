@@ -93,8 +93,9 @@ if [[ -f $HOME/bin/commands-to-aliases ]]; then
     source "$HOME/.aliases"
 fi
 
-export GEM_HOME="$HOME/.gem"
-export GEM_PATH="$HOME/.gem"
+# export GEM_HOME="$HOME/.gem"
+# export GEM_PATH="$HOME/.gem"
+export DEBIAN_DISABLE_RUBYGEMS_INTEGRATION=1
 
 export GOPATH="$HOME/.go"
 

@@ -227,7 +227,7 @@ function minimal() {
 
 	# minimal
 	packages+=(file coreutils findutils vlock nnn ack sed tree grep silversearcher-ag)
-	packages+=(python-pip python3-pip)
+	packages+=(python-pip python3-pip bsdmainutils)
 
 	_add_repository -n "deb http://archive.canonical.com/ $(lsb_release -sc) partner"
  	_add_repository ppa:git-core/ppa
@@ -380,6 +380,9 @@ function general() {
 
 	# PDF
 	packages+=(atril)
+
+	# Terminal
+	packages+=(tilda)
 
 	if [ ! -f /usr/NX/bin/nxplayer ]; then
 		# shellcheck disable=1001
@@ -552,6 +555,14 @@ function virtualbox() {
 	packages+=(VirtualBox-6.1)
 	_install "${packages[*]}" 
 	vagrant
+}
+
+function qemu() {
+	_install qemu 'qemu-system*' virt-manager
+	sudo usermod -aG libvirt "$(whoami)"
+	sudo usermod -aG libvirt-qemu "$(whoami)"
+	sudo chown root:kvm /dev/kvm
+	sudo chmod g+rw /dev/kvm
 }
 
 function vagrant() {
