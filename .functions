@@ -813,6 +813,7 @@ __this_script="$(readlink "$__this_script")"
 fi
 
 
+alias polybar=/snap/polybar-git/current/usr/local/bin/polybar
 # MEMORY RELATED FUNCTIONS
 if is_linux && exists awk && exists bc; then
 	function total_memory_in_kb() {
