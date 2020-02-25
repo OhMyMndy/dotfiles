@@ -21,6 +21,7 @@ link-file "$DIR" ".config/copyq/copyq.conf"
 link-file "$DIR" ".config/copyq/copyq-commands.ini"
 
 
+
 # cp ~/{,dotfiles/}.config/Thunar/uca.xml
 link-file "$DIR" ".config/Thunar/uca.xml"
 
@@ -152,6 +153,6 @@ if [[ ! -d ~/src/splatmoji ]]; then
 	cd ~/src
 	git clone -q https://github.com/cspeterson/splatmoji.git
 	cd splatmoji
-	curl 'https://raw.githubusercontent.com/muan/emojilib/master/emojis.json' | importers/emojilib2tsv - > data/emoji.tsv
-	curl 'https://raw.githubusercontent.com/w33ble/emoticon-data/master/emoticons.json' | importers/w33ble2tsv - > data/emoticons.tsv
+	#curl 'https://raw.githubusercontent.com/muan/emojilib/master/emojis.json' | importers/emojilib2tsv - > data/emoji.tsv
+	#curl 'https://raw.githubusercontent.com/w33ble/emoticon-data/master/emoticons.json' | importers/w33ble2tsv - > data/emoticons.tsv
 fi

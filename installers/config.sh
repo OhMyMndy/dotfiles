@@ -24,7 +24,7 @@ function vim() {
 
         link-file "$ROOT_DIR" ".vim/coc-settings.json"
 
-        find ~/.vim/bundle -maxdepth 1 -type d ! -path . -print0 | xargs -0 -r -i bash -c "cd {}/.git 2>/dev/null && cd .. && git pull -q"
+        find ~/.vim/bundle -maxdepth 1 -type d ! -path . -print0 | xargs -0 -r -i bash -c "cd {}/.git 2>/dev/null; cd ..; git pull -q; exit 0"
         # command vim -c 'CocInstall -sync coc-highlight coc-json coc-html coc-phpls coc-python coc-markdownlint |q'
     }
 }

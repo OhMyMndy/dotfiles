@@ -30,6 +30,8 @@ function xfce_keybindings() {
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Alt>Print" -s "shutter -s" -t "string"
 
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Super>d" -s "rofi -show" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Super>slash" -s "$HOME/src/splatmoji/splatmoji type" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Super>s" -s "xfdashboard -t" -t "string"
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Super>Escape" -s "xkill" -t "string"
 
 
@@ -115,7 +117,7 @@ function xfce_settings() {
 		xfconf-query -c xfwm4 -p /general/cycle_preview -s false
 		xfconf-query -c xfwm4 -p /general/mousewheel_rollup -s false
 		xfconf-query -c xfwm4 -p /general/workspace_names -n -t string -t string -t string -t string -t string -t string -t string -t string -t string -t string -s "1" -s "2" -s "3" -s "4" -s "5" -s "6" -s "7" -s "8" -s "9" -s "10"
-		xfconf-query -c xfwm4 -p /general/workspace_count -s 10
+		xfconf-query -c xfwm4 -p /general/workspace_count -s 4
 
 
  		xfconf-query -c xfce4-session -p /compat/LaunchGNOME -s true
@@ -201,6 +203,9 @@ function wm_i3() {
 }
 
 function move_windows_to_workspace() {
+
+	wmctrl -l | grep -i phpstorm | cut -f1 -d' ' | xargs -r -i wmctrl -i -r {} -t 0 
+
 	i3-msg '[class="Google-chrome"]' move to workspace 1
 	i3-msg '[class="Chromium"]' move to workspace 1
 

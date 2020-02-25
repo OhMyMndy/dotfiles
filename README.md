@@ -5,7 +5,7 @@
 ## Ubuntu
 
 ```bash
-sudo apt-get update -qq; sudo apt-get install git vim curl -y -qq
+sudo apt-get update -qq; sudo apt-get install git vim curl jq -y -qq
 cd ~
 git clone -q https://github.com/mandy91/dotfiles.git
 

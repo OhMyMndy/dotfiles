@@ -50,12 +50,17 @@ if [[ -z $file ]]; then
   file=docker-compose.yml
 fi
 
-if [[ -f "${file}.sh" ]]; then
+extensions=(py sh php)
+
+for extension in "${extensions[@]}"; do
+  executable_file="${file//.yml/}.$extension"
+  if [[ -f ${executable_file} ]] && [[ -x ${executable_file} ]]; then
     # shellcheck disable=2046
-    env $(grep -v '^#' .env | xargs) bash "${file}.sh" > "$tmpfile"
+    env $(grep -v '^#' .env | xargs) ./"$executable_file" > "$tmpfile"
     docker-compose -f "$tmpfile" "$@"
     exit $?
-fi
+  fi
+done
 
 docker-compose "$@"
 exit $?
