@@ -311,11 +311,7 @@ function minimal() {
 	packages+=(python python-gtk2 python-xlib python-dbus python-setuptools libpango-1.0)
 
 	_install "${packages[*]}"
-<<<<<<< HEAD
-	# _install_deb_from_url 'http://ftp.nl.debian.org/debian/pool/main/g/gnome-python-desktop/python-wnck_2.32.0+dfsg-3_amd64.deb'
-=======
 	# _install_deb_from_url "http://ftp.nl.debian.org/debian/pool/main/g/gnome-python-desktop/python-wnck_2.32.0+dfsg-3_$(cpu_architecture_simple).deb"
->>>>>>> 36f20cf6287921a2f1015290ce2b203a085d8543
 	# _install_pip https://github.com/ssokolow/quicktile/archive/master.zip
 
 
@@ -754,12 +750,6 @@ function dev() {
 
 	# Vscode dependencies
 	packages+=(libsecret-1-dev libx11-dev libxkbfile-dev)
-<<<<<<< HEAD
-	_add_repo_or_install_deb 'ppa:rmescandon/yq' 'yq'
-	
-	_install nodejs
-=======
->>>>>>> 36f20cf6287921a2f1015290ce2b203a085d8543
 	npm config set loglevel error
 	npm config set prefix "$HOME/.local"
 	npm install -g --silent bash-language-server >/dev/null
