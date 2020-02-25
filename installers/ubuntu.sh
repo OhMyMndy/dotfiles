@@ -265,13 +265,8 @@ function minimal() {
 
 	# Esential X tools
 	# kdeconnect   shutter
-<<<<<<< HEAD
-	packages+=(redshift-gtk xfce4-terminal xfce4-genmon-plugin chromium-browser seahorse galculator orage ristretto 
-		xsel xclip arandr wmctrl xscreensaver flatpak compton)
-=======
 	packages+=(flameshot redshift-gtk xfce4-terminal xfce4-genmon-plugin xfdashboard chromium-browser seahorse galculator orage ristretto 
 		xsel xclip arandr wmctrl xscreensaver flatpak compton catfish rofi xdotool ssh-askpass)
->>>>>>> 36f20cf6287921a2f1015290ce2b203a085d8543
 
 	_purge xfce4-appmenu-plugin
 	
