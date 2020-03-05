@@ -57,6 +57,7 @@ install robbowen.synthwave-vscode
 install lkytal.flatui
 install mbetacchini.massimo-theme
 
+install byi8220.indented-block-highlighting
 
 
 # Languages
@@ -117,6 +118,8 @@ install donjayamanne.githistory
 
 
 install jomeinaster.bracket-peek
+install formulahendry.code-runner
+install buenon.scratchpads
 
 
 settings

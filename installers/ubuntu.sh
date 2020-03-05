@@ -852,7 +852,8 @@ function docker() {
 		software-properties-common \
 		qemu-user-static \
 		docker.io \
-		lxcfs
+		lxcfs \
+		uidmap
 
 	if ! exists ctop; then
 		sudo -E curl -sSL "https://github.com/bcicen/ctop/releases/download/v0.7.2/ctop-0.7.2-linux-$(cpu_architecture_simple)" -o /usr/local/bin/ctop
@@ -910,6 +911,13 @@ function docker() {
 		curl -sSf https://moncho.github.io/dry/dryup.sh | sudo sh
 		sudo chmod 755 /usr/local/bin/dry
 	fi
+
+	# Docker rootless
+	# curl -LsS https://get.docker.com/rootless | FORCE_ROOTLESS_INSTALL=1 DOCKER_BIN=$HOME/docker bash  
+	# systemctl --user start docker
+	# export PATH=/home/mandy/docker:$PATH
+	# export DOCKER_HOST=unix:///run/user/1000/docker.sock
+
 }
 
 function polybar() {
@@ -935,16 +943,16 @@ EOL
 
 		sudo -E rm -f /etc/NetworkManager/dnsmasq.d/00-home-mndy-be.conf
 
-# 		sudo -E tee /etc/NetworkManager/dnsmasq.d/00-nextdns.conf << EOL &>/dev/null
-# no-resolv
-# bogus-priv
-# strict-order
-# server=2a07:a8c1::
-# server=45.90.30.0
-# server=2a07:a8c0::
-# server=45.90.28.0
-# add-cpe-id=cef6e6
-# EOL
+		sudo -E tee /etc/NetworkManager/dnsmasq.d/00-nextdns.conf << EOL &>/dev/null
+no-resolv
+bogus-priv
+strict-order
+server=2a07:a8c1::
+server=45.90.30.0
+server=2a07:a8c0::
+server=45.90.28.0
+add-cpe-id=cef6e6
+EOL
 
 	sudo -E tee /etc/NetworkManager/conf.d/00-ignore-docker-and-vbox.conf << EOL &>/dev/null
 [keyfile]

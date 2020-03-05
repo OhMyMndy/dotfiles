@@ -116,6 +116,7 @@ bash "$DIR/installers/config.sh" --icons
 link-file "$DIR" '.mpdconf'
 
 
+link-file "$DIR" '.config/Code/User/keybindings.json'
 
 bash "$DIR/installers/config.sh" --xfce
 bash "$DIR/installers/config.sh" --vim

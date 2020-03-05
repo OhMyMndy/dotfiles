@@ -99,6 +99,10 @@ export DEBIAN_DISABLE_RUBYGEMS_INTEGRATION=1
 
 export GOPATH="$HOME/.go"
 
+# Rootless docker
+# if [[ -d $HOME/docker ]]; then
+#     export PATH=$HOME/docker:$PATH
+# fi
 
 if [[ -f $HOME/.lessrc ]]; then
     # shellcheck source=.lessrc
