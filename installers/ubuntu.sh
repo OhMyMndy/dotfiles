@@ -15,7 +15,7 @@ set -eu
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd "$DIR" || exit 1
 # shellcheck source=../.base-script.sh
-source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/../.base-script.sh"
+source "$DIR/../.base-script.sh"
 
 
 if ! is_ubuntu; then
@@ -37,7 +37,7 @@ function _install_deb_from_url() {
 		_install curl
 	fi
 	curl -sSL "$url" >> "$tmp"
-	sudo -E dpkg -i "$tmp"
+	sudo -E dpkg -i "$tmp" || true
 	sudo -E apt-get -qq install -f -y
 }
 
@@ -126,7 +126,7 @@ function _install_flatpak_flathub() {
 
 function _install_pip3() {
 	set -e
-	if ! command -v pip3 &>/dev/null; then
+	if ! exists pip3; then
 		_install python3-pip
 	fi
 	# shellcheck disable=SC2068
@@ -146,7 +146,7 @@ function _install_pipx() {
 	echo "$@" | tr -d '\n' | xargs -d' ' -r -i sudo -E pip3 uninstall -q -y {} &>/dev/null | true
 	echo "$@" | tr -d '\n' | xargs -d' ' -r -i python3 -m pip uninstall --user -q -y {} &>/dev/null | true
 	# shellcheck disable=SC2068
-	echo "$@" | tr -d '\n' | xargs -d' ' -r -i pipx install {} --include-deps --pip-args=-q  >/dev/null
+	echo "$@" | tr -d '\n' | xargs -d' ' -r -i pipx install {} --include-deps --pip-args="-q --force"  >/dev/null
 	set +e
 }
 
@@ -265,7 +265,9 @@ function minimal() {
 
 	# Esential X tools
 	# kdeconnect   shutter
-	packages+=(flameshot redshift-gtk xfce4-terminal xfce4-genmon-plugin xfdashboard chromium-browser seahorse galculator orage ristretto 
+
+	# XFCE ONLY      xfce4-genmon-plugin xfdashboard  galculator
+	packages+=(redshift-gtk xfce4-terminalchromium-browser seahorse galculator orage ristretto 
 		xsel xclip arandr wmctrl xscreensaver flatpak compton catfish rofi xdotool ssh-askpass)
 
 	_purge xfce4-appmenu-plugin
@@ -308,16 +310,14 @@ function minimal() {
 
 	# Window managing
 	# quicktile dependencies
-	packages+=(python python-gtk2 python-xlib python-dbus python-setuptools libpango-1.0)
+	packages+=(python3 python3-pip python3-setuptools python3-gi python3-xlib python3-dbus gir1.2-glib-2.0 gir1.2-gtk-3.0 gir1.2-wnck-3.0)
 
 	_install "${packages[*]}"
 	# _install_deb_from_url "http://ftp.nl.debian.org/debian/pool/main/g/gnome-python-desktop/python-wnck_2.32.0+dfsg-3_$(cpu_architecture_simple).deb"
-	# _install_pip https://github.com/ssokolow/quicktile/archive/master.zip
-
+	_install_pip3 https://github.com/ssokolow/quicktile/archive/master.zip
 
  	_install_pip3 git+https://github.com/jeffkaufman/icdiff.git
 
-	
 
 	_install_gem teamocil
 	
@@ -381,6 +381,9 @@ function general() {
 	# PDF
 	packages+=(atril)
 
+	# Audio
+	packages+=(pulseeffects pasystray pavucontrol lsp-plugins-lv2)
+
 	if [ ! -f /usr/NX/bin/nxplayer ]; then
 		# shellcheck disable=1001
 		_install_deb_from_url "$(curl -sSL https://www.nomachine.com/download/download\&id\=6 2>/dev/null | grep -E -o "http.*download.*deb")"
@@ -399,13 +402,12 @@ function general() {
 		_install_deb_from_url "https://github.com/sharkdp/fd/releases/download/v7.4.0/fd_7.4.0_$(cpu_architecture_simple).deb"
 	fi
 
-	if ! command -v x11docker &>/dev/null; then
-		curl -sSL https://raw.githubusercontent.com/mviereck/x11docker/master/x11docker | sudo -E bash -s -- --update
-	fi
+	# if ! command -v x11docker &>/dev/null; then
+		# curl -sSL https://raw.githubusercontent.com/mviereck/x11docker/master/x11docker | sudo -E bash -s -- --update
+	# fi
 
 	_add_repo_or_install_deb 'ppa:lazygit-team/release' 'lazygit'
 
-	# _add_repo_or_install_deb 'ppa:webupd8team/indicator-kdeconnect' 'indicator-kdeconnect'
 
 	if ! apt-get -qq list papirus-icon-theme 2>/dev/null | grep -i -q installed
 	then
@@ -414,7 +416,6 @@ function general() {
 
 	_install_snap ripgrep --classic
 
-	_install_flatpak_flathub com.github.wwmm.pulseeffects
 
 	_install "${packages[*]}" 
 
@@ -428,6 +429,9 @@ function general() {
 
 	sudo -E curl -LsS "https://dystroy.org/broot/download/$(cpu_architecture)-linux/broot" -o /usr/local/bin/broot
 	sudo -E chmod +x /usr/local/bin/broot
+	sudo install_deb_from_url https://github.com/ksnip/ksnip/releases/download/v1.6.1/ksnip-1.6.1.deb
+
+
 	set +e
 }
 
@@ -444,21 +448,37 @@ function remove_obsolete() {
 }
 
 function groups() {
-	sudo -E groupadd "docker"
-	sudo -E groupadd vboxusers
-	sudo -E groupadd mail
-	sudo -E groupadd sambashare
+	sudo -E groupadd "docker" || true
+	sudo -E groupadd vboxusers || true
+	sudo -E groupadd mail || true
+	sudo -E groupadd sambashare || true
+	sudo -E groupadd audio || true
 
 	sudo -E usermod -aG "docker" mandy
 	sudo -E usermod -aG mail mandy
+	sudo -E usermod -aG audio mandy
 	sudo -E usermod -aG disk mandy
 	sudo -E usermod -aG cdrom mandy
 	sudo -E usermod -aG vboxusers mandy
-	sudo -E usermod -aG sudo -E mandy
+	sudo -E usermod -aG sudo mandy
 	sudo -E usermod -aG sambashare mandy
 	sudo -E usermod -aG netdev mandy
 	sudo -E usermod -aG dialout mandy
+}
 
+function unetbootin() {
+	_add_repository ppa:gezakovacs/ppa
+	_update
+	_install unetbootin
+}
+
+function jack() {
+	sudo -E sudo dpkg --purge kxstudio-repos-gcc5 || true
+	_install_deb_from_url https://launchpad.net/\~kxstudio-debian/+archive/kxstudio/+files/kxstudio-repos_10.0.3_all.deb
+	_install jackd2 carla-git cadence non-mixer pulseaudio-module-jack mididings lsp-plugins
+	ln -sf "${ROOT_DIR}"/.local/share/applications/JackAudio.desktop ~/.config/autostart/
+
+	sudo -E usermod -aG audio mandy
 }
 
 function fonts() {
@@ -496,6 +516,7 @@ function settings() {
 
 	# @todo lightdm_settings
 
+	xfce4-panel-profiles load ~/dotfiles/.local/share/xfpanel-switch/Mandy\ Mac\ OS\ Style\ with\ global\ menu\ dual\ monitor.tar.bz2.tar.bz2
 	
 	# X11 forwarding over SSH
 	sudo -E sed -i -E 's|.*X11UseLocalhost.*|X11UseLocalhost no|g' /etc/ssh/sshd_config
@@ -548,7 +569,7 @@ function virtualbox() {
 	fi
 	_update
 	_remove 'virtualbox*'
-	sudo -E pkill -e -f -9 VBox | true
+	sudo -E pkill -e -f -9 VBox || true
 	packages+=(VirtualBox-6.1)
 	_install "${packages[*]}" 
 	vagrant
@@ -561,14 +582,7 @@ function vagrant() {
 function i3() {
 	unset -f i3
 	sudo -E rm /etc/apt/sources.list.d/sur5r-i3.list
-	# if [ ! -f /etc/apt/sources.list.d/sur5r-i3.list ];
-	# then
-	# 	cd "${TMPDIR}"
-	# 	/usr/lib/apt/apt-helper download-file http://debian.sur5r.net/i3/pool/main/s/sur5r-keyring/sur5r-keyring_2019.02.01_all.deb keyring.deb SHA256:176af52de1a976f103f9809920d80d02411ac5e763f695327de9fa6aff23f416
-	# 	sudo -E dpkg -i ./keyring.deb
-	# 	echo "deb http://debian.sur5r.net/i3/ $(grep '^DISTRIB_CODENAME=' /etc/lsb-release | cut -f2 -d=) universe" | sudo -E tee /etc/apt/sources.list.d/sur5r-i3.list
-	# 	_update
-	# fi
+
 	declare -a packages=()
 	_remove spacefm
 	packages+=(udiskie compton nitrogen feh xfce4-panel pcmanfm rofi ssh-askpass-gnome)
@@ -608,7 +622,7 @@ function upgrade() {
 function media() {
 	declare -a packages=()
 	# Media things, disk burn software
-	packages+=(digikam k3b darktable)
+	packages+=(digikam k3b darktable krita)
 	_install "${packages[*]}" 
 	# Permissions for ripping cds
 	sudo -E chmod 4711 /usr/bin/wodim;
@@ -618,7 +632,7 @@ function media() {
 function chat() {
 	_install_snap slack --classic
 	# Use deb to make use of fonts-noto-color-emoji
-	_install_deb_from_url https://discordapp.com/api/download?platform=linux\&format=deb | true
+	_install_deb_from_url https://discordapp.com/api/download?platform=linux\&format=deb
 	sudo -E apt install -qq -y -f
 
 	if ! exists slack-term; then
@@ -633,8 +647,10 @@ function chat() {
 }
 
 function kde() {
-	packages+=(kronometer ktimer ark)
-	_remove konsole akonadi korganizer kaddressbook kmail kjots kalarm kmail amarok
+	packages+=(kronometer ktimer ark kubuntu-desktop filelight)
+		_install "${packages[*]}" 
+
+	_remove konsole korganizer kaddressbook kmail kjots kalarm kmail amarok kmines
 	# @todo remove kde pim etc
 }
 
@@ -648,7 +664,7 @@ function privacy() {
 	# packages+=(torbrowser-launcher)
 	# @todo add expressvpn
 	_install_deb_from_url "https://s3.amazonaws.com/purevpn-dialer-assets/linux/app/purevpn_1.2.2_$(cpu_architecture_simple).deb"
-	_install_deb_from_url "https://download.expressvpn.xyz/clients/linux/expressvpn_2.3.4-1_$(cpu_architecture_simple).deb"
+	_install_deb_from_url "https://download.expressvpn.xyz/clients/linux/expressvpn_2.4.4.19_1_$(cpu_architecture_simple).deb"
 }
 
 
@@ -740,18 +756,20 @@ function dev() {
 
 	# Vscode dependencies
 	packages+=(libsecret-1-dev libx11-dev libxkbfile-dev)
+	_install "${packages[*]}" 
+
 	npm config set loglevel error
 	npm config set prefix "$HOME/.local"
-	npm install -g --silent bash-language-server >/dev/null
-	npm install -g --silent intelephense >/dev/null
-	npm install -g --silent bats >/dev/null
-	npm install -g --silent json >/dev/null
-	npm install -g --silent fixjson jsonlint >/dev/null
-	npm install -g --silent eslint >/dev/null
-	npm install -g --silent markdownlint-cli >/dev/null
-	npm install -g --silent @marp-team/marp-cli >/dev/null
-	npm install -g --silent yarn >/dev/null
-	npm install -g --silent gulp >/dev/null
+	npm install -g --silent --force bash-language-server >/dev/null
+	npm install -g --silent --force intelephense >/dev/null
+	npm install -g --silent --force bats >/dev/null
+	npm install -g --silent --force json >/dev/null
+	npm install -g --silent --force fixjson jsonlint >/dev/null
+	npm install -g --silent --force eslint >/dev/null
+	npm install -g --silent --force markdownlint-cli >/dev/null
+	npm install -g --silent --force @marp-team/marp-cli >/dev/null
+	npm install -g --silent --force yarn >/dev/null
+	npm install -g --silent --force gulp >/dev/null
 
 	if ! exists circleci; then
 		curl -sSL https://circle.ci/cli | sudo -E bash
@@ -778,7 +796,16 @@ function dev() {
 	fi
 }
 
+function audio() {
+	sudo apt-get update
+	_install flacon flac
 
+	https://launchpad.net/\~kxstudio-debian/+archive/kxstudio/+files/kxstudio-repos_10.0.3_all.deb
+
+	sudo -E dpkg --purge kxstudio-repos-gcc5
+	_install jackd2 carla-git cadence jack-mixer pulseaudio-module-jack mididings lsp-plugins liblash-compat-1debian0 jack-mixer
+	_install_pip gconf
+}
 
 function php() {
 	unset -f php
@@ -1002,9 +1029,10 @@ function firewall() {
 	sudo -E ufw allow 8080/tcp
 
 	# nomachine
-	sudo -E ufw allow 4000udp
+	sudo -E ufw allow 4000/udp
 	sudo -E ufw allow 4000/tcp
 
+	sudo -E ufw reload
 	# access local hosts through vpn
 	# shellcheck disable=SC2010
 	sudo -E ip route add 192.168.10.0/24 "dev" "$(ls /sys/class/net | grep "^en*" | head -1)"
@@ -1041,7 +1069,7 @@ function autostart() {
 		ln -sf "$ROOT_DIR/.local/share/applications/Compton.desktop" ~/.config/autostart/
 	fi
 	find ~/.config/autostart/ -xtype l -delete
-	update-desktop-database
+	sudo -E update-desktop-database
 }
 
 function audit() {
@@ -1050,13 +1078,20 @@ function audit() {
 	sudo augenrules --load
 }
 
+
+function wine() {
+	packages+=(wine winetricks)
+	_install "${packages[*]}" 
+}
+
 function gaming() {
 	lutris
 	retroarch-config
 	packages+=(steam)
+
+	_install https://launcher.mojang.com/download/Minecraft.deb
+
 	_install "${packages[*]}" 
-	sudo -E curl -sSL https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks -o /usr/local/bin/winetricks
-	sudo -E chmod +x /usr/local/bin/winetricks
 	
 	pipx install protontricks
 }

@@ -17,6 +17,10 @@ source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/.base-script.sh"
 mkdir -p ~/.config/{copyq,ulauncher,Thunar}
 mkdir -p ~/Screenshots
 
+link-file "$DIR" "Carla"
+link-file "$DIR" "audio"
+link-file "$DIR" ".alsoftrc"
+
 link-file "$DIR" ".config/copyq/copyq.conf"
 link-file "$DIR" ".config/copyq/copyq-commands.ini"
 

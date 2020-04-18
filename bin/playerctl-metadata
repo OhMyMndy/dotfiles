@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-status="$(playerctl status -p chromium,vlc 2>/dev/null)"
+status="$(playerctl status -p chrome,chromium,vlc 2>/dev/null)"
 if [[ $status = 'Playing' ]]; then
-    data="$(playerctl metadata -p chromium,vlc -f '{{ artist }} - {{ title}}' 2>/dev/null)"
+    data="$(playerctl metadata -p chrome,chromium,vlc -f '{{ artist }} - {{ title }}' 2>/dev/null)"
     echo "$data"
 else
     echo '-'

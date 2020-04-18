@@ -4,7 +4,7 @@ set -eu
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd "$DIR" || exit 1
 # shellcheck source=../../.base-script.sh
-source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/../../.base-script.sh"
+source "$DIR/../../.base-script.sh"
 
 function install() {
     code --install-extension "$@" >/dev/null

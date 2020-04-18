@@ -10,7 +10,7 @@ cd ~
 git clone -q https://github.com/mandy91/dotfiles.git
 
 ~/dotfiles/link.sh
-~/dotfiles/installers/ubuntu.sh --minimal --general --locale --upgrade --autostart --settings --settings-light
+~/dotfiles/installers/ubuntu.sh --minimal --general --groups --firewall --locale --upgrade --remove_obsolete --autostart --settings --settings-light --fonts --groups --keybindings --chat --dev
 ~/dotfiles/link.sh
 ```
 

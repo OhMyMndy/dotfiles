@@ -1,0 +1,22 @@
+#!/bin/bash
+set -x
+pax11publish -i  > "$PWD/pulse.env"
+
+pulseaudio --start
+pacmd unload-module module-jack-sinkc
+pacmd unload-module module-jack-source
+
+pacmd load-module module-jack-source channels=2 source_name=voip-in client_name=voip-in connect=false
+pacmd load-module module-jack-sink channels=2 sink_name=voip-out client_name=voip-out connect=false
+
+pacmd load-module module-jack-sink channels=2 sink_name=games-out client_name=games-out connect=false
+
+pacmd load-module module-jack-source channels=2 source_name=media-in client_name=media-in connect=false
+pacmd load-module module-jack-sink channels=2 sink_name=media-out client_name=media-out connect=false
+
+
+pacmd load-module module-jack-source channels=2 source_name=browser-in client_name=browser-in connect=false
+pacmd load-module module-jack-sink channels=2 sink_name=browser-out client_name=browser-out connect=false
+
+
+sleep infinity

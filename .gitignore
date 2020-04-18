@@ -26,3 +26,4 @@ __pycache__
 .history
 *.un~
 tags
+*.env

@@ -27,7 +27,7 @@ function xfce_keybindings() {
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Alt>F2/startup-notify" -s "true" -t "bool"
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Alt>F3" -s "xfce4-appfinder" -t "string"
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Alt>F3/startup-notify" -s "true" -t "bool"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Alt>Print" -s "shutter -s" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Alt>Print" -s "flameshot gui" -t "string"
 
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Super>d" -s "rofi -show" -t "string"
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Super>slash" -s "$HOME/src/splatmoji/splatmoji type" -t "string"
@@ -39,7 +39,7 @@ function xfce_keybindings() {
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Primary><Alt>Delete" -s "dm-tool lock" -t "string"
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Primary><Alt>Escape" -s "xkill" -t "string"
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Primary>Escape" -s "xfce4-popup-whiskermenu" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/Print" -s "shutter -f" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/Print" -s "flameshot gui" -t "string"
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Super>e" -s "mousepad" -t "string"
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Super>f" -s "exo-open --launch FileManager" -t "string"
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Super>F1" -s "xfce4-find-cursor" -t "string"
