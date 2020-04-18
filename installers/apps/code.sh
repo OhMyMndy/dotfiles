@@ -1,13 +1,17 @@
 #!/usr/bin/env bash
 
-set -eu
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd "$DIR" || exit 1
 # shellcheck source=../../.base-script.sh
 source "$DIR/../../.base-script.sh"
 
 function install() {
-    code --install-extension "$@" >/dev/null
+    if command -v code &>/dev/null; then
+        code --install-extension "$@" >/dev/null
+    fi
+    if command -v code-server &>/dev/null; then
+        code-server --install-extension "$@" >/dev/null
+    fi
 }
 
 function write_setting() {
@@ -17,14 +21,14 @@ function write_setting() {
         echo "{}" > "$settings_file"
     fi
     
-    if exists json; then
+    if  command -v json &>/dev/null; then
         json -f "$settings_file" -I -e "$@"
     fi
 }
 
 function settings() {
     write_setting "this['git.autofetch'] = true"
-    write_setting "this['workbench.iconTheme'] = 'vscode-icons'"
+    write_setting "this['workbench.iconTheme'] = 'material-icon-theme'"
     write_setting "this['terminal.integrated.minimumContrastRatio'] = 9"
     write_setting "this['terminal.integrated.drawBoldTextInBrightColors'] = false"
     write_setting "this['files.exclude'] = { \"**/.*.un~\": true, \"**/.history/**\": true }"
@@ -53,6 +57,7 @@ install robbowen.synthwave-vscode
 install lkytal.flatui
 install mbetacchini.massimo-theme
 
+install byi8220.indented-block-highlighting
 
 
 # Languages
@@ -113,6 +118,8 @@ install donjayamanne.githistory
 
 
 install jomeinaster.bracket-peek
+install formulahendry.code-runner
+install buenon.scratchpads
 
 
 settings

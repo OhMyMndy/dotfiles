@@ -41,6 +41,7 @@ function xfce_keybindings() {
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Primary>Escape" -s "xfce4-popup-whiskermenu" -t "string"
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/Print" -s "flameshot gui" -t "string"
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Super>e" -s "mousepad" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Super>c" -s "code" -t "string"
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Super>f" -s "exo-open --launch FileManager" -t "string"
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Super>F1" -s "xfce4-find-cursor" -t "string"
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Super>m" -s "exo-open --launch MailReader" -t "string"
@@ -63,9 +64,11 @@ function xfce_keybindings() {
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/Left" -s "left_key" -t "string"
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/override" -s "true" -t "bool"
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Primary><Alt>d" -s "show_desktop_key" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Primary><Shift><Alt>Left" -s "move_window_left_key" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Primary><Shift><Alt>Right" -s "move_window_right_key" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Primary><Shift><Alt>Up" -s "move_window_up_key" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Primary><Shift><Alt>Left" -s "tile_left_key" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Primary><Shift><Alt>Right" -s "tile_right_key" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Primary><Shift><Alt>Up" -s "tile_up_key" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Primary><Shift><Alt>Down" -s "tile_down_key" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Primary><Shift><Alt>f" -s "maximize_window_key" -t "string"
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/Right" -s "right_key" -t "string"
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Shift><Alt>ISO_Left_Tab" -s "cycle_reverse_windows_key" -t "string"
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/xfwm4/custom/<Shift><Super>ampersand" -s "move_window_workspace_7_key" -t "string"
@@ -203,6 +206,9 @@ function wm_i3() {
 }
 
 function move_windows_to_workspace() {
+
+	wmctrl -l | grep -i phpstorm | cut -f1 -d' ' | xargs -r -i wmctrl -i -r {} -t 0 
+
 	i3-msg '[class="Google-chrome"]' move to workspace 1
 	i3-msg '[class="Chromium"]' move to workspace 1
 

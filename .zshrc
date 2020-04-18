@@ -93,11 +93,16 @@ if [[ -f $HOME/bin/commands-to-aliases ]]; then
     source "$HOME/.aliases"
 fi
 
-export GEM_HOME="$HOME/.gem"
-export GEM_PATH="$HOME/.gem"
+# export GEM_HOME="$HOME/.gem"
+# export GEM_PATH="$HOME/.gem"
+export DEBIAN_DISABLE_RUBYGEMS_INTEGRATION=1
 
 export GOPATH="$HOME/.go"
 
+# Rootless docker
+# if [[ -d $HOME/docker ]]; then
+#     export PATH=$HOME/docker:$PATH
+# fi
 
 if [[ -f $HOME/.lessrc ]]; then
     # shellcheck source=.lessrc
@@ -149,7 +154,7 @@ alias ve='python3 -m venv ./venv'
 alias va='source ./venv/bin/activate'
 
 # Snapcraft aliases
-alias snapcraft-docker='docker run --rm -v "$PWD":/build --init -w /build snapcore/snapcraft:stable bash -c "apt update -qq apt upgrade -y -qq; snapcraft"'
+alias snapcraft-docker='docker run --rm -v "$PWD":/build --init -w /build snapcore/snapcraft:stable bash -c "apt update -qq; apt upgrade -y -qq; snapcraft"'
 
 if exists thefuck; then eval "$(thefuck --alias)"; fi
 

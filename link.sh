@@ -29,6 +29,9 @@ link-file "$DIR" ".config/copyq/copyq-commands.ini"
 # cp ~/{,dotfiles/}.config/Thunar/uca.xml
 link-file "$DIR" ".config/Thunar/uca.xml"
 
+link-file "$DIR" ".config/neofetch/config.conf"
+link-file "$DIR" ".config/tilda"
+
 link-file "$DIR" ".spacemacs"
 link-file "$DIR" ".imwheelrc"
 
@@ -117,6 +120,7 @@ bash "$DIR/installers/config.sh" --icons
 link-file "$DIR" '.mpdconf'
 
 
+link-file "$DIR" '.config/Code/User/keybindings.json'
 
 bash "$DIR/installers/config.sh" --xfce
 bash "$DIR/installers/config.sh" --vim

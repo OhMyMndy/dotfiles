@@ -227,14 +227,14 @@ function minimal() {
 
 	# minimal
 	packages+=(file coreutils findutils vlock nnn ack sed tree grep silversearcher-ag)
-	packages+=(python-pip python3-pip)
+	packages+=(python-pip python3-pip bsdmainutils)
 
 	_add_repository -n "deb http://archive.canonical.com/ $(lsb_release -sc) partner"
  	_add_repository ppa:git-core/ppa
 	_update
 
 	# Misc
-	packages+=(git git-extras tig gitg zsh iproute2 man pv autojump less curl rename rsync openssh-server most multitail trash-cli zenity libsecret-tools parallel ruby ruby-dev ntp neovim vim-gtk3 fonts-noto-color-emoji fonts-noto fonts-roboto)
+	packages+=(git git-extras tig gitg zsh iproute2 man pv autojump less curl rename rsync rclone openssh-server most multitail trash-cli zenity libsecret-tools parallel ruby ruby-dev ntp neovim vim-gtk3 fonts-noto-color-emoji fonts-noto fonts-roboto)
 
 	# Terminal multiplexing
 	packages+=(byobu tmux)
@@ -243,7 +243,7 @@ function minimal() {
 	packages+=(iotop htop nload glances)
 
 	# Networking tools
-	packages+=(nmap iputils-ping dnsutils telnet-ssl mtr-tiny traceroute libnss3-tools netdiscover whois bridge-utils)
+	packages+=(nmap iputils-ping dnsutils telnet-ssl mtr-tiny traceroute libnss3-tools netdiscover whois bridge-utils trickle)
 	# smbmap, only available in disco+
 
 	# Cron
@@ -383,6 +383,8 @@ function general() {
 
 	# Audio
 	packages+=(pulseeffects pasystray pavucontrol lsp-plugins-lv2)
+	# Terminal
+	packages+=(tilda)
 
 	if [ ! -f /usr/NX/bin/nxplayer ]; then
 		# shellcheck disable=1001
@@ -575,6 +577,14 @@ function virtualbox() {
 	vagrant
 }
 
+function qemu() {
+	_install qemu 'qemu-system*' virt-manager
+	sudo usermod -aG libvirt "$(whoami)"
+	sudo usermod -aG libvirt-qemu "$(whoami)"
+	sudo chown root:kvm /dev/kvm
+	sudo chmod g+rw /dev/kvm
+}
+
 function vagrant() {
 	_install_deb_from_url "https://releases.hashicorp.com/vagrant/2.2.7/vagrant_2.2.7_$(cpu_architecture).deb"
 }
@@ -729,12 +739,11 @@ function dev() {
 		sudo -E cp "hadolint" /usr/bin/
 		sudo -E chmod +x /usr/bin/hadolint
 	fi
-	packages+=(python3-venv python3-dev python3-pip python3-venv python3-wheel golang-go pandoc)
+	packages+=(python3-dev python3-pip python3-venv python3-wheel golang-go pandoc)
 	_install "${packages[*]}"
 	packages=()
-
-	_install_pipx mypy yamllint flake8 autopep8 vim-vint spybar jupyter
-	_install_pip3 dockerfile 
+	_install_pipx mypy yamllint flake8 autopep8 vim-vint spybar
+	_install_pip3 dockerfile
 
 	# python3 version is not in pypi
 	pip install crudini
@@ -869,7 +878,8 @@ function docker() {
 		software-properties-common \
 		qemu-user-static \
 		docker.io \
-		lxcfs
+		lxcfs \
+		uidmap
 
 	if ! exists ctop; then
 		sudo -E curl -sSL "https://github.com/bcicen/ctop/releases/download/v0.7.2/ctop-0.7.2-linux-$(cpu_architecture_simple)" -o /usr/local/bin/ctop
@@ -927,6 +937,13 @@ function docker() {
 		curl -sSf https://moncho.github.io/dry/dryup.sh | sudo sh
 		sudo chmod 755 /usr/local/bin/dry
 	fi
+
+	# Docker rootless
+	# curl -LsS https://get.docker.com/rootless | FORCE_ROOTLESS_INSTALL=1 DOCKER_BIN=$HOME/docker bash  
+	# systemctl --user start docker
+	# export PATH=/home/mandy/docker:$PATH
+	# export DOCKER_HOST=unix:///run/user/1000/docker.sock
+
 }
 
 function polybar() {
@@ -944,17 +961,13 @@ function polybar() {
 
 
 function networkmanager() {
-	if [ ! -f /etc/NetworkManager/conf.d/00-use-dnsmasq.conf ]; then
 		sudo -E tee /etc/NetworkManager/conf.d/00-use-dnsmasq.conf << EOL &>/dev/null
 # This enabled the dnsmasq plugin.
 [main]
 dns=dnsmasq
 EOL
 
-		sudo -E tee /etc/NetworkManager/dnsmasq.d/00-home-mndy-be.conf << EOL &>/dev/null
-address=/home.mndy.be/192.168.10.120
-addn-hosts=/etc/hosts
-EOL
+		sudo -E rm -f /etc/NetworkManager/dnsmasq.d/00-home-mndy-be.conf
 
 		sudo -E tee /etc/NetworkManager/dnsmasq.d/00-nextdns.conf << EOL &>/dev/null
 no-resolv
@@ -967,16 +980,17 @@ server=45.90.28.0
 add-cpe-id=cef6e6
 EOL
 
-
-		# use network manager instead of systemd resolve resolv.conf
-		sudo -E rm /etc/resolv.conf; sudo -E ln -s /var/run/NetworkManager/resolv.conf /etc/resolv.conf
-		sudo -E systemctl restart NetworkManager
-	fi
-
 	sudo -E tee /etc/NetworkManager/conf.d/00-ignore-docker-and-vbox.conf << EOL &>/dev/null
 [keyfile]
-unmanaged-devices=interface-name:docker0;interface-name:vboxnet*;interface-name:br-*
+unmanaged-devices=interface-name:docker0;interface-name:vboxnet*;interface-name:br-*;interface-name:veth*;interface-name:docker_gwbridge
 EOL
+
+	# use network manager instead of systemd resolve resolv.conf
+	if [[ -f /var/run/NetworkManager/resolv.conf ]]; then
+		sudo -E rm /etc/resolv.conf
+		sudo -E ln -s /var/run/NetworkManager/resolv.conf /etc/resolv.conf
+	fi
+	sudo -E systemctl restart NetworkManager
 }
 
 function sysctl() {

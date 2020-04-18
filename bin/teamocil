@@ -2,8 +2,10 @@
 
 set -e
 
-config="$1"
+config="$@"
 tmp_config="$HOME/.teamocil/_tmp_$config.yml"
+
+teamocil_bin="$(which -a teamocil | sort | uniq | grep -v "${BASH_SOURCE[0]}")"
 
 if [[ -z "$TMUX_PANE" ]]; then
     echo "Not in a Tmux session"
@@ -25,7 +27,7 @@ touch "$tmp_config"
 if [ -f "$HOME/.teamocil/$config.yml" ]; then
 	cat "$HOME/.teamocil/$config.yml" > "$tmp_config"
 else
-	exec ~/.gem/bin/teamocil $@
+	exec $teamocil_bin $@
 fi
 
 
@@ -64,7 +66,7 @@ done
 sed -i -e "s#{{[^}]*}}##g" "$tmp_config"
 
 shift
-~/.gem/bin/teamocil "_tmp_$config" $@
+$teamocil_bin "_tmp_$config" $@
 
 exit
 
