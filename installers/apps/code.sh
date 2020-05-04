@@ -2,8 +2,7 @@
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd "$DIR" || exit 1
-# shellcheck source=../../.base-script.sh
-source "$DIR/../../.base-script.sh"
+
 
 function install() {
     if command -v code &>/dev/null; then
@@ -16,13 +15,20 @@ function install() {
 
 function write_setting() {
     settings_file="$HOME/.config/Code/User/settings.json"
+    settings_file_server="$HOME/.local/share/code-server/User/settings.json"
     if [[ ! -f $settings_file ]]; then
         mkdir -p "$(dirname "$settings_file")"
         echo "{}" > "$settings_file"
     fi
     
+    if [[ ! -f $settings_file_server ]]; then
+        mkdir -p "$(dirname "$settings_file_server")"
+        echo "{}" > "$settings_file_server"
+    fi
+
     if  command -v json &>/dev/null; then
-        json -f "$settings_file" -I -e "$@"
+        json -f "$settings_file" -I -e "$@" > /dev/null
+        json -f "$settings_file_server" -I -e "$@" > /dev/null
     fi
 }
 
@@ -34,7 +40,7 @@ function settings() {
     write_setting "this['files.exclude'] = { \"**/.*.un~\": true, \"**/.history/**\": true }"
     write_setting "this['files.watcherExclude'] = { \"**/.*.un~\": true, \"**/.history/**\": true }"
     write_setting "this['shellcheck.customArgs'] = [ '-x' ]"
-    write_setting "this['bashIde.path'] = '$HOME/.local/bin/bash-language-server'"
+    write_setting "this['bashIde.path'] = '$(which bash-language-server)'"
     write_setting "this['shellcheck.executablePath'] = '/usr/bin/shellcheck'"
 }
 
@@ -42,8 +48,10 @@ function settings() {
 # @see https://itnext.io/why-i-wrote-33-vscode-extensions-and-how-i-manage-them-cb61df05e154
 
 # Project management
-install fabiospampinato.vscode-projects-plus
-install fabiospampinato.vscode-terminals
+# install fabiospampinato.vscode-projects-plus
+# install fabiospampinato.vscode-terminals
+
+settings
 
 #Vim
 install fallenwood.viml
@@ -51,11 +59,11 @@ install fallenwood.viml
 # Themes and keybindings
 install k--kato.intellij-idea-keybindings
 install pkief.material-icon-theme
-install equinusocio.vsc-material-theme
-install dracula-theme.theme-dracula
-install robbowen.synthwave-vscode
-install lkytal.flatui
-install mbetacchini.massimo-theme
+#install equinusocio.vsc-material-theme
+#install dracula-theme.theme-dracula
+#install robbowen.synthwave-vscode
+#install lkytal.flatui
+#install mbetacchini.massimo-theme
 
 install byi8220.indented-block-highlighting
 

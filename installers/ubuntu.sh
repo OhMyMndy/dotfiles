@@ -465,6 +465,8 @@ function groups() {
 	sudo -E usermod -aG sudo mandy
 	sudo -E usermod -aG sambashare mandy
 	sudo -E usermod -aG netdev mandy
+	sudo -E usermod -aG plugdev mandy
+	sudo -E usermod -aG input mandy
 	sudo -E usermod -aG dialout mandy
 }
 
@@ -1136,15 +1138,14 @@ function retroarch-config() {
 
 	_set_retroarch_config fps_show "\"true\""
 	# shellcheck disable=SC2016
-	echo "$retroarch_config_files" \
-		| xargs -r -i bash -c 'dir="$(dirname "{}")"; crudini --set --inplace "{}" "" system_directory "\"$dir/system/\""'
+	crudini --set --inplace "{}" "" system_directory "/tank/media/games/bios"
 		
 
 	_set_retroarch_coreconfig beetle_psx_dither_mode "\"internal resolution\""
 	_set_retroarch_coreconfig beetle_psx_filter "\"bilinear\""
 	_set_retroarch_coreconfig beetle_psx_internal_color_depth "\"32bpp\""
 	_set_retroarch_coreconfig beetle_psx_internal_resolution "\"4x\""
-	_set_retroarch_coreconfig beetle_psx_renderer "\"opengl\""
+	_set_retroarch_coreconfig beetle_psx_renderer "\"vulkan\""
 	_set_retroarch_coreconfig beetle_psx_scale_dither "\"enabled\""
 }
 
