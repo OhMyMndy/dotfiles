@@ -187,6 +187,10 @@ function _update() {
 	updated=1
 }
 
+function _force_update() {
+	sudo -E apt-get update -y -qq	
+}
+
 function _remove() {
 	# shellcheck disable=SC2068
 	sudo -E apt-get -qq remove -y $@
@@ -226,15 +230,18 @@ function minimal() {
 	declare -a packages=()
 
 	# minimal
-	packages+=(file coreutils findutils vlock nnn ack sed tree grep silversearcher-ag)
+	packages+=(file coreutils findutils vlock nnn ack sed tree grep silversearcher-ag gawk)
 	packages+=(python-pip python3-pip bsdmainutils)
 
 	_add_repository -n "deb http://archive.canonical.com/ $(lsb_release -sc) partner"
  	_add_repository ppa:git-core/ppa
-	_update
+	_force_update
 
 	# Misc
 	packages+=(git git-extras tig gitg zsh iproute2 man pv autojump less curl rename rsync rclone openssh-server most multitail trash-cli zenity libsecret-tools parallel ruby ruby-dev ntp neovim vim-gtk3 fonts-noto-color-emoji fonts-noto fonts-roboto)
+
+	# Misc X
+	packages+=(rclone-browser)
 
 	# Terminal multiplexing
 	packages+=(byobu tmux)
@@ -250,13 +257,13 @@ function minimal() {
 	packages+=(cron cronic)
 
 	# Mailing
-	packages+=(msmtp-mta thunderbird)
+	packages+=(msmtp-mta)
 
 	# Cli browser with inline images
 	packages+=(w3m w3m-img)
 
 	# Spelling  python-hunspell
-	packages+=(hyphen-en-gb hyphen-nl hunspell aspell-nl hunspell-nl aspell-en hunspell-en-gb hunspell-en-us hunspell-no aspell-no libgspell-1-1 libgtkspell0 python3-hunspell )
+	packages+=(aspell hyphen-en-gb hyphen-nl hunspell aspell-nl hunspell-nl aspell-en hunspell-en-gb hunspell-en-us hunspell-no aspell-no libgspell-1-1 libgtkspell0 python3-hunspell )
 
 	# Apt tools
 	packages+=(apt-file wajig apt-rdepends gnome-software)
@@ -266,13 +273,12 @@ function minimal() {
 	# Esential X tools
 	# kdeconnect   shutter
 
-	# XFCE ONLY      xfce4-genmon-plugin xfdashboard  galculator
-	packages+=(redshift-gtk xfce4-terminalchromium-browser seahorse galculator orage ristretto 
+	packages+=(redshift-gtk xfce4-terminal xfce4-genmon-plugin xfdashboard chromium-browser seahorse galculator orage ristretto 
 		xsel xclip arandr wmctrl xscreensaver flatpak compton catfish rofi xdotool ssh-askpass)
-
+	
 	_purge xfce4-appmenu-plugin
 	
-	_add_repo_or_install_deb 'ppa:hluk/copyq' 'copyq' "https://github.com/hluk/CopyQ/releases/download/v3.9.3/copyq_3.9.3_Debian_10-1_$(cpu_architecture_simple).deb"
+	_add_repo_or_install_deb 'ppa:hluk/copyq' 'copyq' "https://github.com/hluk/CopyQ/releases/download/v3.10.0/copyq_3.10.0_Debian_10-1_$(cpu_architecture_simple).deb"
 
 	# File management and disk plugins
 	packages+=(cifs-utils exfat-fuse exfat-utils samba hfsprogs cdck ncdu mtp-tools ranger)
@@ -285,8 +291,6 @@ function minimal() {
 
 	# Mouse and keyboard
 	packages+=(imwheel)
-	# Language and spell check
-	packages+=(aspell)
 
 	#git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d
 
@@ -322,7 +326,9 @@ function minimal() {
 	_install_gem teamocil
 	
 	ulauncher
+
 	bash "$DIR/apps/oh-my-zsh.sh"
+
 	# Fix for snaps with ZSH
 	LINE="emulate sh -c 'source /etc/profile'"
 	FILE=/etc/zsh/zprofile
@@ -455,6 +461,8 @@ function groups() {
 	sudo -E groupadd mail || true
 	sudo -E groupadd sambashare || true
 	sudo -E groupadd audio || true
+	sudo -E groupadd kvm || true
+	sudo -E groupadd lxd || true
 
 	sudo -E usermod -aG "docker" mandy
 	sudo -E usermod -aG mail mandy
@@ -466,6 +474,8 @@ function groups() {
 	sudo -E usermod -aG sambashare mandy
 	sudo -E usermod -aG netdev mandy
 	sudo -E usermod -aG dialout mandy
+	sudo -E usermod -aG kvm mandy
+	sudo -E usermod -aG lxd mandy
 }
 
 function unetbootin() {
@@ -532,7 +542,7 @@ function keybindings() {
 
 function ulauncher() {
 	unset -f ulauncher
-	_add_repo_or_install_deb 'ppa:agornostal/ulauncher' 'ulauncher' 'https://github.com/Ulauncher/Ulauncher/releases/download/5.4.0/ulauncher_5.4.0_all.deb'
+	_add_repo_or_install_deb 'ppa:agornostal/ulauncher' 'ulauncher' 'https://github.com/Ulauncher/Ulauncher/releases/download/5.7.4/ulauncher_5.7.4_all.deb'
 }
 
 function locale() {
@@ -560,33 +570,6 @@ function locale() {
 	LC_TELEPHONE=nl_BE.UTF-8 \
 	LC_MEASUREMENT=nl_BE.UTF-8 \
 	LC_IDENTIFICATION=nl_BE.UTF-8
-}
-
-function virtualbox() {
-	unset -f virtualbox
-	if [ ! -f /etc/apt/sources.list.d/virtualbox.list ]; then
-		echo "deb [arch=$(cpu_architecture_simple)] https://download.virtualbox.org/virtualbox/debian $(grep '^DISTRIB_CODENAME=' /etc/lsb-release | cut -f2 -d=) contrib" | sudo -E tee /etc/apt/sources.list.d/virtualbox.list
-		wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo apt-key add -
-		wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | sudo apt-key add -
-	fi
-	_update
-	_remove 'virtualbox*'
-	sudo -E pkill -e -f -9 VBox || true
-	packages+=(VirtualBox-6.1)
-	_install "${packages[*]}" 
-	vagrant
-}
-
-function qemu() {
-	_install qemu 'qemu-system*' virt-manager
-	sudo usermod -aG libvirt "$(whoami)"
-	sudo usermod -aG libvirt-qemu "$(whoami)"
-	sudo chown root:kvm /dev/kvm
-	sudo chmod g+rw /dev/kvm
-}
-
-function vagrant() {
-	_install_deb_from_url "https://releases.hashicorp.com/vagrant/2.2.7/vagrant_2.2.7_$(cpu_architecture).deb"
 }
 
 function i3() {
@@ -620,7 +603,8 @@ function usb_ssd() {
 
 
 function upgrade() {
-	_update; sudo -E apt "upgrade" -y -qq
+	_update
+	sudo -E apt "upgrade" -y -qq
 	sudo -E apt install "linux-headers-$(uname -r)" dkms -y
 	if [[ -f /sbin/vboxconfig ]]; then
 		sudo -E /sbin/vboxconfig
@@ -633,6 +617,9 @@ function media() {
 	declare -a packages=()
 	# Media things, disk burn software
 	packages+=(digikam k3b darktable krita)
+
+	# add ffmpegfs for 20.04
+
 	_install "${packages[*]}" 
 	# Permissions for ripping cds
 	sudo -E chmod 4711 /usr/bin/wodim;
@@ -643,17 +630,18 @@ function chat() {
 	_install_snap slack --classic
 	# Use deb to make use of fonts-noto-color-emoji
 	_install_deb_from_url https://discordapp.com/api/download?platform=linux\&format=deb
-	sudo -E apt install -qq -y -f
 
 	if ! exists slack-term; then
 		sudo curl -LsS https://github.com/erroneousboat/slack-term/releases/download/v0.4.1/slack-term-linux-amd64 -o /usr/local/bin/slack-term
 		sudo chmod +x /usr/local/bin/slack-term
 	fi
 
-	# if ! command -v Station.AppImage &>/dev/null; then
-	# 	curl -LSs "https://github.com/getstation/desktop-app-releases/releases/download/1.63.4/Station-1.63.4-$(cpu_architecture).AppImage" -o ~/.local/bin/Station.AppImage
-	# 	chmod +x ~/.local/bin/Station.AppImage
-	# fi
+	if ! exists signal-desktop; then
+		curl -s https://updates.signal.org/desktop/apt/keys.asc | sudo apt-key add -
+		echo "deb [arch=amd64] https://updates.signal.org/desktop/apt xenial main" | sudo tee -a /etc/apt/sources.list.d/signal-xenial.list
+		_force_update
+		_install signal-desktop
+	fi
 }
 
 function kde() {
@@ -723,9 +711,12 @@ function jupyter() {
 function dev() {
 	declare -a packages=()
 	if exists snap && ! exists snapcraft; then
-	sudo -E snap install snapcraft --classic
+		sudo -E snap install snapcraft --classic
 	fi
-	packages+=(apache2-utils multitail virt-what proot)
+
+	# bless is a hex editor
+	# apache2-utils contains ab
+	packages+=(apache2-utils multitail virt-what proot bless)
 	_remove shellcheck
 	if ! exists shellcheck; then
 		scversion="stable" # or "v0.4.7", or "latest"
@@ -742,7 +733,7 @@ function dev() {
 	packages+=(python3-dev python3-pip python3-venv python3-wheel golang-go pandoc)
 	_install "${packages[*]}"
 	packages=()
-	_install_pipx mypy yamllint flake8 autopep8 vim-vint spybar
+	_install_pipx mypy yamllint flake8 autopep8 vim-vint spybar stormssh
 	_install_pip3 dockerfile
 
 	# python3 version is not in pypi
@@ -797,21 +788,53 @@ function dev() {
 	fi
 
 	_install "${packages[*]}" 
-	if exists snap; then
-		sudo -E snap install multipass --classic
-		sudo -E snap install lxd
-		sudo -E lxd init --auto
-		sudo usermod -aG lxd "$(whoami)"
-	fi
+
+	virtualization
+
+	curl -s "https://get.sdkman.io" | bash  # install sdkman
+	sdk install kotlin                      # install Kotlin
+	sdk install kscript
+
+	_install_deb_from_url https://packages.microsoft.com/config/ubuntu/19.10/packages-microsoft-prod.deb
+	_install apt-transport-https 
+	_install dotnet-sdk-3.1
+
 }
+
+
+function lxd() {
+	sudo -E snap install multipass --classic
+	sudo -E snap install lxd
+	sudo -E lxd init --auto
+	sudo usermod -aG lxd "$(whoami)"
+}
+
+
+function virtualbox() {
+	unset -f virtualbox
+	if [ ! -f /etc/apt/sources.list.d/virtualbox.list ]; then
+		echo "deb [arch=$(cpu_architecture_simple)] https://download.virtualbox.org/virtualbox/debian $(grep '^DISTRIB_CODENAME=' /etc/lsb-release | cut -f2 -d=) contrib" | sudo -E tee /etc/apt/sources.list.d/virtualbox.list
+		wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo apt-key add -
+		wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | sudo apt-key add -
+	fi
+	packages+=(VirtualBox-6.1)
+	_install "${packages[*]}" 
+	vagrant
+}
+
+
+function vagrant() {
+	_install_deb_from_url "https://releases.hashicorp.com/vagrant/2.2.7/vagrant_2.2.7_$(cpu_architecture).deb"
+}
+
 
 function audio() {
 	sudo apt-get update
 	_install flacon flac
 
-	https://launchpad.net/\~kxstudio-debian/+archive/kxstudio/+files/kxstudio-repos_10.0.3_all.deb
+	_install_deb_from_url https://launchpad.net/\~kxstudio-debian/+archive/kxstudio/+files/kxstudio-repos_10.0.3_all.deb
 
-	sudo -E dpkg --purge kxstudio-repos-gcc5
+	sudo -E dpkg --purge kxstudio-repos-gcc5 | true
 	_install jackd2 carla-git cadence jack-mixer pulseaudio-module-jack mididings lsp-plugins liblash-compat-1debian0 jack-mixer
 	_install_pip gconf
 }
@@ -1071,13 +1094,13 @@ function ibus_config() {
 function autostart() {
 	mkdir -p ~/.config/autostart
 
-	ln -s "${ROOT_DIR}"/.config/autostart/*.desktop ~/.config/autostart/ 2>/dev/null | true
-
+	ln -s "${ROOT_DIR}"/.config/autostart/*.desktop ~/.config/autostart/ 2>/dev/null || true
 
 	ln -sf /usr/share/applications/ulauncher.desktop ~/.config/autostart/
 	ln -sf /usr/share/applications/redshift-gtk.desktop ~/.config/autostart/
 	ln -sf /usr/share/applications/com.github.hluk.copyq.desktop ~/.config/autostart/
 	ln -sf /usr/share/applications/nextcloud.desktop ~/.config/autostart/
+	ln -sf /usr/share/applications/tilda.desktop ~/.config/autostart/
 	# shellcheck disable=SC1073,SC2181
 	if glxinfo | grep -i "accelerated: no" &>/dev/null; then
 		ln -sf "$ROOT_DIR/.local/share/applications/Compton.desktop" ~/.config/autostart/
