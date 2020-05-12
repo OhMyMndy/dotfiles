@@ -278,12 +278,15 @@ if [[ -f /usr/share/autojump/autojump.sh ]]; then
     . /usr/share/autojump/autojump.sh
 fi
 
-if [[ -f /home/mandy/.config/broot/launcher/bash/br ]]; then
-    source /home/mandy/.config/broot/launcher/bash/br
+if [[ -f $HOME/.config/broot/launcher/bash/br ]]; then
+    source $HOME/.config/broot/launcher/bash/br
 fi
-
 
 # Syntax highlighting colors
 ZSH_HIGHLIGHT_STYLES[arg0]=fg=blue
 ZSH_HIGHLIGHT_STYLES[suffix-alias]=fg=blue,underline
 ZSH_HIGHLIGHT_STYLES[precommand]=fg=blue,underline
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
