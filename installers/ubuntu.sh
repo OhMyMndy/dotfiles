@@ -267,7 +267,7 @@ function minimal() {
 	# kdeconnect   shutter
 
 	# XFCE ONLY      xfce4-genmon-plugin xfdashboard  galculator
-	packages+=(redshift-gtk xfce4-terminalchromium-browser seahorse galculator orage ristretto 
+	packages+=(redshift-gtk xfce4-clipman-plugin xfce4-terminal chromium-browser seahorse galculator orage ristretto 
 		xsel xclip arandr wmctrl xscreensaver flatpak compton catfish rofi xdotool ssh-askpass)
 
 	_purge xfce4-appmenu-plugin
