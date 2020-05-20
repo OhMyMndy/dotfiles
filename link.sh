@@ -17,7 +17,6 @@ source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/.base-script.sh"
 mkdir -p ~/.config/{copyq,ulauncher,Thunar}
 mkdir -p ~/Screenshots
 
-link-file "$DIR" "Carla"
 link-file "$DIR" "audio"
 link-file "$DIR" ".alsoftrc"
 
@@ -111,6 +110,7 @@ link-file "$DIR" '.functions'
 link-file "$DIR" '.ncmpcpp'
 link-file "$DIR" '.config/vis'
 link-file "$DIR" '.config/alacritty'
+link-file "$DIR" '.skyscraper'
 mkdir -p ~/.config/cmus
 link-file "$DIR" '.config/cmus/rc'
 link-file "$DIR" '.zshrc'

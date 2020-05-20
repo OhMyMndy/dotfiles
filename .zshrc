@@ -278,8 +278,8 @@ if [[ -f /usr/share/autojump/autojump.sh ]]; then
     . /usr/share/autojump/autojump.sh
 fi
 
-if [[ -f /home/mandy/.config/broot/launcher/bash/br ]]; then
-    source /home/mandy/.config/broot/launcher/bash/br
+if [[ -f $HOME/.config/broot/launcher/bash/br ]]; then
+    source "$HOME/.config/broot/launcher/bash/br"
 fi
 
 

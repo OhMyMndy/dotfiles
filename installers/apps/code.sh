@@ -128,6 +128,8 @@ install donjayamanne.githistory
 install jomeinaster.bracket-peek
 install formulahendry.code-runner
 install buenon.scratchpads
+install adpyke.codesnap
+
 
 
 settings

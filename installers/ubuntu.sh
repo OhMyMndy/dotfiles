@@ -227,7 +227,7 @@ function minimal() {
 
 	# minimal
 	packages+=(file coreutils findutils vlock nnn ack sed tree grep silversearcher-ag)
-	packages+=(python-pip python3-pip bsdmainutils)
+	packages+=(python3-pip bsdmainutils)
 
 	_add_repository -n "deb http://archive.canonical.com/ $(lsb_release -sc) partner"
  	_add_repository ppa:git-core/ppa
@@ -256,7 +256,7 @@ function minimal() {
 	packages+=(w3m w3m-img)
 
 	# Spelling  python-hunspell
-	packages+=(hyphen-en-gb hyphen-nl hunspell aspell-nl hunspell-nl aspell-en hunspell-en-gb hunspell-en-us hunspell-no aspell-no libgspell-1-1 libgtkspell0 python3-hunspell )
+	packages+=(hyphen-en-gb hyphen-nl hunspell aspell-nl hunspell-nl aspell-en hunspell-en-gb hunspell-en-us hunspell-no aspell-no libgspell-1-2 libgtkspell0 python3-hunspell )
 
 	# Apt tools
 	packages+=(apt-file wajig apt-rdepends gnome-software)
@@ -267,12 +267,13 @@ function minimal() {
 	# kdeconnect   shutter
 
 	# XFCE ONLY      xfce4-genmon-plugin xfdashboard  galculator
-	packages+=(redshift-gtk xfce4-terminalchromium-browser seahorse galculator orage ristretto 
+	packages+=(redshift-gtk xfce4-terminal chromium-browser seahorse galculator orage ristretto 
 		xsel xclip arandr wmctrl xscreensaver flatpak compton catfish rofi xdotool ssh-askpass)
 
-	_purge xfce4-appmenu-plugin
+
+	_purge xfce4-appmenu-plugin || true
+	_purge copyq || true
 	
-	_add_repo_or_install_deb 'ppa:hluk/copyq' 'copyq' "https://github.com/hluk/CopyQ/releases/download/v3.9.3/copyq_3.9.3_Debian_10-1_$(cpu_architecture_simple).deb"
 
 	# File management and disk plugins
 	packages+=(cifs-utils exfat-fuse exfat-utils samba hfsprogs cdck ncdu mtp-tools ranger)
@@ -302,6 +303,9 @@ function minimal() {
 		_install_deb_from_url "https://github.com/altdesktop/playerctl/releases/download/v2.0.2/playerctl-2.0.2_$(cpu_architecture_simple).deb"
 	fi
 
+	# Drivers
+	packages+=(rtl8812au-dkms)
+
 	# Editors
 	packages+=(geany vim-gtk3)
 
@@ -328,7 +332,7 @@ function minimal() {
 	FILE=/etc/zsh/zprofile
 	grep -qF -- "$LINE" "$FILE" || echo "$LINE" | sudo -E tee "$FILE"
 
-
+	_install_nodejs
 	_install_snap code --classic
 	bash "$DIR/apps/code.sh"
 
@@ -376,7 +380,7 @@ function general() {
 	themes
 
 	# Install android tools adbd for android-sdk icon and adb binary
-	packages+=(android-tools-adbd)
+	packages+=(android-tools-adb)
 
 	# PDF
 	packages+=(atril)
@@ -431,8 +435,6 @@ function general() {
 
 	sudo -E curl -LsS "https://dystroy.org/broot/download/$(cpu_architecture)-linux/broot" -o /usr/local/bin/broot
 	sudo -E chmod +x /usr/local/bin/broot
-	sudo install_deb_from_url https://github.com/ksnip/ksnip/releases/download/v1.6.1/ksnip-1.6.1.deb
-
 
 	set +e
 }
@@ -477,10 +479,10 @@ function unetbootin() {
 }
 
 function jack() {
-	sudo -E sudo dpkg --purge kxstudio-repos-gcc5 || true
-	_install_deb_from_url https://launchpad.net/\~kxstudio-debian/+archive/kxstudio/+files/kxstudio-repos_10.0.3_all.deb
-	_install jackd2 carla-git cadence non-mixer pulseaudio-module-jack mididings lsp-plugins
-	ln -sf "${ROOT_DIR}"/.local/share/applications/JackAudio.desktop ~/.config/autostart/
+	# sudo -E sudo dpkg --purge kxstudio-repos-gcc5 || true
+	# _install_deb_from_url https://launchpad.net/\~kxstudio-debian/+archive/kxstudio/+files/kxstudio-repos_10.0.3_all.deb
+	# _install jackd2 carla-git cadence non-mixer pulseaudio-module-jack mididings lsp-plugins
+	# ln -sf "${ROOT_DIR}"/.local/share/applications/JackAudio.desktop ~/.config/autostart/
 
 	sudo -E usermod -aG audio mandy
 }
@@ -722,6 +724,20 @@ function jupyter() {
 	_install_pip3 qtconsole pyqt5
 }
 
+
+function _install_nodejs() {
+	declare -a packages=()
+	curl -sSL https://deb.nodesource.com/setup_12.x | sudo -E bash - >/dev/null
+	packages+=(nodejs build-essential)
+	packages+=(jq)
+	_install "${packages[*]}" 
+
+	if ! exists yq; then
+		sudo -E curl -LsS "https://github.com/mikefarah/yq/releases/download/3.0.1/yq_linux_$(cpu_architecture_simple)" -o /usr/local/bin/yq
+		sudo -E chmod +x /usr/local/bin/yq
+	fi
+}
+
 function dev() {
 	declare -a packages=()
 	if exists snap && ! exists snapcraft; then
@@ -756,14 +772,8 @@ function dev() {
 	fi
 
 	_install_pip3 pre-commit
-
-	curl -sSL https://deb.nodesource.com/setup_12.x | sudo -E bash - >/dev/null
-	packages+=(nodejs build-essential meld)
-	packages+=(jq)
-	if ! exists yq; then
-		sudo -E curl -LsS "https://github.com/mikefarah/yq/releases/download/3.0.1/yq_linux_$(cpu_architecture_simple)" -o /usr/local/bin/yq
-		sudo -E chmod +x /usr/local/bin/yq
-	fi
+	_install_nodejs
+	packages+=(meld)
 
 	# Vscode dependencies
 	packages+=(libsecret-1-dev libx11-dev libxkbfile-dev)
@@ -836,24 +846,25 @@ function php() {
 	_install_pip3 mycli
 
 
-	# if ! exists composer; then
+	if ! exists composer; then
 		# shellcheck disable=SC2091
 		curl -sSL https://getcomposer.org/installer | $(command -v php) && sudo -E mv composer.phar /usr/local/bin/composer
-	# fi
+	fi
 
 
-	# if ! exists phive; then
+	if ! exists phive; then
+		cd /tmp
 		wget -O phive.phar https://phar.io/releases/phive.phar
 		wget -O phive.phar.asc https://phar.io/releases/phive.phar.asc
 		gpg --keyserver pool.sks-keyservers.net --recv-keys 0x9D8A98B29B2D5D79
 		gpg --verify phive.phar.asc phive.phar
 		chmod +x phive.phar
-		sudo mv phive.phar /usr/local/bin/phive
-	# fi
+		sudo -E mv phive.phar /usr/local/bin/phive
+	fi
 
 	# @see https://github.com/felixfbecker/php-language-server/issues/611
-	composer global require jetbrains/phpstorm-stubs:dev-master
-	composer global require felixfbecker/language-server
+	sudo -E composer global require jetbrains/phpstorm-stubs:dev-master
+	sudo -E composer global require felixfbecker/language-server
 	# run once: composer global run-script --working-dir="$HOME/.composer/vendor/felixfbecker/language-server" parse-stubs
 
 
@@ -861,13 +872,14 @@ function php() {
 	sudo -E phive install -g --trust-gpg-keys phpstan/phpstan
 
 	# shellcheck disable=SC2091
-	curl -sSL https://litipk.github.io/Jupyter-PHP-Installer/dist/jupyter-php-installer.phar > "${TMPDIR}/jupyter.php"
-	$(command -v php) "${TMPDIR}/jupyter.php" install
-	rm "${TMPDIR}/jupyter.php"
+	# curl -sSL https://litipk.github.io/Jupyter-PHP-Installer/dist/jupyter-php-installer.phar > "${TMPDIR}/jupyter.php"
+	# sudo -E $(command -v php) "${TMPDIR}/jupyter.php" install
+	# rm "${TMPDIR}/jupyter.php"
 
 	# xdebug
 	sudo -E ufw allow 9000/udp
 	sudo -E ufw allow 9000/tcp
+	sudo -E ufw reload
 }
 
 
@@ -1078,7 +1090,6 @@ function autostart() {
 
 	ln -sf /usr/share/applications/ulauncher.desktop ~/.config/autostart/
 	ln -sf /usr/share/applications/redshift-gtk.desktop ~/.config/autostart/
-	ln -sf /usr/share/applications/com.github.hluk.copyq.desktop ~/.config/autostart/
 	ln -sf /usr/share/applications/nextcloud.desktop ~/.config/autostart/
 	# shellcheck disable=SC1073,SC2181
 	if glxinfo | grep -i "accelerated: no" &>/dev/null; then
@@ -1133,10 +1144,19 @@ function install-game-roms() {
 	cp -r ~/Games/bios/BIOS/** $(_retroarch_system_folders)
 }
 
+function retroarch() {
+	_add_repository ppa:libretro/stable
+	_install 'retroarch*'
+}
+
 function retroarch-config() {
 	# @todo add bios files to the system directories
 
+	_set_retroarch_config menu_swap_ok_cancel_buttons "\"true\""
 	_set_retroarch_config fps_show "\"true\""
+	_set_retroarch_config menu_show_core_updater "\"true\""
+	_set_retroarch_config system_directory "\"/tank/media/games/retropie/bios/\""
+	
 	# shellcheck disable=SC2016
 	crudini --set --inplace "{}" "" system_directory "/tank/media/games/bios"
 		
@@ -1144,7 +1164,7 @@ function retroarch-config() {
 	_set_retroarch_coreconfig beetle_psx_dither_mode "\"internal resolution\""
 	_set_retroarch_coreconfig beetle_psx_filter "\"bilinear\""
 	_set_retroarch_coreconfig beetle_psx_internal_color_depth "\"32bpp\""
-	_set_retroarch_coreconfig beetle_psx_internal_resolution "\"4x\""
+	_set_retroarch_coreconfig beetle_psx_internal_resolution "\"8x\""
 	_set_retroarch_coreconfig beetle_psx_renderer "\"vulkan\""
 	_set_retroarch_coreconfig beetle_psx_scale_dither "\"enabled\""
 }
@@ -1160,16 +1180,13 @@ function _set_retroarch_config() {
 	if [[ $retroarch_config_files = '' ]]; then
 		retroarch_config_files=$(find ~/.config ~/snap ~/.local/share -type f -name 'retroarch.cfg' -and -not -wholename '*/Trash/*')
 	fi
-
 	# create system folders
 	# shellcheck disable=SC2016
 	echo _retroarch_system_folders | xargs -0 -r -i bash -c 'mkdir -p "$(dirname "{}")/system"'
 
 	local key="$1"
 	local value="$2"
-	local retroarch_config_files="$3"
-	echo "$retroarch_config_files" \
-		| xargs -r -i crudini --set --inplace "{}" '' "$key" "$value"
+	echo "$retroarch_config_files" | xargs -r -i crudini --set --inplace "{}" '' "$key" "$value"
 }
 
 retroarch_core_config_files=""
