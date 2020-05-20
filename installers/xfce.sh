@@ -22,6 +22,7 @@ function xfce_keybindings() {
 		# Clear all keyboard shortcuts
 		xfconf-query -c "xfce4-keyboard-shortcuts" -l | xargs -r -i xfconf-query -c "xfce4-keyboard-shortcuts" -p "{}" -r
 
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Primary><Alt>h" -s "xfce4-popup-clipman" -t "string"
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Alt>F1" -s "xfce4-popup-applicationsmenu" -t "string"
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Alt>F2" -s "xfrun4" -t "string"
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Alt>F2/startup-notify" -s "true" -t "bool"

@@ -103,6 +103,7 @@ install gruntfuggly.todo-tree
 # Docker
 install exiasr.hadolint
 install ms-azuretools.vscode-docker
+install ms-vscode-remote.vscode-remote-extensionpack
 install ms-vscode-remote.remote-containers
 install ms-vscode-remote.remote-ssh
 
@@ -129,7 +130,6 @@ install jomeinaster.bracket-peek
 install formulahendry.code-runner
 install buenon.scratchpads
 install adpyke.codesnap
-
-
+install mutantdino.resourcemonitor
 
 settings

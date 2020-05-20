@@ -50,6 +50,7 @@ if [[ -z $file ]]; then
   file=docker-compose.yml
 fi
 
+set -e
 extensions=(py sh php)
 
 for extension in "${extensions[@]}"; do

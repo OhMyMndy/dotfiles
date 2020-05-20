@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+
+
+# Android app https://play.google.com/store/apps/details?id=com.iiordanov.freebVNC
+
+# https://unix.stackexchange.com/a/391519/171290 (for intel gpu's)
+# https://unix.stackexchange.com/a/391574/171290
+
+xrandr --newmode $(cvt 1400 1050 | tail -1 | cut -d' ' -f2-)     
+xrandr --addmode VIRTUAL1 $(cvt 1400 1050 | tail -1 | cut -d' ' -f2)   
+x11vnc -display :0 -clip xinerama1 -usepw -xrandr -forever -nonc -noxdamage -repeat -cursor most 
