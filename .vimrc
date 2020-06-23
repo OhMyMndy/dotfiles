@@ -29,7 +29,7 @@ Plug 'scrooloose/nerdtree'
 "Plug 'dense-analysis/ale'
 Plug 'airblade/vim-gitgutter'
 " Plug 'Valloric/YouCompleteMe'
-"Plug 'wellle/context.vim'
+Plug 'wellle/context.vim'
 
 
 "Plug 'ctrlpvim/ctrlp.vim'

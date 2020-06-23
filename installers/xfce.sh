@@ -34,7 +34,7 @@ function xfce_keybindings() {
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Super>slash" -s "$HOME/src/splatmoji/splatmoji type" -t "string"
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Super>s" -s "xfdashboard -t" -t "string"
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Super>Escape" -s "xkill" -t "string"
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Super>t" -s "tilda" -t "string"
+		# xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Super>t" -s "tilda" -t "string"
 
 
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/override" -s "true" -t "bool"
@@ -50,6 +50,7 @@ function xfce_keybindings() {
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Super>p" -s "xfce4-display-settings --minimal" -t "string"
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Super>r" -s "xfce4-appfinder" -t "string"
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Super>Return" -s "exo-open --launch TerminalEmulator" -t "string"
+		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Super><Shift>Return" -s "alacritty -e $SHELL -c 'tmux new -s default || tmux attach -t default' " -t "string"
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Super>w" -s "exo-open --launch WebBrowser" -t "string"
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/XF86Calculator" -s "mate-calc" -t "string"
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/XF86Display" -s "xfce4-display-settings --minimal" -t "string"
