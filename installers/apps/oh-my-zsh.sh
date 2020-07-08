@@ -45,6 +45,8 @@ installZshPlugin "https://github.com/zsh-users/zsh-syntax-highlighting.git" "zsh
 installZshPlugin "https://github.com/junegunn/fzf.git" "fzf"
 installZshPlugin "https://github.com/marzocchi/zsh-notify.git" "notify"
 installZshPlugin "https://github.com/Aloxaf/fzf-tab" "fzf-tab"
+installZshPlugin "https://github.com/zsh-users/zsh-completions" "zsh-completions"
+
 if [[ ! -f "$HOME/.fzf/bin/fzf" ]]; then
 	~/.oh-my-zsh/custom/plugins/fzf/install --bin
 fi

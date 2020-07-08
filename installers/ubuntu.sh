@@ -250,7 +250,7 @@ function minimal() {
 	packages+=(iotop htop nload glances)
 
 	# Networking tools
-	packages+=(nmap iputils-ping dnsutils telnet-ssl mtr-tiny traceroute libnss3-tools netdiscover whois bridge-utils trickle)
+	packages+=(nmap iputils-ping dnsutils telnet-ssl mtr-tiny traceroute libnss3-tools netdiscover whois bridge-utils trickle ipvsadm)
 	# smbmap, only available in disco+
 
 	# Cron
@@ -832,6 +832,22 @@ function virtualbox() {
 	fi
 	packages+=(VirtualBox-6.1)
 	_install "${packages[*]}" 
+
+	# @see https://pgaskin.net/linux-tips/configuring-virtualbox-autostart/
+	sudo -E mkdir -p /etc/vbox
+	sudo -E tee /etc/vbox/autostart.cfg << EOL &>/dev/null
+default_policy = deny
+mandy = {
+allow = true
+}
+EOL
+	sudo -E chgrp vboxusers /etc/vbox
+	sudo -E chmod 1775 /etc/vbox
+	VBoxManage setproperty autostartdbpath /etc/vbox
+	sudo -E systemctl restart vboxautostart-service.service 
+	sudo -E systemctl enable vboxautostart-service.service 
+
+
 	vagrant
 }
 
@@ -999,24 +1015,20 @@ function polybar() {
 
 
 function networkmanager() {
+	LINE="source /etc/network/interfaces.d/*"
+	FILE=/etc/network/interfaces
+	grep -qF -- "$LINE" "$FILE" || echo "$LINE" | sudo -E tee -a "$FILE"
+	sudo -E mkdir -p /etc/network/interfaces.d
+
 		sudo -E tee /etc/NetworkManager/conf.d/00-use-dnsmasq.conf << EOL &>/dev/null
 # This enabled the dnsmasq plugin.
 [main]
 dns=dnsmasq
 EOL
 
-		sudo -E rm -f /etc/NetworkManager/dnsmasq.d/00-home-mndy-be.conf
+	sudo -E rm -f /etc/NetworkManager/dnsmasq.d/00-home-mndy-be.conf
+	sudo -E rm -f /etc/NetworkManager/dnsmasq.d/00-nextdns.conf
 
-		sudo -E tee /etc/NetworkManager/dnsmasq.d/00-nextdns.conf << EOL &>/dev/null
-no-resolv
-bogus-priv
-strict-order
-server=2a07:a8c1::
-server=45.90.30.0
-server=2a07:a8c0::
-server=45.90.28.0
-add-cpe-id=cef6e6
-EOL
 
 	sudo -E tee /etc/NetworkManager/conf.d/00-ignore-docker-and-vbox.conf << EOL &>/dev/null
 [keyfile]

@@ -1,6 +1,6 @@
 # Dotfiles
 
-[![CircleCI](https://circleci.com/gh/Mandy91/dotfiles.svg?style=svg)](https://circleci.com/gh/Mandy91/dotfiles)
+[![CircleCI](https://circleci.com/gh/OhMyMndy/dotfiles.svg?style=svg)](https://circleci.com/gh/OhMyMndy/dotfiles)
 
 ## Ubuntu
 

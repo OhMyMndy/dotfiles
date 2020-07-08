@@ -55,13 +55,9 @@ if is_linux && ! is_android; then
     plugins+=(systemd) # The systemd plugin provides many useful aliases for systemd. https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins/systemd);
 fi
 
-# Autoload zsh commands
-# autoload -Uz compinit
-# if [ "$ZSH_COMPDUMP" != '' ] && [[ $(find "$ZSH_COMPDUMP" -mtime +100 -print) ]]; then
-# 	compinit
-# else
-# 	compinit -C;
-# fi
+plugins+=(zsh-completions)
+
+# autoload -U compinit && compinit
 
 if [[ -f $HOME/.bash_aliases ]]; then
     # shellcheck source=.bash_aliases

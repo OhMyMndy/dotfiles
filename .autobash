@@ -19,6 +19,8 @@ if ! realpath "$0" &>/dev/null; then
 else
     ABSOLUTE_PATH="$(cd "$(dirname "$0")" && pwd)/$(basename "$0")"
 fi
+ABSOLUTE_PATH="$(realpath "$ABSOLUTE_PATH")"
+
 
 function _print_usage() {
 	shopt -s extdebug
