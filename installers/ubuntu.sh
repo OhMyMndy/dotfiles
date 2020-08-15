@@ -1070,6 +1070,10 @@ vm.swappiness=2
 vm.max_map_count=262144
 # Do not produce core dumps
 fs.suid_dumpable=0
+
+net.bridge.bridge-nf-call-ip6tables = 0
+net.bridge.bridge-nf-call-iptables = 0
+net.bridge.bridge-nf-call-arptables = 0
 EOL
 
 	sudo -E tee /etc/sysctl.d/mandy-keepalive.conf << EOL &>/dev/null
