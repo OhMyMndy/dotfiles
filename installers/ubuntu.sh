@@ -215,10 +215,10 @@ function setup() {
 	general
 	themes
 	locale
+	fonts
 	settings
 	firewall
 	networkmanager
-	albert
 	autostart
 	git-config
 }
