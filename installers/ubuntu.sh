@@ -542,7 +542,7 @@ function settings() {
 
 	# @todo lightdm_settings
 
-	xfce4-panel-profiles load ~/dotfiles/.local/share/xfpanel-switch/Mandy\ Mac\ OS\ Style\ with\ global\ menu\ dual\ monitor.tar.bz2.tar.bz2
+	xfce4-panel-profiles load ~/dotfiles/.local/share/xfpanel-switch/Mandy\ Mac\ OS\ Style\ with\ global\ menu\ dual\ monitor.tar.bz2
 	
 	# X11 forwarding over SSH
 	sudo -E sed -i -E 's|.*X11UseLocalhost.*|X11UseLocalhost no|g' /etc/ssh/sshd_config
