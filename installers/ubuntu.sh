@@ -327,15 +327,9 @@ function minimal-old() {
 	# Archiving    ecm
 	packages+=(engrampa unzip unrar p7zip) # of p7zip-full on 1804
 
-	# Window managing
-	# quicktile dependencies
-	packages+=(python3 python3-pip python3-setuptools python3-gi python3-xlib python3-dbus gir1.2-glib-2.0 gir1.2-gtk-3.0 gir1.2-wnck-3.0)
-
 	_install "${packages[*]}"
-	# _install_deb_from_url "http://ftp.nl.debian.org/debian/pool/main/g/gnome-python-desktop/python-wnck_2.32.0+dfsg-3_$(cpu_architecture_simple).deb"
-	_install_pip3 https://github.com/ssokolow/quicktile/archive/master.zip
 
- 	_install_pip3 git+https://github.com/jeffkaufman/icdiff.git
+ 	# _install_pip3 git+https://github.com/jeffkaufman/icdiff.git
 
 
 	_install_gem teamocil
@@ -349,11 +343,16 @@ function minimal-old() {
 	FILE=/etc/zsh/zprofile
 	grep -qF -- "$LINE" "$FILE" || echo "$LINE" | sudo -E tee "$FILE"
 
-	_install_nodejs
-	_install_snap code --classic
-	bash "$DIR/apps/code.sh"
+function quicktile() {
+	declare -a packages=()
+	# Window managing
+	# quicktile dependencies
+	packages+=(python3 python3-pip python3-setuptools python3-gi python3-xlib python3-dbus gir1.2-glib-2.0 gir1.2-gtk-3.0 gir1.2-wnck-3.0)
 
-	sudo -E chsh -s "$(command -v zsh)" mandy
+	_install "${packages[*]}"
+	# _install_deb_from_url "http://ftp.nl.debian.org/debian/pool/main/g/gnome-python-desktop/python-wnck_2.32.0+dfsg-3_$(cpu_architecture_simple).deb"
+	_install_pip3 https://github.com/ssokolow/quicktile/archive/master.zip
+
 }
 
 function themes() {
