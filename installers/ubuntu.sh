@@ -406,11 +406,7 @@ function general() {
 	# Terminal
 	packages+=(tilda)
 
-	if [ ! -f /usr/NX/bin/nxplayer ]; then
-		# shellcheck disable=1001
-		_install_deb_from_url "$(curl -sSL https://www.nomachine.com/download/download\&id\=6 2>/dev/null | grep -E -o "http.*download.*deb")"
-	fi
-
+	nomachine
 	_add_repo_or_install_deb 'ppa:nextcloud-devs/client' 'nextcloud-client'
 
 	if ! exists bat; then
@@ -490,6 +486,11 @@ function groups() {
 	sudo -E usermod -aG dialout mandy
 	sudo -E usermod -aG kvm mandy
 	sudo -E usermod -aG lxd mandy
+function nomachine() {
+	if [ ! -f /usr/NX/bin/nxplayer ]; then
+		# shellcheck disable=1001
+		_install_deb_from_url "$(curl -sSL https://www.nomachine.com/download/download\&id\=2 2>/dev/null | grep -E -o "http.*download.*deb")"
+	fi
 }
 
 function unetbootin() {
