@@ -306,9 +306,7 @@ function minimal-old() {
 
 	#git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d
 
-	if ! exists google-chrome; then
-		_install_deb_from_url "https://dl.google.com/linux/direct/google-chrome-stable_current_$(cpu_architecture_simple).deb"
-	fi
+	chrome
 
 	# Fix for DRM in Chromium becaue winevinecdm is a proprietary piece of code
 #	sudo -E ln -fs /opt/google/chrome/WidevineCdm /usr/lib/chromium-browser/WidevineCdm
@@ -338,6 +336,10 @@ function minimal-old() {
 
 	zsh
 
+
+function chrome() {
+	_install_deb_from_url "https://dl.google.com/linux/direct/google-chrome-stable_current_$(cpu_architecture_simple).deb"
+}
 
 function zsh() {
 	_install zsh
