@@ -338,10 +338,17 @@ function minimal-old() {
 
 	zsh
 
+
+function zsh() {
+	_install zsh
+	bash "$DIR/apps/oh-my-zsh.sh"
+ 	sudo chsh -s "$(which zsh)" $(whoami)
 	# Fix for snaps with ZSH
 	LINE="emulate sh -c 'source /etc/profile'"
 	FILE=/etc/zsh/zprofile
-	grep -qF -- "$LINE" "$FILE" || echo "$LINE" | sudo -E tee "$FILE"
+	grep -qF -- "$LINE" "$FILE" || echo "$LINE" | sudo -E tee "$FILE" >/dev/null
+	sudo -E chsh -s "$(command -v zsh)" mandy
+}
 
 function quicktile() {
 	declare -a packages=()
