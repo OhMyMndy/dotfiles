@@ -245,9 +245,7 @@ function minimal-old() {
 	packages+=(file coreutils findutils vlock nnn ack sed tree grep silversearcher-ag gawk)
 	packages+=(python3-pip bsdmainutils)
 
-	_add_repository -n "deb http://archive.canonical.com/ $(lsb_release -sc) partner"
- 	_add_repository ppa:git-core/ppa
-	_force_update
+
 
 	# Misc
 	packages+=(git git-extras tig gitg zsh iproute2 man pv autojump less curl rename rsync rclone openssh-server most multitail trash-cli zenity libsecret-tools parallel ruby ruby-dev ntp neovim vim-gtk3 fonts-noto-color-emoji fonts-noto fonts-roboto)
@@ -945,33 +943,33 @@ function docker() {
 	fi
 
 	if ! exists docker; then
-		# curl -sSL https://download.docker.com/linux/ubuntu/gpg | sudo -E apt-key add -
-		# sudo -E apt-key fingerprint 0EBFCD88
-		# sudo -E add-apt-repository \
-		# 	"deb [arch=$(cpu_architecture_simple)] https://download.docker.com/linux/ubuntu \
-		# 	$(lsb_release -cs) \
-		# 	stable"
-		_update
-		_install docker.io
-		sudo -E usermod -aG "docker" "$(whoami)"
+		curl -sSL https://download.docker.com/linux/ubuntu/gpg | sudo -E apt-key add -
+		sudo -E apt-key fingerprint 0EBFCD88
+		sudo -E add-apt-repository \
+			"deb [arch=$(cpu_architecture_simple)] https://download.docker.com/linux/ubuntu \
+			$(lsb_release -cs) \
+			stable"
+		_force_update
+		_install docker
 	fi
+		sudo -E usermod -aG "docker" "$(whoami)"
 
 	if ! exists docker-compose; then
 		sudo -E curl -sSL "https://github.com/docker/compose/releases/download/1.25.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 		sudo -E chmod +x /usr/local/bin/docker-compose
 	fi
 
-	if ! exists dockerize; then
-		sudo -E curl -sSL "https://github.com/jwilder/dockerize/releases/download/v0.6.1/dockerize-linux-$(cpu_architecture_simple)-v0.6.1.tar.gz" -o /usr/local/bin/dockerize
-		sudo -E chmod +x /usr/local/bin/dockerize
-	fi
+	# if ! exists dockerize; then
+	# 	sudo -E curl -sSL "https://github.com/jwilder/dockerize/releases/download/v0.6.1/dockerize-linux-$(cpu_architecture_simple)-v0.6.1.tar.gz" -o /usr/local/bin/dockerize
+	# 	sudo -E chmod +x /usr/local/bin/dockerize
+	# fi
 
-	if ! exists docker-machine; then
-		base=https://github.com/docker/machine/releases/download/v0.16.2
-	  	curl -sSL "$base/docker-machine-$(uname -s)-$(uname -m)" >/tmp/docker-machine
-	  	sudo mv /tmp/docker-machine /usr/local/bin/docker-machine
-	  	sudo chmod +x /usr/local/bin/docker-machine
-	fi
+	# if ! exists docker-machine; then
+	# 	base=https://github.com/docker/machine/releases/download/v0.16.2
+	#   	curl -sSL "$base/docker-machine-$(uname -s)-$(uname -m)" >/tmp/docker-machine
+	#   	sudo mv /tmp/docker-machine /usr/local/bin/docker-machine
+	#   	sudo chmod +x /usr/local/bin/docker-machine
+	# fi
 
 	sudo -E cp "$ROOT_DIR/etc/docker/daemon.json" /etc/docker/daemon.json
 
@@ -985,11 +983,11 @@ function docker() {
 	# fi
 
 	cd "${TMPDIR}"
-	if ! exists lazydocker; then
-		curl -sSL "https://github.com/jesseduffield/lazydocker/releases/download/v0.7.1/lazydocker_0.7.1_Linux_$(cpu_architecture).tar.gz" > lazydocker.tgz
-		tar xzf lazydocker.tgz
-		sudo -E install lazydocker /usr/local/bin/
-	fi
+	# if ! exists lazydocker; then
+	# 	curl -sSL "https://github.com/jesseduffield/lazydocker/releases/download/v0.7.1/lazydocker_0.7.1_Linux_$(cpu_architecture).tar.gz" > lazydocker.tgz
+	# 	tar xzf lazydocker.tgz
+	# 	sudo -E install lazydocker /usr/local/bin/
+	# fi
 
 	if ! exists dry; then
 		curl -sSf https://moncho.github.io/dry/dryup.sh | sudo sh
