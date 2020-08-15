@@ -29,6 +29,9 @@ source "$DIR/../settings/xfce.sh"
 
 export DEBIAN_FRONTEND=noninteractive
 
+function debug() {
+	set -x
+}
 
 function _install_deb_from_url() {
 	local url="$1"
@@ -341,7 +344,7 @@ function minimal-old() {
 	
 	ulauncher
 
-	bash "$DIR/apps/oh-my-zsh.sh"
+	zsh
 
 	# Fix for snaps with ZSH
 	LINE="emulate sh -c 'source /etc/profile'"
