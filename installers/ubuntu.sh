@@ -735,20 +735,14 @@ function dev() {
 
 	# bless is a hex editor
 	# apache2-utils contains ab
-	packages+=(apache2-utils multitail virt-what proot bless)
-	_remove shellcheck
-	if ! exists shellcheck; then
-		scversion="stable" # or "v0.4.7", or "latest"
-		wget -qO- "https://storage.googleapis.com/shellcheck/shellcheck-${scversion?}.linux.$(cpu_architecture).tar.xz" | tar -xJv
-		sudo -E cp "shellcheck-${scversion}/shellcheck" /usr/bin/
-	fi
+	packages+=(apache2-utils multitail virt-what proot bless shellcheck)
 
-	if ! exists hadolint; then
+
 		cd /tmp || exit 2
-		wget -qO- "https://github.com/hadolint/hadolint/releases/download/v1.17.3/hadolint-Linux-$(cpu_architecture)" > hadolint
-		sudo -E cp "hadolint" /usr/bin/
+	curl -sSL "https://github.com/hadolint/hadolint/releases/download/latest/hadolint-Linux-$(cpu_architecture)" > hadolint
+	sudo -E cp -f "hadolint" /usr/bin/
 		sudo -E chmod +x /usr/bin/hadolint
-	fi
+	
 	packages+=(python3-dev python3-pip python3-venv python3-wheel golang-go pandoc)
 	_install "${packages[*]}"
 	packages=()
@@ -758,10 +752,10 @@ function dev() {
 	# python3 version is not in pypi
 	pip install crudini
 
-	if [[ ! -d ~/.mypyls ]]; then
-		python3 -m venv ~/.mypyls
-		~/.mypyls/bin/pip install "https://github.com/matangover/mypyls/archive/master.zip#egg=mypyls[default-mypy]"
-	fi
+	# if [[ ! -d ~/.mypyls ]]; then
+	# 	python3 -m venv ~/.mypyls
+	# 	~/.mypyls/bin/pip install "https://github.com/matangover/mypyls/archive/master.zip#egg=mypyls[default-mypy]"
+	# fi
 
 	_install_pip3 pre-commit
 	_install_nodejs
@@ -772,17 +766,16 @@ function dev() {
 	_install "${packages[*]}" 
 
 	npm config set loglevel error
-	npm config set prefix "$HOME/.local"
-	npm install -g --silent --force bash-language-server >/dev/null
-	npm install -g --silent --force intelephense >/dev/null
-	npm install -g --silent --force bats >/dev/null
-	npm install -g --silent --force json >/dev/null
-	npm install -g --silent --force fixjson jsonlint >/dev/null
-	npm install -g --silent --force eslint >/dev/null
-	npm install -g --silent --force markdownlint-cli >/dev/null
-	npm install -g --silent --force @marp-team/marp-cli >/dev/null
-	npm install -g --silent --force yarn >/dev/null
-	npm install -g --silent --force gulp >/dev/null
+	sudo -E npm install -g --silent --force bash-language-server >/dev/null
+	sudo -E npm install -g --silent --force intelephense >/dev/null
+	sudo -E npm install -g --silent --force bats >/dev/null
+	sudo -E npm install -g --silent --force json >/dev/null
+	sudo -E npm install -g --silent --force fixjson jsonlint >/dev/null
+	sudo -E npm install -g --silent --force eslint >/dev/null
+	sudo -E npm install -g --silent --force markdownlint-cli >/dev/null
+	sudo -E npm install -g --silent --force @marp-team/marp-cli >/dev/null
+	sudo -E npm install -g --silent --force yarn >/dev/null
+	sudo -E npm install -g --silent --force gulp >/dev/null
 
 	if ! exists circleci; then
 		curl -sSL https://circle.ci/cli | sudo -E bash
@@ -802,15 +795,14 @@ function dev() {
 
 	_install "${packages[*]}" 
 
-	virtualization
+	# virtualization
 
 	curl -s "https://get.sdkman.io" | bash  # install sdkman
 	sdk install kotlin                      # install Kotlin
-	sdk install kscript
 
-	_install_deb_from_url https://packages.microsoft.com/config/ubuntu/19.10/packages-microsoft-prod.deb
-	_install apt-transport-https 
-	_install dotnet-sdk-3.1
+	# _install_deb_from_url https://packages.microsoft.com/config/ubuntu/19.10/packages-microsoft-prod.deb
+	# _install apt-transport-https 
+	# _install dotnet-sdk-3.1
 
 }
 
