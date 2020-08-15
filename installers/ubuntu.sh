@@ -1107,7 +1107,7 @@ function firewall() {
 	sudo -E ufw reload
 	# access local hosts through vpn
 	# shellcheck disable=SC2010
-	sudo -E ip route add 192.168.10.0/24 "dev" "$(ls /sys/class/net | grep "^en*" | head -1)"
+	sudo -E ip route add 192.168.81.0/24 "dev" "$(ls /sys/class/net | grep "^en*" | head -1)" | true
 }
 
 function git-config() {
