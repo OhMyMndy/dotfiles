@@ -108,7 +108,7 @@ function xfce_settings() {
 		xfconf-query -c xsettings -p /Xft/Antialias -s 1
 		xfconf-query -c xsettings -p /Xft/Hinting -s 1
 		xfconf-query -c xsettings -p /Xft/HintStyle -s "hintslight"
-		xfconf-query -c xsettings -p /Xft/Lcdfilter -s "lcddefault"
+		# xfconf-query -c xsettings -p /Xft/Lcdfilter -s "lcddefault"
 		xfconf-query -c xsettings -p /Xft/RGBA -s "rgb"
 
 
@@ -126,7 +126,7 @@ function xfce_settings() {
 		xfconf-query -c xfwm4 -p /general/workspace_count -s 4
 
 
- 		xfconf-query -c xfce4-session -p /compat/LaunchGNOME -s true
+ 		# xfconf-query -c xfce4-session -p /compat/LaunchGNOME -s true
 
 		# Notifyd
 		xfconf-query -n -c xfce4-notifyd -p /log-level -t int -s 1

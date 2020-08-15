@@ -25,7 +25,7 @@ fi
 
 
 # shellcheck source=./xfce.sh
-source "$DIR/xfce.sh"
+source "$DIR/../settings/xfce.sh"
 
 export DEBIAN_FRONTEND=noninteractive
 
