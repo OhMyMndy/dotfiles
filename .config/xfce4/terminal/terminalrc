@@ -32,3 +32,7 @@ ScrollingBar=TERMINAL_SCROLLBAR_NONE
 ColorCursorUseDefault=FALSE
 ColorCursorForeground=#000000000000
 ColorCursor=#ffffffffffff
+ColorBoldIsBright=FALSE
+MiscSearchDialogOpacity=100
+MiscShowUnsafePasteDialog=TRUE
+
