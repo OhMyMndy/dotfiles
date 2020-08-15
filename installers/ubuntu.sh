@@ -1127,16 +1127,23 @@ function autostart() {
 
 	ln -s "${ROOT_DIR}"/.config/autostart/*.desktop ~/.config/autostart/ 2>/dev/null || true
 
-	ln -sf /usr/share/applications/ulauncher.desktop ~/.config/autostart/
-	ln -sf /usr/share/applications/redshift-gtk.desktop ~/.config/autostart/
-	ln -sf /usr/share/applications/nextcloud.desktop ~/.config/autostart/
-	ln -sf /usr/share/applications/tilda.desktop ~/.config/autostart/
+	ln -sf /usr/share/applications/ulauncher.desktop ~/.config/autostart/ || true
+	ln -sf /usr/share/applications/redshift-gtk.desktop ~/.config/autostart/ || true
+	ln -sf /usr/share/applications/nextcloud.desktop ~/.config/autostart/ || true
+	rm -r ~/.config/autostart/tilda.desktop 2>/dev/null || true
 	# shellcheck disable=SC1073,SC2181
 	if glxinfo | grep -i "accelerated: no" &>/dev/null; then
+		_install_if_not_installed compton
 		ln -sf "$ROOT_DIR/.local/share/applications/Compton.desktop" ~/.config/autostart/
 	fi
 	find ~/.config/autostart/ -xtype l -delete
 	sudo -E update-desktop-database
+}
+
+function _install_if_not_installed() {
+	if ! command -v "$1" &>/dev/null; then
+		_install "$1"
+	fi
 }
 
 function audit() {
