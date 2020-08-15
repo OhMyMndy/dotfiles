@@ -2,28 +2,28 @@
     "com.github.pedrotroller.ulauncher-php-packagist": {
         "id": "com.github.pedrotroller.ulauncher-php-packagist",
         "url": "https://github.com/PedroTroller/ulauncher-php-packagist",
-        "updated_at": "2020-03-17T09:41:52.404173",
+        "updated_at": "2020-08-15T10:35:13.325404",
         "last_commit": "a2b434126665529a458990dc19d866605588d8bf",
         "last_commit_time": "2019-10-03T12:19:35"
     },
     "com.github.dhollinger.ulauncher-jira": {
         "id": "com.github.dhollinger.ulauncher-jira",
         "url": "https://github.com/dhollinger/ulauncher-jira",
-        "updated_at": "2020-03-17T09:41:54.067988",
+        "updated_at": "2020-08-15T10:35:14.628587",
         "last_commit": "5c5d2c15a71bc60b85cce79e3b5f22a7b407faf3",
         "last_commit_time": "2019-09-23T15:51:47"
     },
     "com.github.friday.ulauncher-clipboard": {
         "id": "com.github.friday.ulauncher-clipboard",
         "url": "https://github.com/friday/ulauncher-clipboard",
-        "updated_at": "2020-03-17T09:41:55.853807",
+        "updated_at": "2020-08-15T10:35:15.972731",
         "last_commit": "400723532a0fbb413befbf19f6c45debfe38ad84",
         "last_commit_time": "2020-01-11T20:30:17"
     },
     "com.github.brpaz.ulauncher-docker": {
         "id": "com.github.brpaz.ulauncher-docker",
         "url": "https://github.com/brpaz/ulauncher-docker",
-        "updated_at": "2020-03-17T09:41:58.305379",
+        "updated_at": "2020-08-15T10:35:18.535078",
         "last_commit": "6213bfe156084aa4c049de24fb69acd7f1fba8f2",
         "last_commit_time": "2019-12-03T20:15:17"
     }
