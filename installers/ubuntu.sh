@@ -336,6 +336,11 @@ function minimal-old() {
 
 	zsh
 
+	_install_nodejs
+	_install_snap code --classic
+	bash "$DIR/apps/code.sh"
+
+}
 
 function chrome() {
 	_install_deb_from_url "https://dl.google.com/linux/direct/google-chrome-stable_current_$(cpu_architecture_simple).deb"
