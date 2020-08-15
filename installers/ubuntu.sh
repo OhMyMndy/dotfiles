@@ -469,12 +469,15 @@ function groups() {
 	sudo -E groupadd mail || true
 	sudo -E groupadd sambashare || true
 	sudo -E groupadd audio || true
+	sudo -E groupadd video || true
 	sudo -E groupadd kvm || true
 	sudo -E groupadd lxd || true
+	sudo -E groupadd render || true
 
 	sudo -E usermod -aG "docker" mandy
 	sudo -E usermod -aG mail mandy
 	sudo -E usermod -aG audio mandy
+	sudo -E usermod -aG video mandy
 	sudo -E usermod -aG disk mandy
 	sudo -E usermod -aG cdrom mandy
 	sudo -E usermod -aG vboxusers mandy
@@ -486,6 +489,9 @@ function groups() {
 	sudo -E usermod -aG dialout mandy
 	sudo -E usermod -aG kvm mandy
 	sudo -E usermod -aG lxd mandy
+	sudo -E usermod -aG render mandy
+}
+
 function nomachine() {
 	if [ ! -f /usr/NX/bin/nxplayer ]; then
 		# shellcheck disable=1001
