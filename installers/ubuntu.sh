@@ -299,7 +299,7 @@ function minimal-old() {
 	packages+=(thunar pcmanfm gnome-disk-utility)
 
 	# Remote desktop
-	packages+=(remmina vinagre xserver-xephyr)
+	packages+=(remmina 'remmina*plugin*' vinagre xserver-xephyr)
 
 	# Mouse and keyboard
 	packages+=(imwheel)
