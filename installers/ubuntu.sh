@@ -713,6 +713,20 @@ function qt_dev() {
 }
 
 
+function virt-manager() {
+	_install "virt-manager qemu-system qemu-kvm"
+
+#  sudo nmcli conn add type bridge con-name br0 ifname br0
+#  sudo nmcli conn add type ethernet slave-type bridge con-name bridge-br0 ifname enp0s31f6 master br0
+#  sudo nmcli conn show --active
+#  sudo nmcli conn up br0
+#  sudo nmcli conn show --active
+#  sudo nmcli conn up br0
+#  sudo nmcli conn show --active
+#  sudo nmcli conn show
+#  sudo nmcli conn down Wired\ connection\ 1
+}
+
 function jupyter() {
 	unset -f jupyter
 	_install_pip3 jupyterlab
