@@ -226,7 +226,16 @@ function _green_bold() {
 }
 
 
+
 function minimal() {
+	_add_repository -n "deb http://archive.canonical.com/ $(lsb_release -sc) partner"
+ 	_add_repository ppa:git-core/ppa
+	_force_update
+
+	_install git tmux tree gawk htop
+}
+
+function minimal-old() {
 	declare -a packages=()
 
 	# minimal
