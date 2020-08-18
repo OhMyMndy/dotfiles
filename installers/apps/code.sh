@@ -42,6 +42,8 @@ function settings() {
     write_setting "this['shellcheck.customArgs'] = [ '-x' ]"
     write_setting "this['bashIde.path'] = '$(which bash-language-server)'"
     write_setting "this['shellcheck.executablePath'] = '/usr/bin/shellcheck'"
+    write_setting "this['window.titleSeparator'] = ' // '"
+    write_setting 'this["window.title"] = "${dirty}${rootName}${separator}${activeEditorShort}${separator}${appName}"'
 }
 
 

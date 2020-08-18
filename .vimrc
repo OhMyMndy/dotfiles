@@ -23,6 +23,10 @@ Plug 'ryanoasis/vim-devicons'
 
 "Plug 'tpope/vim-obsession'
 "Plug 'StanAngeloff/php.vim'
+Plug 'phpstan/vim-phpstan'
+
+Plug 'farmergreg/vim-lastplace'
+
 Plug 'scrooloose/nerdtree'
 "Plug 'vim-airline/vim-airline'
 "Plug 'vim-airline/vim-airline-themes'
