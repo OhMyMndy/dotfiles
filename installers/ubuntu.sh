@@ -398,7 +398,7 @@ function general() {
 
 	declare -a packages=()
 	# System utils
-	packages+=(sysfsutils sysstat qdirstat)
+	packages+=(sysfsutils sysstat mate-utils)
 
 	# Media
 	packages+=(vlc imagemagick flac soundconverter picard)
@@ -474,6 +474,9 @@ function remove_obsolete() {
 
 	# Obsolete indicators
 	_remove indicator-session indicator-datetime indicator-keyboard indicator-power
+
+	# remove KDE/Plasma/QT applications
+	_remove 'okular*' qdirstat ktimer 'kubuntu*' '*kdeconnect*'
 	_autoremove
 }
 
