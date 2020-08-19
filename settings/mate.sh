@@ -6,10 +6,10 @@ set -e
 function write_settings() {
     local config="$1"
     local path="$2"
-    echo "$config" | while read line || [[ -n $line ]];
+    echo "$config" | while read -r line || [[ -n $line ]];
     do
         IFS="="
-        read -a strarr <<< "$line"
+        read -r -a strarr <<< "$line"
         dconf write "$path/${strarr[0]}" "${strarr[1]}"
     done
 }

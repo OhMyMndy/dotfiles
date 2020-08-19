@@ -14,8 +14,47 @@ fontsAdded=0
 set -eu
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd "$DIR" || exit 1
-# shellcheck source=../.base-script.sh
-source "$DIR/../.base-script.sh"
+
+set -eu -o functrace
+
+this_command=''
+previous_command=''
+trap 'previous_command=$this_command; this_command=$BASH_COMMAND' DEBUG
+___finish() {
+	>&2 echo "Error while executing '$previous_command' in $0, line $1"
+	exit $?
+}
+trap '___finish $LINENO' ERR
+
+___shutdown() {
+	exit 99
+}
+trap "___shutdown" INT TERM
+
+if command -v git &>/dev/null && [[ -d .git ]]; then
+	ROOT_DIR="$(git rev-parse --show-toplevel)/"
+fi
+
+
+function cpu_architecture() {
+	if exists uname; then
+		uname -m
+	fi
+}
+
+function  cpu_architecture_simple() {
+	cpu_architecture="$(cpu_architecture)"
+	if [[ $cpu_architecture = 'x86_64' ]]; then
+		echo "amd64"
+	elif [[ $cpu_architecture = 'i686' ]]; then
+		echo "i386"		
+	elif [[ $cpu_architecture = 'aarch64' ]]; then
+		echo "arm64"
+	elif [[ $cpu_architecture = 'aarch32' ]]; then
+		echo "armhf"
+	fi	
+}
+
 
 
 if ! is_ubuntu; then
@@ -24,8 +63,7 @@ if ! is_ubuntu; then
 fi
 
 
-# shellcheck source=./xfce.sh
-source "$DIR/../settings/xfce.sh"
+
 
 export DEBIAN_FRONTEND=noninteractive
 
@@ -46,8 +84,8 @@ function _install_deb_from_url() {
 
 function _is_x_package() {
 	{
-		set +e; sudo -E apt-rdepends $@ 2>/dev/null| grep 'Depends: libx11' &>/dev/null 
-}
+		set +e; sudo -E apt-rdepends "$*" 2>/dev/null| grep 'Depends: libx11' &>/dev/null 
+	}
 }
 
 function _is_installed() {
@@ -87,16 +125,16 @@ function _add_repository() {
 	sudo -E add-apt-repository -y "$@"
 }
 
-install_x=0
-function no-x() {
-	install_x=1
-}
+# install_x=0
+# function no-x() {
+# 	install_x=1
+# }
 
 
 function _install() {
 	# echo "Installing '$*' through apt"
 	set -e
-	new_args="$@"
+	new_args="$*"
 	# if [[ $install_x -eq 1 ]]; then
 	# 	# _update
 	# 	args=$(echo "$@" | tr ' ' '\n')
@@ -111,7 +149,7 @@ function _install() {
 	# 	args=$(echo "$new_args" | tr '\n' ' ')
 	# fi
 
-	# shellcheck disable=SC2068
+	# shellcheck disable=SC2086
 	sudo -E apt-get -qq install -y $new_args
 	set +e
 }
@@ -349,7 +387,7 @@ function chrome() {
 function zsh() {
 	_install zsh
 	bash "$DIR/apps/oh-my-zsh.sh"
- 	sudo chsh -s "$(which zsh)" $(whoami)
+ 	sudo chsh -s "$(which zsh)" "$(whoami)"
 	# Fix for snaps with ZSH
 	LINE="emulate sh -c 'source /etc/profile'"
 	FILE=/etc/zsh/zprofile
@@ -562,6 +600,8 @@ function settings-xfpanel() {
 
 
 function settings() {
+	# shellcheck source=./../settings/xfce.sh
+	source "$DIR/../settings/xfce.sh"
 	xfce_settings
 
 	# @todo lightdm_settings
@@ -857,7 +897,7 @@ function dev() {
 function lxd() {
 	sudo -E snap install multipass --classic
 	sudo -E snap install lxd
-	sudo -E lxd init --auto
+	sudo -E 'lxd' init --auto
 	sudo usermod -aG lxd "$(whoami)"
 }
 
