@@ -11,11 +11,13 @@ fi
 
 
 fontsAdded=0
-set -eu
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-cd "$DIR" || exit 1
 
-set -eu -o functrace
+if [[ -z $BASH_SOURCE ]]; then
+	DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+	cd "$DIR" || exit 1
+fi
+
+set -e -o functrace
 
 this_command=''
 previous_command=''
@@ -37,10 +39,11 @@ fi
 
 
 function cpu_architecture() {
-	if exists uname; then
+	if type -P uname &>/dev/null; then
 		uname -m
 	fi
 }
+
 
 function  cpu_architecture_simple() {
 	cpu_architecture="$(cpu_architecture)"
@@ -55,8 +58,14 @@ function  cpu_architecture_simple() {
 	fi	
 }
 
+function is_ubuntu() {
+	[[ $(lsb_release -s -i 2>/dev/null) = 'Ubuntu' ]]
+}
 
-
+apt_quiet="-qq"
+function debug() {
+	apt_quiet=
+}
 if ! is_ubuntu; then
 	echo "You are running on a non Ubuntu system"
 	exit 101
@@ -74,12 +83,12 @@ function debug() {
 function _install_deb_from_url() {
 	local url="$1"
 	local tmp="$(mktemp)"
-	if ! exists curl; then
+	if ! type -P curl &>/dev/null; then
 		_install curl
 	fi
 	curl -sSL "$url" >> "$tmp"
 	sudo -E dpkg -i "$tmp" || true
-	sudo -E apt-get -qq install -f -y
+	sudo -E apt-get $apt_quiet install -f -y
 }
 
 function _is_x_package() {
@@ -89,7 +98,7 @@ function _is_x_package() {
 }
 
 function _is_installed() {
-	apt list -qq "$@" 2>/dev/null | grep 'installed' &>/dev/null
+	apt list $apt_quiet "$@" 2>/dev/null | grep 'installed' &>/dev/null
 }
 
 function _add_repo_or_install_deb() {
@@ -107,7 +116,7 @@ function _add_repo_or_install_deb() {
 		sudo -E add-apt-repository --remove "$repo" -y
 		if [[ $optional_deb != '' ]]; then
 			_install_deb_from_url "$optional_deb"
-			sudo -E apt-get -qq install -f -y
+			sudo -E apt-get $apt_quiet install -f -y
 		fi
 	fi
 }
@@ -118,7 +127,7 @@ function _list_repositories() {
 }
 
 function _add_repository() {
-	if ! exists add-apt-repository; then
+	if ! type -P add-apt-repository &>/dev/null; then
 		_install software-properties-common
 	fi
 	# shellcheck disable=SC2068
@@ -150,24 +159,24 @@ function _install() {
 	# fi
 
 	# shellcheck disable=SC2086
-	sudo -E apt-get -qq install -y $new_args
+	sudo -E apt-get $apt_quiet install -y $new_args
 	set +e
 }
 
 function _install_flatpak_flathub() {
 	set -e
-	if ! exists flatpak; then
+	if ! type -P flatpak &>/dev/null; then
 		_install flatpak
 	fi
 
-	yes | sudo -E flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo --system
+	yes | sudo -E flatpak remote-add --if-not-type -P flathub &>/dev/null https://flathub.org/repo/flathub.flatpakrepo --system
 	sudo -E flatpak install flathub "$*" --system -y
 	set +e
 }
 
 function _install_pip3() {
 	set -e
-	if ! exists pip3; then
+	if ! type -P pip3 &>/dev/null; then
 		_install python3-pip
 	fi
 	# shellcheck disable=SC2068
@@ -177,7 +186,7 @@ function _install_pip3() {
 
 function _install_pipx() {
 	set -e
-	if ! exists pipx; then
+	if ! type -P pipx &>/dev/null; then
 		_install_pip3 pipx
 	fi
 	if ! python3 -m venv -h &>/dev/null; then
@@ -193,7 +202,7 @@ function _install_pipx() {
 
 function _install_snap() {
 	set -e
-	if ! exists snap; then
+	if ! type -P snap &>/dev/null; then
 		_install snapd
 	fi
 	# shellcheck disable=SC2068
@@ -203,7 +212,7 @@ function _install_snap() {
 
 function _install_pip() {
 	set -e
-	if ! exists pip; then
+	if ! type -P pip &>/dev/null; then
 		_install python-pip
 	fi
 	# shellcheck disable=SC2068
@@ -212,7 +221,7 @@ function _install_pip() {
 }
 
 function _install_gem() {
-	if ! exists gem; then
+	if ! type -P gem &>/dev/null; then
 		_install ruby ruby-dev
 	fi
 
@@ -223,27 +232,27 @@ function _install_gem() {
 updated=0
 function _update() {
 	if [[ $updated -eq 0 ]]; then
-		sudo -E apt-get update -y -qq
+		sudo -E apt-get update -y $apt_quiet
 	fi
 	updated=1
 }
 
 function _force_update() {
-	sudo -E apt-get update -y -qq	
+	sudo -E apt-get update -y $apt_quiet	
 }
 
 function _remove() {
 	# shellcheck disable=SC2068
-	sudo -E apt-get -qq remove -y $@
+	sudo -E apt-get $apt_quiet remove -y $@
 }
 
 function _purge() {
 	# shellcheck disable=SC2068
-	sudo -E apt-get -qq purge -y $@
+	sudo -E apt-get $apt_quiet purge -y $@
 }
 
 function _autoremove() {
-	sudo -E apt-get -qq autoremove -y
+	sudo -E apt-get $apt_quiet autoremove -y
 }
 
 
@@ -350,7 +359,7 @@ function minimal-old() {
 #	sudo -E ln -fs /opt/google/chrome/WidevineCdm /usr/lib/chromium-browser/WidevineCdm
 
 	# Audio
-	if ! exists playerctl; then
+	if ! type -P playerctl &>/dev/null; then
 		_install_deb_from_url "https://github.com/altdesktop/playerctl/releases/download/v2.0.2/playerctl-2.0.2_$(cpu_architecture_simple).deb"
 	fi
 
@@ -461,14 +470,14 @@ function general() {
 	nomachine
 	_add_repo_or_install_deb 'ppa:nextcloud-devs/client' 'nextcloud-client'
 
-	if ! exists bat; then
+	if ! type -P bat &>/dev/null; then
 		_install_deb_from_url "https://github.com/sharkdp/bat/releases/download/v0.11.0/bat_0.11.0_$(cpu_architecture_simple).deb"
 	fi
 
 	_add_repo_or_install_deb 'ppa:mmstick76/alacritty' 'alacritty'
 
 	# @todo change to fd-find for 19.04+
-	if ! exists fd; then
+	if ! type -P fd &>/dev/null; then
 		_install_deb_from_url "https://github.com/sharkdp/fd/releases/download/v7.4.0/fd_7.4.0_$(cpu_architecture_simple).deb"
 	fi
 
@@ -479,7 +488,7 @@ function general() {
 	_add_repo_or_install_deb 'ppa:lazygit-team/release' 'lazygit'
 
 
-	if ! apt-get -qq list papirus-icon-theme 2>/dev/null | grep -i -q installed
+	if ! apt-get $apt_quiet list papirus-icon-theme 2>/dev/null | grep -i -q installed
 	then
 		_add_repo_or_install_deb 'ppa:papirus/papirus' 'papirus-icon-theme'
 	fi
@@ -682,7 +691,7 @@ function usb_ssd() {
 
 function upgrade() {
 	_update
-	sudo -E apt "upgrade" -y -qq
+	sudo -E apt "upgrade" -y $apt_quiet
 	sudo -E apt install "linux-headers-$(uname -r)" dkms -y
 	if [[ -f /sbin/vboxconfig ]]; then
 		sudo -E /sbin/vboxconfig
@@ -709,12 +718,12 @@ function chat() {
 	# Use deb to make use of fonts-noto-color-emoji
 	_install_deb_from_url https://discordapp.com/api/download?platform=linux\&format=deb
 
-	if ! exists slack-term; then
+	if ! type -P slack-term &>/dev/null; then
 		sudo curl -LsS https://github.com/erroneousboat/slack-term/releases/download/v0.4.1/slack-term-linux-amd64 -o /usr/local/bin/slack-term
 		sudo chmod +x /usr/local/bin/slack-term
 	fi
 
-	if ! exists signal-desktop; then
+	if ! type -P signal-desktop &>/dev/null; then
 		curl -s https://updates.signal.org/desktop/apt/keys.asc | sudo apt-key add -
 		echo "deb [arch=amd64] https://updates.signal.org/desktop/apt xenial main" | sudo tee -a /etc/apt/sources.list.d/signal-xenial.list
 		_force_update
@@ -808,7 +817,7 @@ function _install_nodejs() {
 	packages+=(jq)
 	_install "${packages[*]}" 
 
-	if ! exists yq; then
+	if ! type -P yq &>/dev/null; then
 		sudo -E curl -LsS "https://github.com/mikefarah/yq/releases/download/3.0.1/yq_linux_$(cpu_architecture_simple)" -o /usr/local/bin/yq
 		sudo -E chmod +x /usr/local/bin/yq
 	fi
@@ -816,7 +825,7 @@ function _install_nodejs() {
 
 function dev() {
 	declare -a packages=()
-	if exists snap && ! exists snapcraft; then
+	if type -P snap &>/dev/null && ! type -P snapcraft &>/dev/null; then
 		sudo -E snap install snapcraft --classic
 	fi
 
@@ -864,7 +873,7 @@ function dev() {
 	sudo -E npm install -g --silent --force yarn >/dev/null
 	sudo -E npm install -g --silent --force gulp >/dev/null
 
-	if ! exists circleci; then
+	if ! type -P circleci &>/dev/null; then
 		curl -sSL https://circle.ci/cli | sudo -E bash
 		sudo groupadd -g 3434 circleci
 		sudo useradd -u 3434 -g circleci circleci 
@@ -874,7 +883,7 @@ function dev() {
 	# Gnu global and exuberant ctags
 	packages+=(global ctags)
 
-	if ! exists checkmake; then
+	if ! type -P checkmake &>/dev/null; then
 		go get github.com/mrtazz/checkmake
 		cd "$GOPATH/src/github.com/mrtazz/checkmake"
 		sudo make PREFIX=/usr/local clean install    
@@ -965,13 +974,13 @@ function php() {
 	_install_pip3 mycli
 
 
-	if ! exists composer; then
+	if ! type -P composer &>/dev/null; then
 		# shellcheck disable=SC2091
 		curl -sSL https://getcomposer.org/installer | $(command -v php) && sudo -E mv composer.phar /usr/local/bin/composer
 	fi
 
 
-	if ! exists phive; then
+	if ! type -P phive &>/dev/null; then
 		cd /tmp
 		wget -O phive.phar https://phar.io/releases/phive.phar
 		wget -O phive.phar.asc https://phar.io/releases/phive.phar.asc
@@ -1004,22 +1013,23 @@ function php() {
 
 function docker() {
 	unset -f docker
+	_remove docker.io docker
 	_install apt-transport-https \
 		ca-certificates \
 		curl \
 		gnupg2 \
 		software-properties-common \
 		qemu-user-static \
-		docker.io \
 		lxcfs \
 		uidmap
 
-	if ! exists ctop; then
+	if ! type -P ctop &>/dev/null; then
 		sudo -E curl -sSL "https://github.com/bcicen/ctop/releases/download/v0.7.2/ctop-0.7.2-linux-$(cpu_architecture_simple)" -o /usr/local/bin/ctop
 		sudo -E chmod +x /usr/local/bin/ctop
 	fi
 
-	if ! exists docker; then
+	
+	if ! type -P docker &>/dev/null; then
 		curl -sSL https://download.docker.com/linux/ubuntu/gpg | sudo -E apt-key add -
 		sudo -E apt-key fingerprint 0EBFCD88
 		sudo -E add-apt-repository \
@@ -1027,28 +1037,30 @@ function docker() {
 			$(lsb_release -cs) \
 			stable"
 		_force_update
-		_install docker
+		_install docker-ce
 	fi
 		sudo -E usermod -aG "docker" "$(whoami)"
 
-	if ! exists docker-compose; then
+	if ! type -P docker-compose &>/dev/null; then
 		sudo -E curl -sSL "https://github.com/docker/compose/releases/download/1.25.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 		sudo -E chmod +x /usr/local/bin/docker-compose
 	fi
 
-	# if ! exists dockerize; then
+	# if ! type -P dockerize &>/dev/null; then
 	# 	sudo -E curl -sSL "https://github.com/jwilder/dockerize/releases/download/v0.6.1/dockerize-linux-$(cpu_architecture_simple)-v0.6.1.tar.gz" -o /usr/local/bin/dockerize
 	# 	sudo -E chmod +x /usr/local/bin/dockerize
 	# fi
 
-	# if ! exists docker-machine; then
+	# if ! type -P docker-machine &>/dev/null; then
 	# 	base=https://github.com/docker/machine/releases/download/v0.16.2
 	#   	curl -sSL "$base/docker-machine-$(uname -s)-$(uname -m)" >/tmp/docker-machine
 	#   	sudo mv /tmp/docker-machine /usr/local/bin/docker-machine
 	#   	sudo chmod +x /usr/local/bin/docker-machine
 	# fi
 
-	sudo -E cp "$ROOT_DIR/etc/docker/daemon.json" /etc/docker/daemon.json
+	if [[ -n $ROOT_DIR ]]; then
+		sudo -E cp "$ROOT_DIR/etc/docker/daemon.json" /etc/docker/daemon.json
+	fi
 
 	# if which podman &>/dev/null
 	# then
@@ -1060,13 +1072,13 @@ function docker() {
 	# fi
 
 	cd "${TMPDIR}"
-	# if ! exists lazydocker; then
+	# if ! type -P lazydocker &>/dev/null; then
 	# 	curl -sSL "https://github.com/jesseduffield/lazydocker/releases/download/v0.7.1/lazydocker_0.7.1_Linux_$(cpu_architecture).tar.gz" > lazydocker.tgz
 	# 	tar xzf lazydocker.tgz
 	# 	sudo -E install lazydocker /usr/local/bin/
 	# fi
 
-	if ! exists dry; then
+	if ! type -P dry &>/dev/null; then
 		curl -sSf https://moncho.github.io/dry/dryup.sh | sudo sh
 		sudo chmod 755 /usr/local/bin/dry
 	fi
@@ -1330,5 +1342,10 @@ function fail() {
 	exit 233
 }
 
-# shellcheck source=../.autobash
-source "$DIR/../.autobash"
+
+for function in "$@"
+do
+	function="${function//--/}"
+    echo "Executing $function"
+	$function
+done
