@@ -160,10 +160,9 @@ function xfce_settings() {
 function xfce_settings-dark() {
 if command -v xfconf-query &>/dev/null
 	then
-		xfconf-query -c xsettings -p /Net/ThemeName -s Arc-Dark
-		# xfconf-query -c xsettings -p /Net/IconThemeName -s Pocillo
+		xfconf-query -c xsettings -p /Net/ThemeName -s Yaru-dark
 		xfconf-query -c xsettings -p /Net/IconThemeName -s Papirus-Dark
-		xfconf-query -c xfwm4 -p /general/theme -s Bluebird
+		xfconf-query -c xfwm4 -p /general/theme -s Default
 	fi
 
 }
@@ -171,9 +170,9 @@ if command -v xfconf-query &>/dev/null
 function xfce_settings-light() {
 	if command -v xfconf-query &>/dev/null
 	then
-		xfconf-query -c xsettings -p /Net/ThemeName -s Adwaita
+		xfconf-query -c xsettings -p /Net/ThemeName -s Yaru
 		xfconf-query -c xsettings -p /Net/IconThemeName -s Papirus-Light
-		xfconf-query -c xfwm4 -p /general/theme -s Bluebird
+		xfconf-query -c xfwm4 -p /general/theme -s Default
 	fi
 }
 
