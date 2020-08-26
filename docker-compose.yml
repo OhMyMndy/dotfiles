@@ -1,8 +1,27 @@
-version: "2.3"
+version: "3.7"
 
 services:
-
-  dockerfiles-build:
-    image: mandy91/dotfiles-build:0.1.1
+  alpine:
+    image: ohmymndy/dotfiles
+    command: /bin/sh -c "while sleep 1000; do :; done"
     build:
+      dockerfile: Dockerfile
       context: .
+    volumes:
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+        read_only: true
+      - type: bind
+        source: /
+        target: /rootfs
+        read_only: true
+      - type: bind
+        source: ./
+        target: /workspace
+      - extensions:/home/vscode/.vscode-server/extensions
+      - extensions-insiders:/home/vscode/.vscode-server-insiders/extensions
+
+volumes:
+  extensions:
+  extensions-insiders:

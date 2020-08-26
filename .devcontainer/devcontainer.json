@@ -1,0 +1,20 @@
+{
+    "name": "Dotfiles Alpine",
+    "dockerComposeFile": [
+        "../docker-compose.yml"
+    ],
+    "service": "alpine",
+    "remoteUser": "vscode",
+    "settings": {
+        "terminal.integrated.shell.linux": "/bin/ash"
+    },
+    "workspaceFolder": "/workspace",
+    "extensions": [
+       "ms-python.python",
+       "formulahenry.code-runner"
+    ],
+    "remoteEnv": {
+        "COMPOSE_PROJECT_NAME": "dotfiles"
+    }
+    
+}

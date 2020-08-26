@@ -1,24 +1,14 @@
-FROM circleci/node:12-buster
-LABEL maintainer "Mandy Schoep <mandyschoep@gmail.com>"
+FROM mcr.microsoft.com/vscode/devcontainers/base:alpine-3.12
+
+ENV USERNAME=vscode
 
 
-USER root
-# hadolint ignore=DL3008
-RUN apt-get update \
-    && apt-get install -y vim wget curl python3-pip file desktop-file-utils nodejs --no-install-recommends \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
 
-
+RUN apk add --no-cache git python3 py3-pip shellcheck vim wget curl
+RUN apk add --no-cache nodejs npm
 RUN wget -qO- "https://github.com/hadolint/hadolint/releases/download/v1.17.3/hadolint-Linux-x86_64" > hadolint \
     && cp "hadolint" /usr/bin/ \
     && chmod +x /usr/bin/hadolint
-
-# hadolint ignore=DL4006
-RUN scversion="stable" \
-    && wget -qO- "https://storage.googleapis.com/shellcheck/shellcheck-${scversion?}.linux.x86_64.tar.xz" | tar -xJv \
-    && cp "shellcheck-${scversion}/shellcheck" /usr/bin/
-
 
 
 
@@ -36,4 +26,12 @@ RUN pip3 install vim-vint
 RUN npm install -g markdownlint-cli
 
 
-USER circleci
+USER $USERNAME
+
+RUN pip install -U pylint --user
+
+RUN mkdir -p /home/$USERNAME/.vscode-server/extensions \
+        /home/$USERNAME/.vscode-server-insiders/extensions \
+    && chown -R $USERNAME \
+        /home/$USERNAME/.vscode-server \
+        /home/$USERNAME/.vscode-server-insiders
