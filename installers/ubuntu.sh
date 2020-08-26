@@ -12,7 +12,7 @@ fi
 
 fontsAdded=0
 
-if [[ -z $BASH_SOURCE ]]; then
+if [[ ! -z $BASH_SOURCE ]]; then
 	DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 	cd "$DIR" || exit 1
 fi
@@ -418,9 +418,10 @@ function quicktile() {
 
 function themes() {
 	declare -a packages=()
-	# xfwm4-themes pocillo-icon-theme materia-gtk-theme
-	packages+=(arc-theme bluebird-gtk-theme moka-icon-theme)
-	_install "${packages[*]}" 
+	packages+=(xfwm4-themes)
+	packages+=(arc-theme bluebird-gtk-theme moka-icon-theme 'yaru-*')
+	_install "${packages[*]}"
+	papirus
 }
 
 function build-tools() {
@@ -488,10 +489,7 @@ function general() {
 	_add_repo_or_install_deb 'ppa:lazygit-team/release' 'lazygit'
 
 
-	if ! apt-get $apt_quiet list papirus-icon-theme 2>/dev/null | grep -i -q installed
-	then
-		_add_repo_or_install_deb 'ppa:papirus/papirus' 'papirus-icon-theme'
-	fi
+	papirus
 
 	_install_snap ripgrep --classic
 
@@ -510,6 +508,13 @@ function general() {
 	sudo -E chmod +x /usr/local/bin/broot
 
 	set +e
+}
+
+function papirus() {
+	if ! apt-get $apt_quiet list papirus-icon-theme 2>/dev/null | grep -i -q installed
+	then
+		_add_repo_or_install_deb 'ppa:papirus/papirus' 'papirus-icon-theme'
+	fi
 }
 
 function remove_obsolete() {
@@ -595,10 +600,14 @@ function fonts() {
 
 
 function settings-light() {
+	# shellcheck source=./../settings/xfce.sh
+	source "$DIR/../settings/xfce.sh"
 	xfce_settings-light
 }
 
 function settings-dark() {
+	# shellcheck source=./../settings/xfce.sh
+	source "$DIR/../settings/xfce.sh"
 	xfce_settings-dark
 }
 
@@ -624,6 +633,8 @@ function settings() {
 
 
 function keybindings() {
+	# shellcheck source=./../settings/xfce.sh
+	source "$DIR/../settings/xfce.sh"
 	xfce_keybindings
 }
 
