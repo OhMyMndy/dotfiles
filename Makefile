@@ -15,3 +15,9 @@ dark:
 
 keybindings:
 	./installers/xfce.sh --xfce_keybindings
+
+build:
+	docker-compose -p 'dotfiles' build
+
+run:
+	docker-compose -p 'dotfiles' run --rm alpine ash

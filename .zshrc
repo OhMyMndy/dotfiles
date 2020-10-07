@@ -34,6 +34,9 @@ plugins=(
     zsh-syntax-highlighting
 )
 
+zstyle ':completion:*:make::' tag-order targets
+
+
 if [ "$OS" = "Ubuntu" ]; then
     plugins+=(ubuntu)
 elif [ "$OS" = "Arch Linux" ]; then
