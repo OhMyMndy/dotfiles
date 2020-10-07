@@ -1149,10 +1149,9 @@ net.ipv4.ip_forward=1
 kernel.printk=2 4 1 7
 
 # See https://success.docker.com/article/node-using-swap-memory-instead-of-host-memory
-#vm.swappiness=0
-#vm.overcommit_memory=1
+vm.swappiness=0
+vm.overcommit_memory=1
 
-vm.swappiness=2
 
 vm.max_map_count=262144
 # Do not produce core dumps
@@ -1173,7 +1172,7 @@ EOL
 * hard core 0
 EOL
 
-	sudo "sysctl" --system
+	sudo "sysctl" --system >/dev/null
 }
 
 function firewall() {
