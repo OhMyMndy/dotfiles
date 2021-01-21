@@ -33,9 +33,11 @@ ___shutdown() {
 }
 trap "___shutdown" INT TERM
 
-if command -v git &>/dev/null && [[ -d .git ]]; then
+if command -v git &>/dev/null; then
 	ROOT_DIR="$(git rev-parse --show-toplevel)/"
 fi
+
+source /etc/lsb-release
 
 
 function cpu_architecture() {
@@ -76,7 +78,7 @@ fi
 
 export DEBIAN_FRONTEND=noninteractive
 
-function debug() {
+function vv() {
 	set -x
 }
 
@@ -138,6 +140,37 @@ function _add_repository() {
 # function no-x() {
 # 	install_x=1
 # }
+
+
+function installFontsFromZip() {
+	local fontUrl="$1"
+	local fontName="$2"
+	if [ "$(uname)" = 'Darwin' ]; then
+		mkdir -p ~/Library/Fonts || exit 2
+		cd ~/Library/Fonts || exit 1
+	else
+		mkdir -p ~/.local/share/fonts || exit 2
+		cd ~/.local/share/fonts || exit 1
+	fi
+
+	if [ ! -d "$fontName" ]; then
+		rm -f "${TMPDIR:-/tmp}/$fontName.zip"
+		curl -LsSo "${TMPDIR:-/tmp}/$fontName.zip" "$fontUrl"
+		unzip "${TMPDIR:-/tmp}/$fontName.zip" -d "$fontName"
+		fontsAdded=1
+		deleteWindowsFonts
+	fi
+}
+
+function deleteWindowsFonts() {
+	if [ "$(uname)" = 'Darwin' ]; then
+		local DIR=~/Library/Fonts
+	else
+		local DIR=~/.local/share/fonts
+	fi
+	find $DIR -iname '*windows*' -exec rm -r "{}" \;
+}
+
 
 
 function _install() {
@@ -226,7 +259,7 @@ function _install_gem() {
 	fi
 
 	# shellcheck disable=SC2068
-	gem install --config-file "$ROOT_DIR/.gemrc"  $@
+	gem install --user-install $@
 }
 
 updated=0
@@ -244,6 +277,11 @@ function _force_update() {
 function _remove() {
 	# shellcheck disable=SC2068
 	sudo -E apt-get $apt_quiet remove -y $@
+}
+
+function _remove_and_purge() {
+	_remove "$@"
+	_purge "$@"
 }
 
 function _purge() {
@@ -282,7 +320,64 @@ function minimal() {
  	_add_repository ppa:git-core/ppa
 	_force_update
 
-	_install git tmux tree gawk htop
+	# fd-find is available from 19.10
+	_install git git-extras tig tmux tree gawk htop zsh less curl wget rsync openssh-server ssh-askpass vim nmap iputils-ping dnsutils unzip unrar p7zip fd-find
+
+	# git diff tool with syntax highlighting
+	install_deb_from_url https://github.com/dandavison/delta/releases/download/0.5.1/git-delta_0.5.1_amd64.deb
+
+	_install_gem teamocil
+
+	zsh
+}
+
+function minimal-desktop() {
+	declare -a packages=()
+
+	# XFCE ONLY      xfce4-genmon-plugin xfdashboard  galculator
+	packages+=(redshift-gtk xfce4-terminal seahorse mate-utils orage ristretto 
+		xsel xclip arandr wmctrl flatpak compton catfish rofi xdotool)
+
+	# File management and disk plugins X
+	packages+=(thunar gnome-disk-utility)
+
+	# Remote desktop
+	packages+=(remmina 'remmina*plugin*' vinagre xserver-xephyr)
+
+	_purge xfce4-appmenu-plugin || true
+	_purge copyq || true
+	_purge chromium-browser || true
+
+	chrome
+
+	# Editors
+	packages+=(geany)
+
+	# Archiving    ecm
+	packages+=(engrampa) # of p7zip-full on 1804
+
+	_install "${packages[*]}"
+
+
+	ulauncher
+
+	_install_snap code --classic
+	nodejs
+	bash "$DIR/apps/code.sh"
+
+}
+
+function sysadmin() {
+	declare -a packages=()
+
+	# System monitoring
+	packages+=(iotop htop nload glances)
+
+	# Networking tools
+	packages+=(net-tools nmap iputils-ping dnsutils telnet-ssl mtr-tiny traceroute libnss3-tools netdiscover whois bridge-utils trickle ipvsadm)
+
+
+	_install "${packages[*]}"
 }
 
 function minimal-old() {
@@ -383,7 +478,6 @@ function minimal-old() {
 
 	zsh
 
-	_install_nodejs
 	_install_snap code --classic
 	bash "$DIR/apps/code.sh"
 
@@ -396,12 +490,11 @@ function chrome() {
 function zsh() {
 	_install zsh
 	bash "$DIR/apps/oh-my-zsh.sh"
- 	sudo chsh -s "$(which zsh)" "$(whoami)"
 	# Fix for snaps with ZSH
 	LINE="emulate sh -c 'source /etc/profile'"
 	FILE=/etc/zsh/zprofile
 	grep -qF -- "$LINE" "$FILE" || echo "$LINE" | sudo -E tee "$FILE" >/dev/null
-	sudo -E chsh -s "$(command -v zsh)" mandy
+	sudo -E chsh -s "$(command -v zsh)" "$(whoami)"
 }
 
 function quicktile() {
@@ -418,7 +511,7 @@ function quicktile() {
 
 function themes() {
 	declare -a packages=()
-	packages+=(xfwm4-themes)
+	# packages+=(xfwm4-themes)
 	packages+=(arc-theme bluebird-gtk-theme moka-icon-theme 'yaru-*')
 	_install "${packages[*]}"
 	papirus
@@ -446,13 +539,13 @@ function general() {
 
 	declare -a packages=()
 	# System utils
-	packages+=(sysfsutils sysstat mate-utils)
+	packages+=(sysfsutils sysstat mate-utils run-one)
 
 	# Media
 	packages+=(vlc imagemagick flac soundconverter picard)
 	
-	_install_flatpak_flathub io.github.quodlibet.QuodLibet
-	_install_flatpak_flathub org.gnome.design.Contrast
+	# _install_flatpak_flathub io.github.quodlibet.QuodLibet
+	# _install_flatpak_flathub org.gnome.design.Contrast
 
 	vpn
 	themes
@@ -469,24 +562,27 @@ function general() {
 	packages+=(tilda)
 
 	nomachine
-	_add_repo_or_install_deb 'ppa:nextcloud-devs/client' 'nextcloud-client'
+	# _add_repo_or_install_deb 'ppa:nextcloud-devs/client' 'nextcloud-client'
 
 	if ! type -P bat &>/dev/null; then
-		_install_deb_from_url "https://github.com/sharkdp/bat/releases/download/v0.11.0/bat_0.11.0_$(cpu_architecture_simple).deb"
+		_install_deb_from_url "https://github.com/sharkdp/bat/releases/download/v0.17.1/bat_0.17.1_$(cpu_architecture_simple).deb"
 	fi
 
 	_add_repo_or_install_deb 'ppa:mmstick76/alacritty' 'alacritty'
 
-	# @todo change to fd-find for 19.04+
-	if ! type -P fd &>/dev/null; then
-		_install_deb_from_url "https://github.com/sharkdp/fd/releases/download/v7.4.0/fd_7.4.0_$(cpu_architecture_simple).deb"
-	fi
+	# if [[ "$DISTRIB_CODENAME" = 'bionic' ]]; then
+	# 	if ! type -P fd &>/dev/null; then
+	# 	_install_deb_from_url "https://github.com/sharkdp/fd/releases/download/v7.4.0/fd_7.4.0_$(cpu_architecture_simple).deb"
+	# 	fi
+	# else
+	# 	packages+=(rust-fd-find)
+	# fi
 
 	# if ! command -v x11docker &>/dev/null; then
 		# curl -sSL https://raw.githubusercontent.com/mviereck/x11docker/master/x11docker | sudo -E bash -s -- --update
 	# fi
 
-	_add_repo_or_install_deb 'ppa:lazygit-team/release' 'lazygit'
+	# _add_repo_or_install_deb 'ppa:lazygit-team/release' 'lazygit'
 
 
 	papirus
@@ -500,12 +596,12 @@ function general() {
 	# ibus_typing_booster
 
 	remove_obsolete
-	_install_pip3 thefuck numpy csvkit httpie
+	# _install_pip3 thefuck numpy csvkit httpie
 
-	install_deb_from_url "https://github.com/TheAssassin/AppImageLauncher/releases/download/v2.1.0/appimagelauncher_2.1.0-travis897.d1be7e7.bionic_$(cpu_architecture_simple).deb"
+	# install_deb_from_url "https://github.com/TheAssassin/AppImageLauncher/releases/download/v2.1.0/appimagelauncher_2.1.0-travis897.d1be7e7.bionic_$(cpu_architecture_simple).deb"
 
-	sudo -E curl -LsS "https://dystroy.org/broot/download/$(cpu_architecture)-linux/broot" -o /usr/local/bin/broot
-	sudo -E chmod +x /usr/local/bin/broot
+	# sudo -E curl -LsS "https://dystroy.org/broot/download/$(cpu_architecture)-linux/broot" -o /usr/local/bin/broot
+	# sudo -E chmod +x /usr/local/bin/broot
 
 	set +e
 }
@@ -517,31 +613,33 @@ function papirus() {
 	fi
 }
 
+
 function remove_obsolete() {
-	_remove parole mpv 'pidgin*' 'zathura*' evince
+	_remove_and_purge parole mpv 'pidgin*' 'zathura*' evince
 	# Remove gnome games
-	_remove aisleriot hitori sgt-puzzles lightsoff iagno gnome-games gnome-nibbles \
+	_remove_and_purge aisleriot hitori 'sgt-*' lightsoff iagno gnome-games gnome-nibbles \
 		gnome-mines quadrapassel gnome-sudoku gnome-robots swell-foop tali gnome-taquin \
 		gnome-tetravex gnome-chess five-or-more four-in-a-row gnome-klotski gnome-mahjongg emacs
 
 	# Obsolete indicators
-	_remove indicator-session indicator-datetime indicator-keyboard indicator-power
+	_remove_and_purge indicator-session indicator-datetime indicator-keyboard indicator-power
 
 	# remove KDE/Plasma/QT applications
-	_remove 'okular*' qdirstat ktimer 'kubuntu*' '*kdeconnect*'
+	_remove_and_purge 'okular*' qdirstat ktimer 'kubuntu*' '*kdeconnect*' kmail plasma-workspace 'kate5*' korganizer 'kdepim*'
 	_autoremove
 }
 
 function groups() {
-	sudo -E groupadd "docker" || true
-	sudo -E groupadd vboxusers || true
-	sudo -E groupadd mail || true
-	sudo -E groupadd sambashare || true
-	sudo -E groupadd audio || true
-	sudo -E groupadd video || true
-	sudo -E groupadd kvm || true
-	sudo -E groupadd lxd || true
-	sudo -E groupadd render || true
+	sudo -E groupadd --system --force "docker" || true
+	sudo -E groupadd --system --force vboxusers || true
+	sudo -E groupadd --system --force mail || true
+	sudo -E groupadd --system --force sambashare || true
+	sudo -E groupadd --system --force audio || true
+	sudo -E groupadd --system --force video || true
+	sudo -E groupadd --system --force kvm || true
+	sudo -E groupadd --system --force lxd || true
+	sudo -E groupadd --system --force render || true
+	sudo -E groupadd --system --force wireshark || true
 
 	sudo -E usermod -aG "docker" mandy
 	sudo -E usermod -aG mail mandy
@@ -559,6 +657,7 @@ function groups() {
 	sudo -E usermod -aG kvm mandy
 	sudo -E usermod -aG lxd mandy
 	sudo -E usermod -aG render mandy
+	sudo -E usermod -aG wireshark mandy
 }
 
 function nomachine() {
@@ -584,12 +683,12 @@ function jack() {
 }
 
 function fonts() {
-	installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/SourceCodePro.zip SourceCodeProNerdFont
-	installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/FantasqueSansMono.zip FantasqueSansMono
-	installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/DroidSansMono.zip DroidSansMono
-	installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/DejaVuSansMono.zip DejaVuSansMono
-	installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/Iosevka.zip Iosevka
-	installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/Inconsolata.zip Inconsolata
+	# installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/SourceCodePro.zip SourceCodeProNerdFont
+	# installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/FantasqueSansMono.zip FantasqueSansMono
+	# installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/DroidSansMono.zip DroidSansMono
+	# installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/DejaVuSansMono.zip DejaVuSansMono
+	# installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/Iosevka.zip Iosevka
+	# installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/Inconsolata.zip Inconsolata
 	installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/JetBrainsMono.zip JetBrainsMono
 	installFontsFromZip https://github.com/IBM/plex/releases/download/v4.0.2/OpenType.zip "IBM Plex"
 
@@ -726,20 +825,21 @@ function media() {
 
 function chat() {
 	_install_snap slack --classic
+	_install_snap discord --classic
 	# Use deb to make use of fonts-noto-color-emoji
 	_install_deb_from_url https://discordapp.com/api/download?platform=linux\&format=deb
 
-	if ! type -P slack-term &>/dev/null; then
-		sudo curl -LsS https://github.com/erroneousboat/slack-term/releases/download/v0.4.1/slack-term-linux-amd64 -o /usr/local/bin/slack-term
-		sudo chmod +x /usr/local/bin/slack-term
-	fi
+	# if ! type -P slack-term &>/dev/null; then
+		# sudo curl -LsS https://github.com/erroneousboat/slack-term/releases/download/v0.4.1/slack-term-linux-amd64 -o /usr/local/bin/slack-term
+		# sudo chmod +x /usr/local/bin/slack-term
+	# fi
 
-	if ! type -P signal-desktop &>/dev/null; then
-		curl -s https://updates.signal.org/desktop/apt/keys.asc | sudo apt-key add -
-		echo "deb [arch=amd64] https://updates.signal.org/desktop/apt xenial main" | sudo tee -a /etc/apt/sources.list.d/signal-xenial.list
-		_force_update
-		_install signal-desktop
-	fi
+	# if ! type -P signal-desktop &>/dev/null; then
+		# curl -s https://updates.signal.org/desktop/apt/keys.asc | sudo apt-key add -
+		# echo "deb [arch=amd64] https://updates.signal.org/desktop/apt xenial main" | sudo tee -a /etc/apt/sources.list.d/signal-xenial.list
+		# _force_update
+		# _install signal-desktop
+	# fi
 }
 
 function kde() {
@@ -821,7 +921,7 @@ function jupyter() {
 }
 
 
-function _install_nodejs() {
+function nodejs() {
 	declare -a packages=()
 	curl -sSL https://deb.nodesource.com/setup_12.x | sudo -E bash - >/dev/null
 	packages+=(nodejs build-essential)
@@ -832,6 +932,7 @@ function _install_nodejs() {
 		sudo -E curl -LsS "https://github.com/mikefarah/yq/releases/download/3.0.1/yq_linux_$(cpu_architecture_simple)" -o /usr/local/bin/yq
 		sudo -E chmod +x /usr/local/bin/yq
 	fi
+	sudo -E npm install -g --silent --force json >/dev/null
 }
 
 function dev() {
@@ -845,7 +946,7 @@ function dev() {
 	packages+=(apache2-utils multitail virt-what proot bless shellcheck)
 
 
-		cd /tmp || exit 2
+	cd /tmp || exit 2
 	curl -sSL "https://github.com/hadolint/hadolint/releases/download/latest/hadolint-Linux-$(cpu_architecture)" > hadolint
 	sudo -E cp -f "hadolint" /usr/bin/
 		sudo -E chmod +x /usr/bin/hadolint
@@ -857,7 +958,7 @@ function dev() {
 	_install_pip3 dockerfile
 
 	# python3 version is not in pypi
-	pip install crudini
+	# pip install crudini
 
 	# if [[ ! -d ~/.mypyls ]]; then
 	# 	python3 -m venv ~/.mypyls
@@ -865,7 +966,7 @@ function dev() {
 	# fi
 
 	_install_pip3 pre-commit
-	_install_nodejs
+	# nodejs
 	packages+=(meld)
 
 	# Vscode dependencies
@@ -884,12 +985,12 @@ function dev() {
 	sudo -E npm install -g --silent --force yarn >/dev/null
 	sudo -E npm install -g --silent --force gulp >/dev/null
 
-	if ! type -P circleci &>/dev/null; then
-		curl -sSL https://circle.ci/cli | sudo -E bash
-		sudo groupadd -g 3434 circleci
-		sudo useradd -u 3434 -g circleci circleci 
-		sudo usermod -aG docker circleci
-	fi
+	# if ! type -P circleci &>/dev/null; then
+	# 	curl -sSL https://circle.ci/cli | sudo -E bash
+	# 	sudo groupadd -g 3434 circleci
+	# 	sudo useradd -u 3434 -g circleci circleci 
+	# 	sudo usermod -aG docker circleci
+	# fi
 
 	# Gnu global and exuberant ctags
 	packages+=(global ctags)
@@ -904,8 +1005,8 @@ function dev() {
 
 	# virtualization
 
-	curl -s "https://get.sdkman.io" | bash  # install sdkman
-	sdk install kotlin                      # install Kotlin
+	# curl -s "https://get.sdkman.io" | bash  # install sdkman
+	# sdk install kotlin                      # install Kotlin
 
 	# _install_deb_from_url https://packages.microsoft.com/config/ubuntu/19.10/packages-microsoft-prod.deb
 	# _install apt-transport-https 
@@ -970,12 +1071,12 @@ function audio() {
 function php() {
 	unset -f php
 	
-	_add_repository ppa:ondrej/php
+	# _add_repository ppa:ondrej/php
 
 
 	declare -a packages=()
-	packages+=(wkhtmltopdf php7.4-cli php7.4-opcache php7.4-zip php7.4-curl php7.4-yaml)
-	packages+=(php7.4-phpdbg php7.4-xml php7.4-mbstring php7.4-curl php7.4-zip php7.4-pdo-sqlite php7.4-intl php7.4-zmq)
+	# packages+=(wkhtmltopdf php7.4-cli php7.4-opcache php7.4-zip php7.4-curl php7.4-yaml)
+	# packages+=(php7.4-phpdbg php7.4-xml php7.4-mbstring php7.4-curl php7.4-zip php7.4-pdo-sqlite php7.4-intl php7.4-zmq)
 	packages+=(kcachegrind)
 
 	_install "${packages[*]}" 
@@ -1034,10 +1135,10 @@ function docker() {
 		lxcfs \
 		uidmap
 
-	if ! type -P ctop &>/dev/null; then
-		sudo -E curl -sSL "https://github.com/bcicen/ctop/releases/download/v0.7.2/ctop-0.7.2-linux-$(cpu_architecture_simple)" -o /usr/local/bin/ctop
-		sudo -E chmod +x /usr/local/bin/ctop
-	fi
+	# if ! type -P ctop &>/dev/null; then
+		# sudo -E curl -sSL "https://github.com/bcicen/ctop/releases/download/v0.7.2/ctop-0.7.2-linux-$(cpu_architecture_simple)" -o /usr/local/bin/ctop
+		# sudo -E chmod +x /usr/local/bin/ctop
+	# fi
 
 	
 	if ! type -P docker &>/dev/null; then
@@ -1052,10 +1153,11 @@ function docker() {
 	fi
 		sudo -E usermod -aG "docker" "$(whoami)"
 
-	if ! type -P docker-compose &>/dev/null; then
-		sudo -E curl -sSL "https://github.com/docker/compose/releases/download/1.25.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-		sudo -E chmod +x /usr/local/bin/docker-compose
-	fi
+	# if ! type -P docker-compose &>/dev/null; then
+		# sudo -E curl -sSL "https://github.com/docker/compose/releases/download/1.27.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+		# sudo -E chmod +x /usr/local/bin/docker-compose
+	# fi
+	_install_pip3 docker-compose
 
 	# if ! type -P dockerize &>/dev/null; then
 	# 	sudo -E curl -sSL "https://github.com/jwilder/dockerize/releases/download/v0.6.1/dockerize-linux-$(cpu_architecture_simple)-v0.6.1.tar.gz" -o /usr/local/bin/dockerize
@@ -1069,7 +1171,7 @@ function docker() {
 	#   	sudo chmod +x /usr/local/bin/docker-machine
 	# fi
 
-	if [[ -n $ROOT_DIR ]]; then
+	if [[ -n $ROOT_DIR ]] && [[ -f "$ROOT_DIR/etc/docker/daemon.json" ]]; then
 		sudo -E cp "$ROOT_DIR/etc/docker/daemon.json" /etc/docker/daemon.json
 	fi
 
@@ -1089,10 +1191,10 @@ function docker() {
 	# 	sudo -E install lazydocker /usr/local/bin/
 	# fi
 
-	if ! type -P dry &>/dev/null; then
-		curl -sSf https://moncho.github.io/dry/dryup.sh | sudo sh
-		sudo chmod 755 /usr/local/bin/dry
-	fi
+	# if ! type -P dry &>/dev/null; then
+		# curl -sSf https://moncho.github.io/dry/dryup.sh | sudo sh
+		# sudo chmod 755 /usr/local/bin/dry
+	# fi
 
 	# Docker rootless
 	# curl -LsS https://get.docker.com/rootless | FORCE_ROOTLESS_INSTALL=1 DOCKER_BIN=$HOME/docker bash  
@@ -1119,7 +1221,7 @@ function polybar() {
 function networkmanager() {
 	LINE="source /etc/network/interfaces.d/*"
 	FILE=/etc/network/interfaces
-	grep -qF -- "$LINE" "$FILE" || echo "$LINE" | sudo -E tee -a "$FILE"
+	grep -qF -- "$LINE" "$FILE" &>/dev/null|| echo "$LINE" | sudo -E tee -a "$FILE"
 	sudo -E mkdir -p /etc/network/interfaces.d
 
 		sudo -E tee /etc/NetworkManager/conf.d/00-use-dnsmasq.conf << EOL &>/dev/null
@@ -1171,6 +1273,8 @@ fs.suid_dumpable=0
 net.bridge.bridge-nf-call-ip6tables = 0
 net.bridge.bridge-nf-call-iptables = 0
 net.bridge.bridge-nf-call-arptables = 0
+# Docker rootless
+kernel.unprivileged_userns_clone=1
 EOL
 
 	sudo -E tee /etc/sysctl.d/mandy-keepalive.conf << EOL &>/dev/null
@@ -1190,21 +1294,12 @@ function firewall() {
 	sudo -E ufw enable
 	sudo -E ufw allow ssh
 
-	sudo -E ufw allow http
-	sudo -E ufw allow https
-
-	# pulse over HTTP
-	sudo -E ufw allow 8080/udp
-	sudo -E ufw allow 8080/tcp
-
 	# nomachine
 	sudo -E ufw allow 4000/udp
 	sudo -E ufw allow 4000/tcp
 
 	sudo -E ufw reload
-	# access local hosts through vpn
-	# shellcheck disable=SC2010
-	sudo -E ip route add 192.168.81.0/24 "dev" "$(ls /sys/class/net | grep "^en*" | head -1)" | true
+
 }
 
 function git-config() {
@@ -1231,6 +1326,7 @@ function autostart() {
 	ln -sf /usr/share/applications/ulauncher.desktop ~/.config/autostart/ || true
 	ln -sf /usr/share/applications/redshift-gtk.desktop ~/.config/autostart/ || true
 	ln -sf /usr/share/applications/nextcloud.desktop ~/.config/autostart/ || true
+	ln -sf /usr/share/applications/clipit.desktop ~/.config/autostart/ || true
 	rm -r ~/.config/autostart/tilda.desktop 2>/dev/null || true
 	# shellcheck disable=SC1073,SC2181
 	if glxinfo | grep -i "accelerated: no" &>/dev/null; then
