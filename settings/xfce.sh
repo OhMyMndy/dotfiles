@@ -19,10 +19,12 @@ function xfce_keybindings() {
 		# 	echo "xfconf-query -n -c \"$key\" -p \"$result\" -s \"$value\" -t \"$the_type\""
 		# done
 
+		# list all confs
+		# xfconf-query -l | xargs -r -I{} xfconf-query -c {} -l
+
 		# Clear all keyboard shortcuts
 		xfconf-query -c "xfce4-keyboard-shortcuts" -l | xargs -r -i xfconf-query -c "xfce4-keyboard-shortcuts" -p "{}" -r
 
-		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Primary><Alt>h" -s "xfce4-popup-clipman" -t "string"
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Alt>F1" -s "xfce4-popup-applicationsmenu" -t "string"
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Alt>F2" -s "xfrun4" -t "string"
 		xfconf-query -n -c "xfce4-keyboard-shortcuts" -p "/commands/custom/<Alt>F2/startup-notify" -s "true" -t "bool"
@@ -124,6 +126,9 @@ function xfce_settings() {
 		xfconf-query -c xfwm4 -p /general/mousewheel_rollup -s false
 		xfconf-query -c xfwm4 -p /general/workspace_names -n -t string -t string -t string -t string -t string -t string -t string -t string -t string -t string -s "1" -s "2" -s "3" -s "4" -s "5" -s "6" -s "7" -s "8" -s "9" -s "10"
 		xfconf-query -c xfwm4 -p /general/workspace_count -s 4
+		xfconf-query -c xfwm4 -p /general/box_move -s true
+		xfconf-query -c xfwm4 -p /general/box_resize -s true
+		xfconf-query -c xfwm4 -p /general/use_compositing -s true
 
 
  		# xfconf-query -c xfce4-session -p /compat/LaunchGNOME -s true
