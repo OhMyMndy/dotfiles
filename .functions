@@ -603,33 +603,6 @@ remove-from-dotfiles() {
 }
 
 
-link-file() {
-		dir="$1"
-		# file relative to root folder
-		arg="$2"
-		source="${dir}/$arg"
-		target="${HOME}/$arg"
-
-		# Optional third argument to override the targer
-		if [[ $# -eq 3 ]]; then
-				target="$3"
-		fi
-
-		if [[ $arg = '' ]]; then
-				echo "You need to provide source folder as first parameter"
-				return 1
-		fi
-
-		if [ ! -f "$source" ] && [ ! -d "$source" ]; then
-				echo "File or folder '$source' ($target) does not exist!"
-				return 2
-		fi
-
-		rm -rf "$target"
-		mkdir -p "$(dirname "$target")"
-		ln -sf "$source" "$target"
-}
-
 install-service() {
 		file="$1"
 		service_name="$(echo "$file" | sed -E 's#.*/([^/]+).service#\1#p' | head -1)"
