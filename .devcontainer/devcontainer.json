@@ -1,20 +1,28 @@
 {
-    "name": "Dotfiles Alpine",
-    "dockerComposeFile": [
-        "../docker-compose.yml"
-    ],
-    "service": "alpine",
+    "name": "${localWorkspaceFolderBasename}",
+    "dockerFile": "./Dockerfile",
     "remoteUser": "vscode",
+    "mounts": [
+        "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind",
+        "source=${localWorkspaceFolderBasename}-extensions,target=/home/vscode/.vscode-server/extensions,type=volume,consistency=cached",
+        "source=${localWorkspaceFolderBasename}-extensions-insiders,target=/home/vscode/.vscode-server-insiders/extensions,type=volume,consistency=cached",
+    ],
+    "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
+    "updateRemoteUserUID": true,
     "settings": {
-        "terminal.integrated.shell.linux": "/bin/ash"
+        "terminal.integrated.shell.linux": "/bin/bash"
     },
     "workspaceFolder": "/workspace",
     "extensions": [
        "ms-python.python",
-       "formulahenry.code-runner"
+       "formulahenry.code-runner",
+       "ms-azuretools.vscode-docker",
+       "exiasr.hadolint",
+       "mads-hartmann.bash-ide-vscode",
+       "jetmartin.bats",
+       "timonwong.shellcheck"
     ],
     "remoteEnv": {
-        "COMPOSE_PROJECT_NAME": "dotfiles"
+        "COMPOSE_PROJECT_NAME": "${localWorkspaceFolderBasename}"
     }
-    
 }

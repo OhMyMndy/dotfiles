@@ -7,6 +7,9 @@ services:
     build:
       dockerfile: Dockerfile
       context: .
+      args:
+        - PUID=1000
+        - PGID=1000
     volumes:
       - type: bind
         source: /var/run/docker.sock
