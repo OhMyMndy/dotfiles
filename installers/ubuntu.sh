@@ -771,7 +771,10 @@ function locale() {
 
 function i3() {
 	unset -f i3
-	sudo -E rm /etc/apt/sources.list.d/sur5r-i3.list
+
+	if [[ -f /etc/apt/sources.list.d/sur5r-i3.list ]]; then
+		sudo -E rm /etc/apt/sources.list.d/sur5r-i3.list
+	fi
 
 	declare -a packages=()
 	_remove spacefm
