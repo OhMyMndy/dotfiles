@@ -1,0 +1,23 @@
+---
+- hosts: all
+  gather_facts: no
+  become: yes
+  tasks:
+
+    - name: "Sysctl settings"
+      ansible.posix.sysctl:
+        name: '{{ item.key }}'
+        value: '{{ item.value }}'
+        sysctl_file: "/etc/sysctl.d/mandy.conf"
+        sysctl_set: yes
+        reload: yes
+        state: present
+      loop: "{{ sysctl_settings | dict2items }}"
+  
+      vars:
+        sysctl_settings:
+          "vm.swappiness": 0
+          "vm.overcommit_memory": 1
+          "vm.max_map_count": 262144
+          "net.ipv4.ip_forward": 1
+
