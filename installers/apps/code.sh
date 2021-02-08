@@ -47,6 +47,7 @@ function settings() {
     write_setting 'this["color-highlight.markRuler"] = false'
     write_setting 'this["color-highlight.matchWords"] = true'
     write_setting 'this["editor.linkedEditing"] = true' 
+    write_setting 'this["editor.fontFamliy"] = "monospace, Jetbrains Mono, Consolas, ''Courier New''"' 
     write_setting 'this["terminal.integrated.sendKeybindingsToShell"] = true'
     write_setting 'this["workbench.colorCustomizations"] = {
                         "terminal.background":"#000000",
@@ -137,6 +138,8 @@ install ms-azuretools.vscode-docker
 install ms-vscode-remote.vscode-remote-extensionpack
 install ms-vscode-remote.remote-containers
 install ms-vscode-remote.remote-ssh
+install auchenberg.vscode-browser-preview
+
 
 # CI
 install jvandyke.vscode-circleci
