@@ -3,5 +3,10 @@
     {
         "key": "ctrl+shift+alt+insert",
         "command": "scratchpads.newScratchpad"
+    },
+    {
+        "key": "ctrl+enter",
+        "command": "sqltools.executeCurrentQuery",
+        "when": "resourceExtname == .sql"
     }
 ]

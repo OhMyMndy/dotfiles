@@ -107,6 +107,7 @@ install casualjim.gotemplate
 
 install streetsidesoftware.code-spell-checker
 install mcright.auto-save
+install mtxr.sqltools
 
 
 # Markdown
