@@ -429,6 +429,25 @@ EOL
 	done
 }
 
+
+create_dockerfiles_desktop_files() {
+	cd ~/src/dockerfiles || exit 99
+	find ~/.local/share/applications/ -type f -name 'dockerfiles-*' | while read -r file; do
+		rm "$file"
+	done
+	docker-compose config --services | while read -r service; do
+		name_formatted=$(echo "$service" | sed -E 's/[^a-zA-Z0-9]/_/g')
+		cat <<EOL | tee ~/.local/share/applications/dockerfiles-"$name_formatted".desktop >/dev/null
+[Desktop Entry]
+Name=$service (Dockerfiles)
+Exec=bash -c "xhost + && cd ~/src/dockerfiles && docker-compose run --rm $service"
+Icon=$service
+Type=Application
+Categories=GTK;GNOME;Network;
+EOL
+	done
+}
+
 create_vm() {
 	local type="$1"
 	local name="$2"
