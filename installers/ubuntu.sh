@@ -265,13 +265,13 @@ function _install_gem() {
 updated=0
 function _update() {
 	if [[ $updated -eq 0 ]]; then
-		sudo -E apt-get update -y $apt_quiet
+		sudo -E apt-get update -y $apt_quiet >/dev/null
 	fi
 	updated=1
 }
 
 function _force_update() {
-	sudo -E apt-get update -y $apt_quiet	
+	sudo -E apt-get update -y $apt_quiet >/dev/null
 }
 
 function _remove() {
@@ -321,7 +321,7 @@ function minimal() {
 	_force_update
 
 	# fd-find is available from 19.10
-	_install git git-extras tig tmux tree gawk htop zsh less curl wget rsync openssh-server ssh-askpass vim nmap iputils-ping dnsutils unzip unrar p7zip fd-find
+	_install git git-extras tig tmux tree gawk htop zsh less curl wget rsync openssh-server ssh-askpass vim nmap iputils-ping dnsutils unzip unrar p7zip fd-find bat
 
 	# git diff tool with syntax highlighting
 	install_deb_from_url https://github.com/dandavison/delta/releases/download/0.5.1/git-delta_0.5.1_amd64.deb
@@ -494,7 +494,7 @@ function zsh() {
 	LINE="emulate sh -c 'source /etc/profile'"
 	FILE=/etc/zsh/zprofile
 	grep -qF -- "$LINE" "$FILE" || echo "$LINE" | sudo -E tee "$FILE" >/dev/null
-	sudo -E chsh -s "$(command -v zsh)" "$(whoami)"
+	sudo -E chsh -s "$(which zsh)" "$(whoami)"
 }
 
 function quicktile() {
