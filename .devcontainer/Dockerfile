@@ -24,8 +24,14 @@ RUN pip3 install vim-vint
 # hadolint ignore=DL3013
 RUN npm install -g markdownlint-cli
 
+RUN apk add --no-cache build-base libffi-dev openssl-dev python3-dev
+
+RUN pip3 install ansible
+RUN pip3 install paramiko
 
 RUN apk add --no-cache docker-cli
+# RUN chown -R root:root /etc/sudo.conf /usr/lib/sudo/sudoers.so /etc/sudoers /etc/sudoers.d \
+    # && chown -R root:root /usr/bin/sudo && chmod -R a=rx,u+ws /usr/bin/sudo
 
 
 USER $USERNAME
