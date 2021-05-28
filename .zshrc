@@ -54,7 +54,7 @@ if exists vagrant; then plugins+=(vagrant); fi
 if exists rsync; then plugins+=(rsync); fi
 if exists sudo; then plugins+=(sudo); fi
 if is_linux && ! is_android; then 
-    plugins+=(notify)
+#    plugins+=(notify)
     plugins+=(systemd) # The systemd plugin provides many useful aliases for systemd. https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins/systemd);
 fi
 
