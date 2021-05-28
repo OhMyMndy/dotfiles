@@ -39,7 +39,7 @@
 	<icon>edit-find</icon>
 	<name>Find in this folder</name>
 	<unique-id>1574084457367904-4</unique-id>
-	<command>catfish --path=%d</command>
+	<command>catfish --path=%f</command>
 	<description>Search for files within this folder</description>
 	<patterns>*</patterns>
 	<directories/>

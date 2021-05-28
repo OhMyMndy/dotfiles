@@ -25,7 +25,7 @@ function write_setting() {
         mkdir -p "$(dirname "$settings_file_server")"
         echo "{}" > "$settings_file_server"
     fi
-
+    
     if  command -v json &>/dev/null; then
         json -f "$settings_file" -I -e "$@" > /dev/null
         json -f "$settings_file_server" -I -e "$@" > /dev/null
@@ -35,15 +35,42 @@ function write_setting() {
 function settings() {
     write_setting "this['git.autofetch'] = true"
     write_setting "this['workbench.iconTheme'] = 'material-icon-theme'"
-    write_setting "this['terminal.integrated.minimumContrastRatio'] = 9"
+    write_setting "this['terminal.integrated.minimumContrastRatio'] = 5"
     write_setting "this['terminal.integrated.drawBoldTextInBrightColors'] = false"
     write_setting "this['files.exclude'] = { \"**/.*.un~\": true, \"**/.history/**\": true }"
     write_setting "this['files.watcherExclude'] = { \"**/.*.un~\": true, \"**/.history/**\": true }"
     write_setting "this['shellcheck.customArgs'] = [ '-x' ]"
     write_setting "this['bashIde.path'] = '$(which bash-language-server)'"
     write_setting "this['shellcheck.executablePath'] = '/usr/bin/shellcheck'"
-    write_setting "this['window.titleSeparator'] = ' // '"
-    write_setting 'this["window.title"] = "${dirty}${rootName}${separator}${activeEditorShort}${separator}${appName}"'
+    write_setting "this['window.titleSeparator'] = ' - '"
+    write_setting 'this["window.title"] = "${rootName} ${dirty}${separator}${activeEditorShort}${separator}${appName}"'
+    write_setting 'this["color-highlight.markRuler"] = false'
+    write_setting 'this["color-highlight.matchWords"] = true'
+    write_setting 'this["editor.linkedEditing"] = true' 
+    write_setting 'this["editor.fontFamliy"] = "monospace, Jetbrains Mono, Consolas, ''Courier New''"' 
+    write_setting 'this["terminal.integrated.sendKeybindingsToShell"] = true'
+    write_setting 'this["workbench.colorCustomizations"] = {
+                        "terminal.background":"#000000",
+                        "terminal.foreground":"#ffffff",
+                        "terminalCursor.background":"#000000",
+                        "terminalCursor.foreground":"#a5a2a2",
+                        "terminal.ansiBlack":"#ffffff",
+                        "terminal.ansiBlue":"#24c5e8",
+                        "terminal.ansiBrightBlack":"#000000",
+                        "terminal.ansiBrightBlue":"#0D6678",
+                        "terminal.ansiBrightCyan":"#58dac1",
+                        "terminal.ansiBrightGreen":"#52e75c",
+                        "terminal.ansiBrightMagenta":"#e254c6",
+                        "terminal.ansiBrightRed":"#fb0120",
+                        "terminal.ansiBrightWhite":"#ffffff",
+                        "terminal.ansiBrightYellow":"#e7c547",
+                        "terminal.ansiCyan":"#58dac1",
+                        "terminal.ansiGreen":"#52e75c",
+                        "terminal.ansiMagenta":"#e254c6",
+                        "terminal.ansiRed":"#fb0120",
+                        "terminal.ansiWhite":"#eaeaea",
+                        "terminal.ansiYellow":"#fe5004"
+                    }'
 }
 
 
@@ -61,6 +88,7 @@ install fallenwood.viml
 # Themes and keybindings
 install k--kato.intellij-idea-keybindings
 install pkief.material-icon-theme
+install stephenwassell.light-high-contrast-theme
 #install equinusocio.vsc-material-theme
 #install dracula-theme.theme-dracula
 #install robbowen.synthwave-vscode
@@ -76,9 +104,12 @@ install redhat.vscode-yaml
 install malmaud.tmux
 install ms-python.python
 install jetmartin.bats
+install casualjim.gotemplate
 
 install streetsidesoftware.code-spell-checker
 install mcright.auto-save
+install mtxr.sqltools
+install xshrim.txt-syntax
 
 
 # Markdown
@@ -108,6 +139,8 @@ install ms-azuretools.vscode-docker
 install ms-vscode-remote.vscode-remote-extensionpack
 install ms-vscode-remote.remote-containers
 install ms-vscode-remote.remote-ssh
+install auchenberg.vscode-browser-preview
+
 
 # CI
 install jvandyke.vscode-circleci
