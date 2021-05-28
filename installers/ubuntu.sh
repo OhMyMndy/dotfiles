@@ -1163,7 +1163,7 @@ kernel.printk=2 4 1 7
 #vm.swappiness=0
 #vm.overcommit_memory=1
 
-vm.swappiness=2
+vm.swappiness=0
 
 vm.max_map_count=262144
 # Do not produce core dumps
