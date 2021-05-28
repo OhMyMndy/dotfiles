@@ -429,6 +429,25 @@ EOL
 	done
 }
 
+
+create_dockerfiles_desktop_files() {
+	cd ~/src/dockerfiles || exit 99
+	find ~/.local/share/applications/ -type f -name 'dockerfiles-*' | while read -r file; do
+		rm "$file"
+	done
+	docker-compose config --services | while read -r service; do
+		name_formatted=$(echo "$service" | sed -E 's/[^a-zA-Z0-9]/_/g')
+		cat <<EOL | tee ~/.local/share/applications/dockerfiles-"$name_formatted".desktop >/dev/null
+[Desktop Entry]
+Name=$service (Dockerfiles)
+Exec=bash -c "xhost + && cd ~/src/dockerfiles && docker-compose run --rm $service"
+Icon=$service
+Type=Application
+Categories=GTK;GNOME;Network;
+EOL
+	done
+}
+
 create_vm() {
 	local type="$1"
 	local name="$2"
@@ -602,33 +621,6 @@ remove-from-dotfiles() {
 		fi
 }
 
-
-link-file() {
-		dir="$1"
-		# file relative to root folder
-		arg="$2"
-		source="${dir}/$arg"
-		target="${HOME}/$arg"
-
-		# Optional third argument to override the targer
-		if [[ $# -eq 3 ]]; then
-				target="$3"
-		fi
-
-		if [[ $arg = '' ]]; then
-				echo "You need to provide source folder as first parameter"
-				return 1
-		fi
-
-		if [ ! -f "$source" ] && [ ! -d "$source" ]; then
-				echo "File or folder '$source' ($target) does not exist!"
-				return 2
-		fi
-
-		rm -rf "$target"
-		mkdir -p "$(dirname "$target")"
-		ln -sf "$source" "$target"
-}
 
 install-service() {
 		file="$1"

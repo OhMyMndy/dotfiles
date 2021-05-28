@@ -17,7 +17,7 @@ call plug#begin('~/.vim/bundle')
 
 "Plug 'ycm-core/YouCompleteMe'
 "Plug 'neoclide/coc.nvim', {'branch': 'release'}
-"Plug 'chrisbra/Colorizer'
+Plug 'chrisbra/Colorizer'
 Plug 'tpope/vim-sensible'
 Plug 'ryanoasis/vim-devicons'
 
@@ -28,9 +28,10 @@ Plug 'phpstan/vim-phpstan'
 Plug 'farmergreg/vim-lastplace'
 
 Plug 'scrooloose/nerdtree'
-"Plug 'vim-airline/vim-airline'
-"Plug 'vim-airline/vim-airline-themes'
-"Plug 'dense-analysis/ale'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+
+Plug 'dense-analysis/ale'
 Plug 'airblade/vim-gitgutter'
 " Plug 'Valloric/YouCompleteMe'
 Plug 'wellle/context.vim'
@@ -42,7 +43,7 @@ Plug 'wellle/context.vim'
 Plug 'sheerun/vim-polyglot'
 
 
-"Plug 'editorconfig/editorconfig-vim'
+Plug 'editorconfig/editorconfig-vim'
 "Plug 'vim-voom/VOoM'
 
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -61,13 +62,13 @@ Plug 'dense-analysis/ale'
 "Plug 'tpope/vim-sleuth'
 Plug '907th/vim-auto-save'
 "Plug 'scrooloose/nerdcommenter'
-Plug 'autozimu/LanguageClient-neovim', {
-    \ 'branch': 'next',
-    \ 'do': 'bash install.sh',
-    \ }
+"Plug 'autozimu/LanguageClient-neovim', {
+"    \ 'branch': 'next',
+"    \ 'do': 'bash install.sh',
+"    \ }
 
 
-Plug 'severin-lemaignan/vim-minimap'
+"Plug 'severin-lemaignan/vim-minimap'
 
 call plug#end()
 
@@ -200,10 +201,11 @@ nnoremap <C-p> :Files<Cr>
 " Switch file tabs
 map <C-PageUp> :tabn<CR>
 map <C-PageDown> :tabp<CR>
-
+nnoremap <M-Left> :tabp<CR>
+nnoremap <M-Right> :tabn<CR>
 
 " Tagbar
-map <C-t> :TagbarToggle<CR>
+"map <C-t> :TagbarToggle<CR>
 let g:tagbar_autofocus = 1
 let g:tagbar_autoclose = 1
 
