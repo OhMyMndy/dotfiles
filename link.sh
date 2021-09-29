@@ -239,7 +239,6 @@ link-file "$DIR" '.dircolors'
 link-file "$DIR" '.screenrc'
 
 link-file "$DIR" '.config/mopidy'
-link-file "$DIR" '.config/htop'
 # link-file "$DIR" '.toprc'
 link-file "$DIR" 'z.sh'
 link-file "$DIR" '.mpdconf'
