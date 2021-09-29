@@ -277,6 +277,8 @@ link-file "$DIR" '.config/alacritty'
 link-file "$DIR" '.skyscraper'
 mkdir -p ~/.config/cmus
 link-file "$DIR" '.config/cmus/rc'
+mkdir -p ~/.config/pulse
+link-file "$DIR" '.config/pulse/client.conf'
 link-file "$DIR" '.zshrc'
 
 icons
