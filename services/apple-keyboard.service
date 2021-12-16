@@ -1,5 +1,5 @@
 [Unit]
-Description=mac-keyboard
+Description=Apple keyboard
 [Service]
 Type=oneshot
 ExecStart=/bin/sh -c "echo 2 > /sys/module/hid_apple/parameters/fnmode"

@@ -1,16 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
-# sudo apt-get update -y -qq
-# sudo apt-get install git node-typescript make -y -qq
-
-# mkdir -p ~/src && cd ~/src
-# git clone https://github.com/pop-os/shell.git pop-os-shell | true
-# cd ~/src/pop-os-shell
-# git pull
-
-# yes | make local-install
-
+set -enable
 
 dconf write /org/gnome/desktop/wm/keybindings/switch-windows "['<Alt>Tab']"
 dconf write /org/gnome/desktop/wm/keybindings/switch-windows-backward "['<Alt><Shift>Tab']"
@@ -39,7 +29,7 @@ dconf write /org/gnome/settings-daemon/plugins/color/night-light-enabled "true"
 dconf write /org/gnome/settings-daemon/plugins/color/night-light-schedule-automatic "false"
 dconf write /org/gnome/settings-daemon/plugins/color/night-light-schedule-from "0.0"
 dconf write /org/gnome/settings-daemon/plugins/color/night-light-schedule-to "23.983333333333334"
-dconf write /org/gnome/settings-daemon/plugins/color/night-light-temperature "uint32 4164"
+dconf write /org/gnome/settings-daemon/plugins/color/night-light-temperature "uint32 41366164"
 
 
 dconf write /org/gnome/settings-daemon/plugins/xsettings/antialiasing "'rgba'"
@@ -55,20 +45,25 @@ dconf write /org/virt-manager/virt-manager/confirm/removedev "true"
 dconf write /org/virt-manager/virt-manager/confirm/unapplied-dev "true"
 
 
-
+# (export KEY="/org/gnome/shell/extensions/dash-to-dock/" && dconf dump "$KEY" | awk -F= "(NR>1){ print \"dconf write ${KEY}\"\$1 \" \\\"\" \$2 \"\\\"\"}")
+dconf write /org/gnome/shell/extensions/dash-to-dock/animation-time "0.2"
 dconf write /org/gnome/shell/extensions/dash-to-dock/apply-custom-theme "true"
+dconf write /org/gnome/shell/extensions/dash-to-dock/autohide-in-fullscreen "true"
 dconf write /org/gnome/shell/extensions/dash-to-dock/background-opacity "1.0"
 dconf write /org/gnome/shell/extensions/dash-to-dock/click-action "'minimize-or-previews'"
 dconf write /org/gnome/shell/extensions/dash-to-dock/custom-theme-shrink "true"
 dconf write /org/gnome/shell/extensions/dash-to-dock/dash-max-icon-size "24"
-dconf write /org/gnome/shell/extensions/dash-to-dock/dock-fixed "true"
-dconf write /org/gnome/shell/extensions/dash-to-dock/dock-position "'LEFT'"
-dconf write /org/gnome/shell/extensions/dash-to-dock/extend-height "true"
+dconf write /org/gnome/shell/extensions/dash-to-dock/dock-fixed "false"
+dconf write /org/gnome/shell/extensions/dash-to-dock/dock-position "'BOTTOM'"
+dconf write /org/gnome/shell/extensions/dash-to-dock/extend-height "false"
 dconf write /org/gnome/shell/extensions/dash-to-dock/force-straight-corner "false"
-dconf write /org/gnome/shell/extensions/dash-to-dock/height-fraction "0.90000000000000002"
+dconf write /org/gnome/shell/extensions/dash-to-dock/height-fraction "0.9"
+dconf write /org/gnome/shell/extensions/dash-to-dock/hide-delay "0"
 dconf write /org/gnome/shell/extensions/dash-to-dock/icon-size-fixed "false"
+dconf write /org/gnome/shell/extensions/dash-to-dock/intellihide-mode "'FOCUS_APPLICATION_WINDOWS'"
 dconf write /org/gnome/shell/extensions/dash-to-dock/middle-click-action "'launch'"
 dconf write /org/gnome/shell/extensions/dash-to-dock/multi-monitor "true"
+dconf write /org/gnome/shell/extensions/dash-to-dock/pressure-threshold "0.0"
 dconf write /org/gnome/shell/extensions/dash-to-dock/scroll-action "'cycle-windows'"
 dconf write /org/gnome/shell/extensions/dash-to-dock/shift-click-action "'minimize'"
 dconf write /org/gnome/shell/extensions/dash-to-dock/shift-middle-click-action "'launch'"
