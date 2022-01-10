@@ -253,7 +253,7 @@ function _base() {
 	_install nmap iputils-ping dnsutils sed grep file
 
 	if [[ "$DISPLAY" != "" ]]; then
-		_install xclip syncthing-gtk
+		_install xclip xsel syncthing-gtk
 		_install_snap bitwarden
 		if ! command -v vivaldi &>/dev/null; then
 			_install_deb_from_url https://downloads.vivaldi.com/stable/vivaldi-stable_5.0.2497.32-1_amd64.deb
