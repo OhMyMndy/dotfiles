@@ -45,14 +45,23 @@ elif [ "$OS" = "Fedora" ]; then
     plugins+=(fedora)
 fi
 
-if exists adb; then plugins+=(adb); fi
-if exists nmap; then plugins+=(nmap); fi
-if exists git; then plugins+=(git); fi
-if exists docker; then plugins+=(docker); fi
-if exists docker-compose; then plugins+=(docker-compose); fi
-if exists vagrant; then plugins+=(vagrant); fi
-if exists rsync; then plugins+=(rsync); fi
-if exists sudo; then plugins+=(sudo); fi
+if [[ $commands[adb] ]]; then plugins+=(adb); fi
+if [[ $commands[nmap] ]]; then plugins+=(nmap); fi
+if [[ $commands[git] ]]; then plugins+=(git); fi
+if [[ $commands[docker] ]]; then plugins+=(docker); fi
+if [[ $commands[docker-compose] ]]; then plugins+=(docker-compose); fi
+if [[ $commands[vagrant] ]]; then plugins+=(vagrant); fi
+if [[ $commands[rsync] ]]; then plugins+=(rsync); fi
+if [[ $commands[sudo] ]]; then plugins+=(sudo); fi
+if [[ $commands[minikube] ]]; then
+    source <(minikube completion zsh)
+fi
+if [[ $commands[kubectl] ]]; then
+    source <(kubectl completion zsh)
+fi
+if [[ $commands[k3d] ]]; then
+    source <(k3d completion zsh)
+fi
 if is_linux && ! is_android; then 
 #    plugins+=(notify)
     plugins+=(systemd) # The systemd plugin provides many useful aliases for systemd. https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins/systemd);
