@@ -5,7 +5,7 @@
 # shellcheck source=./z.sh
 source "$HOME/z.sh"
 export ZSH=$HOME/.oh-my-zsh
-export ZSH_THEME="mandy-pride"
+export ZSH_THEME="mandy"
 
 #zstyle ':completion:*' use-cache yes
 
