@@ -34,7 +34,7 @@ function is_linux() {
 
 
 
-remove_wine_desktop_files() {
+function remove_wine_desktop_files() {
 	find "$HOME/.local/share/applications/" | sort \
 		| grep wine-extension \
 		| grep -v application.desktop \
@@ -46,7 +46,7 @@ remove_wine_desktop_files() {
 		| xargs -I {} rm {}
 }
 
-create_remmina_desktop_files() {
+function create_remmina_desktop_files() {
 	find ~/.local/share/applications/ -type f -name 'remmina-connection-*' | while read -r file; do
 		rm "$file"
 	done
@@ -117,7 +117,6 @@ function vim() {
         link-file "$DIR" ".vim/ftplugin"
 
         find ~/.vim/bundle -maxdepth 1 -type d ! -path . -print0 | xargs -0 -r -i bash -c "cd {}/.git 2>/dev/null; cd ..; git pull -q; exit 0"
-        # command vim -c 'CocInstall -sync coc-highlight coc-json coc-html coc-phpls coc-python coc-markdownlint |q'
     }
 }
 
@@ -238,7 +237,6 @@ link-file "$DIR" '.synergy.conf'
 link-file "$DIR" '.dircolors'
 link-file "$DIR" '.screenrc'
 
-link-file "$DIR" '.config/mopidy'
 # link-file "$DIR" '.toprc'
 link-file "$DIR" 'z.sh'
 link-file "$DIR" '.mpdconf'
@@ -315,11 +313,4 @@ then
 	mkdir -p "$HOME/.local/share/fonts/Jetbrains Mono"
 	curl -LsS https://github.com/JetBrains/JetBrainsMono/raw/8f764465dd71567dca8c547fbac23663cedd867c/ttf-nerdfont-patched/JetBrains%20Mono%20Regular%20Nerd%20Font%20Complete%20Mono.ttf -o "$HOME/.local/share/fonts/Jetbrains Mono/Jetbrains Mono Regular Nerd Font Complete Mono.ttf"
 	cp "$HOME/.local/share/fonts/Jetbrains Mono/Jetbrains Mono Regular Nerd Font Complete Mono.ttf" ~/.termux/font.ttf
-fi
-
-
-if [[ ! -d ~/src/splatmoji ]]; then
-	mkdir -p ~/src
-	cd ~/src
-	git clone -q https://github.com/cspeterson/splatmoji.git
 fi
