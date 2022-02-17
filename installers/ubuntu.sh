@@ -213,7 +213,7 @@ function _minimum() {
 
 function _base() {
 	_minimum
-	_install git tree zsh tmux htop vim xsel
+	_install git tree zsh tmux htop vim xsel ssh-askpass openssh-server
 
 	_install nmap iputils-ping dnsutils sed grep file
 
