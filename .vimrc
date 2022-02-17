@@ -110,15 +110,16 @@ if ! has('nvim')
 endif
 set mouse=a
 
+	
 " Indenting
 set autoindent " Auto-indent new lines
 set shiftwidth=4       " Number of auto-indent spaces
-" set smartindent        " Enable smart-indent
-" set smarttab   " Enable smart-tabs
-"set softtabstop=4      " Number of spaces per Tab
+set smartindent        " Enable smart-indent
+set smarttab   " Enable smart-tabs
+set softtabstop=4      " Number of spaces per Tab
 set tabstop=4  " Number of spaces per Tab
-set expandtab!
 
+	
 set splitbelow
 set splitright
 
