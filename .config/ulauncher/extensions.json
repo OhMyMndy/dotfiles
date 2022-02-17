@@ -2,21 +2,21 @@
     "com.github.pedrotroller.ulauncher-php-packagist": {
         "id": "com.github.pedrotroller.ulauncher-php-packagist",
         "url": "https://github.com/PedroTroller/ulauncher-php-packagist",
-        "updated_at": "2021-01-05T15:46:54.412355",
+        "updated_at": "2022-02-17T13:49:12.783026",
         "last_commit": "a2b434126665529a458990dc19d866605588d8bf",
         "last_commit_time": "2019-10-03T12:19:35"
     },
     "com.github.brpaz.ulauncher-docker": {
         "id": "com.github.brpaz.ulauncher-docker",
         "url": "https://github.com/brpaz/ulauncher-docker",
-        "updated_at": "2021-01-05T15:46:55.808259",
-        "last_commit": "6213bfe156084aa4c049de24fb69acd7f1fba8f2",
-        "last_commit_time": "2019-12-03T20:15:17"
+        "updated_at": "2022-02-17T13:49:14.138078",
+        "last_commit": "78a5872cd9804dbd8b562bf83e0f3e2a7ed44309",
+        "last_commit_time": "2021-12-12T15:49:36"
     },
     "com.github.brpaz.ulauncher-file-search": {
         "id": "com.github.brpaz.ulauncher-file-search",
         "url": "https://github.com/brpaz/ulauncher-file-search",
-        "updated_at": "2021-02-01T17:19:31.191048",
+        "updated_at": "2022-02-17T13:49:15.772710",
         "last_commit": "0ea61c2049b27f1ddfa81d1844876f21dd9d6e7b",
         "last_commit_time": "2020-07-03T13:30:16"
     }
