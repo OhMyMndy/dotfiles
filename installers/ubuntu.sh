@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-
 if [[ $UID -eq 0 ]]; then
 	echo "Run this script as non root user please..."
 	exit 99
@@ -15,26 +14,32 @@ set -e
 ## getopt
 ###############
 
+# @todo make this autodetectable
+CPU_ARCHITECTURE=amd64
+
 function usage() {
 	echo
 	echo "Usage: $0 [ARGS...]" 1>&2
 	echo
 	echo "Options:"
-	echo "      --dev							Install dev tools"
+	echo "      --dev							Install dev packages"
+	echo "      --link							Link dotfiles"
 	echo "      --base							Install bare minimum packages"
 	echo "      --sysctl							Configure sysctl"
 	echo "      --services						Install necessary systemd services"
 	echo "      --ulauncher						Install ulauncher"
+	echo "      --multimedia						Install multimedia"
 	echo "      --communications						Install discord etc."
 	echo "      --git-config						Configure git"
 	echo "      --quicktile						Install quicktile"
 	echo "      --docker							Install docker"
+	echo "      --fonts							Install fonts"
 	echo "      --zsh							Install and configure zsh"
 	echo "      -v|--verbose						Verbose output"
 	echo "      -h, --help						Print this help"
 }
 
-options=$(getopt -o "hv" --longoptions "base,dev,help,sysctl,services,ulauncher,verbose,zsh,quicktile,communication,git-config,docker" -- "$@")
+options=$(getopt -o "hv" --longoptions "base,help,sysctl,services,ulauncher,verbose,zsh,quicktile,communications,git-config,docker,dev,link,fonts,multimedia" -- "$@")
 eval set -- "$options"
 
 apt_quiet="-qq"
@@ -185,19 +190,50 @@ done
 		local optional_deb="$3"
 
 		if ! command -v "$package_name" &>/dev/null; then
-			sudo -E add-apt-repository "$repo" -y
+			sudo -E add-apt-repository -y "$repo"
 			_install "$package_name"
 		fi
 
 		# still no package?? remove repo and install deb
 		if ! command -v "$package_name" &>/dev/null; then
-			sudo -E add-apt-repository --remove "$repo" -y
+			sudo -E add-apt-repository -y --remove "$repo"
 			if [[ $optional_deb != '' ]]; then
 				_install_deb_from_url "$optional_deb"
 				sudo -E apt-get $apt_quiet install -f -y
 			fi
 		fi
 	}
+
+	fontsAdded=0
+	function __installFontsFromZip() {
+		local fontUrl="$1"
+		local fontName="$2"
+		if [ "$(uname)" = 'Darwin' ]; then
+			mkdir -p ~/Library/Fonts || exit 2
+			cd ~/Library/Fonts || exit 1
+		else
+			mkdir -p ~/.local/share/fonts || exit 2
+			cd ~/.local/share/fonts || exit 1
+		fi
+
+		if [ ! -d "$fontName" ]; then
+			rm -f "${TMPDIR:-/tmp}/$fontName.zip"
+			curl -LsSo "${TMPDIR:-/tmp}/$fontName.zip" "$fontUrl"
+			unzip "${TMPDIR:-/tmp}/$fontName.zip" -d "$fontName"
+			fontsAdded=1
+			__deleteWindowsFonts
+		fi
+	}
+
+	function __deleteWindowsFonts() {
+		if [ "$(uname)" = 'Darwin' ]; then
+			local DIR=~/Library/Fonts
+		else
+			local DIR=~/.local/share/fonts
+		fi
+		find $DIR -iname '*windows*' -exec rm -r "{}" \;
+	}
+
 }
 ###
 # End Util functions
@@ -218,20 +254,25 @@ function _base() {
 	_install nmap iputils-ping dnsutils sed grep file
 
 	if [[ "$DISPLAY" != "" ]]; then
-		_install xclip xsel gnome-tweaks
+		_install xclip xsel syncthing-gtk
+		if [[ "$GNOME_SHELL_SESSION_MODE" != '' ]]; then
+			_install gnome-tweaks
+		fi
+		_install_snap bitwarden
+		if ! command -v vivaldi &>/dev/null; then
+			_install_deb_from_url https://downloads.vivaldi.com/stable/vivaldi-stable_5.0.2497.32-1_amd64.deb
+		fi
 
-		# @todo check if gnome
+		_install_snap code
 	fi
 
-	_install_snap code
-
-	"$DIR/link.sh"
 }
 
 function _communications() {
 	_install_snap discord
 	_install_snap skype
-	_install_snap signal
+	_install_snap signal-desktop
+	_install_snap zoom-client
 }
 
 function _multimedia() {
@@ -269,21 +310,52 @@ function _docker() {
 		qemu-user-static \
 		lxcfs \
 		uidmap
-	
+
 	if ! command -v docker &>/dev/null; then
 		curl -SsL https://get.docker.com | sudo bash
 	fi
 	sudo -E usermod -aG "docker" "$(whoami)"
 
 	if ! command -v docker-compose &>/dev/null; then
-		sudo -E curl -sSL "https://github.com/docker/compose/releases/download/1.29.s/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+		sudo -E curl -sSL "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 		sudo -E chmod +x /usr/local/bin/docker-compose
 	fi
 
-	if [[ -f "$DIR/etc/docker/daemon.json" ]] && [[ ! -f  /etc/docker/daemon.json ]]; then
+	if [[ -f "$DIR/etc/docker/daemon.json" ]] && [[ ! -f /etc/docker/daemon.json ]]; then
 		sudo -E cp "$DIR/etc/docker/daemon.json" /etc/docker/daemon.json
 	fi
 
+}
+
+function _link() {
+
+	"$DIR/link.sh"
+
+}
+
+function _dev() {
+	_install_snap multipass
+	_install virt-manager
+
+	_install_snap jq
+	_install_snap yq
+	_install_snap kubectl --classic
+
+	if ! command -v minikube &>/dev/null; then
+		# minikube start --kubernetes-version=v1.19.16 --driver=docker
+		_install_deb_from_url https://storage.googleapis.com/minikube/releases/latest/minikube_latest_amd64.deb
+	fi
+
+	if ! grep --quiet releases.hashicorp.com /etc/apt/sources.list &>/dev/null; then
+		curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+		sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+		_force_update
+	fi
+	_install vault terraform
+
+	_docker
+
+	_install shellcheck yamllint
 }
 
 function _ulauncher() {
@@ -384,6 +456,21 @@ function _git-config() {
 		git config --global --replace-all merge.guitool meld
 	fi
 	echo "Manually execute 'git config --global user.email <email>'"
+}
+
+function _fonts() {
+	__installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/SourceCodePro.zip SourceCodeProNerdFont
+	__installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/FantasqueSansMono.zip FantasqueSansMono
+	__installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/DroidSansMono.zip DroidSansMono
+	__installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/DejaVuSansMono.zip DejaVuSansMono
+	__installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/Iosevka.zip Iosevka
+	__installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/Inconsolata.zip Inconsolata
+	__installFontsFromZip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/JetBrainsMono.zip JetBrainsMono
+	__installFontsFromZip https://github.com/IBM/plex/releases/download/v4.0.2/OpenType.zip "IBM Plex"
+
+	if [[ $fontsAdded -eq 1 ]]; then
+		fc-cache -f -v
+	fi
 }
 
 ################
