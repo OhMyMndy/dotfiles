@@ -20,6 +20,7 @@ function usage() {
 	echo "Usage: $0 [ARGS...]" 1>&2
 	echo
 	echo "Options:"
+	echo "      --dev							Install dev tools"
 	echo "      --base							Install bare minimum packages"
 	echo "      --sysctl							Configure sysctl"
 	echo "      --services						Install necessary systemd services"
@@ -33,7 +34,7 @@ function usage() {
 	echo "      -h, --help						Print this help"
 }
 
-options=$(getopt -o "hv" --longoptions "base,help,sysctl,services,ulauncher,verbose,zsh,quicktile,communication,git-config,docker" -- "$@")
+options=$(getopt -o "hv" --longoptions "base,dev,help,sysctl,services,ulauncher,verbose,zsh,quicktile,communication,git-config,docker" -- "$@")
 eval set -- "$options"
 
 apt_quiet="-qq"
@@ -211,15 +212,20 @@ function _minimum() {
 }
 
 function _base() {
-	_install git tree zsh tmux htop
+	_minimum
+	_install git tree zsh tmux htop vim xsel
 
 	_install nmap iputils-ping dnsutils sed grep file
 
 	if [[ "$DISPLAY" != "" ]]; then
-		_install xclip
+		_install xclip xsel gnome-tweaks
+
+		# @todo check if gnome
 	fi
 
 	_install_snap code
+
+	"$DIR/link.sh"
 }
 
 function _communications() {
@@ -236,6 +242,23 @@ function _multimedia() {
 	_install pavucontrol
 }
 
+function _dev() {
+	_base
+	_install libnss-myhostname net-tools traceroute
+
+	_install_snap kubectl --classic
+	_install_snap helm --classic
+
+	if ! command -v tilt &>/dev/null; then
+		curl -fsSL https://raw.githubusercontent.com/tilt-dev/tilt/master/scripts/install.sh | bash -
+	fi
+
+	if ! command -v k3d &>/dev/null; then
+		curl -fsSL https://raw.githubusercontent.com/rancher/k3d/main/install.sh | bash -
+	fi
+	_docker
+}
+
 function _docker() {
 	_remove docker.io docker
 	_install apt-transport-https \
@@ -248,14 +271,7 @@ function _docker() {
 		uidmap
 	
 	if ! command -v docker &>/dev/null; then
-		curl -sSL https://download.docker.com/linux/ubuntu/gpg | sudo -E apt-key add -
-		sudo -E apt-key fingerprint 0EBFCD88
-		sudo -E add-apt-repository \
-			"deb [arch=$(cpu_architecture_simple)] https://download.docker.com/linux/ubuntu \
-			$(lsb_release -cs) \
-			stable"
-		_force_update
-		_install docker-ce
+		curl -SsL https://get.docker.com | sudo bash
 	fi
 	sudo -E usermod -aG "docker" "$(whoami)"
 
@@ -363,7 +379,10 @@ function _git-config() {
 	git config --global --replace-all submodule.recurse true
 	git config --global --replace-all user.name 'Mandy Schoep'
 	git config --global --replace-all fetch.prune true
-	git config --global --replace-all diff.guitool meld
+	if command -v meld &>/dev/null; then
+		git config --global --replace-all diff.guitool meld
+		git config --global --replace-all merge.guitool meld
+	fi
 	echo "Manually execute 'git config --global user.email <email>'"
 }
 
