@@ -1,10 +1,13 @@
 {
 	"log-driver": "json-file",
 	"log-opts": {
-	    "max-size": "4m",    
-	    "max-file": "3"    
-    },
-	"dns": ["1.1.1.1", "1.0.0.1"],
+		"max-size": "4m",
+		"max-file": "3"
+	},
+	"dns": [
+		"1.1.1.1",
+		"1.0.0.1"
+	],
 	"init": true,
 	"default-ulimits": {
 		"core": {
@@ -12,5 +15,15 @@
 			"Hard": 0,
 			"Soft": 0
 		}
-	}
+	},
+	"default-address-pools": [
+		{
+			"base": "10.10.0.0/16",
+			"size": 24
+		},
+		{
+			"base": "10.11.0.0/16",
+			"size": 24
+		}
+	]
 }
