@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -enable
+set -e
 
 dconf write /org/gnome/desktop/wm/keybindings/switch-windows "['<Alt>Tab']"
 dconf write /org/gnome/desktop/wm/keybindings/switch-windows-backward "['<Alt><Shift>Tab']"
@@ -12,6 +12,8 @@ dconf write /org/gnome/desktop/interface/clock-show-weekday "true"
 dconf write /org/gnome/desktop/interface/enable-animations "false"
 dconf write /org/gnome/gedit/plugins/active-plugins "['modelines', 'time', 'spell', 'filebrowser', 'docinfo']"
 dconf write /org/gnome/mutter/workspaces-only-on-primary "false"
+
+dconf write /org/gnome/desktop/calendar/show-weekdate "true"
 
 
 
@@ -70,3 +72,22 @@ dconf write /org/gnome/shell/extensions/dash-to-dock/shift-middle-click-action "
 dconf write /org/gnome/shell/extensions/dash-to-dock/show-mounts "false"
 dconf write /org/gnome/shell/extensions/dash-to-dock/show-trash "false"
 dconf write /org/gnome/shell/extensions/dash-to-dock/transparency-mode "'FIXED'"
+
+# Unite
+dconf write /org/gnome/shell/extensions/unite/autofocus-windows "false"
+dconf write /org/gnome/shell/extensions/unite/enable-titlebar-actions "true"
+dconf write /org/gnome/shell/extensions/unite/extend-left-box "true"
+dconf write /org/gnome/shell/extensions/unite/greyscale-tray-icons "false"
+dconf write /org/gnome/shell/extensions/unite/hide-app-menu-icon "true"
+dconf write /org/gnome/shell/extensions/unite/reduce-panel-spacing "true"
+dconf write /org/gnome/shell/extensions/unite/show-desktop-name "true"
+dconf write /org/gnome/shell/extensions/unite/show-legacy-tray "true"
+dconf write /org/gnome/shell/extensions/unite/show-window-buttons "'maximized'"
+dconf write /org/gnome/shell/extensions/unite/show-window-title "'always'"
+dconf write /org/gnome/shell/extensions/unite/window-buttons-placement "'left'"
+dconf write /org/gnome/shell/extensions/unite/hide-activities-button "'never'"
+dconf write /org/gnome/shell/extensions/unite/autofocus-windows "'true'"
+
+if [[ -f /usr/bin/xfce4-terminal.wrapper ]]; then
+    sudo update-alternatives --set x-terminal-emulator /usr/bin/xfce4-terminal.wrapper 
+fi
