@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 # shellcheck source-path=../
 # shellcheck disable=2155
-
+zmodload zsh/zprof
 # shellcheck source=./z.sh
 source "$HOME/z.sh"
 export ZSH=$HOME/.oh-my-zsh
@@ -14,11 +14,6 @@ source "$HOME/.functions"
 
 detect_os
 
-# Compleat https://limpet.net/mbrubeck/2009/10/30/compleat.html``
-# sysadmin-util https://github.com/skx/sysadmin-util
-
-export FZF_TAB_OPTS=("--ansi")
-export FZF_COMPLETION_OPTS="${FZF_TAB_OPTS}"
 
 plugins=(
     colored-man-pages
@@ -60,7 +55,7 @@ fi
 
 plugins+=(zsh-completions)
 
-# autoload -U compinit && compinit
+
 
 if [[ -f $HOME/.bash_aliases ]]; then
     # shellcheck source=.bash_aliases
@@ -115,7 +110,7 @@ if exists dircolors; then
 fi
 
 
-export HISTFILE="$HOME/.zhistory"
+# export HISTFILE="$HOME/.zhistory"
 HISTSIZE=1000000
 export SAVEHIST=$HISTSIZE
 setopt EXTENDED_HISTORY
@@ -218,6 +213,8 @@ fi
 
 
 
+export NVM_LAZY_LOAD=true
+export NVM_COMPLETION=true
 export NVM_DIR="$HOME/.nvm"
 # shellcheck source=.nvm/nvm.sh
 # shellcheck disable=SC1091
@@ -232,23 +229,13 @@ if [[ $TERM = "linux" ]]; then
   set_term_colors
 fi
 
-function set_macbook_term_size() {
-    add-to-file "stty rows 50" "$HOME/.profile"
-    add-to-file "stty columns 160" "$HOME/.profile"
-}
 
 bindkey  "^[[1~"   beginning-of-line
 bindkey  "^[[4~"   end-of-line
 
-#bindkey '^[[1;5C' forward-word
-#bindkey '^[[1;5D' backward-word
-
-[[ "$(tty)" =~ /dev/tty[0-9]* ]] && exists setupcon && setupcon
-[[ "$(tty)" =~ /dev/tty[0-9]* ]] && [[ "$(hostname)" =~ macbook ]] && set_macbook_term_size
-
-
-export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --exclude node_modules --exclude vendor --exclude .mypy-cache'
-
+if exists fd; then
+    export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --exclude node_modules --exclude vendor --exclude .mypy-cache'
+fi
 
 export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE=fg=5
 export ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)
@@ -271,22 +258,9 @@ if [[ -t 0 ]]; then
 	stty -ixon -ixoff
 fi
 
-# Hook for desk activation
-[[ -n "$DESK_ENV" ]] && source "$DESK_ENV"
 
-if [[ -f /usr/share/autojump/autojump.sh ]]; then
-    . /usr/share/autojump/autojump.sh
-fi
-
-if [[ -f $HOME/.config/broot/launcher/bash/br ]]; then
-    source "$HOME/.config/broot/launcher/bash/br"
-fi
 
 # Syntax highlighting colors
 ZSH_HIGHLIGHT_STYLES[arg0]=fg=blue
 ZSH_HIGHLIGHT_STYLES[suffix-alias]=fg=blue,underline
 ZSH_HIGHLIGHT_STYLES[precommand]=fg=blue,underline
-
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR="$HOME/.sdkman"
-[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
