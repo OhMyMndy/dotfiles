@@ -1,9 +1,0 @@
-<?xml version="1.0" ?>
-<jack_mixer geometry="596x852">
-	<input_channel balance="0.000000" name="Media" type="stereo" volume="0.000000"/>
-	<input_channel balance="0.000000" balance_midi_cc="12" name="Voip" type="stereo" volume="0.000000" volume_midi_cc="11"/>
-	<input_channel balance="0.000000" balance_midi_cc="14" name="Game" type="stereo" volume="0.000000" volume_midi_cc="13"/>
-	<input_channel balance="0.000000" balance_midi_cc="16" name="Pulse JACK" type="stereo" volume="0.000000" volume_midi_cc="15"/>
-	<input_channel balance="0.000000" balance_midi_cc="18" name="Browser" type="stereo" volume="0.000000" volume_midi_cc="17"/>
-	<main_mix_channel balance="0.000000" balance_midi_cc="8" volume="0.000000" volume_midi_cc="7"/>
-</jack_mixer>

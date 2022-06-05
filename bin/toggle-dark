@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-
-dark_mode=$(cat ~/.dark-mode 2>/dev/null)
-
-if [ "$dark_mode" = "1" ]; then
-	echo "0" > ~/.dark-mode
-else
-	echo "1" > ~/.dark-mode
-fi

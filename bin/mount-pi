@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-
-xfce4-terminal -e "bash -c \"sudo umount /mnt/pi; sudo mkdir -p /mnt/pi; sudo mount -t cifs //192.168.10.127/home/pi /mnt/pi -o username=pi,uid=$(id -u),gid=$(id -g),file_mode=0750,dir_mode=0750; sleep 2\""

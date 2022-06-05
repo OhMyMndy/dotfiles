@@ -1,9 +1,0 @@
-#before export hostname="$(echo ${host} | sed -E 's#\.#_#g' | cut -d "@" -f 2)"
-windows:
-  - name: SSH {{hostname}}
-    layout: tiled
-    panes:
-      - " title \"Remote SSH | {{host}}\"; ssh -t {{host}} \"screen -DR mandy1\""
-      - " title \"Remote SSH | {{host}}\"; ssh -t {{host}} \"screen -DR mandy2\""
-      - " title \"Remote SSH | {{host}}\"; ssh -t {{host}} \"screen -DR mandy3\""
-      - " title \"Remote SSH | {{host}}\"; ssh -t {{host}} \"screen -DR mandy4\""

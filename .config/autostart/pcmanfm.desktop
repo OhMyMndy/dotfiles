@@ -1,9 +1,0 @@
-[Desktop Entry]
-Version=0.9.4
-Type=Application
-Name=PcmanFM Daemon
-Comment=
-Exec=pcmanfm -d
-StartupNotify=false
-Terminal=false
-Hidden=false

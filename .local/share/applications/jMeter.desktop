@@ -1,9 +1,0 @@
-#!/usr/bin/env xdg-open
-[Desktop Entry]
-Name=jMeter
-Exec=/usr/bin/jmeter
-StartupNotify=true
-Terminal=false
-Type=Application
-Icon=jmeter
-Categories=Development
