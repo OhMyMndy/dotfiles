@@ -1,16 +1,42 @@
-# shellcheck shell=bash
-# shellcheck source-path=../
-# shellcheck disable=2155
-zmodload zsh/zprof
-# shellcheck source=./z.sh
-source "$HOME/z.sh"
 export ZSH=$HOME/.oh-my-zsh
 export ZSH_THEME="mandy"
 
-#zstyle ':completion:*' use-cache yes
+detect_os() {
+	## OS and Architecture
+	if [ -f /etc/os-release ]; then
+			# freedesktop.org and systemd
+			. /etc/os-release
+			OS="$NAME"
+			VER="$VERSION_ID"
+	elif type lsb_release >/dev/null 2>&1; then
+			# linuxbase.org
+			OS=$(lsb_release -si)
+			VER=$(lsb_release -sr)
+	elif [ -f /etc/lsb-release ]; then
+			# For some versions of Debian/Ubuntu without lsb_release command
+			. /etc/lsb-release
+			OS=$DISTRIB_ID
+			VER=$DISTRIB_RELEASE
+	elif [ -f /etc/debian_version ]; then
+			# Older Debian/Ubuntu/etc.
+			OS=Debian
+			VER=$(cat /etc/debian_version)
+	elif [ -f /etc/SuSe-release ]; then
+			# Older SuSE/etc.
+			...
+	elif [ -f /etc/redhat-release ]; then
+			# Older Red Hat, CentOS, etc.
+			...
+	else
+			# Fall back to uname, e.g. "Linux <version>", also works for BSD, etc.
+			OS="$(uname -s)"
+			VER="$(uname -r)"
+	fi
+	export OS
+	export VER
+}
 
-# shellcheck source=.functions
-source "$HOME/.functions"
+
 
 detect_os
 
@@ -19,14 +45,11 @@ plugins=(
     colored-man-pages
     command-not-found
     cp # This plugin defines a cpv function that uses rsync so that you get the features and security of this command.
-    copydir # Copies the path of your current folder to the system clipboard.
     extract
-    fzf-tab
-    httpie
-    jira
+    # fzf-tab
     z
-    zsh-autosuggestions
-    zsh-syntax-highlighting
+    # zsh-autosuggestions
+    # zsh-syntax-highlighting
 )
 
 zstyle ':completion:*:make::' tag-order targets
@@ -57,12 +80,12 @@ fi
 if [[ $commands[k3d] ]]; then
     source <(k3d completion zsh)
 fi
-if is_linux && ! is_android; then 
+if [[ $OS = 'Linux' ]]; then 
 #    plugins+=(notify)
     plugins+=(systemd) # The systemd plugin provides many useful aliases for systemd. https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins/systemd);
 fi
 
-plugins+=(zsh-completions)
+# plugins+=(zsh-completions)
 
 
 
@@ -71,10 +94,10 @@ if [[ -f $HOME/.bash_aliases ]]; then
     source "$HOME/.bash_aliases"
 fi
 
-if [[ -f $HOME/.profile ]]; then
-    # shellcheck source=.profile
-    source "$HOME/.profile"
-fi
+# if [[ -f $HOME/.profile ]]; then
+#     # shellcheck source=.profile
+#     source "$HOME/.profile"
+# fi
 
 
 zstyle ':notify:*' error-title "Command failed (in #{time_elapsed} seconds)"
@@ -90,31 +113,9 @@ if [[ -f $HOME/.oh-my-zsh/oh-my-zsh.sh ]]; then
 fi
 
 
-if [[ -f $HOME/bin/commands-to-aliases ]]; then
-    "$HOME/bin/commands-to-aliases" > "$HOME/.aliases"
-    # shellcheck source=./.aliases
-    source "$HOME/.aliases"
-fi
-
-# export GEM_HOME="$HOME/.gem"
-# export GEM_PATH="$HOME/.gem"
-export DEBIAN_DISABLE_RUBYGEMS_INTEGRATION=1
-
 export GOPATH="$HOME/.go"
 
-# Rootless docker
-# if [[ -d $HOME/docker ]]; then
-#     export PATH=$HOME/docker:$PATH
-# fi
-
-if [[ -f $HOME/.lessrc ]]; then
-    # shellcheck source=.lessrc
-    source ~/.lessrc
-fi
-
-compctl -g "$HOME/.teamocil/*(:t:r)" teamocil
-
-if exists dircolors; then
+if [[ $commands[dircolors] ]]; then
     eval "$(dircolors ~/.dircolors)";
 fi
 
@@ -125,43 +126,13 @@ export SAVEHIST=$HISTSIZE
 setopt EXTENDED_HISTORY
 
 
-alias docker-ps-min='docker ps --format "table{{.Names}}\t{{.RunningFor}}\t{{.Status}}"'
-alias docker-stats-min="docker stats --format 'table {{.Name}}\t{{.MemUsage}}\t{{.CPUPerc}}\t{{.BlockIO}}'"
-alias hl='grepc "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+"'
-#alias current-window-process='ps -o args= $(xprop -id $(xprop -root -f _NET_ACTIVE_WINDOW 0x " \$0\\n" _NET_ACTIVE_WINDOW | awk "{print \$2}") -f _NET_WM_PID 0c " \$0\\n" _NET_WM_PID | awk "{print \$2}")'
-alias disk-usage='sudo du -h -t200M -x / 2>/dev/null'
-# alias xdg-open='exo-open'
-
-# exa aliases
-alias dir="exa -lag --git --time-style=long-iso --group-directories-first"
-alias dir-sort-size="dir -s=size"
-alias dir-sort-size-desc="dir -s=size -r"
-alias dir-sort-mod="dir -s=modified"
-alias dir-sort-mod-desc="dir -s=modified -r"
-alias dir-tree="dir -T -L=2"
-alias dir-tree-full="dir -T"
-
-
 alias rcp='rsync -ahrt --info progress2'
 alias rmv='rsync -ahrt --info progress2 --remove-sent-files'
 
-alias lc='colorls -lA --sd'
 
-alias dockly='docker run -it --rm -v /var/run/docker.sock:/var/run/docker.sock lirantal/dockly'
+if [[ $commands[thefuck] ]]; then eval "$(thefuck --alias)"; fi
 
-# Prevents local TERM from affecting ssh.
-alias ssh='TERM=xterm ssh'
-
-# Python aliases
-alias ve='python3 -m venv ./venv'
-alias va='source ./venv/bin/activate'
-
-# Snapcraft aliases
-alias snapcraft-docker='docker run --rm -v "$PWD":/build --init -w /build snapcore/snapcraft:stable bash -c "apt update -qq; apt upgrade -y -qq; snapcraft"'
-
-if exists thefuck; then eval "$(thefuck --alias)"; fi
-
-if ! exists pbcopy; then
+if [[ $commands[pbcopy] ]]; then
     alias pbcopy='xsel --clipboard --input'
     alias pbpaste='xsel --clipboard --output'
 fi
@@ -196,12 +167,12 @@ export COMPOSE_DOCKER_CLI_BUILD=1
 export DOCKER_BUILDKIT=1
 export BUILDKIT_INLINE_CACHE=1
 
-export IP_ADDRESS=$(ip_address)
+# export IP_ADDRESS=$(ip_address)
 export HOSTNAME="$(hostname)"
 export USER="$(whoami)"
 
 # ssh-agent omzsh should do the same
-if is_linux && exists ssh-agent && ! is_android; then
+if [[ $OS = 'Linux' ]] && command -v ssh-agent &>/dev/null; then
     # export SUDO_ASKPASS=/usr/libexec/openssh/gnome-ssh-askpass
 
     # Launch SSH agent if not running
@@ -216,7 +187,7 @@ if is_linux && exists ssh-agent && ! is_android; then
 fi
 
 
-if is_mac; then
+if [[ $OS = Darwin ]]; then
     export DISPLAY="$HOSTNAME:0"
 fi
 
@@ -234,15 +205,11 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 
-if [[ $TERM = "linux" ]]; then
-  set_term_colors
-fi
 
+# bindkey  "^[[1~"   beginning-of-line
+# bindkey  "^[[4~"   end-of-line
 
-bindkey  "^[[1~"   beginning-of-line
-bindkey  "^[[4~"   end-of-line
-
-if exists fd; then
+if [[ $commands[fd] ]]; then
     export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --exclude node_modules --exclude vendor --exclude .mypy-cache'
 fi
 
@@ -257,19 +224,8 @@ ZSH_HIGHLIGHT_PATTERNS+=('rm -rf *' 'fg=red,bold')
 # shellcheck source=./.fzf.zsh
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-if exists direnv; then
-	eval "$(direnv hook zsh)"
-fi
-
 # https://stackoverflow.com/questions/6429515/stty-hupcl-ixon-ixoff
 # Disable CTRL-Z
 if [[ -t 0 ]]; then
 	stty -ixon -ixoff
 fi
-
-
-
-# Syntax highlighting colors
-ZSH_HIGHLIGHT_STYLES[arg0]=fg=blue
-ZSH_HIGHLIGHT_STYLES[suffix-alias]=fg=blue,underline
-ZSH_HIGHLIGHT_STYLES[precommand]=fg=blue,underline

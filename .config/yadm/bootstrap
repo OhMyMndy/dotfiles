@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 # Because Git submodule commands cannot operate without a work tree, they must
 # be run from within $HOME (assuming this is the root of your dotfiles)
 cd "$HOME"
@@ -24,4 +25,11 @@ if [ "$system_type" = "Darwin" ]; then
     brew bundle --global
   fi
 
+fi
+
+
+
+# Ohmyzsh
+if [[ ! -d ~/.oh-my-zsh ]]; then
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 fi
