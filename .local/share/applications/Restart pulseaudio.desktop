@@ -1,8 +1,0 @@
-[Desktop Entry]
-Exec=bash -c "sleep 20; /usr/bin/pulseaudio -k"
-Icon=music
-Name=Restart Pulseaudio
-StartupNotify=true
-Terminal=false
-Type=Application
-Categories=AudioVideo;Audio

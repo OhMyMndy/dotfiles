@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-
-if [ "$2" != '' ]; then
-    CITY="$2"
-fi
-
-xdg-open "https://openweathermap.org/city/$CITY"

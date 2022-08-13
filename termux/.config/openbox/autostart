@@ -1,5 +1,0 @@
-
-xsetroot -solid gray
-
-# Launch PyPanel.
-pypanel &

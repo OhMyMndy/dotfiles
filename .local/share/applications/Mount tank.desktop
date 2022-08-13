@@ -1,8 +1,0 @@
-[Desktop Entry]
-Name=Mount Tank
-Exec=\$HOME/bin/mount-tank
-StartupNotify=true
-Terminal=false
-Type=Application
-Icon=media-mount
-Categories=Utility

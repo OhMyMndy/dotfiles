@@ -1,6 +1,0 @@
-"\e[1;5C": forward-word
-"\e[1;5D": backward-word
-
-set bind-tty-special-chars off
-# "\e[3~": kill-word
-"\e[3;^H": backward-kill-word

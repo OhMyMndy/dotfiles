@@ -1,8 +1,0 @@
-[Desktop Entry]
-Name=VNC Server virtual display
-Exec=vnc-server-virtual
-StartupNotify=true
-Terminal=false
-Type=Application
-Icon=display
-Categories=Utility;

@@ -1,9 +1,0 @@
-[Desktop Entry]
-Name=Scrcpy portrait
-StartupWMClass=Scrcpy
-Exec=sh -c "\$HOME/bin/scrcpy_wrapper --disable-animations --null-keyboard -S -b 20M"
-StartupNotify=true
-Terminal=false
-Type=Application
-Icon=android-sdk
-Categories=Utility;
