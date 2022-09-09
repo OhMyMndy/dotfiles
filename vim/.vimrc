@@ -1,3 +1,4 @@
+if !has('nvim')
 set encoding=UTF-8
 scriptencoding utf-8
 
@@ -310,3 +311,4 @@ let g:airline_theme='papercolor'
 
 " Filetypes
 autocmd Filetype yaml setlocal ts=4 sw=4 sts=0 expandtab
+endif
