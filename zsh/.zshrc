@@ -1,6 +1,8 @@
 export ZSH=$HOME/.oh-my-zsh
 export ZSH_THEME="mandy"
 
+[ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"
+
 detect_os() {
 	## OS and Architecture
 	if [ -f /etc/os-release ]; then
@@ -115,7 +117,7 @@ fi
 
 export GOPATH="$HOME/.go"
 
-if [[ $commands[dircolors] ]]; then
+if [[ $commands[dircolors] ]] && [[ -f ~/.dircolors ]]; then
     eval "$(dircolors ~/.dircolors)";
 fi
 

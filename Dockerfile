@@ -1,15 +1,7 @@
-FROM mcr.microsoft.com/vscode/devcontainers/base:ubuntu-20.04
-ENV USERNAME=vscode
+FROM ghcr.io/linuxserver/baseimage-ubuntu:focal
+
+# use Bash so we can use pipefail, often piping the output to curl to bash fails silently
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-
-
-RUN wget -qO- "https://github.com/hadolint/hadolint/releases/download/v2.10.0/hadolint-Linux-x86_64" > hadolint \
-    && cp "hadolint" /usr/bin/ \
-    && chmod +x /usr/bin/hadolint
-
-
-RUN passwd -d vscode
-RUN chsh -s /bin/zsh vscode
 
 RUN \
 apt-get update && \
@@ -17,28 +9,23 @@ DEBIAN_FRONTEND=noninteractive \
 apt-get install --no-install-recommends -y \
 git \
 tig \
-shellcheck \yamllint \
-less \
-moreutils \
-python3.8-venv \
-htop \
 tmux \
 xstow \
 zsh \
-fzf \
-rsync \
+tree \
 curl \
 sudo \
+qemu-user-static \
+lxcfs \
+uidmap \
 jq \
 nmap \
-ncdu \
 lsb-release && \
 apt-get autoclean && \
 rm -rf \
 /var/lib/apt/lists/* \
 /var/tmp/* \
 /tmp/*
-
 
 # deb-get dependencies
 RUN \
@@ -51,7 +38,6 @@ ca-certificates \
 sudo \
 jq \
 lsb-release \
-gpg-agent \
 software-properties-common && \
 apt-get autoclean && \
 rm -rf \
@@ -75,7 +61,6 @@ apt-get install --no-install-recommends -y \
 gcc \
 g++ \
 ripgrep \
-unzip \
 && \
 apt-get autoclean && \
 rm -rf \
@@ -83,18 +68,10 @@ rm -rf \
 /var/tmp/* \
 /tmp/*
 
-RUN curl -fsSL https://get.pnpm.io/install.sh | bash -
+RUN passwd -d abc
 
-USER $USERNAME
-RUN curl -sS https://webi.sh/webi | sh 
-RUN source ~/.config/envman/PATH.env && webi node@lts
-RUN source ~/.config/envman/PATH.env && webi deno
-RUN source ~/.config/envman/PATH.env && webi go-essentials
+USER abc
+COPY . /config/dotfiles
+RUN /config/dotfiles/install.sh
 
-
-
-RUN mkdir -p /home/$USERNAME/.vscode-server/extensions \
-        /home/$USERNAME/.vscode-server-insiders/extensions \
-    && chown -R $USERNAME \
-        /home/$USERNAME/.vscode-server \
-        /home/$USERNAME/.vscode-server-insiders
+USER root

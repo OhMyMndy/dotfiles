@@ -15,15 +15,23 @@
     "workspaceFolder": "/home/vscode/.homesick/repos/dotfiles",
     "postCreateCommand": "./.devcontainer/init.sh",
     "extensions": [
-       "ms-python.python",
-       "formulahenry.code-runner",
-       "ms-azuretools.vscode-docker",
-       "exiasr.hadolint",
-       "mads-hartmann.bash-ide-vscode",
-       "jetmartin.bats",
-       "timonwong.shellcheck"
-    ],
+		"ms-python.python",
+		"formulahenry.code-runner",
+		"ms-azuretools.vscode-docker",
+		"exiasr.hadolint",
+		"mads-hartmann.bash-ide-vscode",
+		"jetmartin.bats",
+		"timonwong.shellcheck",
+		"k--kato.intellij-idea-keybindings"
+	],
     "remoteEnv": {
         "COMPOSE_PROJECT_NAME": "${localWorkspaceFolderBasename}"
+    },
+    "features": {
+        "docker-in-docker": {
+            "version": "latest",
+            "moby": true,
+            "dockerDashComposeVersion": "v1"
+        }
     }
 }
