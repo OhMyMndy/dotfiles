@@ -40,6 +40,20 @@ rm -rf \
 /tmp/*
 
 
+# fuse and bindfs
+
+RUN \
+apt-get update && \
+DEBIAN_FRONTEND=noninteractive \
+apt-get install --no-install-recommends -y \
+fuse \
+bindfs && \
+apt-get autoclean && \
+rm -rf \
+/var/lib/apt/lists/* \
+/var/tmp/* \
+/tmp/*
+
 # deb-get dependencies
 RUN \
 apt-get update && \

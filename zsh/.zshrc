@@ -3,6 +3,7 @@ export ZSH_THEME="mandy"
 
 [ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"
 
+
 detect_os() {
 	## OS and Architecture
 	if [ -f /etc/os-release ]; then

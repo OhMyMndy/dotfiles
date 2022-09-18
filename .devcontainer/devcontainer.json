@@ -9,6 +9,10 @@
     ],
     // "workspaceMount": "source=${localWorkspaceFolder},target=/home/vscode/.homesick/repos/dotfiles,type=bind",
     "updateRemoteUserUID": true,
+    "runArgs": [
+      "--cap-add=SYS_ADMIN",
+      "--device=/dev/fuse"
+    ],
     "settings": {
         // "terminal.integrated.shell.linux": "/bin/bash"
     },
