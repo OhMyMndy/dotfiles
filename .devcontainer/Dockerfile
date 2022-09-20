@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/vscode/devcontainers/base:ubuntu-20.04
+FROM mcr.microsoft.com/vscode/devcontainers/base:ubuntu-22.04
 ENV USERNAME=vscode
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
@@ -20,7 +20,7 @@ tig \
 shellcheck \yamllint \
 less \
 moreutils \
-python3.8-venv \
+python3.10-venv \
 htop \
 tmux \
 xstow \
@@ -39,6 +39,20 @@ rm -rf \
 /var/tmp/* \
 /tmp/*
 
+
+# fuse and bindfs
+
+RUN \
+apt-get update && \
+DEBIAN_FRONTEND=noninteractive \
+apt-get install --no-install-recommends -y \
+fuse \
+bindfs && \
+apt-get autoclean && \
+rm -rf \
+/var/lib/apt/lists/* \
+/var/tmp/* \
+/tmp/*
 
 # deb-get dependencies
 RUN \
@@ -60,7 +74,7 @@ rm -rf \
 /tmp/*
 
 # Install deb-get from source instead of the .deb
-RUN curl -Sl https://raw.githubusercontent.com/OhMyMndy/deb-get/install-exit-status-code/deb-get > /bin/deb-get \
+RUN curl -SLlk https://raw.githubusercontent.com/OhMyMndy/deb-get/install-exit-status-code/deb-get > /bin/deb-get \
 && chmod +x /bin/deb-get
 
 RUN deb-get install neovim \
@@ -76,6 +90,7 @@ gcc \
 g++ \
 ripgrep \
 unzip \
+xz-utils \
 && \
 apt-get autoclean && \
 rm -rf \
@@ -83,10 +98,10 @@ rm -rf \
 /var/tmp/* \
 /tmp/*
 
-RUN curl -fsSL https://get.pnpm.io/install.sh | bash -
+RUN curl -fsSLk https://get.pnpm.io/install.sh | bash -
 
 USER $USERNAME
-RUN curl -sS https://webi.sh/webi | sh 
+RUN curl -sSLk https://webi.sh/webi | sh 
 RUN source ~/.config/envman/PATH.env && webi node@lts
 RUN source ~/.config/envman/PATH.env && webi deno
 RUN source ~/.config/envman/PATH.env && webi go-essentials

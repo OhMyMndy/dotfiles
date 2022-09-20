@@ -3,16 +3,19 @@
     "dockerFile": "./Dockerfile",
     "remoteUser": "vscode",
     "mounts": [
-        // "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind",
+        "source=${localEnv:HOME}${localEnv:USERPROFILE},target=/host-home-folder,type=bind,consistency=cached",
         "source=${localWorkspaceFolderBasename}-extensions,target=/home/vscode/.vscode-server/extensions,type=volume,consistency=cached",
         "source=${localWorkspaceFolderBasename}-extensions-insiders,target=/home/vscode/.vscode-server-insiders/extensions,type=volume,consistency=cached",
+        "source=${localWorkspaceFolderBasename}-nvim,target=/home/vscode/.config/nvim,type=volume,consistency=cached",
     ],
-    // "workspaceMount": "source=${localWorkspaceFolder},target=/home/vscode/.homesick/repos/dotfiles,type=bind",
     "updateRemoteUserUID": true,
+    "runArgs": [
+      "--cap-add=SYS_ADMIN",
+      "--device=/dev/fuse"
+    ],
     "settings": {
         // "terminal.integrated.shell.linux": "/bin/bash"
     },
-    "workspaceFolder": "/home/vscode/.homesick/repos/dotfiles",
     "postCreateCommand": "./.devcontainer/init.sh",
     "extensions": [
 		"ms-python.python",
