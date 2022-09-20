@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 
 sudo chown vscode:vscode ~/.config/nvim
+
 ./install.sh
+
 
 sudo sed -i -E 's/#(user_allow_other)/\1/' /etc/fuse.conf
 
