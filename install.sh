@@ -28,21 +28,27 @@ function do_stow() {
     echo
 }
 
-if [[ ! -d ~/.config/nvim ]]; then
+if [[ ! -d ~/.config/nvim/.git ]]; then
     git clone https://github.com/NvChad/NvChad ~/.config/nvim --depth 1
+fi
+
+if [[ ! -d ~/.tmux/plugins/tpm ]]; then
+	git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 fi
 
 # Ohmyzsh
 if [[ ! -d ~/.oh-my-zsh ]]; then
-  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended --keep-zshrc
 fi
 
 
 
 do_stow "$DIR/tmux"
 do_stow "$DIR/vim"
-rm -f ~/.zshrc
 do_stow "$DIR/zsh"
+do_stow "$DIR/polybar"
+do_stow "$DIR/i3"
+do_stow "$DIR/rofi"
 
 
 do_stow "$DIR/nvim"
