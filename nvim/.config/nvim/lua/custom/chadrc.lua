@@ -6,7 +6,7 @@ local M = {}
 -- example of changing theme:
 
 M.ui = {
-  theme = "gatekeeper",
+  theme = "tokyodark",
 }
 
 -- @see https://github.dev/siduck/dotfiles/tree/master/nvchad/custom
@@ -19,6 +19,7 @@ M.truzen = {
 }
 
 M.plugins = {
+  ['folke/tokyonight.nvim'] = {},
   override = {
     ["NvChad/nvterm"] = {
     },
@@ -30,7 +31,8 @@ M.plugins = {
         "json",
         "typescript",
         "yaml",
-        "bash"
+        "bash",
+        "java"
       },
     },
     ["williamboman/mason.nvim"] = {
@@ -64,7 +66,10 @@ M.plugins = {
         -- Python
         "python-lsp-server",
         -- markdown
-        "markdownlint"
+        "markdownlint",
+        
+        -- Java
+        "jdtls"
       },
     },
   },
