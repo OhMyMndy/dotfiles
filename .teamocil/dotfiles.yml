@@ -1,7 +1,0 @@
-windows:
-  - name: Dotfiles
-    root: ~/.dotfiles
-    layout: main-vertical
-    panes:
-      - ' title "Ruby installer"; cd ~/dotfiles; ruby ~/dotfiles/install.rb'
-      - ' title "Logs"; touch /tmp/output-link.sh; tail -f /tmp/output-link.sh'

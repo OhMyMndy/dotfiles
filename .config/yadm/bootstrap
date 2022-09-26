@@ -1,0 +1,35 @@
+#!/bin/bash
+
+
+# Because Git submodule commands cannot operate without a work tree, they must
+# be run from within $HOME (assuming this is the root of your dotfiles)
+cd "$HOME"
+
+echo "Init submodules"
+yadm submodule update --recursive --init
+
+
+
+system_type=$(uname -s)
+
+if [ "$system_type" = "Darwin" ]; then
+
+  # install homebrew if it's missing
+  if ! command -v brew >/dev/null 2>&1; then
+    echo "Installing homebrew"
+    /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+  fi
+
+  if [ -f "$HOME/.Brewfile" ]; then
+    echo "Updating homebrew bundle"
+    brew bundle --global
+  fi
+
+fi
+
+
+
+# Ohmyzsh
+if [[ ! -d ~/.oh-my-zsh ]]; then
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+fi

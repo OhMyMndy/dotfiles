@@ -1,42 +1,112 @@
-FROM mcr.microsoft.com/vscode/devcontainers/base:alpine-3.12
+FROM mcr.microsoft.com/vscode/devcontainers/base:ubuntu-22.04
 ENV USERNAME=vscode
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 
-
-RUN apk add --no-cache git python3 py3-pip shellcheck vim wget curl shadow
-RUN apk add --no-cache nodejs npm
-RUN wget -qO- "https://github.com/hadolint/hadolint/releases/download/v1.17.3/hadolint-Linux-x86_64" > hadolint \
+RUN wget -qO- "https://github.com/hadolint/hadolint/releases/download/v2.10.0/hadolint-Linux-x86_64" > hadolint \
     && cp "hadolint" /usr/bin/ \
     && chmod +x /usr/bin/hadolint
 
 
+RUN passwd -d vscode
+RUN chsh -s /bin/zsh vscode
 
-# hadolint ignore=DL3016
-RUN npm install -g bats
-# hadolint ignore=DL3013
-RUN pip3 install wheel
-# hadolint ignore=DL3013
-RUN pip3 install setuptools
-# hadolint ignore=DL3013
-RUN pip3 install yamllint
-# hadolint ignore=DL3013
-RUN pip3 install vim-vint
-# hadolint ignore=DL3013
-RUN npm install -g markdownlint-cli
+RUN \
+apt-get update && \
+DEBIAN_FRONTEND=noninteractive \
+apt-get install --no-install-recommends -y \
+git \
+tig \
+shellcheck \yamllint \
+less \
+moreutils \
+python3.10-venv \
+htop \
+tmux \
+xstow \
+zsh \
+fzf \
+rsync \
+curl \
+sudo \
+jq \
+nmap \
+ncdu \
+lsb-release && \
+apt-get autoclean && \
+rm -rf \
+/var/lib/apt/lists/* \
+/var/tmp/* \
+/tmp/*
 
-RUN apk add --no-cache build-base libffi-dev openssl-dev python3-dev
 
-RUN pip3 install ansible
-RUN pip3 install paramiko
+# fuse and bindfs
 
-RUN apk add --no-cache docker-cli
-# RUN chown -R root:root /etc/sudo.conf /usr/lib/sudo/sudoers.so /etc/sudoers /etc/sudoers.d \
-    # && chown -R root:root /usr/bin/sudo && chmod -R a=rx,u+ws /usr/bin/sudo
+RUN \
+apt-get update && \
+DEBIAN_FRONTEND=noninteractive \
+apt-get install --no-install-recommends -y \
+fuse \
+bindfs && \
+apt-get autoclean && \
+rm -rf \
+/var/lib/apt/lists/* \
+/var/tmp/* \
+/tmp/*
 
+# deb-get dependencies
+RUN \
+apt-get update && \
+DEBIAN_FRONTEND=noninteractive \
+apt-get install --no-install-recommends -y \
+curl \
+wget \
+ca-certificates \
+sudo \
+jq \
+lsb-release \
+gpg-agent \
+software-properties-common && \
+apt-get autoclean && \
+rm -rf \
+/var/lib/apt/lists/* \
+/var/tmp/* \
+/tmp/*
+
+# Install deb-get from source instead of the .deb
+RUN curl -SLlk https://raw.githubusercontent.com/OhMyMndy/deb-get/install-exit-status-code/deb-get > /bin/deb-get \
+&& chmod +x /bin/deb-get
+
+RUN deb-get install neovim \
+&& deb-get install terraform \
+&& deb-get install yq
+
+# neovim dependencies
+RUN \
+apt-get update && \
+DEBIAN_FRONTEND=noninteractive \
+apt-get install --no-install-recommends -y \
+gcc \
+g++ \
+ripgrep \
+unzip \
+xz-utils \
+&& \
+apt-get autoclean && \
+rm -rf \
+/var/lib/apt/lists/* \
+/var/tmp/* \
+/tmp/*
+
+RUN curl -fsSLk https://get.pnpm.io/install.sh | bash -
 
 USER $USERNAME
+RUN curl -sSLk https://webi.sh/webi | sh 
+RUN source ~/.config/envman/PATH.env && webi node@lts
+RUN source ~/.config/envman/PATH.env && webi deno
+RUN source ~/.config/envman/PATH.env && webi go-essentials
 
-RUN pip install -U pylint --user
+
 
 RUN mkdir -p /home/$USERNAME/.vscode-server/extensions \
         /home/$USERNAME/.vscode-server-insiders/extensions \
