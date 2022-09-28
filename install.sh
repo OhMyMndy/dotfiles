@@ -45,6 +45,7 @@ fi
 
 do_stow "$DIR/tmux"
 do_stow "$DIR/vim"
+rm -f ~/.zshrc
 do_stow "$DIR/zsh"
 do_stow "$DIR/polybar"
 do_stow "$DIR/i3"
@@ -63,10 +64,6 @@ fi
 
 # @todo install lazygit
 
-# Dependencies for nvim
-# @todo install lts node and npm,npx
-# $ sudo apt-get install golang gcc g++
-
 if command -v nvim &>/dev/null; then
     if [[ "$TERM" = '' ]]; then
         export TERM=xterm
@@ -75,10 +72,10 @@ if command -v nvim &>/dev/null; then
     # Just try to PackerSync a couple of times because it it quite flakey...
     
     # shellcheck disable=SC2034
-    for VARIABLE in 1 2 3
-    do
+    # for VARIABLE in 1 2 3
+    # do
         timeout 60 nvim -V1 --headless -c 'autocmd User PackerComplete quitall' -c 'silent PackerSync'
-    done
+    # done
     
     nvim -V1 --headless +MasonInstallAll +qa
 else

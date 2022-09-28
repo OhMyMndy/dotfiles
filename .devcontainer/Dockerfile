@@ -21,6 +21,7 @@ shellcheck \yamllint \
 less \
 moreutils \
 python3.10-venv \
+python3-pip \
 htop \
 tmux \
 xstow \
@@ -32,6 +33,7 @@ sudo \
 jq \
 nmap \
 ncdu \
+openssh-server \
 lsb-release && \
 apt-get autoclean && \
 rm -rf \
@@ -41,7 +43,6 @@ rm -rf \
 
 
 # fuse and bindfs
-
 RUN \
 apt-get update && \
 DEBIAN_FRONTEND=noninteractive \
@@ -74,12 +75,13 @@ rm -rf \
 /tmp/*
 
 # Install deb-get from source instead of the .deb
-RUN curl -SLlk https://raw.githubusercontent.com/OhMyMndy/deb-get/install-exit-status-code/deb-get > /bin/deb-get \
+RUN curl -SLl https://raw.githubusercontent.com/wimpysworld/deb-get/main/deb-get > /bin/deb-get \
 && chmod +x /bin/deb-get
 
 RUN deb-get install neovim \
 && deb-get install terraform \
-&& deb-get install yq
+&& deb-get install yq \
+&& deb-get install google-cloud-cli
 
 # neovim dependencies
 RUN \
@@ -91,6 +93,8 @@ g++ \
 ripgrep \
 unzip \
 xz-utils \
+golang-go \
+python3-pip \
 && \
 apt-get autoclean && \
 rm -rf \
@@ -98,14 +102,22 @@ rm -rf \
 /var/tmp/* \
 /tmp/*
 
-RUN curl -fsSLk https://get.pnpm.io/install.sh | bash -
+RUN curl -fsSL https://get.pnpm.io/install.sh | bash -
+RUN curl -fsSL https://deno.land/x/install/install.sh | sh
+
+RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - && \
+apt-get update && \
+DEBIAN_FRONTEND=noninteractive \
+apt-get install --no-install-recommends -y \
+nodejs \
+&& \
+apt-get autoclean && \
+rm -rf \
+/var/lib/apt/lists/* \
+/var/tmp/* \
+/tmp/*
 
 USER $USERNAME
-RUN curl -sSLk https://webi.sh/webi | sh 
-RUN source ~/.config/envman/PATH.env && webi node@lts
-RUN source ~/.config/envman/PATH.env && webi deno
-RUN source ~/.config/envman/PATH.env && webi go-essentials
-
 
 
 RUN mkdir -p /home/$USERNAME/.vscode-server/extensions \
@@ -113,3 +125,6 @@ RUN mkdir -p /home/$USERNAME/.vscode-server/extensions \
     && chown -R $USERNAME \
         /home/$USERNAME/.vscode-server \
         /home/$USERNAME/.vscode-server-insiders
+
+COPY --chown=vscode:vscode ./ /home/vscode/dotfiles
+RUN /home/vscode/dotfiles/install.sh

@@ -1,6 +1,9 @@
 {
     "name": "${localWorkspaceFolderBasename}",
-    "dockerFile": "./Dockerfile",
+    "build": {
+        "dockerfile": "./Dockerfile",
+        "context": "../"
+    },
     "remoteUser": "vscode",
     "mounts": [
         "source=${localEnv:HOME}${localEnv:USERPROFILE},target=/host-home-folder,type=bind,consistency=cached",
@@ -14,9 +17,9 @@
       "--device=/dev/fuse"
     ],
     "settings": {
-        // "terminal.integrated.shell.linux": "/bin/bash"
+        "editor.fontFamily": "'JetbrainsMono NF','monospace', 'Droid Sans Mono', 'Droid Sans Fallback', Consolas"
     },
-    "postCreateCommand": "./.devcontainer/init.sh",
+    "postCreateCommand": "./.devcontainer/entrypoint.sh echo done",
     "extensions": [
 		"ms-python.python",
 		"formulahenry.code-runner",
@@ -36,5 +39,5 @@
             "moby": true,
             "dockerDashComposeVersion": "v1"
         }
-    }
+    },
 }
