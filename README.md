@@ -1,7 +1,5 @@
 # Dotfiles
 
-[![CircleCI](https://circleci.com/gh/OhMyMndy/dotfiles.svg?style=svg)](https://circleci.com/gh/OhMyMndy/dotfiles)
-
 ## Ubuntu
 
 ```bash
@@ -9,9 +7,7 @@ sudo apt-get update -qq; sudo apt-get install git vim curl jq -y -qq
 cd ~
 git clone -q https://github.com/mandy91/dotfiles.git
 
-~/dotfiles/link.sh
-~/dotfiles/installers/ubuntu.sh --minimal --general --groups --firewall --locale --upgrade --remove_obsolete --autostart --settings --settings-light --fonts --groups --keybindings --chat --dev
-~/dotfiles/link.sh
+~/dotfiles/install.sh
 ```
 
 ## Termux
@@ -22,7 +18,16 @@ cd ~
 git clone -q https://github.com/mandy91/dotfiles.git
 ```
 
-## Development
+### OCI container image
 
-Install `pre-commit`
-Run `pre-commit install` to set up the git hooks
+```bash
+docker run --rm -it -p 8083:8083 \
+    --workdir /home/vscode \
+    --mount "source=$HOME/src,target=/home/vscode/src,type=bind" \
+    --mount "source=$HOME/.ssh,target=/home/vscode/.ssh,type=bind" \
+    --cap-add=SYS_ADMIN --device=/dev/fuse \
+    --privileged ohmymndy/dotfiles:latest
+```
+
+Run i3 with novnc on port 8083
+`.devcontainer/entrypoint-i3.sh sleep infinity`

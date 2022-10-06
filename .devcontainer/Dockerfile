@@ -55,6 +55,18 @@ rm -rf \
 /var/tmp/* \
 /tmp/*
 
+# i3 with novnc
+RUN \
+apt-get update && \
+DEBIAN_FRONTEND=noninteractive \
+apt-get install --no-install-recommends -y \
+i3 rofi novnc xvfb x11vnc supervisor && \
+apt-get autoclean && \
+rm -rf \
+/var/lib/apt/lists/* \
+/var/tmp/* \
+/tmp/*
+
 # deb-get dependencies
 RUN \
 apt-get update && \
@@ -83,6 +95,17 @@ RUN deb-get install neovim \
 && deb-get install yq \
 && deb-get install google-cloud-cli
 
+RUN deb-get install docker-ce \
+&& apt-get update && \
+DEBIAN_FRONTEND=noninteractive \
+apt-get install --no-install-recommends -y \
+fuse-overlayfs \
+&& \
+apt-get autoclean && \
+rm -rf \
+/var/lib/apt/lists/* \
+/var/tmp/* \
+/tmp/*
 # neovim dependencies
 RUN \
 apt-get update && \

@@ -22,9 +22,9 @@ fi
 if [[ -d ~vscode/.ssh ]]; then
   sudo chown vscode:vscode -R ~vscode/.ssh
   sudo chmod 700 ~vscode/.ssh
-  chmod 600 ~vscode/.ssh/config || true
-  chmod 600 ~vscode/.ssh/id_* || true
-  chmod 644 ~vscode/.ssh/*.pub || true
+  chmod 600 ~/.ssh/config || true
+  chmod 600 ~/.ssh/id_* || true
+  chmod 644 ~/.ssh/*.pub || true
 fi
 
 
