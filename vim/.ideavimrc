@@ -1,4 +1,4 @@
-"" Source your .vimrc
+" " Source your .vimrc
 "source ~/.vimrc
 
 "" -- Suggested options --
@@ -25,9 +25,9 @@ map Q gq
 
 
 " Find more examples here: https://jb.gg/share-ideavimrc
-noremap l h
-noremap ; l
-noremap h ;
+" noremap l h
+" noremap ; l
+" noremap h ;
 
 let mapleader = " "
 set relativenumber

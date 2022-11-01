@@ -53,6 +53,7 @@ do_stow "$DIR/rofi"
 
 
 do_stow "$DIR/nvim"
+do_stow "$DIR/nixpkgs"
 
 # it doesn't like relative paths...
 
@@ -74,23 +75,12 @@ if command -v nvim &>/dev/null; then
     # shellcheck disable=SC2034
     # for VARIABLE in 1 2 3
     # do
-        timeout 60 nvim -V1 --headless -c 'autocmd User PackerComplete quitall' -c 'silent PackerSync'
+     #   timeout 60 nvim -V1 --headless -c 'autocmd User PackerComplete quitall' -c 'silent PackerSync'
     # done
     
-    nvim -V1 --headless +MasonInstallAll +qa
+    #nvim -V1 --headless +MasonInstallAll +qa
 else
     echo "Neovim is not installed, not configuring!" 1>&2
 fi
 
 
-# fonts
-if command -v fc-cache &>/dev/null; then
-    if ! (fc-match ":family=JetBrainsMonoNL Nerd Font" | grep -q "JetBrainsMonoNL Nerd Font"); then
-        echo "Installing Jetbrains Mono Nerd Font"
-        mkdir -p "$HOME/.local/share/fonts/"
-        jetBrainsMonoFile="$HOME/.local/share/fonts/JetBrains Mono NL Regular Nerd Font Complete.ttf"
-        jetBrainsMono="https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/patched-fonts/JetBrainsMono/NoLigatures/Regular/complete/JetBrains%20Mono%20NL%20Regular%20Nerd%20Font%20Complete.ttf"
-        curl -LsS "$jetBrainsMono" -o "$jetBrainsMonoFile"
-        fc-cache "$HOME/.local/share/fonts/" --force --verbose
-    fi
-fi

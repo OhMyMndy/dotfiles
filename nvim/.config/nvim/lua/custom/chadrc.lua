@@ -4,9 +4,8 @@ local M = {}
 
 -- make sure you maintain the structure of `core/default_config.lua` here,
 -- example of changing theme:
-
 M.ui = {
-  theme = "tokyodark",
+  theme = "onenord",
 }
 
 -- @see https://github.dev/siduck/dotfiles/tree/master/nvchad/custom
@@ -20,8 +19,14 @@ M.truzen = {
 
 M.plugins = {
   ['folke/tokyonight.nvim'] = {},
+  ['sonph/onehalf'] = {
+    rtp = "vim"
+  },
   override = {
     ["NvChad/nvterm"] = {
+    },
+    ["nvim-telescope/telescope.nvim"] = {
+
     },
     ["nvim-treesitter/nvim-treesitter"] = {
       ensure_installed = {

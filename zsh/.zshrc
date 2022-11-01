@@ -56,6 +56,7 @@ plugins=(
 )
 
 zstyle ':completion:*:make::' tag-order targets
+zstyle ':completion:*' special-dirs false
 
 
 if [ "$OS" = "Ubuntu" ]; then
