@@ -233,3 +233,7 @@ ZSH_HIGHLIGHT_PATTERNS+=('rm -rf *' 'fg=red,bold')
 if [[ -t 0 ]]; then
 	stty -ixon -ixoff
 fi
+
+if [[ -f ~/.nix-profile/etc/profile.d/nix.sh ]]; then
+  . ~/.nix-profile/etc/profile.d/nix.sh
+fi

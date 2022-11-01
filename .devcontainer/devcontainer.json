@@ -11,7 +11,7 @@
         "source=${localWorkspaceFolderBasename}-extensions-insiders,target=/home/vscode/.vscode-server-insiders/extensions,type=volume,consistency=cached",
         "source=${localWorkspaceFolderBasename}-nvim,target=/home/vscode/.config/nvim,type=volume,consistency=cached",
     ],
-    "workspaceFolder": "/home/vscode/dotfiles",
+    // "workspaceFolder": "/home/vscode/dotfiles",
     "updateRemoteUserUID": true,
     "runArgs": [
       "--cap-add=SYS_ADMIN",
@@ -19,7 +19,105 @@
       "--privileged"
     ],
     "settings": {
-        "editor.fontFamily": "'JetbrainsMono NF','monospace', 'Droid Sans Mono', 'Droid Sans Fallback', Consolas"
+        "editor.fontFamily": "'JetbrainsMono NF','monospace', 'Droid Sans Mono', 'Droid Sans Fallback', Consolas",
+        "editor.inlineSuggest.enabled": true,
+        "[jsonc]": {
+          "editor.defaultFormatter": "vscode.json-language-features"
+        },
+        "editor.minimap.enabled": false,
+        "vim.normalModeKeyBindingsNonRecursive": [
+          {
+            "before": ["<leader>", "f", "f"],
+            "commands": ["workbench.action.quickOpen"],
+            "silent": true
+          },
+          {
+            "before": ["<leader>", "f", "m"],
+            "commands": ["workbench.action.formatDocument"],
+            "silent": true
+          },
+          {
+            "before": ["<leader>", "f", "m"],
+            "commands": ["editor.action.formatDocument"],
+            "silent": true
+          },
+          {
+            "before": ["<leader>", "t", "w"],
+            "commands": ["workbench.action.terminal.toggleTerminal"],
+            "silent": true
+          },
+          {
+            "before": ["g", "d"],
+            "commands": ["editor.action.goToTypeDefinition"]
+          },
+          {
+            "before": ["<leader>", "s"],
+            // @see https://gist.github.com/skfarhat/4e88ef386c93b9dceb98121d9457edbf
+            // workbench.action.files.saveAll
+            "commands": ["saveAll"]
+          }
+        ],
+        "vim.visualModeKeyBindingsNonRecursive": [
+          {
+            "before": [">"],
+            "commands": ["editor.action.indentLines"]
+          },
+          {
+            "before": ["<"],
+            "commands": ["editor.action.outdentLines"]
+          }
+        ],
+        "vim.leader": "<space>",
+        "vim.useCtrlKeys": true,
+        "vim.handleKeys": {
+          "<C-n>": false
+        },
+        "vim.statusBarColorControl": true,
+        "vim.statusBarColors.normal": ["#0b918f", "#ffffff"],
+        "vim.statusBarColors.insert": ["#830410", "#ffffff"],
+        "vim.statusBarColors.visual": ["#e75100", "#ffffff"],
+        "vim.statusBarColors.visualline": ["#B48EAD", "#000"],
+        "vim.statusBarColors.visualblock": ["#A3BE8C", "#000"],
+        "vim.statusBarColors.replace": "#D08770",
+        "vim.statusBarColors.commandlineinprogress": ["#007ACC", "#ffffff"],
+        "vim.statusBarColors.searchinprogressmode": ["#007ACC", "#ffffff"],
+        "vim.statusBarColors.easymotionmode": ["#007ACC", "#ffffff"],
+        "vim.statusBarColors.easymotioninputmode": ["#007ACC", "#ffffff"],
+        "vim.statusBarColors.surroundinputmode": ["#007ACC", "#ffffff"],
+        "workbench.colorCustomizations": {
+          "statusBar.background": "#e75100",
+          "statusBar.noFolderBackground": "#e75100",
+          "statusBar.debuggingBackground": "#e75100",
+          "statusBar.foreground": "#ffffff",
+          "statusBar.debuggingForeground": "#ffffff"
+        },
+        // "workbench.list.defaultFindMode": "highlight",
+        // "workbench.list.keyboardNavigation": "filter"
+        "nerdtree.hideSidebarWhenOpenFile": true,
+        "nerdtree.alwaysShowSidebar": false,
+        "editor.stickyScroll.enabled": true,
+        "html.autoClosingTags": false,
+        "editor.acceptSuggestionOnCommitCharacter": false,
+        "editor.suggestOnTriggerCharacters": false,
+        // Controls if quick suggestions should show up while typing
+        "editor.quickSuggestions": {
+          "other": false,
+          "comments": false,
+          "strings": false
+        },
+      
+        // Controls if suggestions should be accepted with "Enter" - in addition to "Tab". Helps to avoid ambiguity between inserting new lines and accepting suggestions.
+        "editor.acceptSuggestionOnEnter": "on",
+      
+        // Controls the delay in ms after which quick suggestions will show up.
+        "editor.quickSuggestionsDelay": 10,
+      
+        // Enable word based suggestions
+        "editor.wordBasedSuggestions": false,
+        "vim.smartRelativeLine": true,
+        "excalidraw.theme": "light",
+        "gitpod.remote.useLocalApp": false,
+        "redhat.telemetry.enabled": true,
     },
     "postCreateCommand": "./.devcontainer/entrypoint.sh echo done",
     "extensions": [
@@ -30,7 +128,9 @@
 		"mads-hartmann.bash-ide-vscode",
 		"jetmartin.bats",
 		"timonwong.shellcheck",
-		"k--kato.intellij-idea-keybindings"
+		"bbenoist.Nix",
+		"vscodevim.vim",
+		"JulianIaquinandi.nvim-ui-modifier"
 	],
     "features": {
         "docker-in-docker": {
@@ -39,4 +139,5 @@
             "dockerDashComposeVersion": "v1"
         }
     },
+    
 }

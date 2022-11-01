@@ -18,6 +18,10 @@ if ! mountpoint -q ~/docker-volumes; then
 fi
 
 
+if [[ -d /workspace/dotfiles ]]; then
+  mv ~/dotfiles ~/dotfiles_
+  ln -sf /workspace/dotfiles ~/dotfiles
+fi
 
 if [[ -d ~vscode/.ssh ]]; then
   sudo chown vscode:vscode -R ~vscode/.ssh

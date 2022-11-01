@@ -1,21 +1,29 @@
 #!/usr/bin/env bash
 
-clear
+# @todo install nix if we can run sudo without password
 
-# set -e
+. "$HOME/.nix-profile/etc/profile.d/nix.sh"
+
+nix-channel --add https://nixos.org/channels/nixpkgs-unstable nixos-unstable \
+    && nix-channel --update
+
+nix-env -iA nixpkgs.ohmymndy-core \
+    && nix-env -iA nixpkgs.ohmymndy-dev \
+    && nix-env -iA nixpkgs.ohmymndy-containers \
+    && nix-env -iA nixpkgs.ohmymndy-diagnostics
 
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$DIR" || exit 1
 
 if ! command -v xstow &>/dev/null; then
     echo "xstow has to be installed!" 1>&2
-    exit 1
+    exit 0
 fi
 
 
 if ! command -v curl &>/dev/null; then
     echo "curl has to be installed!" 1>&2
-    exit 1
+    exit 0
 fi
 
 function do_stow_absolute() {
@@ -75,10 +83,10 @@ if command -v nvim &>/dev/null; then
     # shellcheck disable=SC2034
     # for VARIABLE in 1 2 3
     # do
-     #   timeout 60 nvim -V1 --headless -c 'autocmd User PackerComplete quitall' -c 'silent PackerSync'
+       timeout 60 nvim -V1 --headless -c 'autocmd User PackerComplete quitall' -c 'silent PackerSync'
     # done
     
-    #nvim -V1 --headless +MasonInstallAll +qa
+    timeout 60 nvim -V1 --headless +MasonInstallAll +qa
 else
     echo "Neovim is not installed, not configuring!" 1>&2
 fi

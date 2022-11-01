@@ -1,4 +1,4 @@
-let  unstable = import <nixos-unstable> { config = { allowUnfree = true; }; };
+let unstable = import <nixos-unstable> { config = { allowUnfree = true; }; };
 in
 {
   packageOverrides = pkgs: with pkgs; {
@@ -74,6 +74,9 @@ in
   sqlite
 	nodePackages.pnpm
   gnumake
+  nodePackages.bash-language-server
+  nodePackages.typescript-language-server
+  shfmt
       ];
     };
     ohmymndy-dev-gui = pkgs.buildEnv {

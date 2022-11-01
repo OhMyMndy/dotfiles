@@ -16,7 +16,13 @@ M.truzen = {
     ["<leader>tf"] = { "<cmd> TZFocus <CR>", "   truzen focus" },
   },
 }
-
+M.mappings = {
+  telescope = {
+    n = {
+      ["<leader>fa"] = { "<cmd> Telescope find_files follow=true hidden=true <CR>", "find all" },
+    }
+  }
+}
 M.plugins = {
   ['folke/tokyonight.nvim'] = {},
   ['sonph/onehalf'] = {
@@ -26,6 +32,7 @@ M.plugins = {
     ["NvChad/nvterm"] = {
     },
     ["nvim-telescope/telescope.nvim"] = {
+      ["<leader>fa"] = { "<cmd> Telescope find_files follow=true hidden=true <CR>", "find all" },
 
     },
     ["nvim-treesitter/nvim-treesitter"] = {
@@ -44,37 +51,37 @@ M.plugins = {
       -- :Mason to show available
       ensure_installed = {
         -- lua stuff
-        "lua-language-server",
-        "stylua",
+        -- "lua-language-server", -- done by nix
+        -- "stylua", -- done by nix
 
         -- web dev
         "css-lsp",
         "html-lsp",
-        "typescript-language-server",
-        "deno",
+        -- "typescript-language-server", -- done by nix
+        -- "deno", -- done by nix
         "json-lsp",
 
         -- shell
-        "shfmt",
-        "shellcheck",
-        "bash-language-server",
+        -- "shfmt", -- done by nix
+        -- "shellcheck", -- done by nix
+        -- "bash-language-server", -- done by nix
 
         -- cloud and containerization
-        "hadolint",
-        "dockerfile-language-server",
-        "terraform-ls",
-        "tflint",
-        "yaml-language-server",
-        "yamlfmt",
-        "yamllint",
+        -- "hadolint", - done by nix
+        -- "dockerfile-language-server", -- done by nix
+        -- "terraform-ls", -- done by nix
+        -- "tflint", -- done by nix
+        -- "yaml-language-server", -- done by nix
+        -- "yamlfmt", -- todo
+        -- "yamllint", -- done by nix
 
         -- Python
-        "python-lsp-server",
+        -- "python-lsp-server", -- is now done by nix
         -- markdown
-        "markdownlint",
+        -- "markdownlint", -- done by nix
         
         -- Java
-        "jdtls"
+        -- "jdtls" -- skip for now
       },
     },
   },
