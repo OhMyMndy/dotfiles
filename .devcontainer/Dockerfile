@@ -22,6 +22,18 @@ sudo rm -rf \
 /var/tmp/* \
 /tmp/*i
 
+# xstow
+RUN sudo apt-get update && \
+DEBIAN_FRONTEND=noninteractive \
+sudo apt-get install --no-install-recommends -y \
+xstow && \
+sudo apt-get autoclean && \
+sudo rm -rf \
+/var/lib/apt/lists/* \
+/var/tmp/* \
+/tmp/*i
+
+
 
 # deb-get dependencies
 RUN sudo apt-get update && \

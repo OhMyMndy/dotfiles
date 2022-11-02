@@ -2,15 +2,8 @@
 
 # @todo install nix if we can run sudo without password
 
-. "$HOME/.nix-profile/etc/profile.d/nix.sh"
+set -e
 
-nix-channel --add https://nixos.org/channels/nixpkgs-unstable nixos-unstable \
-    && nix-channel --update
-
-nix-env -iA nixpkgs.ohmymndy-core \
-    && nix-env -iA nixpkgs.ohmymndy-dev \
-    && nix-env -iA nixpkgs.ohmymndy-containers \
-    && nix-env -iA nixpkgs.ohmymndy-diagnostics
 
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$DIR" || exit 1
@@ -26,6 +19,8 @@ if ! command -v curl &>/dev/null; then
     exit 0
 fi
 
+
+
 function do_stow_absolute() {
     xstow -force -absolute-path -restow -target="$HOME" "$1"
     echo
@@ -35,6 +30,23 @@ function do_stow() {
     xstow -force -restow -target="$HOME" "$1"
     echo
 }
+
+
+do_stow "$DIR/nixpkgs"
+
+if [[ -f "$HOME/.nix-profile/etc/profile.d/nix.sh" ]]; then
+    source "$HOME/.nix-profile/etc/profile.d/nix.sh"
+
+
+    nix-channel --add https://nixos.org/channels/nixpkgs-unstable nixos-unstable \
+        && nix-channel --update
+
+    nix-env -iA nixpkgs.ohmymndy-core \
+        && nix-env -iA nixpkgs.ohmymndy-dev \
+        && nix-env -iA nixpkgs.ohmymndy-containers \
+        && nix-env -iA nixpkgs.ohmymndy-diagnostics
+fi
+
 
 if [[ ! -d ~/.config/nvim/.git ]]; then
     git clone https://github.com/NvChad/NvChad ~/.config/nvim --depth 1
@@ -61,7 +73,7 @@ do_stow "$DIR/rofi"
 
 
 do_stow "$DIR/nvim"
-do_stow "$DIR/nixpkgs"
+
 
 # it doesn't like relative paths...
 
@@ -70,8 +82,6 @@ if [[ -d "$DIR/xfce4-terminal" ]]; then
 fi
 
 
-
-# @todo install lazygit
 
 if command -v nvim &>/dev/null; then
     if [[ "$TERM" = '' ]]; then
