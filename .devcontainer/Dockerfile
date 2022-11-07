@@ -57,8 +57,41 @@ sudo rm -rf \
 RUN curl -sL https://raw.githubusercontent.com/wimpysworld/deb-get/main/deb-get | sudo -E bash -s install deb-get
 
 RUN curl -s https://raw.githubusercontent.com/89luca89/distrobox/main/install | sudo sh
-RUN sudo distrobox-init --name "$USER" --user $(id -u) --group $(id -g) --home "$HOME" --upgrade
 
+# distrobox dependencies @see https://github.com/89luca89/distrobox/blob/main/distrobox-init#L301
+RUN sudo apt-get update && \
+DEBIAN_FRONTEND=noninteractive \
+sudo apt-get install -y \
+apt-utils \
+bc \
+curl \
+dialog \
+diffutils \
+findutils \
+gnupg2 \
+less \
+libnss-myhostname \
+libvte-2.9[0-9]-common \
+libvte-common \
+lsof \
+ncurses-base \
+passwd \
+pinentry-curses \
+procps \
+sudo \
+time \
+wget \
+util-linux \
+libegl1-mesa \
+libgl1-mesa-glx && \
+sudo apt-get autoclean && \
+sudo rm -rf \
+/var/lib/apt/lists/* \
+/var/tmp/* \
+/tmp/*
+
+
+			
 RUN sudo deb-get install docker-ce
 
 RUN sh <(curl -L https://nixos.org/nix/install) --no-daemon \
