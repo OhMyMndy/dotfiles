@@ -26,8 +26,9 @@ set_from_resource $darkwhite   color7  #eaeaea
 set_from_resource $white       color15 #ffffff
 
 
-
-set $mod Mod4
+# Mod1 is the Alt key
+# Mod4 is the Windows key
+set $mod Mod1
 
 # Font for window titles. Will also be used by the bar unless a different font
 font pango:IBM Plex Sans Text 10
