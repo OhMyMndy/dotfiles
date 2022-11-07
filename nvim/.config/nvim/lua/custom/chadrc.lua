@@ -5,7 +5,7 @@ local M = {}
 -- make sure you maintain the structure of `core/default_config.lua` here,
 -- example of changing theme:
 M.ui = {
-  theme = "onenord",
+  theme = "nightowl",
 }
 
 -- @see https://github.dev/siduck/dotfiles/tree/master/nvchad/custom
