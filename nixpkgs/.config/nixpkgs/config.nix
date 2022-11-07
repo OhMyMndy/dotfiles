@@ -53,6 +53,7 @@ in
   shadow
   consul
   vault
+  driftctl
       ];
     };
     ohmymndy-infra = pkgs.buildEnv {

@@ -56,6 +56,8 @@ sudo rm -rf \
 # Install deb-get from source instead of the .deb
 RUN curl -sL https://raw.githubusercontent.com/wimpysworld/deb-get/main/deb-get | sudo -E bash -s install deb-get
 
+RUN curl -s https://raw.githubusercontent.com/89luca89/distrobox/main/install | sudo sh
+RUN sudo distrobox-init --name "$USER" --user $(id -u) --group $(id -g) --home "$HOME" --upgrade
 
 RUN sudo deb-get install docker-ce
 
