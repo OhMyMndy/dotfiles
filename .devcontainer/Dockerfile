@@ -3,6 +3,13 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 USER root
 
+RUN apt-get update && apt-get upgrade -y && \
+    apt-get autoclean && \
+    rm -rf \
+    /var/lib/apt/lists/* \
+    /var/tmp/* \
+    /tmp/*
+
 RUN passwd -d vscode \
     && chsh -s /bin/zsh vscode
 
@@ -31,7 +38,7 @@ sudo apt-get autoclean && \
 sudo rm -rf \
 /var/lib/apt/lists/* \
 /var/tmp/* \
-/tmp/*i
+/tmp/*
 
 
 
