@@ -2,7 +2,7 @@
 
 # @todo install nix if we can run sudo without password
 
-set -e
+set -ex
 
 
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -93,7 +93,7 @@ if command -v nvim &>/dev/null; then
     # shellcheck disable=SC2034
     # for VARIABLE in 1 2 3
     # do
-       timeout 60 nvim -V1 --headless -c 'autocmd User PackerComplete quitall' -c 'silent PackerSync'
+       timeout 60 nvim -V1 --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
     # done
     
     timeout 60 nvim -V1 --headless +MasonInstallAll +qa
