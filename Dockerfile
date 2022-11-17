@@ -36,7 +36,7 @@ RUN sudo pacman -Sy --noconfirm $(cat /tmp/pacman-distrobox-packages.txt) \
 FROM base as dotfiles
 
 USER root
-
+RUN pacman -Syu --needed --noconfirm nodejs npm
 ARG user=mandy
 RUN useradd --system --create-home $user \
   && echo "$user ALL=(ALL:ALL) NOPASSWD:ALL" > /etc/sudoers.d/$user
