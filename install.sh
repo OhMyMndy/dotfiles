@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -ex
+set -x
 
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$DIR" || exit 1
@@ -69,7 +69,7 @@ do_stow "$DIR/i3"
 do_stow "$DIR/rofi"
 
 
-if [[ -d ~/.local/share/nvim/site/pack/packer/start/packer.nvim ]]; then
+if [[ ! -d ~/.local/share/nvim/site/pack/packer/start/packer.nvim ]]; then
     git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/.local/share/nvim/site/pack/packer/start/packer.nvim
 fi
 do_stow "$DIR/nvim"
@@ -94,9 +94,6 @@ if command -v nvim &>/dev/null; then
     for VARIABLE in 1 2 3
     do
        timeout 60 nvim -V1 --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
-       if [[ $? -eq 0 ]]; then
-           break
-       fi
     done
     
     timeout 60 nvim -V1 --headless +MasonInstallAll +qa
