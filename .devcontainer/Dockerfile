@@ -97,9 +97,16 @@ sudo rm -rf \
 /var/tmp/* \
 /tmp/*
 
+ARG GOARCH=amd64
+ARG CNI_PLUGINS_VERSION=v1.1.1
 
+RUN mkdir -p /opt/cni/bin && \
+    curl -Lo cni.tar.gz https://github.com/containernetworking/plugins/releases/download/$CNI_PLUGINS_VERSION/cni-plugins-linux-$GOARCH-$CNI_PLUGINS_VERSION.tgz && \
+    tar -xf cni.tar.gz /opt/cni/bin && \
+    rm cni.tar.gz
 			
 RUN sudo deb-get install docker-ce
+RUN sudo deb-get install nomad terraform waypoint
 
 RUN sh <(curl -L https://nixos.org/nix/install) --no-daemon \
     && . "/home/vscode/.nix-profile/etc/profile.d/nix.sh" \
