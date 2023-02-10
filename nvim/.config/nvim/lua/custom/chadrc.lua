@@ -88,4 +88,19 @@ M.plugins = {
   user = require "custom.plugins",
 }
 
+M.mappings = {
+  abc = {
+    n = {
+      ["C-d"] = "<C-d>zz",
+      ["C-u"] = "<C-u>zz",
+      ["n"] = "nzzzv",
+      ["N"] = "Nzzzv",
+      ["<C-k>"] = "<cmd>cnext<CR>zz",
+      ["<C-j>"] = "<cmd>cprev<CR>zz",
+      ["<leader>k"] = "<cmd>lnext<CR>zz",
+      ["<leader>j"] = "<cmd>lprev<CR>zz",
+    }
+  }
+}
+
 return M

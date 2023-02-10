@@ -213,6 +213,10 @@ export NVM_DIR="$HOME/.nvm"
 # bindkey  "^[[1~"   beginning-of-line
 # bindkey  "^[[4~"   end-of-line
 
+# Make ctrl+backpace and ctrl+delete work in zsh
+bindkey '^H' backward-kill-word
+bindkey '5~' kill-word
+
 if [[ $commands[fd] ]]; then
     export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --exclude node_modules --exclude vendor --exclude .mypy-cache'
 fi

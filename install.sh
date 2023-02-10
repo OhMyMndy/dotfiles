@@ -54,7 +54,7 @@ if [[ ! -d ~/.tmux/plugins/tpm ]]; then
 fi
 
 # Ohmyzsh
-if [[ ! -d ~/.oh-my-zsh ]]; then
+if [[ ! -d ~/.oh-my-zsh/.git ]]; then
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended --keep-zshrc
 fi
 
