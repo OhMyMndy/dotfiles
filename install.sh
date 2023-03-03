@@ -168,7 +168,7 @@ if command -v nvim &>/dev/null; then
     timeout 60 nvim --headless "+Lazy! sync" +qa || true
     
 
-    timeout 60 nvim -V1 --headless +MasonInstallAll +qa || true
+    timeout 120 nvim -V1 --headless +MasonInstallAll +qa || true
     timeout 60 nvim -V1 --headless +TSUpdate +qa || true
 else
     echo "Neovim is not installed, not configuring!" 1>&2
