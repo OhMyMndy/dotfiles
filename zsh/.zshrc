@@ -1,7 +1,6 @@
 export ZSH=$HOME/.oh-my-zsh
 export ZSH_THEME="mandy"
 
-[ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"
 
 
 detect_os() {
@@ -92,18 +91,6 @@ fi
 # plugins+=(zsh-completions)
 
 
-
-if [[ -f $HOME/.bash_aliases ]]; then
-    # shellcheck source=.bash_aliases
-    source "$HOME/.bash_aliases"
-fi
-
-# if [[ -f $HOME/.profile ]]; then
-#     # shellcheck source=.profile
-#     source "$HOME/.profile"
-# fi
-
-
 zstyle ':notify:*' error-title "Command failed (in #{time_elapsed} seconds)"
 zstyle ':notify:*' success-title "Command finished (in #{time_elapsed} seconds)"
 
@@ -116,8 +103,6 @@ if [[ -f $HOME/.oh-my-zsh/oh-my-zsh.sh ]]; then
     source "$HOME/.oh-my-zsh/oh-my-zsh.sh"
 fi
 
-
-export GOPATH="$HOME/.go"
 
 if [[ $commands[dircolors] ]] && [[ -f ~/.dircolors ]]; then
     eval "$(dircolors ~/.dircolors)";
@@ -196,20 +181,6 @@ if [[ $OS = Darwin ]]; then
 fi
 
 
-
-export NVM_LAZY_LOAD=true
-export NVM_COMPLETION=true
-export NVM_DIR="$HOME/.nvm"
-# shellcheck source=.nvm/nvm.sh
-# shellcheck disable=SC1091
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" --no-use  # This loads nvm
-
-# shellcheck source=.nvm/bash_completion
-# shellcheck disable=SC1091
-[ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-
-
 # bindkey  "^[[1~"   beginning-of-line
 # bindkey  "^[[4~"   end-of-line
 
@@ -229,8 +200,6 @@ typeset -A ZSH_HIGHLIGHT_PATTERNS
 # To have commands starting with `rm -rf` in red:
 ZSH_HIGHLIGHT_PATTERNS+=('rm -rf *' 'fg=red,bold')
 
-# shellcheck source=./.fzf.zsh
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # https://stackoverflow.com/questions/6429515/stty-hupcl-ixon-ixoff
 # Disable CTRL-Z
@@ -240,4 +209,16 @@ fi
 
 if [[ -f ~/.nix-profile/etc/profile.d/nix.sh ]]; then
   . ~/.nix-profile/etc/profile.d/nix.sh
+fi
+
+
+
+if [[ -f "$HOME/.bash_aliases" ]]; then
+    # shellcheck source=.bash_aliases
+    source "$HOME/.bash_aliases"
+fi
+
+
+if [[ -f "$HOME/.sharedrc" ]]; then
+    source "$HOME/.sharedrc"
 fi

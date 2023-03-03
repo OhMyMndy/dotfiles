@@ -1,26 +1,21 @@
 #!/usr/bin/env bash
 
-if [[ -d ~/.config/nvim ]]; then
-  sudo chown vscode:vscode ~/.config/nvim
-fi
-
-
 ./install.sh
 
-if [[ -f /etc/fuse.conf ]]; then
-    sudo sed -i -E 's/#(user_allow_other)/\1/' /etc/fuse.conf
-fi
+# if [[ -f /etc/fuse.conf ]]; then
+#     sudo sed -i -E 's/#(user_allow_other)/\1/' /etc/fuse.conf
+# fi
 
 
-if ! mountpoint -q ~/docker-volumes; then
-  mkdir -p ~/docker-volumes
-  bindfs --force-user="$(id -u)" --force-group="$(id -g)" ~/docker-volumes ~/docker-volumes
-fi
+# if ! mountpoint -q ~/docker-volumes; then
+#   mkdir -p ~/docker-volumes
+#   bindfs --force-user="$(id -u)" --force-group="$(id -g)" ~/docker-volumes ~/docker-volumes
+# fi
 
 
-if [[ -d /workspace/dotfiles ]]; then
-  mv ~/dotfiles ~/dotfiles_
-  ln -sf /workspace/dotfiles ~/dotfiles
+if [[ -d /workspaces/dotfiles ]]; then
+  mv /home/vscode/dotfiles /home/vscode/dotfiles_
+  ln -sf /workspaces/dotfiles /home/vscode/dotfiles
 fi
 
 if [[ -d ~vscode/.ssh ]]; then

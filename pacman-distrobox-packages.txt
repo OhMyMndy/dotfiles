@@ -14,7 +14,3 @@ time
 util-linux
 wget
 vte-common
-mesa
-opengl-driver
-vulkan-intel
-vulkan-radeon

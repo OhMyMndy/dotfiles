@@ -1,4 +1,0 @@
-
-vim.opt.relativenumber = true
-
-

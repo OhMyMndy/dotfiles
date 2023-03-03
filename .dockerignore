@@ -1,5 +1,9 @@
-.git
+/.git
 .history
 *.log
 *.un~
 node_modules
+**/.cache
+# strip a lot of stuff from gvm go installs
+**/go/pkg
+**/go/src
