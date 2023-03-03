@@ -10,5 +10,11 @@ return {
       "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
       "MunifTanjim/nui.nvim",
     }
+  },
+  {
+    "nvim-treesitter/nvim-treesitter-context",
+    dependencies = {
+        "nvim-treesitter/nvim-treesitter"
+    }
   }
 }
