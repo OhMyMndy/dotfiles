@@ -9,7 +9,7 @@ export NVM_COMPLETION=true
 export NVM_DIR="$HOME/.nvm"
 # shellcheck source=.nvm/nvm.sh
 # shellcheck disable=SC1091
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" --no-use  # This loads nvm
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # This loads nvm
 
 # shellcheck source=.nvm/bash_completion
 # shellcheck disable=SC1091
@@ -19,4 +19,4 @@ export NVM_DIR="$HOME/.nvm"
 
 export GOPATH="$HOME/.go"
 
-export PATH="$HOME/.nix-profile/bin:$HOME/.local/bin:${KREW_ROOT:-$HOME/.krew}/bin:$HOME/.tfenv/bin:$HOME/.gvm/go/bin:$HOME/.garden/bin:$PATH"
+export PATH="$HOME/.nix-profile/bin:$HOME/.local/bin:${KREW_ROOT:-$HOME/.krew}/bin:$HOME/.tfenv/bin:$HOME/.gvm/go/bin:$HOME/.garden/bin:$PATH:$HOME/.cargo/bin"

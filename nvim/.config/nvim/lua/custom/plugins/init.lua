@@ -1,6 +1,9 @@
 vim.cmd([[ let g:neo_tree_remove_legacy_commands = 1 ]])
 return {
     {
+        "Mofiqul/dracula.nvim"
+    },
+    {
   "nvim-neo-tree/neo-tree.nvim",
     config = {
         branch = "v2.x",

@@ -116,7 +116,7 @@ require('lazy').setup({
     priority = 1000,
     lazy = false,
     config = function()
-      vim.cmd.colorscheme 'tokyonight-moon'
+      vim.cmd.colorscheme 'dracula'
     end,
   },
   { -- Set lualine as statusline
@@ -126,7 +126,7 @@ require('lazy').setup({
     opts = {
       options = {
         icons_enabled = true,
-        theme = 'tokyonight',
+        theme = 'dracula',
         component_separators = '|',
         section_separators = '',
       },

@@ -63,6 +63,7 @@ if [[ ! -d ~/.nvm ]]; then
 fi
 # install node lts
 nvm install --lts
+nvm alias default 'lts/*'
 
 if [[ ! -d ~/.tfenv ]]; then
     git clone --depth=1 https://github.com/tfutils/tfenv.git ~/.tfenv
@@ -85,6 +86,9 @@ if [[ ! -d ~/.garden/bin ]]; then
     curl -sL https://get.garden.io/install.sh | bash
 fi
 
+if [[ ! -d ~/.cargo ]]; then
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --quiet --no-modify-path -y
+fi
 
 if command -v apt-get &>/dev/null; then
     install_from_url https://raw.githubusercontent.com/wimpysworld/deb-get/main/deb-get deb-get

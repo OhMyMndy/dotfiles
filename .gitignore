@@ -29,3 +29,4 @@ tags
 *.env
 work-programs
 nohup.out
+nvim/.local
