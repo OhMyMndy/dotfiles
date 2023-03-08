@@ -116,32 +116,32 @@ require('lazy').setup({
     priority = 1000,
     lazy = false,
     config = function()
-      vim.cmd.colorscheme 'dracula'
+      vim.cmd.colorscheme 'noctis'
     end,
   },
   { -- Set lualine as statusline
     'nvim-lualine/lualine.nvim',
-    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    dependencies = { 'nvim-tree/nvim-web-devicons', 'kartikp10/noctis.nvim'},
     -- See `:help lualine.txt`
     opts = {
       options = {
         icons_enabled = true,
-        theme = 'dracula',
+        theme = 'noctis',
         component_separators = '|',
         section_separators = '',
       },
     },
   },
   {"folke/trouble.nvim",
-  dependencies = {"nvim-tree/nvim-web-devicons"},
-  opts = {
-    config = function()
-      require("trouble").setup {
-        -- your configuration comes here
-        -- or leave it empty to use the default settings
-        -- refer to the configuration section below
-      }
-    end
+    dependencies = {"nvim-tree/nvim-web-devicons"},
+    opts = {
+      config = function()
+        require("trouble").setup {
+          -- your configuration comes here
+          -- or leave it empty to use the default settings
+          -- refer to the configuration section below
+        }
+      end
     }
   },
   { -- Add indentation guides even on blank lines
@@ -453,17 +453,17 @@ capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 require('mason').setup({})
 
 mason_ensure_installed = {
-    "shellcheck",
-    "shellharden",
-    "shfmt",
-    "yamllint",
-    "marksman",
-    "markdownlint",
+  "shellcheck",
+  "shellharden",
+  "shfmt",
+  "yamllint",
+  "marksman",
+  "markdownlint",
 
-    "intelephense",
-    "phpstan",
+  "intelephense",
+  "phpstan",
 
-    "cspell"
+  "cspell"
 }
 
 -- @see https://github.com/NvChad/NvChad/blob/dc669313c1e3e4348c65d622734e57d7459b6f83/lua/plugins/configs/mason.lua
@@ -532,6 +532,32 @@ cmp.setup {
     { name = 'luasnip' },
   },
 }
+
+-- @see https://github.com/ThePrimeagen/init.lua/blob/master/lua/theprimeagen/remap.lua
+
+-- recenter after moving up/down next/previous search result
+vim.keymap.set("n", "<C-d>", "<C-d>zz")
+vim.keymap.set("n", "<C-u>", "<C-u>zz")
+vim.keymap.set("n", "n", "nzzzv")
+vim.keymap.set("n", "N", "Nzzzv")
+
+
+-- greatest remap ever
+vim.keymap.set("x", "<leader>p", [["_dP]])
+
+-- next greatest remap ever : asbjornHaland
+vim.keymap.set({"n", "v"}, "<leader>y", [["+y]])
+vim.keymap.set("n", "<leader>Y", [["+Y]])
+
+vim.keymap.set({"n", "v"}, "<leader>d", [["_d]])
+
+
+vim.keymap.set("n", "<leader>f", vim.lsp.buf.format)
+
+vim.keymap.set("n", "<C-k>", "<cmd>cnext<CR>zz")
+vim.keymap.set("n", "<C-j>", "<cmd>cprev<CR>zz")
+vim.keymap.set("n", "<leader>k", "<cmd>lnext<CR>zz")
+vim.keymap.set("n", "<leader>j", "<cmd>lprev<CR>zz")
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
