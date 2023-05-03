@@ -57,5 +57,4 @@ COPY --chown=vscode:vscode ./ /home/vscode/dotfiles
 RUN source ~/.nix-profile/etc/profile.d/nix.sh \
     && rm ~/.zshrc \
     && nix run . switch -- --flake .
-# RUN /home/vscode/dotfiles/install.sh
 

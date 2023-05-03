@@ -20,6 +20,8 @@
 
     ripgrep
     tree
+    jq
+    yq
 
     delta
 
