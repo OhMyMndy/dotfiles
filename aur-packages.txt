@@ -1,5 +1,0 @@
-waypoint-bin
-hadolint-bin
-xstow
-terraform-ls-bin
-terraform-lsp-bin
