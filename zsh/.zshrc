@@ -19,12 +19,6 @@ detect_os() {
 			# Older Debian/Ubuntu/etc.
 			OS=Debian
 			VER=$(cat /etc/debian_version)
-	elif [ -f /etc/SuSe-release ]; then
-			# Older SuSE/etc.
-			...
-	elif [ -f /etc/redhat-release ]; then
-			# Older Red Hat, CentOS, etc.
-			...
 	else
 			# Fall back to uname, e.g. "Linux <version>", also works for BSD, etc.
 			OS="$(uname -s)"
@@ -39,21 +33,21 @@ detect_os() {
 detect_os
 
 
-if [[ $commands[adb] ]]; then plugins+=(adb); fi
-if [[ $commands[nmap] ]]; then plugins+=(nmap); fi
-if [[ $commands[git] ]]; then plugins+=(git); fi
-if [[ $commands[docker] ]]; then plugins+=(docker); fi
-if [[ $commands[docker-compose] ]]; then plugins+=(docker-compose); fi
-if [[ $commands[vagrant] ]]; then plugins+=(vagrant); fi
-if [[ $commands[rsync] ]]; then plugins+=(rsync); fi
-if [[ $commands[sudo] ]]; then plugins+=(sudo); fi
-if [[ $commands[minikube] ]]; then
+if [[ ${commands[adb]} ]]; then plugins+=(adb); fi
+if [[ ${commands[nmap]} ]]; then plugins+=(nmap); fi
+if [[ ${commands[git]} ]]; then plugins+=(git); fi
+if [[ ${commands[docker]} ]]; then plugins+=(docker); fi
+if [[ ${commands[docker-compose]} ]]; then plugins+=(docker-compose); fi
+if [[ ${commands[vagrant]} ]]; then plugins+=(vagrant); fi
+if [[ ${commands[rsync]} ]]; then plugins+=(rsync); fi
+if [[ ${commands[sudo]} ]]; then plugins+=(sudo); fi
+if [[ ${commands[minikube]} ]]; then
     source <(minikube completion zsh)
 fi
-if [[ $commands[kubectl] ]]; then
+if [[ ${commands[kubectl]} ]]; then
     source <(kubectl completion zsh)
 fi
-if [[ $commands[k3d] ]]; then
+if [[ ${commands[k3d]} ]]; then
     source <(k3d completion zsh)
 fi
 # plugins+=(zsh-completions)
@@ -66,7 +60,7 @@ zstyle ':notify:*' success-title "Command finished (in #{time_elapsed} seconds)"
 zstyle :omz:plugins:ssh-agent agent-forwarding on
 
 
-if [[ $commands[dircolors] ]] && [[ -f ~/.dircolors ]]; then
+if [[ ${commands[dircolors]} ]] && [[ -f ~/.dircolors ]]; then
     eval "$(dircolors ~/.dircolors)";
 fi
 
@@ -81,9 +75,9 @@ alias rcp='rsync -ahrt --info progress2'
 alias rmv='rsync -ahrt --info progress2 --remove-sent-files'
 
 
-if [[ $commands[thefuck] ]]; then eval "$(thefuck --alias)"; fi
+if [[ ${commands[thefuck]} ]]; then eval "$(thefuck --alias)"; fi
 
-if [[ $commands[pbcopy] ]]; then
+if [[ ${commands[pbcopy]} ]]; then
     alias pbcopy='xsel --clipboard --input'
     alias pbpaste='xsel --clipboard --output'
 fi
@@ -119,8 +113,11 @@ export DOCKER_BUILDKIT=1
 export BUILDKIT_INLINE_CACHE=1
 
 # export IP_ADDRESS=$(ip_address)
-export HOSTNAME="$(hostname)"
-export USER="$(whoami)"
+HOSTNAME="$(hostname)"
+USER="$(whoami)"
+
+export HOSTNAME
+export USER
 
 # ssh-agent omzsh should do the same
 if [[ $OS = 'Linux' ]] && command -v ssh-agent &>/dev/null; then
@@ -149,7 +146,7 @@ bindkey '^H' backward-kill-word
 bindkey '5~' kill-word
 eval "$(direnv hook zsh)"
 
-if [[ $commands[fd] ]]; then
+if [[ ${commands[fd]} ]]; then
     export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --exclude node_modules --exclude vendor --exclude .mypy-cache'
 fi
 
