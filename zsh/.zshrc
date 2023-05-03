@@ -1,7 +1,3 @@
-export ZSH=$HOME/.oh-my-zsh
-export ZSH_THEME="mandy"
-
-
 
 detect_os() {
 	## OS and Architecture
@@ -43,29 +39,6 @@ detect_os() {
 detect_os
 
 
-plugins=(
-    colored-man-pages
-    command-not-found
-    cp # This plugin defines a cpv function that uses rsync so that you get the features and security of this command.
-    extract
-    # fzf-tab
-    z
-    # zsh-autosuggestions
-    # zsh-syntax-highlighting
-)
-
-zstyle ':completion:*:make::' tag-order targets
-zstyle ':completion:*' special-dirs false
-
-
-if [ "$OS" = "Ubuntu" ]; then
-    plugins+=(ubuntu)
-elif [ "$OS" = "Arch Linux" ]; then
-    plugins+=(archlinux)
-elif [ "$OS" = "Fedora" ]; then
-    plugins+=(fedora)
-fi
-
 if [[ $commands[adb] ]]; then plugins+=(adb); fi
 if [[ $commands[nmap] ]]; then plugins+=(nmap); fi
 if [[ $commands[git] ]]; then plugins+=(git); fi
@@ -83,11 +56,6 @@ fi
 if [[ $commands[k3d] ]]; then
     source <(k3d completion zsh)
 fi
-if [[ $OS = 'Linux' ]]; then 
-#    plugins+=(notify)
-    plugins+=(systemd) # The systemd plugin provides many useful aliases for systemd. https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins/systemd);
-fi
-
 # plugins+=(zsh-completions)
 
 
@@ -96,12 +64,6 @@ zstyle ':notify:*' success-title "Command finished (in #{time_elapsed} seconds)"
 
 
 zstyle :omz:plugins:ssh-agent agent-forwarding on
-
-if [[ -f $HOME/.oh-my-zsh/oh-my-zsh.sh ]]; then
-    # shellcheck source=./.oh-my-zsh/oh-my-zsh.sh
-    # shellcheck disable=SC1094
-    source "$HOME/.oh-my-zsh/oh-my-zsh.sh"
-fi
 
 
 if [[ $commands[dircolors] ]] && [[ -f ~/.dircolors ]]; then
@@ -180,13 +142,12 @@ if [[ $OS = Darwin ]]; then
     export DISPLAY="$HOSTNAME:0"
 fi
 
-
-# bindkey  "^[[1~"   beginning-of-line
-# bindkey  "^[[4~"   end-of-line
-
+bindkey  "^[[H"   beginning-of-line    
+bindkey  "^[[F"   end-of-line    
 # Make ctrl+backpace and ctrl+delete work in zsh
 bindkey '^H' backward-kill-word
 bindkey '5~' kill-word
+eval "$(direnv hook zsh)"
 
 if [[ $commands[fd] ]]; then
     export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --exclude node_modules --exclude vendor --exclude .mypy-cache'

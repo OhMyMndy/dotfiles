@@ -13,7 +13,6 @@
 # fi
 
 # see: https://discourse.nixos.org/t/github-codespace-support/27152/3
-sudo chmod +x setfacl
 sudo chmod 1777 /tmp/
 sudo setfacl  --remove-default  /tmp
 
@@ -32,9 +31,9 @@ fi
 
 
 # Status 2 means error connecting to agent
-if ! ssh-add -l 2>/dev/null; then
-    eval "$(ssh-agent)"
-fi
+# if ! ssh-add -l 2>/dev/null; then
+#     eval "$(ssh-agent)"
+# fi
 
 if command -v podman &>/dev/null; then
     sudo "$(which podman)" image trust set -t reject default

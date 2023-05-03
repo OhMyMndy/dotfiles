@@ -191,7 +191,7 @@
         "gitpod.remote.useLocalApp": false,
         "redhat.telemetry.enabled": true
       },
-      "postCreateCommand": "./.devcontainer/entrypoint.sh echo done",
+      "postStartCommand": "./.devcontainer/entrypoint.sh echo done",
       "extensions": [
         "ms-python.python",
         "formulahenry.code-runner",

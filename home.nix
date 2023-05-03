@@ -1,7 +1,9 @@
+# see: https://juliu.is/tidying-your-home-with-nix/
+
 { pkgs, ... }: {
   home.username = "vscode";
   home.homeDirectory = "/home/vscode";
-  home.stateVersion = "22.11"; # To figure this out you can comment out the line and see what version it expected.
+  home.stateVersion = "22.11";
   programs.home-manager.enable = true;
   home.packages = with pkgs; [
     # sudo $(which podman) image trust set -t reject default
@@ -13,17 +15,55 @@
     hadolint
     shellcheck
 
-    git
-    tig
-    tmux
 
+    tig
+
+    ripgrep
+    tree
+
+    delta
 
     nixpkgs-fmt
   ];
 
-  programs.neovim = {
+
+  programs.git = {
     enable = true;
   };
+
+  programs.fzf = {
+    enable = true;
+  };
+
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;
+  };
+
+  programs.neovim = {
+    enable = true;
+    plugins = with pkgs; [
+      vimPlugins.nvim-treesitter
+      vimPlugins.nvim-treesitter-context
+      vimPlugins.vim-nix
+      vimPlugins.nvim-lastplace
+      vimPlugins.nvim-lspconfig
+      vimPlugins.nvim-cmp
+      vimPlugins.cmp-path
+      vimPlugins.vim-commentary
+      vimPlugins.lsp-zero-nvim
+      vimPlugins.cmp-nvim-lsp
+    ];
+
+    extraLuaConfig = builtins.readFile ./nvim/config.lua;
+  };
+
+  programs.tmux = {
+    enable = true;
+    clock24 = true;
+    extraConfig = builtins.readFile ./tmux/.tmux.conf;
+  };
+
   programs.zsh = {
     enable = true;
     oh-my-zsh = {
@@ -33,11 +73,7 @@
       ];
       theme = "robbyrussell";
     };
-    initExtra = ''    
-      bindkey  "^[[H"   beginning-of-line    
-      bindkey  "^[[F"   end-of-line    
-      eval "$(direnv hook zsh)"    
-    '';
+    initExtra = builtins.readFile ./zsh/.zshrc;
 
   };
 }
