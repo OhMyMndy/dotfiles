@@ -9,7 +9,7 @@
     "source=${localEnv:HOME}${localEnv:USERPROFILE},target=/host-home-folder,type=bind,consistency=cached",
     "source=${localWorkspaceFolderBasename}-extensions,target=/home/vscode/.vscode-server/extensions,type=volume,consistency=cached",
     "source=${localWorkspaceFolderBasename}-extensions-insiders,target=/home/vscode/.vscode-server-insiders/extensions,type=volume,consistency=cached",
-    "source=${localWorkspaceFolderBasename}-nvim,target=/home/vscode/.config/nvim,type=volume,consistency=cached"
+    "source=${localWorkspaceFolderBasename}-nix,target=/nix,type=volume,consistency=cached"
   ],
   // "workspaceFolder": "/home/vscode/dotfiles",
   "updateRemoteUserUID": true,
@@ -202,15 +202,16 @@
         "timonwong.shellcheck",
         "bbenoist.Nix",
         "vscodevim.vim",
-        "JulianIaquinandi.nvim-ui-modifier"
+        "JulianIaquinandi.nvim-ui-modifier",
+        "usernamehw.errorlens"
       ]
     }
   },
   "features": {
-    "docker-in-docker": {
-      "version": "latest",
-      "moby": true,
-      "dockerDashComposeVersion": "v1"
-    }
+    // "docker-in-docker": {
+    //   "version": "latest",
+    //   "moby": true,
+    //   "dockerDashComposeVersion": "v2"
+    // }
   }
 }
