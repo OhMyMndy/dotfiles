@@ -14,6 +14,7 @@
 
     hadolint
     shellcheck
+    shfmt
 
 
     tig

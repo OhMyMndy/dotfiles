@@ -203,7 +203,8 @@
         "bbenoist.Nix",
         "vscodevim.vim",
         "JulianIaquinandi.nvim-ui-modifier",
-        "usernamehw.errorlens"
+        "usernamehw.errorlens",
+        "mkhl.shfmt"
       ]
     }
   },
