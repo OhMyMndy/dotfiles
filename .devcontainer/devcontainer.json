@@ -1,9 +1,5 @@
 {
   "name": "${localWorkspaceFolderBasename}",
-  "build": {
-    "dockerfile": "./Dockerfile",
-    "context": "../"
-  },
   "remoteUser": "vscode",
   "mounts": [
     "source=${localEnv:HOME}${localEnv:USERPROFILE},target=/host-home-folder,type=bind,consistency=cached",
@@ -191,7 +187,6 @@
         "gitpod.remote.useLocalApp": false,
         "redhat.telemetry.enabled": true
       },
-      "postStartCommand": "./.devcontainer/entrypoint.sh echo done",
       "extensions": [
         "ms-python.python",
         "formulahenry.code-runner",
