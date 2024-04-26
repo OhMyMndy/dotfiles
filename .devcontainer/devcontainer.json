@@ -1,10 +1,6 @@
 {
   "name": "${localWorkspaceFolderBasename}",
-  "build": {
-    "dockerfile": "./Dockerfile",
-    "context": "../"
-  },
-  "remoteUser": "vscode",
+
   "mounts": [
     "source=${localEnv:HOME}${localEnv:USERPROFILE},target=/host-home-folder,type=bind,consistency=cached",
     "source=${localWorkspaceFolderBasename}-extensions,target=/home/vscode/.vscode-server/extensions,type=volume,consistency=cached",
@@ -13,11 +9,6 @@
   ],
   // "workspaceFolder": "/home/vscode/dotfiles",
   "updateRemoteUserUID": true,
-  "runArgs": [
-    "--cap-add=SYS_ADMIN",
-    "--device=/dev/fuse",
-    "--privileged"
-  ],
   "customizations": {
     "vscode": {
       "settings": {
@@ -209,10 +200,10 @@
     }
   },
   "features": {
-    // "docker-in-docker": {
-    //   "version": "latest",
-    //   "moby": true,
-    //   "dockerDashComposeVersion": "v2"
-    // }
+    "docker-in-docker": {
+       "version": "20.10",
+       "moby": true,
+       "dockerDashComposeVersion": "v2"
+   }
   }
 }
