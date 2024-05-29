@@ -1,9 +1,0 @@
-[Desktop Entry]
-Version=0.9.4
-Type=Application
-Name=Quicktile
-Comment=
-Exec=quicktile --daemonize
-StartupNotify=false
-Terminal=false
-Hidden=false
