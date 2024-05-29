@@ -1,6 +1,12 @@
+/* cSpell:disable */
 {
   "name": "${localWorkspaceFolderBasename}",
-
+  "build": {
+    "dockerfile": "./Dockerfile",
+    "context": "../"
+  },
+  "remoteUser": "vscode",
+  "postStartCommand": "./.devcontainer/entrypoint.sh",
   "mounts": [
     "source=${localEnv:HOME}${localEnv:USERPROFILE},target=/host-home-folder,type=bind,consistency=cached",
     "source=${localWorkspaceFolderBasename}-extensions,target=/home/vscode/.vscode-server/extensions,type=volume,consistency=cached",
@@ -9,6 +15,11 @@
   ],
   // "workspaceFolder": "/home/vscode/dotfiles",
   "updateRemoteUserUID": true,
+  "runArgs": [
+    "--cap-add=SYS_ADMIN",
+    "--device=/dev/fuse",
+    "--privileged"
+  ],
   "customizations": {
     "vscode": {
       "settings": {
@@ -176,7 +187,7 @@
         // Controls the delay in ms after which quick suggestions will show up.
         "editor.quickSuggestionsDelay": 10,
         // Enable word based suggestions
-        "editor.wordBasedSuggestions": false,
+        "editor.wordBasedSuggestions": "off",
         "vim.smartRelativeLine": true,
         "excalidraw.theme": "light",
         "gitpod.remote.useLocalApp": false,
@@ -200,10 +211,10 @@
     }
   },
   "features": {
-    "docker-in-docker": {
-       "version": "20.10",
-       "moby": true,
-       "dockerDashComposeVersion": "v2"
-   }
+    // "docker-in-docker": {
+    //   "version": "latest",
+    //   "moby": true,
+    //   "dockerDashComposeVersion": "v2"
+    // }
   }
 }
