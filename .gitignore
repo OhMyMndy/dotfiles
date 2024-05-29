@@ -30,3 +30,4 @@ tags
 work-programs
 nohup.out
 nvim/.local
+/host.nix
