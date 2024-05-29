@@ -1,11 +1,6 @@
-FROM mcr.microsoft.com/vscode/devcontainers/base:ubuntu-22.04 as base
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+FROM mcr.microsoft.com/vscode/devcontainers/base:ubuntu-24.04 as base
 
 USER root
-
-# RUN apt-get update && apt-get upgrade -y && \
-#     apt-get autoclean && \
-#     rm -rf /var/lib/apt/lists/* /var/tmp/* /tmp/*
 
 RUN passwd -d vscode && chsh -s /bin/zsh vscode
 
@@ -14,7 +9,13 @@ RUN apt-get update && \
     apt-get install --no-install-recommends -y \
     curl \
     uidmap \
-    acl && \
+    acl \
+    podman \
+    slirp4netns \
+    fuse-overlayfs \
+    podman-docker \
+    podman-toolbox \
+    && \
     apt-get autoclean && \
     rm -rf \
     /var/lib/apt/lists/* \
@@ -34,27 +35,17 @@ RUN mkdir --parents /etc/nix/ && \
     echo "trusted-substituters = https://cache.nixos.org/ https://composable-community.cachix.org/ https://devenv.cachix.org/ https://nix-community.cachix.org/" >> /etc/nix/nix.conf
 
 # Podman uid/gid
-RUN echo "vscode:100000:64535" > /etc/subuid /etc/subgid
+RUN echo "vscode:100000:64535" | tee /etc/subuid /etc/subgid >/dev/null
 
 USER vscode
 ENV USER=vscode
 
-RUN sh <(curl -L https://nixos.org/nix/install) --no-daemon
+RUN curl -SsL https://nixos.org/nix/install -o /tmp/install.sh && sh /tmp/install.sh --no-daemon && rm -f /tmp/install.sh
 RUN mkdir -p ~/.config/nix && echo "experimental-features = nix-command flakes" > ~/.config/nix/nix.conf
 
 
-RUN echo "source ~/.nix-profile/etc/profile.d/nix.sh" >> ~/.bashrc && \
-    echo "source ~/.nix-profile/etc/profile.d/nix.sh" >> ~/.profile && \
-    echo "source ~/.nix-profile/etc/profile.d/nix.sh" >> ~/.bash_profile && \
-    echo "source ~/.nix-profile/etc/profile.d/nix.sh" >> ~/.zshrc
+RUN echo "source ~/.nix-profile/etc/profile.d/nix.sh" | tee -a ~/.bashrc ~/.profile ~/.profile ~/.zshrc >/dev/null
+
 
 RUN mkdir -p /home/vscode/.vscode-server/extensions /home/vscode/.vscode-server-insiders/extensions \
     && chown -R vscode /home/vscode/.vscode-server /home/vscode/.vscode-server-insiders
-
-COPY --chown=vscode:vscode ./ /home/vscode/dotfiles
-
-# see: https://github.com/ComposableFi/composable/blob/15eb5029ca32fb3ded71f47d2544285c9695a6b0/Dockerfile
-RUN source ~/.nix-profile/etc/profile.d/nix.sh \
-    && rm ~/.zshrc \
-    && nix run . switch -- --flake .
-
