@@ -4,10 +4,13 @@
 ---@type LazySpec
 return {
   {
-    "nvim-treesitter/nvim-treesitter-context",
-    lazy = false,
-    opts = {
-      mode = "topline",
-    },
-  },
+    "nvim-telescope/telescope-frecency.nvim",
+    config = function()
+      require("telescope").load_extension "frecency"
+      -- I don't use find register
+      vim.keymap.set("n", "<Leader>fr", function()
+        require("telescope").extensions.frecency.frecency {}
+      end)
+    end,
+  }
 }
