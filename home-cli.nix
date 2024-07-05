@@ -1,5 +1,5 @@
 # see: https://juliu.is/tidying-your-home-with-nix/
-{ pkgs, username, ... }: {
+{ pkgs, config, username, ... }: {
   home.username = username; #(builtins.getEnv "USER");
   home.homeDirectory = "/home/${username}"; #./. + (builtins.getEnv "HOME");
   home.stateVersion = "22.11";
@@ -38,22 +38,22 @@
 
     python3
 
-    php82
-    php82Extensions.curl 
-    php82Extensions.imagick 
-    php82Extensions.opcache 
-    php82Extensions.redis 
-    php82Extensions.pdo_mysql 
-    php82Extensions.pdo 
-    php82Extensions.mysqlnd
-    php82Extensions.openssl 
-    php82Extensions.posix 
-    php82Extensions.sodium 
-    php82Extensions.sockets 
-    php82Extensions.zip 
-    php82Extensions.yaml 
-    php82Extensions.xdebug
-    php82Packages.composer
+#    php82
+#    php82Extensions.curl 
+#    php82Extensions.imagick 
+#    php82Extensions.opcache 
+#    php82Extensions.redis 
+#    php82Extensions.pdo_mysql 
+#    php82Extensions.pdo 
+#    php82Extensions.mysqlnd
+#    php82Extensions.openssl 
+#    php82Extensions.posix 
+#    php82Extensions.sodium 
+#    php82Extensions.sockets 
+#    php82Extensions.zip 
+#    php82Extensions.yaml 
+#    php82Extensions.xdebug
+#    php82Packages.composer
       
     
 
@@ -76,26 +76,22 @@
   programs.neovim = {
     enable = true;
     plugins = with pkgs; [
-      vimPlugins.nvim-treesitter
-      vimPlugins.nvim-treesitter-context
-      vimPlugins.vim-nix
-      vimPlugins.nvim-lastplace
-      vimPlugins.nvim-lspconfig
-      vimPlugins.nvim-cmp
-      vimPlugins.cmp-path
-      vimPlugins.vim-commentary
-      vimPlugins.lsp-zero-nvim
-      vimPlugins.cmp-nvim-lsp
+
     ];
 
   };
+
+#  home.file.".config/nvim/lazy-lock.json" = {
+#    source = config.lib.file.mkOutOfStoreSymlink ./.config/nvim/lazy-lock.json;
+#  };
+    
+
   home.file.".config/nvim" = {
     source = ./. + "/.config/nvim";
     recursive = true;
   };
 
-  # todo .zshrc
-  # todo .oh-my-zsh
+
 
   home.file.".bashrc" = {
     source = ./. + "/.bashrc";
