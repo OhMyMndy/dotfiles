@@ -38,9 +38,9 @@
             username = "mandy";
           };
         };
-        "mandy_schoep" = home-manager.lib.homeManagerConfiguration {
+        "cloud_shell" = home-manager.lib.homeManagerConfiguration {
           pkgs = nixpkgs.legacyPackages.x86_64-linux;
-          modules = [ ./home-cli.nix ];
+          modules = [ ./home-cli-minimal.nix ];
           extraSpecialArgs = {
             username = "mandy_schoep";
           };
