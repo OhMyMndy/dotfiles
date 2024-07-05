@@ -31,7 +31,7 @@
     python3
 
 
-    terraform
+    terraform.withPlugins (p: [ ])
     google-cloud-sdk
   ];
 
