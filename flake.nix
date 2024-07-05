@@ -38,6 +38,20 @@
             username = "mandy";
           };
         };
+        "mandy_schoep" = home-manager.lib.homeManagerConfiguration {
+          pkgs = nixpkgs.legacyPackages.x86_64-linux;
+          modules = [ ./home-cli.nix ];
+          extraSpecialArgs = {
+            username = "mandy_schoep";
+          };
+        };
+        "mschoep" = home-manager.lib.homeManagerConfiguration {
+          pkgs = nixpkgs.legacyPackages.x86_64-linux;
+          modules = [ ./home-cli.nix ];
+          extraSpecialArgs = {
+            username = "mschoep";
+          };
+        };
         "gui" = home-manager.lib.homeManagerConfiguration {
           pkgs = nixpkgs.legacyPackages.x86_64-linux;
           modules = [ ./home-cli.nix ./home-gui.nix ];
