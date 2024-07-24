@@ -1,4 +1,4 @@
-{ pkgs, ... }: {
+{ pkgs, config, username, ... }: {
   fonts.fontconfig.enable = true;
 
   home.packages = with pkgs; [
