@@ -26,5 +26,6 @@ if command -v podman &>/dev/null; then
 
 fi
 
+ln -sf "$PWD" ~/dotfiles
 
 exec "$@"

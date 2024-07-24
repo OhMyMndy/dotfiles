@@ -22,6 +22,8 @@ RUN apt-get update && \
     /var/tmp/* \
     /tmp/*
 
+RUN touch /etc/containers/nodocker
+
 RUN mkdir -m 0755 /nix && chown vscode:vscode /nix
 RUN mkdir --parents /etc/nix/ && \
     echo "sandbox = false" >> /etc/nix/nix.conf && \
@@ -35,7 +37,7 @@ RUN mkdir --parents /etc/nix/ && \
     echo "trusted-substituters = https://cache.nixos.org/ https://composable-community.cachix.org/ https://devenv.cachix.org/ https://nix-community.cachix.org/" >> /etc/nix/nix.conf
 
 # Podman uid/gid
-RUN echo "vscode:100000:64535" | tee /etc/subuid /etc/subgid >/dev/null
+RUN echo "vscode:100000:65536" | tee /etc/subuid /etc/subgid >/dev/null
 
 USER vscode
 ENV USER=vscode
@@ -44,8 +46,22 @@ RUN curl -SsL https://nixos.org/nix/install -o /tmp/install.sh && sh /tmp/instal
 RUN mkdir -p ~/.config/nix && echo "experimental-features = nix-command flakes" > ~/.config/nix/nix.conf
 
 
-RUN echo "source ~/.nix-profile/etc/profile.d/nix.sh" | tee -a ~/.bashrc ~/.profile ~/.profile ~/.zshrc >/dev/null
+RUN echo ". ~/.nix-profile/etc/profile.d/nix.sh" | tee -a ~/.bashrc ~/.profile ~/.profile ~/.zshrc >/dev/null
 
 
-RUN mkdir -p /home/vscode/.vscode-server/extensions /home/vscode/.vscode-server-insiders/extensions \
-    && chown -R vscode /home/vscode/.vscode-server /home/vscode/.vscode-server-insiders
+RUN mkdir -p ~/.vscode-server/extensions ~/.vscode-server-insiders/extensions \
+    && chown -R vscode ~/.vscode-server ~/.vscode-server-insiders
+
+FROM base as home-manager
+
+RUN mkdir -p ~/dotfiles
+COPY --chown=vscode:vscode . /home/vscode/dotfiles
+
+RUN ls -lash ~/dotfiles
+RUN bash -c ". ~/.nix-profile/etc/profile.d/nix.sh && cd ~/dotfiles && nix run .#just"
+
+# TODO run mason install
+RUN bash -c ". ~/.nix-profile/etc/profile.d/nix.sh && nvim --headless +q && nvim --headless +AstroMasonUpdateAll"
+
+
+FROM base as devcontainer

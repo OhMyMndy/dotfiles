@@ -1,0 +1,9 @@
+services:
+  nginx:
+    image: nginx
+    volumes:
+      - nginx-config:/etc/nginx
+
+
+volumes:
+  nginx-config:

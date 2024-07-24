@@ -10,6 +10,6 @@ return {
   { import = "astrocommunity.diagnostics.trouble-nvim"},
   { import = "astrocommunity.colorscheme.catppuccin" },
   { import = "astrocommunity.colorscheme.tokyonight-nvim" },
-  { import = "astrocommunity.neovim-lua-development.lazydev-nvim"}
+  -- { import = "astrocommunity.neovim-lua-development.lazydev-nvim"}
   -- import/override with your plugins folder
 }
