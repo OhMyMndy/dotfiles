@@ -7,3 +7,5 @@ node_modules
 # strip a lot of stuff from gvm go installs
 **/go/pkg
 **/go/src
+Dockerfile
+.devcontainer

@@ -47,7 +47,7 @@
         };
         "cloud_shell" = home-manager.lib.homeManagerConfiguration {
           pkgs = nixpkgs.legacyPackages.x86_64-linux;
-          modules = [ ./home-cli-minimal.nix ];
+          modules = [ ./home-cli.nix ];
           extraSpecialArgs = {
             username = "mandy_schoep";
           };

@@ -16,9 +16,9 @@
   // "workspaceFolder": "/home/vscode/dotfiles",
   "updateRemoteUserUID": true,
   "runArgs": [
-    "--cap-add=SYS_ADMIN",
-    "--device=/dev/fuse",
-    "--privileged"
+    // "--cap-add=SYS_ADMIN",
+    "--device=/dev/fuse"
+    // "--privileged"
   ],
   "customizations": {
     "vscode": {

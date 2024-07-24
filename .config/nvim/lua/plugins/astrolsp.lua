@@ -1,4 +1,4 @@
-if true then return {} end -- WARN: REMOVE THIS LINE TO ACTIVATE THIS FILE
+-- if true then return {} end -- WARN: REMOVE THIS LINE TO ACTIVATE THIS FILE
 
 -- AstroLSP allows you to customize the features in AstroNvim's LSP configuration engine
 -- Configuration documentation can be found with `:h astrolsp`
@@ -39,8 +39,27 @@ return {
       -- end
     },
     -- enable servers that you already have installed without mason
+    -- SEE: https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
     servers = {
-      -- "pyright"
+      "ruff_lsp", -- python
+      "bashls",
+      "clangd",
+      "nil_ls", -- nix lsp
+      "yamlls",
+      "terraformls",
+      "tflint",
+      "htmx",
+      "gopls",
+      "dockerls",
+      "lua_ls",
+      "tsserver",
+      "ansiblels",
+      "html",
+      "jsonls",
+      "ruby_lsp",
+      "rust_analyzer",
+      "taplo",
+      "dartls"
     },
     -- customize language server configuration options passed to `lspconfig`
     ---@diagnostic disable: missing-fields
