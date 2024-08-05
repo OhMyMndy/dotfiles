@@ -5,24 +5,8 @@
 ---@type LazySpec
 return {
   "nvim-treesitter/nvim-treesitter",
+  -- dev = true,
   opts = {
-    ensure_installed = {
-      -- "bash",
-      -- "dart",
-      -- "dockerfile",
-      -- "go",
-      -- "hcl",
-      -- "helm",
-      -- "javascript",
-      -- "json",
-      -- "lua",
-      -- "python",
-      -- "rust",
-      -- "toml",
-      -- "typescript",
-      -- "vim",
-      -- "yaml",
-    },
+    ensure_installed = {},
   },
 }
-
