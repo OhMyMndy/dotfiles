@@ -1,5 +1,5 @@
 # see: https://juliu.is/tidying-your-home-with-nix/
-{ pkgs, config, username, ... }: 
+{ pkgs, config, username, lib, ... }: 
 
 let newTerraform = pkgs.terraform.overrideAttrs (old: {
   #plugins = [];
@@ -17,6 +17,7 @@ treesitterWithGrammars = (pkgs.vimPlugins.nvim-treesitter.withPlugins (p: [
     p.gomod
     p.gowork
     p.hcl
+    p.html
     p.javascript
     p.jq
     p.json5
@@ -48,8 +49,11 @@ in {
   home.homeDirectory = "/home/${username}"; #./. + (builtins.getEnv "HOME");
   home.stateVersion = "22.11";
   programs.home-manager.enable = true;
-  nixpkgs.config.allowUnfree = true;
   home.packages = with pkgs; [
+
+    tmux
+    zellij
+
     distrobox
     k3s
 
@@ -57,8 +61,10 @@ in {
     shellcheck
     shfmt
 
-
+    git
     tig
+    gh
+    gitkraken
 
     ripgrep
     fd
@@ -66,6 +72,8 @@ in {
     jq
     yq
     fzf
+    eza
+    just
 
     delta
 
@@ -85,6 +93,7 @@ in {
 
     nodePackages_latest.bash-language-server
     ruff-lsp # python lsp
+    pyright
     clang-tools_18 # clangd
     yaml-language-server
     nil # nix language server
@@ -102,7 +111,7 @@ in {
     
     rubyPackages_3_3.ruby-lsp
     rust-analyzer
-    taplo
+    taplo # TOML LSP
     dart
 
 #    php82
@@ -142,6 +151,7 @@ in {
 
   programs.neovim = {
     enable = true;
+    package = pkgs.neovim-unwrapped;
     plugins = [
       treesitterWithGrammars
     ];
@@ -153,12 +163,22 @@ in {
 #    source = config.lib.file.mkOutOfStoreSymlink ./.config/nvim/lazy-lock.json;
 #  };
     
-
+  home.activation.setupGit = lib.hm.dag.entryAfter [ "installPackages" ] ''
+    ${pkgs.git}/bin/git config --global include.path ".gitconfig-delta"
+  '';
   home.file.".config/nvim" = {
     source = config.lib.file.mkOutOfStoreSymlink  "${config.home.homeDirectory}/dotfiles/.config/nvim";
     recursive = true;
   };
 
+  home.file.".config/fish" = {
+    source = config.lib.file.mkOutOfStoreSymlink  "${config.home.homeDirectory}/dotfiles/.config/fish";
+    recursive = true;
+  };
+
+  home.file.".gitconfig-delta" = {
+    source = config.lib.file.mkOutOfStoreSymlink  "${config.home.homeDirectory}/dotfiles/.gitconfig-delta";
+  };
   # Treesitter is configured as a locally developed module in lazy.nvim
   # we hardcode a symlink here so that we can refer to it in our lazy config
   # SEE: https://github.com/Kidsan/nixos-config/blob/main/home/programs/neovim/default.nix
@@ -166,6 +186,10 @@ in {
     recursive = true;
     source = treesitterWithGrammars;
   };
+
+  home.file."./.config/nvim/lua/treesitter_config.lua".text = ''
+    vim.opt.runtimepath:prepend("${treesitter-parsers}")
+  '';
 
   home.file.".bashrc" = {
     source = ./. + "/.bashrc";
