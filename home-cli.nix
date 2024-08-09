@@ -46,7 +46,7 @@ treesitterWithGrammars = (pkgs.vimPlugins.nvim-treesitter.withPlugins (p: [
 
 in {
   home.username = username; #(builtins.getEnv "USER");
-  home.homeDirectory = "/home/${username}"; #./. + (builtins.getEnv "HOME");
+  home.homeDirectory = (builtins.getEnv "HOME");
   home.stateVersion = "22.11";
   programs.home-manager.enable = true;
   home.packages = with pkgs; [
@@ -166,9 +166,12 @@ in {
 #  };
     
   home.activation.setupGit = lib.hm.dag.entryAfter [ "installPackages" ] ''
-    cd "$HOME"
+    (cd "$HOME"
     touch ".gitconfig"
-    ${pkgs.git}/bin/git config --global include.path ".gitconfig-delta"
+    ${pkgs.git}/bin/git config --global include.path ".gitconfig-delta")
+    mkdir -p .config/nvim/lua
+    echo "vim.opt.runtimepath:prepend(\"${treesitter-parsers}\")" > ~/.config/nvim/lua/treesitter_config.lua
+    # ln -s .config/nvim/lua/treesitter_config.lua ~/.config/nvim/lua/treesitter_config.lua
   '';
 
 
@@ -188,10 +191,7 @@ in {
     source = treesitterWithGrammars;
   };
 
-  home.file."./.config/nvim/lua/treesitter_config.lua".text = ''
-    vim.opt.runtimepath:prepend("${treesitter-parsers}")
-  '';
-  home.file.".config/nvim" = {
+  home.file."./.config/nvim" = {
     source = config.lib.file.mkOutOfStoreSymlink  "${config.home.homeDirectory}/dotfiles/.config/nvim";
     recursive = true;
   };
