@@ -166,6 +166,7 @@ in {
 #  };
     
   home.activation.setupGit = lib.hm.dag.entryAfter [ "installPackages" ] ''
+    cd "$HOME"
     ${pkgs.git}/bin/git config --global include.path ".gitconfig-delta"
   '';
   home.file.".config/nvim" = {
