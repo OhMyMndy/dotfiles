@@ -77,8 +77,10 @@ in {
 
     delta
 
+    nmap
     thefuck
 
+    libsecret
 
     nixpkgs-fmt
 
