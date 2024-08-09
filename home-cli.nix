@@ -171,7 +171,9 @@ in {
     ${pkgs.git}/bin/git config --global include.path ".gitconfig-delta")
     mkdir -p .config/nvim/lua
     echo "vim.opt.runtimepath:prepend(\"${treesitter-parsers}\")" > ~/.config/nvim/lua/treesitter_config.lua
-    # ln -s .config/nvim/lua/treesitter_config.lua ~/.config/nvim/lua/treesitter_config.lua
+    if [ ! -f ~/.config/nvim/lua/treesitter_config.lua ]; then
+      ln -s .config/nvim/lua/treesitter_config.lua ~/.config/nvim/lua/treesitter_config.lua
+    fi
   '';
 
 
