@@ -8,5 +8,6 @@ return {
   -- dev = true,
   opts = {
     ensure_installed = {},
+    auto_install = false,
   },
 }
