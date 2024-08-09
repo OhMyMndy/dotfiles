@@ -167,12 +167,10 @@ in {
     
   home.activation.setupGit = lib.hm.dag.entryAfter [ "installPackages" ] ''
     cd "$HOME"
+    touch ".gitconfig"
     ${pkgs.git}/bin/git config --global include.path ".gitconfig-delta"
   '';
-  home.file.".config/nvim" = {
-    source = config.lib.file.mkOutOfStoreSymlink  "${config.home.homeDirectory}/dotfiles/.config/nvim";
-    recursive = true;
-  };
+
 
   home.file.".config/fish" = {
     source = config.lib.file.mkOutOfStoreSymlink  "${config.home.homeDirectory}/dotfiles/.config/fish";
@@ -193,7 +191,10 @@ in {
   home.file."./.config/nvim/lua/treesitter_config.lua".text = ''
     vim.opt.runtimepath:prepend("${treesitter-parsers}")
   '';
-
+  home.file.".config/nvim" = {
+    source = config.lib.file.mkOutOfStoreSymlink  "${config.home.homeDirectory}/dotfiles/.config/nvim";
+    recursive = true;
+  };
   home.file.".bashrc" = {
     source = ./. + "/.bashrc";
   };
