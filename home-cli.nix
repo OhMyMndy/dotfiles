@@ -85,7 +85,7 @@ in {
     nixpkgs-fmt
 
     go
-
+    gcc
     cargo
 
     nodejs
