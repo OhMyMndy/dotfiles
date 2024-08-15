@@ -49,6 +49,10 @@ in {
   home.homeDirectory = (builtins.getEnv "HOME");
   home.stateVersion = "22.11";
   programs.home-manager.enable = true;
+
+  # xdg.enable = true;
+  targets.genericLinux.enable = true;
+  xdg.mime.enable = true;
   home.packages = with pkgs; [
 
     tmux
@@ -116,6 +120,13 @@ in {
     taplo # TOML LSP
     dart
 
+
+    talosctl
+    bat
+    traceroute
+    iputils
+    bind # for dig
+
 #    php82
 #    php82Extensions.curl 
 #    php82Extensions.imagick 
@@ -160,7 +171,9 @@ in {
 
   };
 
-
+  services.ssh-agent = {
+    enable = true;
+  };
 #  home.file.".config/nvim/lazy-lock.json" = {
 #    source = config.lib.file.mkOutOfStoreSymlink ./.config/nvim/lazy-lock.json;
 #  };
@@ -177,10 +190,10 @@ in {
   '';
 
 
-  home.file.".config/fish" = {
-    source = config.lib.file.mkOutOfStoreSymlink  "${config.home.homeDirectory}/dotfiles/.config/fish";
-    recursive = true;
-  };
+  # home.file.".config/fish" = {
+  #   source = config.lib.file.mkOutOfStoreSymlink  "${config.home.homeDirectory}/dotfiles/.config/fish";
+  #   recursive = true;
+  # };
 
   home.file.".gitconfig-delta" = {
     source = config.lib.file.mkOutOfStoreSymlink  "${config.home.homeDirectory}/dotfiles/.gitconfig-delta";
@@ -197,17 +210,40 @@ in {
     source = config.lib.file.mkOutOfStoreSymlink  "${config.home.homeDirectory}/dotfiles/.config/nvim";
     recursive = true;
   };
-  home.file.".bashrc" = {
-    source = ./. + "/.bashrc";
+  home.file."./.config/zellij" = {
+    source = config.lib.file.mkOutOfStoreSymlink  "${config.home.homeDirectory}/dotfiles/.config/zellij";
+    recursive = true;
   };
+  # home.file.".bashrc" = {
+    # source = ./. + "/.bashrc";
+  # };
 
-  home.file.".bash_profile" = {
-    source = ./. + "/.bash_profile";
-  };
+  # home.file.".bash_profile" = {
+    # source = ./. + "/.bash_profile";
+  # };
 
   home.file.".bashrc.d" = {
     source = ./. + "/.bashrc.d";
     recursive = true;
+  };
+
+  home.file.".inputrc" = {
+    source = ./. + "/.inputrc";
+  };
+
+  programs.bash = {
+    enable = true;
+    bashrcExtra = builtins.readFile ./.bashrc;
+  };
+
+  programs.fish = {
+    enable = true;
+    interactiveShellInit = ''
+      # disable fish greeting
+      set fish_greeting
+      fish_config theme choose tokyonight
+      fish_add_path -p ~/.nix-profile/bin /nix/var/nix/profiles/default/bin
+    '';
   };
 
   programs.tmux = {

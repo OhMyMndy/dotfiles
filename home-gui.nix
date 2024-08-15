@@ -5,7 +5,8 @@
     (pkgs.nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
     ibm-plex
     inter
-
+    copyq
+    gitkraken
   ];
 
   home.file.".config/i3" = {
