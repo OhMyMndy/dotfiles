@@ -67,6 +67,7 @@ in {
 
     git
     tig
+    lazygit
     gh
     gitkraken
 
@@ -78,6 +79,7 @@ in {
     fzf
     eza
     just
+    atuin
 
     delta
 
@@ -126,6 +128,8 @@ in {
     traceroute
     iputils
     bind # for dig
+    btop
+    htop
 
 #    php82
 #    php82Extensions.curl 
@@ -174,9 +178,9 @@ in {
   services.ssh-agent = {
     enable = true;
   };
-#  home.file.".config/nvim/lazy-lock.json" = {
-#    source = config.lib.file.mkOutOfStoreSymlink ./.config/nvim/lazy-lock.json;
-#  };
+  home.file.".config/lazygit" = {
+    source = config.lib.file.mkOutOfStoreSymlink ./.config/lazygit;
+  };
     
   home.activation.setupGit = lib.hm.dag.entryAfter [ "installPackages" ] ''
     (cd "$HOME"
@@ -190,10 +194,9 @@ in {
   '';
 
 
-  # home.file.".config/fish" = {
-  #   source = config.lib.file.mkOutOfStoreSymlink  "${config.home.homeDirectory}/dotfiles/.config/fish";
-  #   recursive = true;
-  # };
+  home.file."./.config/fish/fish_variables" = {
+    source = config.lib.file.mkOutOfStoreSymlink  "${config.home.homeDirectory}/dotfiles/.config/fish_variables";
+  };
 
   home.file.".gitconfig-delta" = {
     source = config.lib.file.mkOutOfStoreSymlink  "${config.home.homeDirectory}/dotfiles/.gitconfig-delta";
@@ -243,6 +246,14 @@ in {
       set fish_greeting
       fish_config theme choose tokyonight
       fish_add_path -p ~/.nix-profile/bin /nix/var/nix/profiles/default/bin
+
+      set fish_cursor_default     block      blink
+      set fish_cursor_insert      line       blink
+      set fish_cursor_replace_one underscore blink
+      set fish_cursor_visual      block
+
+      set -g fish_key_bindings fish_vi_key_bindings
+      bind -M insert \cc kill-whole-line repaint
     '';
   };
 
