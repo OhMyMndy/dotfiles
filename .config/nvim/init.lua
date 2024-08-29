@@ -17,4 +17,5 @@ end
 
 require "lazy_setup"
 require "polish"
+-- require "mappings"
 require "treesitter_config"
