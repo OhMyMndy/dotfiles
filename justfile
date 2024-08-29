@@ -1,5 +1,10 @@
 switch:
-    nix run .#home-manager -- switch --flake . --impure -b backup
+    if [[ -n "$DISPLAY" ]]; then nix run .#home-manager -- switch --flake .#gui --impure -b backup; fi
+    if [[ -z "$DISPLAY" ]]; then nix run .#home-manager -- switch --flake .#cli --impure -b backup; fi
+
+
+format:
+    nix run .#nixpkgs-fmt -- .
 
 update:
     nix flake update

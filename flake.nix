@@ -23,15 +23,16 @@
     flake-utils.lib.eachDefaultSystem
       (system:
 
-        let stable-pkgs = import nixpkgs {config.allowUnfree = true; system = system; }; 
-        unstable-pkgs = import nixpkgs-unstable {config.allowUnfree = true; system = system; }; 
-        pkgs = stable-pkgs // {
-          # provides alias for all unstable pkgs SEE: https://rexk.github.io/en/blog/nix-home-manager-flake-setup/
-          unstable = unstable-pkgs;
-          neovim = unstable-pkgs.neovim;
-          neovim-unwrapped = unstable-pkgs.neovim-unwrapped;
-        };
-      in
+        let
+          stable-pkgs = import nixpkgs { config.allowUnfree = true; system = system; };
+          unstable-pkgs = import nixpkgs-unstable { config.allowUnfree = true; system = system; };
+          pkgs = stable-pkgs // {
+            # provides alias for all unstable pkgs SEE: https://rexk.github.io/en/blog/nix-home-manager-flake-setup/
+            unstable = unstable-pkgs;
+            neovim = unstable-pkgs.neovim;
+            neovim-unwrapped = unstable-pkgs.neovim-unwrapped;
+          };
+        in
         {
           apps = rec {
             home-manager = flake-utils.lib.mkApp { drv = pkgs.home-manager; };
@@ -39,46 +40,26 @@
             nixpkgs-fmt = flake-utils.lib.mkApp { drv = pkgs.nixpkgs-fmt; };
           };
 
-        packages = {
-      homeConfigurations = {
-        "vscode" = home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
-          modules = [ ./home-cli.nix ];
-          extraSpecialArgs = {
-            username = "vscode";
+          packages = {
+            homeConfigurations = {
+              "cli" = home-manager.lib.homeManagerConfiguration {
+                inherit pkgs;
+                modules = [ ./home-manager/cli ];
+                extraSpecialArgs = {
+                  inherit pkgs;
+                  # username = "mandy";
+                };
+              };
+              "gui" = home-manager.lib.homeManagerConfiguration {
+                inherit pkgs;
+                modules = [ ./home-manager/gui ];
+                extraSpecialArgs = {
+                  inherit pkgs;
+                  # username = "mandy";
+                };
+              };
+            };
           };
-        };
-        "mandy" = home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
-          modules = [ ./home-cli.nix ];
-          extraSpecialArgs = {
-            username = "mandy";
-          };
-        };
-        "cloud_shell" = home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
-          modules = [ ./home-cli.nix ];
-          extraSpecialArgs = {
-            username = "mandy_schoep";
-          };
-        };
-        "mschoep" = home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
-          modules = [ ./home-cli.nix ];
-          extraSpecialArgs = {
-            username = "mschoep";
-          };
-        };
-        "gui" = home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
-          modules = [ ./home-cli.nix ./home-gui.nix ];
-          extraSpecialArgs = {
-            inherit pkgs;
-            username = "mandy";
-          };
-        };
-      };
-        };
-    });
+        });
 
 }
