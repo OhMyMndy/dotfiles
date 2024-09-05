@@ -24,7 +24,7 @@
   home.stateVersion = "22.11";
   programs.home-manager.enable = true;
 
-  # xdg.enable = true;
+  xdg.enable = true;
   targets.genericLinux.enable = true;
   xdg.mime.enable = true;
 

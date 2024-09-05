@@ -5,8 +5,7 @@
     interactiveShellInit = ''
       # disable fish greeting
       set fish_greeting
-      fish_config theme choose tokyonight
-      fish_add_path -p ~/.nix-profile/bin /nix/var/nix/profiles/default/bin
+      # fish_config theme choose tokyonight
 
       set fish_cursor_default     block      blink
       set fish_cursor_insert      line       blink
