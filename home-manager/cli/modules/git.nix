@@ -14,11 +14,11 @@
   };
 
   home.file.".config/lazygit" = {
-    source = config.lib.file.mkOutOfStoreSymlink ./.config/lazygit;
+    source = config.lib.file.mkOutOfStoreSymlink ./../../../.config/lazygit;
   };
 
   home.file.".gitconfig-delta" = {
-    source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/.gitconfig-delta";
+    source = config.lib.file.mkOutOfStoreSymlink ./../../../.gitconfig-delta;
   };
 
 }
