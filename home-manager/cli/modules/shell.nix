@@ -27,7 +27,7 @@
   };
 
   home.file.".inputrc" = {
-    source = ./. + "/../../../.inputrc";
+    source = ./../../../.inputrc;
   };
 }
 
