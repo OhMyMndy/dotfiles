@@ -5,7 +5,7 @@
   ];
 
   home.file."./.config/zellij" = {
-    source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/.config/zellij";
+    source = config.lib.file.mkOutOfStoreSymlink ./../../../.config/zellij;
     recursive = true;
   };
 }
