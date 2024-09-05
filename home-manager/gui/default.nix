@@ -1,4 +1,4 @@
-{ pkgs, config, ... }: {
+{ pkgs, ... }: {
   imports = [
     (import ./../cli)
     (import ./modules/dconf.nix)
@@ -17,7 +17,4 @@
     ibm-plex
     inter
   ];
-
-
-
 }
