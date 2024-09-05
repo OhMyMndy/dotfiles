@@ -1,4 +1,4 @@
-{ pkgs, config, ... }:
+{ pkgs, config, lib, ... }:
 {
   home.packages = with pkgs; [
     delta
@@ -20,5 +20,11 @@
   home.file.".gitconfig-delta" = {
     source = config.lib.file.mkOutOfStoreSymlink ./../../../.gitconfig-delta;
   };
+
+  home.activation.setupGit = lib.hm.dag.entryAfter [ "installPackages" ] ''
+    (cd "$HOME"
+    touch ".gitconfig"
+    ${pkgs.git}/bin/git config --global include.path ".gitconfig-delta")
+  '';
 
 }
