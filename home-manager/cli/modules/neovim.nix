@@ -84,18 +84,17 @@ in
     plugins = [
       treesitterWithGrammars
     ];
+    extraLuaConfig = ''
 
+    ${builtins.readFile ./../../../.config/nvim/init.lua}
+    vim.opt.runtimepath:prepend("${treesitter-parsers}")
+    '';
   };
 
   home.activation.setupNeovim = lib.hm.dag.entryAfter [ "installPackages" ] ''
     (cd "$HOME"
     touch ".gitconfig"
     ${pkgs.git}/bin/git config --global include.path ".gitconfig-delta")
-    mkdir -p .config/nvim/lua
-    echo "vim.opt.runtimepath:prepend(\"${treesitter-parsers}\")" > ~/.config/nvim/lua/treesitter_config.lua
-    if [ ! -f ~/.config/nvim/lua/treesitter_config.lua ]; then
-      ln -s .config/nvim/lua/treesitter_config.lua ~/.config/nvim/lua/treesitter_config.lua
-    fi
   '';
   # Treesitter is configured as a locally developed module in lazy.nvim
   # we hardcode a symlink here so that we can refer to it in our lazy config
@@ -105,8 +104,11 @@ in
     source = treesitterWithGrammars;
   };
 
-  home.file."./.config/nvim" = {
-    source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/.config/nvim";
+  home.file."./.config/nvim/lua" = {
+    source = config.lib.file.mkOutOfStoreSymlink ./../../../.config/nvim/lua;
     recursive = true;
+  };
+  home.file."./.config/nvim/lazy-lock.json" = {
+    source = config.lib.file.mkOutOfStoreSymlink ./../../../.config/nvim/lazy-lock.json;
   };
 }
