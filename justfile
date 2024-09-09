@@ -1,8 +1,14 @@
+set shell := ["bash", "-c"]
+
 switch:
     if [[ -n "$DISPLAY" ]]; then nix run .#home-manager -- switch --flake .#gui --impure -b backup; fi
     if [[ -z "$DISPLAY" ]]; then nix run .#home-manager -- switch --flake .#cli --impure -b backup; fi
 
+switch-gui:
+    nix run .#home-manager -- switch --flake .#gui --impure -b backup
 
+switch-cli:
+    nix run .#home-manager -- switch --flake .#cli --impure -b backup
 format:
     nix run .#nixpkgs-fmt -- .
 
