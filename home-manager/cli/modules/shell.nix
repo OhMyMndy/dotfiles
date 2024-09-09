@@ -11,6 +11,8 @@
     shfmt
     tree
     yq
+
+    aria2
   ];
 
   programs.fzf = {
