@@ -1,8 +1,8 @@
 { pkgs, ... }:
 {
-  home.packages = with pkgs; [
+  imports = [
+    (import ./gnome-extensions.nix)
   ];
-
 
   dconf.settings = {
     "org/gnome/desktop/wm/keybindings" = {
@@ -55,5 +55,6 @@
         "org.gnome.Terminal.desktop"
       ];
     };
+
   };
 }
