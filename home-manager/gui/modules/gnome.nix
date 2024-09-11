@@ -1,4 +1,7 @@
-{ pkgs, ... }:
+{ lib, ... }:
+let
+  profileUUID = "b1dcc9dd-5262-4d8d-a863-c897e6d979b9";
+in
 {
   imports = [
     (import ./gnome-extensions.nix)
@@ -55,6 +58,37 @@
         "org.gnome.Terminal.desktop"
       ];
     };
+   "org/gnome/terminal/legacy/profiles:" = {
+        default = profileUUID;
+        list = [ profileUUID ];
+      };
+    "org/gnome/terminal/legacy/profiles:/:${profileUUID}" = {
+        visible-name = "OhMyMndy Dark";
+        audible-bell = true;
+        use-system-font = true;
+        use-theme-colors = false;
+        background-color = "rgb(0,0,0)";
+        foreground-color = "rgb(255,255,255)";
+        bold-is-bright = false;
+        pallette = [
+          "#ffffff"
+          "#CD0000"
+          "rgb(38,162,105)"
+          "rgb(162,115,76)"
+          "#00AAEE"
+          "rgb(163,71,186)"
+          "#00CDCD"
+          "rgb(208,207,204)"
+          "rgb(94,92,100)"
+          "rgb(246,97,81)"
+          "#FF0000"
+          "rgb(233,173,12)"
+          "#5CCAFF"
+          "rgb(192,97,203)"
+          "#00FFFF"
+          "#ffffff"
+        ];
+      };
 
   };
 }
