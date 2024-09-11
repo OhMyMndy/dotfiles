@@ -30,10 +30,16 @@
       "apply-custom-theme" = true;
       "custom-theme-shrink" = true;
       "disable-overview-on-startup" = true;
+      "show-mounts" = false;
+      "show-trash" = false;
     };
 
     "org/gnome/shell/extensions/net/gfxmonk/impatience" = {
       "speed-factor" = 0.0;
+    };
+
+    "org/gnome/shell/extensions/clipboard-indicator" = {
+      "history-size" = 200;
     };
   };
 }
