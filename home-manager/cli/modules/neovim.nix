@@ -1,4 +1,4 @@
-{ pkgs, config, lib, ... }:
+{ pkgs, config, ... }:
 let
   treesitterWithGrammars = (pkgs.vimPlugins.nvim-treesitter.withPlugins (p: [
     p.bash
@@ -52,7 +52,8 @@ in
     cargo
     gnumake
 
-
+    shellcheck
+    hadolint
 
     ansible-language-server
     clang-tools_18 # clangd
