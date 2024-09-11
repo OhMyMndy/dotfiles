@@ -13,6 +13,7 @@
     yq
 
     aria2
+    lm_sensors
   ];
 
   programs.fzf = {
