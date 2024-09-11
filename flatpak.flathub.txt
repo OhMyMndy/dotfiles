@@ -1,0 +1,15 @@
+flathub	com.adamcake.Bolt
+flathub	com.cassidyjames.butler
+flathub	com.gitbutler.gitbutler
+flathub	com.github.marhkb.Pods
+flathub	com.github.taiko2k.tauonmb
+flathub	com.github.tchx84.Flatseal
+flathub	com.mattjakeman.ExtensionManager
+flathub	com.visualstudio.code
+flathub	dev.aunetx.deezer
+flathub	io.github.dvlv.boxbuddyrs
+flathub	io.github.vikdevelop.SaveDesktop
+flathub	io.gitlab.liferooter.TextPieces
+flathub	io.podman_desktop.PodmanDesktop
+flathub	net.runelite.RuneLite
+flathub	org.gnome.Fractal

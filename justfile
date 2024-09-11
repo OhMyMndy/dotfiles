@@ -32,3 +32,9 @@ remove-lazy-lock:
 add-lazy-lock:
     cp ~/.config/nvim/lazy-lock.json .config/nvim/
     git add .config/nvim/lazy-lock.json
+
+update-flathub-list:
+    flatpak list --columns "origin,application" --app | grep flathub > flatpak.flathub.txt
+
+install-flathub-flatpaks:
+     cat flatpak.flathub.txt | tr '\n' '\0' | xargs -0 -r -I{} bash -c 'flatpak install -y {}'
