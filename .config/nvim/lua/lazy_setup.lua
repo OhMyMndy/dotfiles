@@ -12,7 +12,8 @@ require("lazy").setup({
     },
   },
   {
-    "AstroNvim/astrocore", --[[ dev = true ]]
+    "AstroNvim/astrocore",
+    dev = true,
   },
   { import = "community" },
   { import = "plugins" },
@@ -34,6 +35,6 @@ require("lazy").setup({
   },
   dev = {
     path = "~/src",
-    fallback = false,
+    fallback = true,
   },
 } --[[@as LazyConfig]])
