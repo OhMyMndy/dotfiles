@@ -13,4 +13,12 @@
       fi
     fi
   '';
+
+  programs.zsh = {
+    oh-my-zsh = {
+      plugins = [
+        "podman"
+      ];
+    };
+  };
 }

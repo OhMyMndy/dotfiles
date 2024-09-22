@@ -11,11 +11,12 @@ require("lazy").setup({
       update_notifications = true, -- Enable/disable notification about running `:Lazy update` twice to update pinned plugins
     },
   },
+  { "AstroNvim/astrocore", dev = true },
   { import = "community" },
   { import = "plugins" },
 } --[[@as LazySpec]], {
   -- Configure any other `lazy.nvim` configuration options here
-  install = { colorscheme = { "astrodark", "habamax" } },
+  install = { colorscheme = { "dracula", "habamax" } },
   ui = { backdrop = 100 },
   performance = {
     rtp = {
@@ -30,7 +31,7 @@ require("lazy").setup({
     },
   },
   dev = {
-    path = "~/.local/share/nvim/nix",
+    path = "~/src",
     fallback = false,
   },
 } --[[@as LazyConfig]])

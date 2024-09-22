@@ -41,26 +41,28 @@ return {
     -- enable servers that you already have installed without mason
     -- SEE: https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
     servers = {
-      "ruff_lsp", -- python
-      "pyright",
+      "ansiblels",
       "bashls",
       "clangd",
+      "dartls",
+      "dockerls",
+      "gopls",
+      "hadolint",
+      "html",
+      "htmx",
+      "jsonls",
+      "lua_ls",
       "nil_ls", -- nix lsp
-      "yamlls",
+      "pyright",
+      "ruby_lsp",
+      "ruff_lsp", -- python
+      "rust_analyzer",
+      "shellcheck",
+      "taplo",
       "terraformls",
       "tflint",
-      "htmx",
-      "gopls",
-      "dockerls",
-      "lua_ls",
       "tsserver",
-      "ansiblels",
-      "html",
-      "jsonls",
-      "ruby_lsp",
-      "rust_analyzer",
-      "taplo",
-      "dartls",
+      "yamlls",
     },
     -- customize language server configuration options passed to `lspconfig`
     ---@diagnostic disable: missing-fields

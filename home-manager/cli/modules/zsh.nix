@@ -1,22 +1,44 @@
-{ ... }:
+{ pkgs, lib, ... }:
 {
+
+
+  home.packages = with pkgs; [
+    git
+    fzf
+    direnv
+    starship
+  ];
+
   programs.zsh = {
     enable = true;
+    autosuggestion.enable = true;
+    syntaxHighlighting = {
+      enable = true;
+      highlighters = [
+        "main"
+        "brackets"
+      ];
+      patterns = {
+        "rm -rf *" = "fg=red,bold";
+      };
+    };
+    history = {
+      # TODO: available when upgrading to 24.11
+      append = true;
+      expireDuplicatesFirst = true;
+    };
     oh-my-zsh = {
       enable = true;
       plugins = [
         "git"
-        "terraform"
+        "sudo" # easily prefix your current or previous commands with sudo by pressing esc twice.
         "fzf"
-        "gcloud"
-        "thefuck"
         "direnv"
-        "docker"
-        "docker-compose"
-        "kubectl"
+        "shell-proxy" # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/shell-proxy
+        "starship"
       ];
-      theme = "robbyrussell";
-
+      # theme = "superjarin";
+      theme = "fishy";
     };
     # initExtra = ''
     #   # see: https://stackoverflow.com/questions/18600188/home-end-keys-do-not-work-in-tmux
@@ -27,5 +49,15 @@
     #   bindkey  "^[[4~"   end-of-line
     # '';
     initExtra = builtins.readFile ./../../../.zshrc;
+  };
+
+
+  programs.starship = {
+    enable = true;
+    settings = 
+      {
+        direnv.disabled = false;
+      }
+    ;
   };
 }

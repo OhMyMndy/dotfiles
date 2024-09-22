@@ -10,7 +10,6 @@
     gnomeExtensions.impatience
   ];
 
-
   dconf.settings = {
     "org/gnome/shell" = {
       "enabled-extensions" = [

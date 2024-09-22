@@ -1,24 +1,24 @@
 { pkgs, ... }:
 {
   home.packages = with pkgs; [
-    autoconf
-    patch
-    stdenv.cc.cc.lib # For build-essential
-    rustc
-    openssl # For libssl-dev
-    libyaml
-    readline # For libreadline6-dev
-    zlib
-    gmp
-    ncurses # For libncurses5-dev
-    libffi
-    gdbm # For libgdbm6
-    db # For libdb
-    libossp_uuid # For uuid
+    # autoconf
+    # patch
+    # stdenv.cc.cc.lib # For build-essential
+    # rustc
+    # openssl # For libssl-dev
+    # libyaml
+    # readline # For libreadline6-dev
+    # zlib
+    # gmp
+    # ncurses # For libncurses5-dev
+    # libffi
+    # gdbm # For libgdbm6
+    # db # For libdb
+    # libossp_uuid # For uuid
   ];
 
   programs.rbenv = {
-    enable = true;
+    enable = false;
     plugins = [
       {
         name = "ruby-build";

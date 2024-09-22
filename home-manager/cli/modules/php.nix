@@ -19,6 +19,5 @@
     #    php82Extensions.xdebug
     #    php82Packages.composer
 
-
   ];
 }

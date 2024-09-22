@@ -1,20 +1,24 @@
 # see: https://juliu.is/tidying-your-home-with-nix/
-{ pkgs, config, lib, ... }:
+{ pkgs, ... }:
 
 {
   imports = [
     (import ./modules/bash.nix)
     (import ./modules/cloud.nix)
+    (import ./modules/file-transfer.nix)
     (import ./modules/fish.nix)
     (import ./modules/git.nix)
     (import ./modules/kubernetes.nix)
     (import ./modules/neovim.nix)
     (import ./modules/networking.nix)
-    (import ./modules/nix.nix)
     (import ./modules/networking.nix)
-    (import ./modules/rbenv.nix)
+    (import ./modules/nix.nix)
+    (import ./modules/python.nix)
+    (import ./modules/ruby.nix)
+    (import ./modules/security.nix)
     (import ./modules/shell.nix)
     (import ./modules/tmux.nix)
+    (import ./modules/virtualization.nix)
     (import ./modules/zellij.nix)
     (import ./modules/zsh.nix)
   ];
@@ -29,7 +33,5 @@
   xdg.mime.enable = true;
 
   home.packages = with pkgs; [
-    nodejs
-    python3
   ];
 }

@@ -4,4 +4,6 @@
 -- Here are some examples:
 
 ---@type LazySpec
-return {}
+return {
+  { "Mofiqul/dracula.nvim" },
+}

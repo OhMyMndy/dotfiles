@@ -1,19 +1,20 @@
 { pkgs, ... }:
 {
   home.packages = with pkgs; [
+    aria2
     atuin
     bat
-    eza
+    devenv # https://devenv.sh
+    dialog
+    eza # https://github.com/eza-community/eza
     hadolint
     jq
     just
+    lm_sensors
     shellcheck
     shfmt
     tree
     yq
-
-    aria2
-    lm_sensors
   ];
 
   programs.fzf = {
@@ -33,4 +34,3 @@
     source = ./../../../.inputrc;
   };
 }
-
