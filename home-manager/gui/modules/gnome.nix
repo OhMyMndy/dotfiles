@@ -44,6 +44,7 @@ in
       "font-name" = "IBM Plex Sans 11";
       "document-font-name" = "IBM Plex Sans 11";
       "titlebar-font" = "IBM Plex Sans Bold 11";
+      "clock-format" = "24h";
     };
     "org/gnome/settings-daemon/plugins/media-keys" = {
       "custom-keybindings" = [
@@ -88,6 +89,9 @@ in
         "#00FFFF"
         "#ffffff"
       ];
+    };
+    "org/gtk/settings/file-chooser" = {
+      "clock-format" = "24h";
     };
 
     # TODO: add nightlight config
