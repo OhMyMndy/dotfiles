@@ -1,3 +1,5 @@
+source /etc/zshrc
+
 bindkey "^[[H" beginning-of-line
 bindkey "^[[F" end-of-line
 # Make ctrl+backpace and ctrl+delete work in zsh
