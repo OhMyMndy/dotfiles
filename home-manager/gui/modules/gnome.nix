@@ -25,11 +25,13 @@ in
     "org/gnome/desktop/search-providers" = {
       disabled = [
         "org.gnome.Nautilus.desktop"
+        "org.mozilla.firefox.desktop"
       ];
     };
     "org/gnome/desktop/wm/preferences" = {
       num-workspaces = "10";
       button-layout = "appmenu:minimize,maximize,close";
+      resize-with-right-button = true;
     };
     "org/gnome/mutter" = {
       edge-tiling = true;
@@ -50,6 +52,13 @@ in
       "custom-keybindings" = [
         "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/"
       ];
+    };
+    "org/gnome/settings-daemon/plugins/color" = {
+      "night-light-enabled" = true;
+      "night-light-schedule-automatic" = true;
+      "night-light-schedule-from" = 5.0;
+      "night-light-schedule-to" = 4.0;
+      "night-light-temperature" = lib.hm.gvariant.mkUint32 4300;
     };
     "org/gnome/shell" = {
       "favorite-apps" = [
