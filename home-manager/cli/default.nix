@@ -32,6 +32,8 @@
   targets.genericLinux.enable = true;
   xdg.mime.enable = true;
 
-  home.packages = with pkgs; [
-  ];
+  home.packages =
+    with pkgs;
+    [
+    ];
 }

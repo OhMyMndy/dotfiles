@@ -1,7 +1,6 @@
 { pkgs, lib, ... }:
 {
 
-
   home.packages = with pkgs; [
     git
     fzf
@@ -51,13 +50,10 @@
     initExtra = builtins.readFile ./../../../.zshrc;
   };
 
-
   programs.starship = {
     enable = true;
-    settings = 
-      {
-        direnv.disabled = false;
-      }
-    ;
+    settings = {
+      direnv.disabled = false;
+    };
   };
 }

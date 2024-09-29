@@ -22,7 +22,6 @@
     # zlib-ng
   ];
 
-
   programs.pyenv = {
     enable = false;
   };
