@@ -28,6 +28,9 @@ in
         "org.mozilla.firefox.desktop"
       ];
     };
+    "org/gnome/desktop/session" = {
+      "idle-delay" = lib.hm.gvariant.mkUint32 300;
+    };
     "org/gnome/desktop/wm/preferences" = {
       num-workspaces = "10";
       button-layout = "appmenu:minimize,maximize,close";
@@ -59,6 +62,9 @@ in
       "night-light-schedule-from" = 5.0;
       "night-light-schedule-to" = 4.0;
       "night-light-temperature" = lib.hm.gvariant.mkUint32 4300;
+    };
+    "org/gnome/settings-daemon/plugins/power" = {
+      "sleep-inactive-ac-timeout" = 660; # 6 minutes
     };
     "org/gnome/shell" = {
       "favorite-apps" = [
