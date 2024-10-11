@@ -2,8 +2,9 @@
 {
 
   home.packages = with pkgs; [
-    quickemu
     cloud-hypervisor
+    quickemu
+    virter
   ];
 
   home.activation.setupVirtualization = lib.hm.dag.entryAfter [ "installPackages" ] ''
