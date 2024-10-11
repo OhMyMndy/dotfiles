@@ -8,6 +8,7 @@
     dialog
     eza # https://github.com/eza-community/eza
     hadolint
+    jless
     jq
     just
     lm_sensors
