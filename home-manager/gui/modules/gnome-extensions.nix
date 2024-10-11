@@ -1,13 +1,14 @@
 { pkgs, ... }:
 {
   home.packages = with pkgs; [
+    gnomeExtensions.appindicator
     gnomeExtensions.caffeine
     gnomeExtensions.clipboard-indicator
     gnomeExtensions.dash-to-dock
+    gnomeExtensions.gsconnect
+    gnomeExtensions.impatience
     gnomeExtensions.sound-output-device-chooser
     gnomeExtensions.tray-icons-reloaded
-    gnomeExtensions.appindicator
-    gnomeExtensions.impatience
   ];
 
   dconf.settings = {
