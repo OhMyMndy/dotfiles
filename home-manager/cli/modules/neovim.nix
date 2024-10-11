@@ -49,8 +49,8 @@ in
     fd
     fzf
     ripgrep
-
-    gcc
+    # TODO:does not contain annobin which is needed for installing http_parser dependency for Jekyll
+    # gcc
     go
     cargo
     gnumake
