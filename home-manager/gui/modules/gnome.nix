@@ -7,6 +7,8 @@ in
     (import ./gnome-extensions.nix)
   ];
 
+  # Set fractional scaling for Wayland:
+  #  gsettings set org.gnome.mutter experimental-features "['scale-monitor-framebuffer']" 
   dconf.settings = {
     "org/gnome/desktop/wm/keybindings" = {
       "switch-input-source" = [ ];
@@ -50,6 +52,9 @@ in
       "document-font-name" = "IBM Plex Sans 11";
       "titlebar-font" = "IBM Plex Sans Bold 11";
       "clock-format" = "24h";
+    };
+    "org/gnome/desktop/wm/preferences" = {
+      "mouse-button-modifier" = "<Alt>";
     };
     "org/gnome/settings-daemon/plugins/media-keys" = {
       "custom-keybindings" = [
