@@ -26,8 +26,15 @@ in
     };
     "org/gnome/desktop/search-providers" = {
       disabled = [
-        "org.gnome.Nautilus.desktop"
-        "org.mozilla.firefox.desktop"
+				"org.gnome.Nautilus.desktop"
+				"org.mozilla.firefox.desktop"
+				"org.gnome.Nautilus.desktop"
+				"org.gnome.Contacts.desktop"
+				"org.gnome.Calendar.desktop"
+				"org.gnome.Terminal.desktop"
+				"org.gnome.Characters.desktop"
+				"org.gnome.clocks.desktop"
+				"org.gnome.Boxes.desktop"
       ];
     };
     "org/gnome/desktop/session" = {
@@ -46,7 +53,7 @@ in
       "show-weekdate" = true;
     };
     "org/gnome/desktop/interface" = {
-      "enable-hot-corners" = false;
+      "enable-hot-corners" = true;
       "monospace-font-name" = "JetBrainsMonoNL Nerd Font Mono 10";
       "font-name" = "IBM Plex Sans 11";
       "document-font-name" = "IBM Plex Sans 11";
