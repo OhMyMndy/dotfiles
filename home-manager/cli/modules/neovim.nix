@@ -52,7 +52,7 @@ in
     # TODO:does not contain annobin which is needed for installing http_parser dependency for Jekyll
     # gcc
     go
-    cargo
+    # cargo
     gnumake
     vala
 
@@ -61,7 +61,7 @@ in
 
     ansible-language-server
     clang-tools_18 # clangd
-    dart
+    # dart
     docker-ls
     gopls
     helm-ls

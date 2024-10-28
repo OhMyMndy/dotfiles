@@ -3,7 +3,6 @@
 
 {
   imports = [
-    (import ./modules/asdf.nix)
     (import ./modules/bash.nix)
     (import ./modules/cloud.nix)
     (import ./modules/file-transfer.nix)
@@ -22,6 +21,11 @@
     (import ./modules/virtualization.nix)
     (import ./modules/zellij.nix)
     (import ./modules/zsh.nix)
+    # Add asdf last
+    (import ./modules/asdf.nix)
+    (import ./modules/go.nix)
+    (import ./modules/dart.nix)
+    (import ./modules/rust.nix)
   ];
 
   home.username = (builtins.getEnv "USER");
