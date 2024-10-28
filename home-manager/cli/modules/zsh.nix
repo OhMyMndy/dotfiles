@@ -47,7 +47,12 @@
     #   bindkey  "^[[1~"   beginning-of-line
     #   bindkey  "^[[4~"   end-of-line
     # '';
-    initExtra = builtins.readFile ./../../../.zshrc;
+    # initExtra = builtins.readFile ./../../../.zshrc;
+    initExtra = ''
+      ${builtins.readFile "${./../../../.zshrc}"}
+      . "${pkgs.asdf-vm}/share/asdf-vm/asdf.sh"
+      . "${pkgs.asdf-vm}/share/asdf-vm/completions/asdf.bash"
+    '';
   };
 
   programs.starship = {

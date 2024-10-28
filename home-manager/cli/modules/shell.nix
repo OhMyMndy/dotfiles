@@ -3,6 +3,8 @@
   home.packages = with pkgs; [
     aria2
     atuin
+    curl
+    gawk
     bat
     devenv # https://devenv.sh
     dialog
@@ -16,6 +18,7 @@
     shfmt
     tree
     yq
+    wget
   ];
 
   programs.fzf = {

@@ -3,6 +3,7 @@
 
 {
   imports = [
+    (import ./modules/asdf.nix)
     (import ./modules/bash.nix)
     (import ./modules/cloud.nix)
     (import ./modules/file-transfer.nix)
