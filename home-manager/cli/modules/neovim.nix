@@ -1,4 +1,4 @@
-{ pkgs, config, ... }:
+{ pkgs, config, lib, ... }:
 let
   treesitterWithGrammars = (
     pkgs.vimPlugins.nvim-treesitter.withPlugins (p: [
@@ -114,4 +114,9 @@ in
   home.file."./.config/nvim/lazy-lock.json" = {
     source = config.lib.file.mkOutOfStoreSymlink ./../../../.config/nvim/lazy-lock.json;
   };
+
+  # TODO: fix this
+  # home.activation.neovim = lib.hm.dag.entryAfter [ "installPackages" ] ''
+  #   sudo chmod 770 ~/.config/nvim/lazy-lock.json
+  # '';
 }

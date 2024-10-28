@@ -32,3 +32,5 @@ nohup.out
 nvim/.local
 /host.nix
 .config/nvim/lua/treesitter_config.lua
+*.backup
+*/lua.backup/*
