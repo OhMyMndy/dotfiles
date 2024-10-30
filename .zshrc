@@ -10,7 +10,9 @@ bindkey '5~' kill-word
 
     #   bindkey  "^[[1~"   beginning-of-line
     #   bindkey  "^[[4~"   end-of-line
-    
+# bindkey -e
+bindkey '^[[1;3C' forward-word
+bindkey '^[[1;3D' backward-word    
 #shellcheck disable=SC2190
 # To have commands starting with `rm -rf` in red:
 
