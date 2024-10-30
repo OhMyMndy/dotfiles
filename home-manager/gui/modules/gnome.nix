@@ -95,26 +95,47 @@ in
       audible-bell = true;
       use-system-font = true;
       use-theme-colors = false;
-      background-color = "rgb(0,0,0)";
-      foreground-color = "rgb(255,255,255)";
+      # catppuccin-mocha
+      # https://github.com/catppuccin/gnome-terminal
+      # curl -L https://raw.githubusercontent.com/catppuccin/gnome-terminal/v0.3.0/install.py | python3 -
+      background-color = "#1e1e2e";
+      foreground-color = "#F2F5FE";
       bold-is-bright = false;
-      pallette = [
-        "#ffffff"
-        "#CD0000"
-        "rgb(38,162,105)"
-        "rgb(162,115,76)"
-        "#00AAEE"
-        "rgb(163,71,186)"
-        "#00CDCD"
-        "rgb(208,207,204)"
-        "rgb(94,92,100)"
-        "rgb(246,97,81)"
-        "#FF0000"
-        "rgb(233,173,12)"
-        "#5CCAFF"
-        "rgb(192,97,203)"
-        "#00FFFF"
-        "#ffffff"
+      palette = [
+        "#45475a"
+        "#f38ba8"
+        "#a6e3a1"
+        "#f9e2af"
+        "#89b4fa"
+        "#f5c2e7"
+        "#94e2d5"
+        "#F2F5FE"
+        "#585b70"
+        "#f38ba8"
+        "#a6e3a1"
+        "#f9e2af"
+        "#89b4fa"
+        "#f5c2e7"
+        "#94e2d5"
+        "#F2F5FE"
+
+        # "#bcc0cc"
+        # "#d20f39"
+        # "#40a02b"
+        # "#df8e1d"
+        # # todo
+        # "#00AAEE"
+        # "rgb(163,71,186)"
+        # "#00CDCD"
+        # "rgb(208,207,204)"
+        # "rgb(94,92,100)"
+        # "rgb(246,97,81)"
+        # "#FF0000"
+        # "rgb(233,173,12)"
+        # "#5CCAFF"
+        # "rgb(192,97,203)"
+        # "#00FFFF"
+        # "#ffffff"
       ];
     };
     "org/gtk/settings/file-chooser" = {
@@ -125,3 +146,4 @@ in
 
   };
 }
+
