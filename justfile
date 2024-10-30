@@ -25,7 +25,7 @@ update-bashrc:
     podman run --rm docker://rockylinux:9 bash -c "cat /etc/skel/.bash_profile" > .bash_profile
 
 clear-nvim:
-    rm -rf ~/.cache/nvim ~/.local/share/nvim 
+    rm -rf ~/.cache/nvim ~/.local/share/nvim ~/.local/state/nvim
 
 remove-lazy-lock:
     rm .config/nvim/lazy-lock.json || true
