@@ -50,15 +50,23 @@
     # initExtra = builtins.readFile ./../../../.zshrc;
     initExtra = ''
       ${builtins.readFile "${./../../../.zshrc}"}
-      . "${pkgs.asdf-vm}/share/asdf-vm/asdf.sh"
-      . "${pkgs.asdf-vm}/share/asdf-vm/completions/asdf.bash"
+      . "$HOME/.asdf/asdf.sh"
+      . "$HOME/.asdf/completions/asdf.bash"
     '';
   };
 
   programs.starship = {
     enable = true;
+    # SEE https://starship.rs/config/#default-prompt-format
     settings = {
       direnv.disabled = false;
+      format = "\${custom.wsl_distro}$all";
+      custom.wsl_distro = {
+        command = "echo $WSL_DISTRO_NAME";
+        when = ''test -n "$WSL_DISTRO_NAME"'';
+        os = "linux";
+        style = "bold white";
+      };
     };
   };
 }

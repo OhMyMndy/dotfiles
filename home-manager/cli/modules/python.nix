@@ -31,16 +31,14 @@
       plugins = [
         "python"
         "pylint"
-        "uv"
       ];
     };
   };
   
   home.activation.setupUv = lib.hm.dag.entryAfter [ "installPackages" ] ''
     PATH="${config.home.path}/bin:$PATH"
-    # . "${pkgs.asdf-vm}/share/asdf-vm/asdf.sh"
+    . ~/.asdf/asdf.sh
     ${pkgs.asdf-vm}/bin/asdf plugin add uv
-    ${pkgs.asdf-vm}/bin/asdf install uv
     ${pkgs.asdf-vm}/bin/asdf install uv latest
     ${pkgs.asdf-vm}/bin/asdf global uv latest
   '';
