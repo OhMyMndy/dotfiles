@@ -81,8 +81,9 @@ in
     "org/gnome/shell" = {
       "favorite-apps" = [
         "org.gnome.Nautilus.desktop"
-        "firefox.desktop"
+        "org.mozilla.firefox.desktop"
         "microsoft-edge.desktop"
+        "org.gnome.Geary.desktop"
         "org.gnome.Terminal.desktop"
       ];
     };
