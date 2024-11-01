@@ -8,10 +8,10 @@
     clock24 = true;
     customPaneNavigationAndResize = true;
     # keyMode = "vi";
-    # terminal = "screen-256color";
+    # terminal = "tmux-256color";
     mouse = true;
+    sensibleOnTop = true;
     plugins = with pkgs; [
-      tmuxPlugins.sensible
       tmuxPlugins.continuum
       # {
       #   plugin = tmuxPlugins.dracula;
@@ -41,6 +41,7 @@
     # extraConfig = builtins.readFile ./../../../.tmux.conf;
     extraConfig = ''
       set -g pane-border-status top
+      set -as terminal-features ",gnome*:RGB"
     '';
   };
 
