@@ -11,6 +11,7 @@
     (import ./modules/fish.nix)
     (import ./modules/git.nix)
     (import ./modules/go.nix)
+    (import ./modules/javascript.nix)
     (import ./modules/kubernetes.nix)
     (import ./modules/neovim.nix)
     (import ./modules/networking.nix)
