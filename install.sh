@@ -26,4 +26,6 @@ if ! grep -Fxq "$PUBLIC_KEYS" "$CONF_FILE"; then
 fi
 ## END FLOX
 
+. /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+
 time nix run .#just -- switch
