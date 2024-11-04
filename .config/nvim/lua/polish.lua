@@ -19,3 +19,4 @@
 
 -- TODO: not working
 vim.opt.clipboard = ""
+-- vim.o.termguicolors = true
