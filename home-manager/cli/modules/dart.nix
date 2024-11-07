@@ -17,9 +17,7 @@
   ];
   programs.zsh = {
     oh-my-zsh = {
-      plugins = [
-        "flutter"
-      ];
+      plugins = [ "flutter" ];
     };
   };
 

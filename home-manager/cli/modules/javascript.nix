@@ -1,4 +1,9 @@
-{ pkgs, config, lib,... }:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 {
 
   home.packages = with pkgs; [
@@ -13,7 +18,7 @@
       ];
     };
   };
-  
+
   home.activation.setupNodejs = lib.hm.dag.entryAfter [ "installPackages" ] ''
     PATH="${config.home.path}/bin:$PATH"
     . ~/.asdf/asdf.sh
