@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ pkgs, ... }:
 {
 
   home.packages = with pkgs; [
@@ -10,71 +10,27 @@
 
   programs.zsh = {
     enable = true;
-    autosuggestion.enable = true;
+    autosuggestion = {
+      enable = true;
+    };
     syntaxHighlighting = {
       enable = true;
       highlighters = [
         "main"
         "brackets"
+        "pattern"
+        "cursor"
       ];
       patterns = {
         "rm -rf *" = "fg=red,bold";
       };
-      # SEE https://github.com/catppuccin/zsh-syntax-highlighting/blob/main/themes/catppuccin_macchiato-zsh-syntax-highlighting.zsh
-      styles = {
-        comment = "fg=#5b6078";
-        alias = "fg=#a6da95";
-        suffix-alias = "fg=#a6da95";
-        global-alias = "fg=#a6da95";
-        function = "fg=#a6da95";
-        command = "fg=#a6da95";
-        precommand = "fg=#a6da95,italic";
-        autodirectory = "fg=#f5a97f,italic";
-        single-hyphen-option = "fg=#f5a97f";
-        double-hyphen-option = "fg=#f5a97f";
-        back-quoted-argument = "fg=#c6a0f6";
-        builtin = "fg=#a6da95";
-        reserved-word = "fg=#a6da95";
-        hashed-command = "fg=#a6da95";
-        commandseparator = "fg=#ed8796";
-        command-substitution-delimiter = "fg=#cad3f5";
-        command-substitution-delimiter-unquoted = "fg=#cad3f5";
-        process-substitution-delimiter = "fg=#cad3f5";
-        back-quoted-argument-delimiter = "fg=#ed8796";
-        back-double-quoted-argument = "fg=#ed8796";
-        back-dollar-quoted-argument = "fg=#ed8796";
-        command-substitution-quoted = "fg=#eed49f";
-        command-substitution-delimiter-quoted = "fg=#eed49f";
-        single-quoted-argument = "fg=#eed49f";
-        single-quoted-argument-unclosed = "fg=#ee99a0";
-        double-quoted-argument = "fg=#eed49f";
-        double-quoted-argument-unclosed = "fg=#ee99a0";
-        rc-quote = "fg=#eed49f";
-        dollar-quoted-argument = "fg=#cad3f5";
-        dollar-quoted-argument-unclosed = "fg=#ee99a0";
-        dollar-double-quoted-argument = "fg=#cad3f5";
-        assign = "fg=#cad3f5";
-        named-fd = "fg=#cad3f5";
-        numeric-fd = "fg=#cad3f5";
-        unknown-token = "fg=#ee99a0";
-        path = "fg=#cad3f5,underline";
-        path_pathseparator = "fg=#ed8796,underline";
-        path_prefix = "fg=#cad3f5,underline";
-        path_prefix_pathseparator = "fg=#ed8796,underline";
-        globbing = "fg=#cad3f5";
-        history-expansion = "fg=#c6a0f6";
-        back-quoted-argument-unclosed = "fg=#ee99a0";
-        redirection = "fg=#cad3f5";
-        arg0 = "fg=#cad3f5";
-        default = "fg=#cad3f5";
-        cursor = "fg=#cad3f5";
-      };
     };
+
     history = {
-      # TODO: available when upgrading to 24.11
       append = true;
       expireDuplicatesFirst = true;
     };
+
     oh-my-zsh = {
       enable = true;
       plugins = [
@@ -85,23 +41,47 @@
         "shell-proxy" # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/shell-proxy
         "starship"
       ];
-      # theme = "superjarin";
       theme = "fishy";
     };
-    # initExtra = ''
-    #   # see: https://stackoverflow.com/questions/18600188/home-end-keys-do-not-work-in-tmux
-    #   bindkey  "^[OH"   beginning-of-line
-    #   bindkey  "^[OF"   end-of-line
 
-    #   bindkey  "^[[1~"   beginning-of-line
-    #   bindkey  "^[[4~"   end-of-line
-    # '';
-    # initExtra = builtins.readFile ./../../../.zshrc;
     initExtra = ''
       ${builtins.readFile "${./../../../.zshrc}"}
+      # Make sure we use asdf versions of tools before tools installed on the
+      # OS or via Nix
+      ASDF_FORCE_PREPEND=yes
       . "$HOME/.asdf/asdf.sh"
       . "$HOME/.asdf/completions/asdf.bash"
     '';
+    # SEE https://github.com/redyf/nixdots/blob/492aede6453d4f62fad6929a6281552504efbaa8/home/system/shell/default.nix#L184
+    plugins =
+      let
+        themepkg = pkgs.fetchFromGitHub {
+          owner = "catppuccin";
+          repo = "zsh-syntax-highlighting";
+          rev = "7926c3d3e17d26b3779851a2255b95ee650bd928";
+          hash = "sha256-l6tztApzYpQ2/CiKuLBf8vI2imM6vPJuFdNDSEi7T/o=";
+        };
+        fzf-tab = pkgs.fetchFromGitHub {
+          owner = "Aloxaf";
+          repo = "fzf-tab";
+          rev = "6aced3f35def61c5edf9d790e945e8bb4fe7b305";
+          hash = "sha256-EWMeslDgs/DWVaDdI9oAS46hfZtp4LHTRY8TclKTNK8=";
+        };
+      in
+      with pkgs;
+      [
+          # TODO make this work
+         {
+              name = "fzf-tab";
+              file = "fzf-tab.plugin.zsh";
+              src = fzf-tab;
+            }
+        {
+          name = "ctp-zsh-syntax-highlighting";
+          src = themepkg;
+          file = themepkg + "/themes/catppuccin_mocha-zsh-syntax-highlighting.zsh";
+        }
+      ];
   };
 
   programs.starship = {
@@ -116,6 +96,8 @@
         os = "linux";
         style = "bold white";
       };
+      git_status.disabled = true;
+      gcloud.disabled = false;
       # SEE https://github.com/catppuccin/starship/blob/main/starship.toml
       palette = "catppuccin_macchiato";
       palettes.catppuccin_macchiato = {
