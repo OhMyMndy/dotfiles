@@ -3,6 +3,7 @@
   home.packages = with pkgs; [
     aria2
     atuin
+    bat # TODO https://github.com/catppuccin/bat
     curl
     gawk
     bat
@@ -14,6 +15,8 @@
     jq
     just
     lm_sensors
+    p7zip
+    restic
     shellcheck
     shfmt
     tree
