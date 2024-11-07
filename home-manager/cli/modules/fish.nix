@@ -19,10 +19,10 @@
   };
 
   home.file."./.config/fish/fish_variables" = {
-    source = config.lib.file.mkOutOfStoreSymlink ./../../../.config/fish/fish_variables;
+    source = ./../../../.config/fish/fish_variables;
   };
   home.file."./.config/fish/conf.d" = {
-    source = config.lib.file.mkOutOfStoreSymlink ./../../../.config/fish/conf.d;
+    source = ./../../../.config/fish/conf.d;
     recursive = true;
   };
 }
