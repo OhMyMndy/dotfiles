@@ -3,9 +3,7 @@ let
   profileUUID = "b1dcc9dd-5262-4d8d-a863-c897e6d979b9";
 in
 {
-  imports = [
-    (import ./gnome-extensions.nix)
-  ];
+  imports = [ (import ./gnome-extensions.nix) ];
 
   # Set fractional scaling for Wayland:
   #  gsettings set org.gnome.mutter experimental-features "['scale-monitor-framebuffer']" 
@@ -26,15 +24,15 @@ in
     };
     "org/gnome/desktop/search-providers" = {
       disabled = [
-				"org.gnome.Nautilus.desktop"
-				"org.mozilla.firefox.desktop"
-				"org.gnome.Nautilus.desktop"
-				"org.gnome.Contacts.desktop"
-				"org.gnome.Calendar.desktop"
-				"org.gnome.Terminal.desktop"
-				"org.gnome.Characters.desktop"
-				"org.gnome.clocks.desktop"
-				"org.gnome.Boxes.desktop"
+        "org.gnome.Nautilus.desktop"
+        "org.mozilla.firefox.desktop"
+        "org.gnome.Nautilus.desktop"
+        "org.gnome.Contacts.desktop"
+        "org.gnome.Calendar.desktop"
+        "org.gnome.Terminal.desktop"
+        "org.gnome.Characters.desktop"
+        "org.gnome.clocks.desktop"
+        "org.gnome.Boxes.desktop"
       ];
     };
     "org/gnome/desktop/session" = {
@@ -84,6 +82,8 @@ in
         "org.mozilla.firefox.desktop"
         "microsoft-edge.desktop"
         "org.gnome.Geary.desktop"
+        "com.vixalien.sticky.desktop"
+        "md.obsidian.Obsidian.desktop"
         "org.gnome.Terminal.desktop"
       ];
     };
@@ -147,4 +147,3 @@ in
 
   };
 }
-
