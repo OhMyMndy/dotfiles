@@ -1,4 +1,8 @@
-{ pkgs, config, lib, ... }:
+{
+  pkgs,
+  lib,
+  ...
+}:
 let
   treesitterWithGrammars = (
     pkgs.vimPlugins.nvim-treesitter.withPlugins (p: [
@@ -88,9 +92,7 @@ in
   programs.neovim = {
     enable = true;
     package = pkgs.neovim-unwrapped;
-    plugins = [
-      treesitterWithGrammars
-    ];
+    plugins = [ treesitterWithGrammars ];
     extraLuaConfig = ''
 
       ${builtins.readFile ./../../../.config/nvim/init.lua}
@@ -108,12 +110,20 @@ in
 
   # TODO: keyboard shortcut to hide popup messages
   home.file."./.config/nvim/lua" = {
-    source = config.lib.file.mkOutOfStoreSymlink ./../../../.config/nvim/lua;
+    source = ./../../../.config/nvim/lua;
     recursive = true;
   };
-  home.file."./.config/nvim/lazy-lock.json" = {
-    source = config.lib.file.mkOutOfStoreSymlink ./../../../.config/nvim/lazy-lock.json;
-  };
+
+  # TODO update lazy-lock: https://github.com/vdbe/nvim/blob/2c12d00beaa8e4c2f2bc98350a309472321e63f6/nix/apps.nix#L22
+  # home.file."./.config/nvim/lazy-lock.json" = {
+  #   source = config.lib.file.mkOutOfStoreSymlink ./../../../.config/nvim/lazy-lock.json;
+  # };
+
+
+  home.activation.setupNeovim = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    cp -f ${./../../../.config/nvim/lazy-lock.json} ~/.config/nvim/lazy-lock.json
+    chmod 0644 ~/.config/nvim/lazy-lock.json
+  '';
 
   # TODO: fix this
   # home.activation.neovim = lib.hm.dag.entryAfter [ "installPackages" ] ''
