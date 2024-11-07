@@ -11,8 +11,7 @@ switch-cli:
     time nix run .#home-manager -- switch --flake .#cli --impure -b backup
 
 format:
-    # time nix run .#nixpkgs-fmt -- .
-    time nix run nixpkgs#nixfmt-rfc-style -- .
+    time nix run nixpkgs#nixfmt-rfc-style -- --strict .
 
 update:
     time nix flake update
