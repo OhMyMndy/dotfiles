@@ -1,4 +1,9 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 {
   home.packages = with pkgs; [
     # autoconf
@@ -34,7 +39,7 @@
       ];
     };
   };
-  
+
   home.activation.setupUv = lib.hm.dag.entryAfter [ "installPackages" ] ''
     PATH="${config.home.path}/bin:$PATH"
     . ~/.asdf/asdf.sh
