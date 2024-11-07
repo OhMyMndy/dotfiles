@@ -1,8 +1,8 @@
 { pkgs, ... }:
 {
-  home.packages = with pkgs; [
-    tmux
-  ];
+  home.packages = with pkgs; [ tmux ];
+
+  # SEE https://github.com/nix-community/home-manager/blob/master/modules/programs/tmux.nix
   programs.tmux = {
     enable = true;
     clock24 = true;
@@ -28,9 +28,9 @@
       {
         plugin = tmuxPlugins.catppuccin;
         extraConfig = ''
-          set -ogq @catppuccin_pane_status_enabled "yes" # set to "yes" to enable
-          # set -ogq @catppuccin_pane_active_border_style "##{?pane_in_mode,fg=#{@thm_lavender},##{?pane_synchronized,fg=#{@thm_mauve},fg=#{@thm_lavender}}}"
-        #   set -ogq @catppuccin_pane_border_status "yes" # set to "yes" to enable
+            set -ogq @catppuccin_pane_status_enabled "yes" # set to "yes" to enable
+            # set -ogq @catppuccin_pane_active_border_style "##{?pane_in_mode,fg=#{@thm_lavender},##{?pane_synchronized,fg=#{@thm_mauve},fg=#{@thm_lavender}}}"
+          #   set -ogq @catppuccin_pane_border_status "yes" # set to "yes" to enable
         '';
       }
       tmuxPlugins.resurrect
@@ -45,6 +45,10 @@
       set -as terminal-features ",gnome*:RGB"
       set -as terminal-features ",tmux-256color:RGB"
       set -as terminal-features ",xterm-256color:RGB"
+
+      set -g automatic-rename off
+      set -s escape-time 0
+      set -g repeat-time 0
     '';
   };
 
