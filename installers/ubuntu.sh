@@ -7,7 +7,6 @@ sudo apt-get install -y git curl zsh podman-docker
 # sudo apt-get install -y gnome-tweaks
 
 
+./tailscale.sh
 
-if ! command -v tailscale &>/dev/null; then
-  curl -fsSL https://tailscale.com/install.sh | sh
-fi
+
