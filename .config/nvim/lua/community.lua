@@ -12,6 +12,12 @@ return {
   { import = "astrocommunity.diagnostics.trouble-nvim" },
   { import = "astrocommunity.editing-support.cloak-nvim" },
   { import = "astrocommunity.editing-support.nvim-treesitter-context" },
+  {
+    "nvim-treesitter/nvim-treesitter-context",
+    opts = {
+      mode = "topline",
+    },
+  },
   { import = "astrocommunity.editing-support.telescope-undo-nvim" },
   { import = "astrocommunity.git.blame-nvim" },
   -- { import = "astrocommunity.motion.harpoon" },
