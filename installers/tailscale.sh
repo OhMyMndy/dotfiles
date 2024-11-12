@@ -1,16 +1,16 @@
-#!/usr/bin/env tailscale
+#!/usr/bin/env bash
 
 if ! command -v tailscale &>/dev/null; then
   curl -fsSL https://tailscale.com/install.sh | sh
 fi
 
-echo 'net.ipv4.ip_forward = 1' | sudo tee -a /etc/sysctl.d/99-tailscale.conf
-echo 'net.ipv6.conf.all.forwarding = 1' | sudo tee -a /etc/sysctl.d/99-tailscale.conf
-sudo sysctl -p /etc/sysctl.d/99-tailscale.conf
+echo 'net.ipv4.ip_forward = 1' | sudo tee -a /etc/sysctl.d/99-tailscale.conf >/dev/null
+echo 'net.ipv6.conf.all.forwarding = 1' | sudo tee -a /etc/sysctl.d/99-tailscale.conf >/dev/null
+sudo sysctl -p /etc/sysctl.d/99-tailscale.conf >/dev/null
 
 
 # TODO remove when https://github.com/tailscale/tailscale/issues/1227 gets fixed
-cat <<EOL | sudo tee /etc/systemd/system/fix-tailscale-lan-access.service
+cat <<EOL | sudo tee /etc/systemd/system/fix-tailscale-lan-access.service >/dev/null
 [Unit]
 Description=Fix Tailscale LAN Access Route
 After=tailscaled.service
