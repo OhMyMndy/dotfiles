@@ -10,6 +10,12 @@ if ! command -v nix &>/dev/null; then
 fi
 
 
+ sudo systemctl set-property nix-daemon.service CPUShares=$((50* $(nproc --all)))
+ sudo systemctl set-property nix-daemon.service MemoryLimit=$(($(awk '/MemTotal/ {print $2}' /proc/meminfo) / 2 / 1024))M
+ sudo systemctl daemon-reload
+ sudo systemctl restart nix-daemon
+
+
 ## START FLOX
 CONF_FILE="/etc/nix/nix.conf"
 SUBSTITUTERS="extra-trusted-substituters = https://cache.flox.dev"
