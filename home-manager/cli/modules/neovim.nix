@@ -1,8 +1,4 @@
-{
-  pkgs,
-  lib,
-  ...
-}:
+{ pkgs, lib, ... }:
 let
   treesitterWithGrammars = (
     pkgs.vimPlugins.nvim-treesitter.withPlugins (p: [
@@ -87,6 +83,7 @@ in
     tfsec
     vala-language-server
     yaml-language-server
+    yamlfmt
   ];
 
   programs.neovim = {
@@ -118,7 +115,6 @@ in
   # home.file."./.config/nvim/lazy-lock.json" = {
   #   source = config.lib.file.mkOutOfStoreSymlink ./../../../.config/nvim/lazy-lock.json;
   # };
-
 
   home.activation.setupNeovim = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     cp -f ${./../../../.config/nvim/lazy-lock.json} ~/.config/nvim/lazy-lock.json
