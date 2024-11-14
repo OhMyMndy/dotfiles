@@ -16,4 +16,30 @@ return {
       }
     end,
   },
+  {
+    "williamboman/mason-lspconfig.nvim",
+    opts = { automatic_installation = false },
+  },
+  {
+    "jay-babu/mason-null-ls.nvim",
+    opts = {
+      automatic_installation = false,
+    },
+  },
+  {
+    "jay-babu/mason-nvim-dap.nvim",
+    opts = {
+      automatic_installation = false,
+    },
+  },
+  {
+    "stevearc/conform.nvim",
+  },
+  {
+    "WhoIsSethDaniel/mason-tool-installer.nvim",
+    opts = {
+      auto_update = false,
+      run_on_start = false,
+    },
+  },
 }
