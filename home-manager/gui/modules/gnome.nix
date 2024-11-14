@@ -1,10 +1,18 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 let
   profileUUID = "b1dcc9dd-5262-4d8d-a863-c897e6d979b9";
 in
 {
   imports = [ (import ./gnome-extensions.nix) ];
-
+  # TODO fix xdg-open with flatpak applications
+  # xdg.portal = {
+  #   enable = true;
+  #   extraPortals = [
+  #     pkgs.xdg-desktop-portal-gtk
+  #     pkgs.xdg-desktop-portal-gnome
+  #   ];
+  #   xdgOpenUsePortal = true;
+  # };
   # Set fractional scaling for Wayland:
   #  gsettings set org.gnome.mutter experimental-features "['scale-monitor-framebuffer']" 
   dconf.settings = {
