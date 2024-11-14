@@ -6,6 +6,7 @@
     (import ./modules/asdf.nix)
     (import ./modules/bash.nix)
     (import ./modules/cloud.nix)
+    (import ./modules/containers.nix)
     (import ./modules/dart.nix)
     (import ./modules/file-transfer.nix)
     (import ./modules/fish.nix)
