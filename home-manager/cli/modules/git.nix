@@ -1,9 +1,4 @@
-{
-  pkgs,
-  config,
-  lib,
-  ...
-}:
+{ pkgs, lib, ... }:
 {
   home.packages = with pkgs; [
     delta
@@ -11,6 +6,7 @@
     gitkraken
     gh
     lazygit
+    tea
     tig
   ];
 
@@ -30,6 +26,7 @@
     (cd "$HOME"
     touch ".gitconfig"
     ${pkgs.git}/bin/git config --global include.path ".gitconfig-delta")
+    ${pkgs.git}/bin/git config --global init.defaultBranch main
 
     # TODO: add two if statements and add how to fix it
     if ${pkgs.gh}/bin/gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /user/emails >/dev/null; then
