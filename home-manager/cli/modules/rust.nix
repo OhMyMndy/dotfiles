@@ -1,15 +1,14 @@
-{
-  pkgs,
-  lib,
-  config,
-  ...
-}:
+{ pkgs, lib, ... }:
 {
   programs.zsh = {
     oh-my-zsh = {
       plugins = [ "rust" ];
     };
   };
+
+  home.packages = with pkgs; [
+    lldb # High performance debugger
+  ];
 
   home.activation.setupRust = lib.hm.dag.entryAfter [ "installPackages" ] ''
     . ~/.asdf/asdf.sh
