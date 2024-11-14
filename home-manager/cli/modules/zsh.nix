@@ -19,7 +19,6 @@
         "main"
         "brackets"
         "pattern"
-        "cursor"
       ];
       patterns = {
         "rm -rf *" = "fg=red,bold";
@@ -51,6 +50,8 @@
       ASDF_FORCE_PREPEND=yes
       . "$HOME/.asdf/asdf.sh"
       . "$HOME/.asdf/completions/asdf.bash"
+
+      setopt rmstarsilent
     '';
     # SEE https://github.com/redyf/nixdots/blob/492aede6453d4f62fad6929a6281552504efbaa8/home/system/shell/default.nix#L184
     plugins =
@@ -68,14 +69,13 @@
           hash = "sha256-EWMeslDgs/DWVaDdI9oAS46hfZtp4LHTRY8TclKTNK8=";
         };
       in
-      with pkgs;
       [
-          # TODO make this work
-         {
-              name = "fzf-tab";
-              file = "fzf-tab.plugin.zsh";
-              src = fzf-tab;
-            }
+        # TODO make this work
+        {
+          name = "fzf-tab";
+          file = "fzf-tab.plugin.zsh";
+          src = fzf-tab;
+        }
         {
           name = "ctp-zsh-syntax-highlighting";
           src = themepkg;
