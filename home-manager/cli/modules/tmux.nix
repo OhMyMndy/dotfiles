@@ -12,25 +12,24 @@
     terminal = "tmux-256color";
     mouse = true;
     sensibleOnTop = true;
-    plugins = with pkgs; [
+    plugins = with pkgs.master; [
       tmuxPlugins.continuum
-      # {
-      #   plugin = tmuxPlugins.dracula;
-      #   extraConfig = ''
-      #     set -g @dracula-battery-label false
-      #     set -g @dracula-no-battery-label true
-      #     set -g @dracula-show-battery-status false
-      #
-      #     # available plugins: battery, cpu-usage, git, gpu-usage, ram-usage, tmux-ram-usage, network, network-bandwidth, network-ping, ssh-session, attached-clients, network-vpn, weather, time, mpc, spotify-tui, krbtgt, playerctl, kubernetes-context, synchronize-panes
-      #     set -g @dracula-plugins "cpu-usage gpu-usage ram-usage synchronize-panes"
-      #   '';
-      # }
+      # Since the version in nixpkgs is old, lets use it directly from GitHub
       {
-        plugin = tmuxPlugins.catppuccin;
+        plugin = tmuxPlugins.mkTmuxPlugin {
+          pluginName = "catppuccin";
+          version = "v2.1.0";
+          src = fetchFromGitHub {
+            owner = "catppuccin";
+            repo = "tmux";
+            rev = "d6458527ef121cc280c5dd119ba638749de1f713";
+            hash = "sha256-kWixGC3CJiFj+YXqHRMbeShC/Tl+1phhupYAIo9bivE=";
+          };
+        };
         extraConfig = ''
-            set -ogq @catppuccin_pane_status_enabled "yes" # set to "yes" to enable
-            # set -ogq @catppuccin_pane_active_border_style "##{?pane_in_mode,fg=#{@thm_lavender},##{?pane_synchronized,fg=#{@thm_mauve},fg=#{@thm_lavender}}}"
-          #   set -ogq @catppuccin_pane_border_status "yes" # set to "yes" to enable
+          set -ogq @catppuccin_pane_status_enabled "yes" # set to "yes" to enable
+          set -ogq @catppuccin_window_text " #{window_name}"
+          set -ogq @catppuccin_window_current_text " #{window_name}"
         '';
       }
       tmuxPlugins.resurrect
@@ -39,7 +38,6 @@
       tmuxPlugins.yank
       tmuxPlugins.pain-control
     ];
-    # extraConfig = builtins.readFile ./../../../.tmux.conf;
     extraConfig = ''
       set -g pane-border-status top
       set -as terminal-features ",gnome*:RGB"
