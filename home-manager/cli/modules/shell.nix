@@ -4,6 +4,7 @@
     aria2
     atuin
     bat # TODO https://github.com/catppuccin/bat
+    cpulimit
     curl
     gawk
     bat
@@ -33,6 +34,10 @@
   programs.direnv = {
     enable = true;
     nix-direnv.enable = true;
+  };
+
+  programs.nushell = {
+    enable = true;
   };
 
   services.ssh-agent = {
