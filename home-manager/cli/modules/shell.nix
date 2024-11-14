@@ -11,6 +11,7 @@
     dialog
     eza # https://github.com/eza-community/eza
     hadolint
+    ijq
     jless
     jq
     just
@@ -19,6 +20,7 @@
     restic
     shellcheck
     shfmt
+    sqlite
     tree
     yq
     wget
