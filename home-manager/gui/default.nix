@@ -12,6 +12,7 @@
     (import ./modules/gtk.nix)
     (import ./modules/i3.nix)
     (import ./modules/wayland.nix)
+    (import ./modules/x11.nix)
     (import ./modules/zeal.nix)
   ];
 
