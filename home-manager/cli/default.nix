@@ -16,7 +16,7 @@
     (import ./modules/kubernetes.nix)
     (import ./modules/neovim.nix)
     (import ./modules/networking.nix)
-    (import ./modules/networking.nix)
+    (import ./modules/performance.nix)
     (import ./modules/nix.nix)
     (import ./modules/python.nix)
     (import ./modules/ruby.nix)
