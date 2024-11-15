@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, config, ... }:
 {
   home.activation.setupFlathub = lib.hm.dag.entryAfter [ "installPackages" ] ''
     # add path here so flatpak can access other binaries
