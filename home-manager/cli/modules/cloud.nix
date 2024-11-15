@@ -9,9 +9,14 @@
 {
   home.packages = with pkgs; [
     awscli2
+    azure-cli
+    azure-storage-azcopy
+    checkov
     google-cloud-sdk
-    terraform
     opentofu
+    terraform
+    tflint
+    tfsec
   ];
   programs.zsh = {
     oh-my-zsh = {
