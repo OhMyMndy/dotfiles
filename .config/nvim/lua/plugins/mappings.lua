@@ -1,42 +1,15 @@
 -- if true then return {} end -- WARN: REMOVE THIS LINE TO ACTIVATE THIS FILE
 return {
-  {
     "AstroNvim/astrocore",
     ---@type AstroCoreOpts
     opts = {
       mappings = {
         v = {
-          ["<leader>y"] = { [["+y]], { desc = "Yank" } },
+          ["<leader>y"] = { [["+y]],  desc = "Yank"  },
         },
-        x = {
-          -- ["LeaderP"] = { [["_dP]], { desc = "Paste" } },
-        },
-        -- first key is the mode
         n = {
-          ["<leader>Y"] = { [["+Y]], { desc = "Yank" } },
-          ["<leader>y"] = { [["+y]], { desc = "Yank" } },
-          -- ["<Leader>P"] = { [["_dP]], { desc = "Paste" } },
-          -- -- second key is the lefthand side of the map
-          -- -- mappings seen under group name "Buffer"
-          -- ["<Leader>bn"] = { "<cmd>tabnew<cr>", desc = "New tab" },
-          -- ["<Leader>bD"] = {
-          --   function()
-          --     require("astroui.status").heirline.buffer_picker(
-          --       function(bufnr) require("astrocore.buffer").close(bufnr) end
-          --     )
-          --   end,
-          --   desc = "Pick to close",
-          -- },
-          -- tables with the `name` key will be registered with which-key if it's installed
-          -- this is useful for naming menus
-          -- ["<Leader>b"] = { name = "Buffers" },
-          -- quick save
-          -- ["<C-s>"] = { ":w!<cr>", desc = "Save File" },  -- change description but the same command
-        },
-        t = {
-          -- setting a mapping to false will disable it
-          -- ["<esc>"] = false,
-        },
+          ["<leader>Y"] = { [["+Y]],  desc = "Yank"  },
+          ["<leader>y"] = { [["+y]],  desc = "Yank"  },
       },
     },
   },
