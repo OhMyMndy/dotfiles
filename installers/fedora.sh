@@ -7,7 +7,8 @@ cd "$DIR" || exit 1
 
 # XDG utils is needed for gcloud for example
 sudo dnf install -y vim git curl zsh flatpak @development-tools \
-  unzip xdg-utils flatpak-xdg-utils python3-pip
+  unzip xdg-utils flatpak-xdg-utils python3-pip python3-venv composer
+
 sudo dnf remove firefox -y
 
 sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo

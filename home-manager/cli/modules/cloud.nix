@@ -1,6 +1,5 @@
 # see: https://juliu.is/tidying-your-home-with-nix/
-{ pkgs, ... }:
-
+{pkgs, ...}:
 # let
 #   newTerraform = pkgs.terraform.overrideAttrs (old: {
 #     #plugins = [];

@@ -3,9 +3,7 @@
   config,
   lib,
   ...
-}:
-{
-
+}: {
   home.packages = with pkgs; [
     # nvm
   ];
@@ -19,7 +17,7 @@
     };
   };
 
-  home.activation.setupNodejs = lib.hm.dag.entryAfter [ "installPackages" ] ''
+  home.activation.setupNodejs = lib.hm.dag.entryAfter ["installPackages"] ''
     PATH="${config.home.path}/bin:$PATH"
     . ~/.asdf/asdf.sh
     ${pkgs.asdf-vm}/bin/asdf plugin add nodejs

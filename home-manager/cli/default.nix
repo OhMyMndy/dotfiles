@@ -1,7 +1,5 @@
 # see: https://juliu.is/tidying-your-home-with-nix/
-{ pkgs, ... }:
-
-{
+{pkgs, ...}: {
   imports = [
     (import ./modules/asdf.nix)
     (import ./modules/bash.nix)
@@ -29,8 +27,8 @@
     (import ./modules/zsh.nix)
   ];
 
-  home.username = (builtins.getEnv "USER");
-  home.homeDirectory = (builtins.getEnv "HOME");
+  home.username = builtins.getEnv "USER";
+  home.homeDirectory = builtins.getEnv "HOME";
   home.stateVersion = "22.11";
   programs.home-manager.enable = true;
 
@@ -38,5 +36,5 @@
   targets.genericLinux.enable = true;
   xdg.mime.enable = true;
 
-  home.packages = with pkgs; [ ];
+  home.packages = with pkgs; [];
 }

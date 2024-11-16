@@ -1,6 +1,4 @@
-{ pkgs, ... }:
-
-{
+{pkgs, ...}: {
   programs.bash = {
     enable = true;
     bashrcExtra = ''
@@ -14,5 +12,4 @@
     source = ./../../../.bashrc.d;
     recursive = true;
   };
-
 }

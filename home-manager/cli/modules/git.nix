@@ -1,5 +1,7 @@
-{ pkgs, lib, ... }:
-{
+{ pkgs
+, lib
+, ...
+}: {
   home.packages = with pkgs; [
     delta
     git
@@ -44,5 +46,4 @@
       echo "run: 'gh auth refresh -h github.com -s user' to refresh the token" 
     fi
   '';
-
 }

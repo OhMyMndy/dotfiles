@@ -1,5 +1,8 @@
-{ pkgs, lib, ... }:
-let
+{
+  pkgs,
+  lib,
+  ...
+}: let
   treesitterWithGrammars = (
     pkgs.vimPlugins.nvim-treesitter.withPlugins (p: [
       p.bash
@@ -41,11 +44,8 @@ let
     name = "treesitter-parsers";
     paths = treesitterWithGrammars.dependencies;
   };
-
-in
-{
+in {
   home.packages = with pkgs; [
-
     fd
     fzf
     ripgrep
@@ -60,14 +60,17 @@ in
     hadolint
 
     ansible-language-server
+    alejandra
     clang-tools_18 # clangd
     # dart
+    deadnix
     docker-ls
     gopls
     helm-ls
     htmx-lsp
     lua-language-server
     nil # nix language server
+    nixd
     nodePackages_latest.bash-language-server
     nodePackages_latest.typescript-language-server
     nodePackages_latest.vscode-html-languageserver-bin
@@ -76,6 +79,7 @@ in
     rubyPackages_3_3.ruby-lsp
     ruff-lsp # python lsp
     rust-analyzer
+    statix
     stylua
     taplo # TOML LSP
     terraform-ls
@@ -89,7 +93,7 @@ in
   programs.neovim = {
     enable = true;
     package = pkgs.neovim-unwrapped;
-    plugins = [ treesitterWithGrammars ];
+    plugins = [treesitterWithGrammars];
     extraLuaConfig = ''
 
       ${builtins.readFile ./../../../.config/nvim/init.lua}
@@ -116,7 +120,7 @@ in
   #   source = config.lib.file.mkOutOfStoreSymlink ./../../../.config/nvim/lazy-lock.json;
   # };
 
-  home.activation.setupNeovim = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+  home.activation.setupNeovim = lib.hm.dag.entryAfter ["writeBoundary"] ''
     cp -f ${./../../../.config/nvim/lazy-lock.json} ~/.config/nvim/lazy-lock.json
     chmod 0644 ~/.config/nvim/lazy-lock.json
   '';

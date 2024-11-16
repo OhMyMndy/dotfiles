@@ -1,6 +1,5 @@
-{ pkgs, ... }:
-{
-  home.packages = with pkgs; [ tmux ];
+{pkgs, ...}: {
+  home.packages = with pkgs; [tmux];
 
   # SEE https://github.com/nix-community/home-manager/blob/master/modules/programs/tmux.nix
   programs.tmux = {
@@ -49,5 +48,4 @@
       set -g repeat-time 0
     '';
   };
-
 }

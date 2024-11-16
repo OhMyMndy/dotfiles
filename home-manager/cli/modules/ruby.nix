@@ -3,8 +3,7 @@
   lib,
   config,
   ...
-}:
-{
+}: {
   home.packages = with pkgs; [
     # autoconf
     # patch

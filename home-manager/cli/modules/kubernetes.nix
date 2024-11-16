@@ -1,5 +1,4 @@
-{ pkgs, ... }:
-let
+{pkgs, ...}: let
   myHelm = pkgs.wrapHelm pkgs.kubernetes-helm {
     plugins = with pkgs.kubernetes-helmPlugins; [
       helm-secrets
@@ -9,10 +8,8 @@ let
     ];
   };
 
-  myHelmfile = pkgs.helmfile-wrapped.override { inherit (myHelm.passthru) pluginsDir; };
-in
-{
-
+  myHelmfile = pkgs.helmfile-wrapped.override {inherit (myHelm.passthru) pluginsDir;};
+in {
   home.packages = with pkgs; [
     cilium-cli
     # myHelm
