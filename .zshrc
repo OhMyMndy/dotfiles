@@ -1,4 +1,7 @@
-source /etc/zshrc
+if [[ -f /etc/zshrc ]]; then
+  source /etc/zshrc
+fi
+
 
 bindkey "^[[H" beginning-of-line
 bindkey "^[[F" end-of-line
