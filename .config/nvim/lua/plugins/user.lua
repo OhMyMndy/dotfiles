@@ -34,6 +34,7 @@ return {
   },
   {
     "stevearc/conform.nvim",
+    opts = {},
   },
   {
     "WhoIsSethDaniel/mason-tool-installer.nvim",
@@ -41,5 +42,15 @@ return {
       auto_update = false,
       run_on_start = false,
     },
+  },
+  {
+    "nvimtools/none-ls.nvim",
+    opts = {},
+  },
+  {
+    "mfussenegger/nvim-lint",
+    event = { "BufWritePost", "BufReadPost", "InsertLeave" },
+    -- for some reason this is necessary for lazy.nvim not to throw an error in loader.lua:383
+    config = function() end,
   },
 }
