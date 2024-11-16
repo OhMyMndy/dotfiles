@@ -42,8 +42,12 @@
       ];
       theme = "fishy";
     };
-
+    
+    initExtraFirst = ''
+      ZSH_DISABLE_COMPFIX=true
+    '';
     initExtra = ''
+      ZSH_DISABLE_COMPFIX=true
       ${builtins.readFile "${./../../../.zshrc}"}
       # Make sure we use asdf versions of tools before tools installed on the
       # OS or via Nix
