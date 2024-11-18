@@ -46,7 +46,12 @@ while IFS= read -r url; do
     clean_url="${url#http://}"
     clean_url="${clean_url#https://}"
 
-    if [[ $url != http* ]]; then
+    if [[ $url != http* ]] ||
+        [[ $url = https://youtube.com/shorts/* ]] ||
+        [[ $url = https://console.cloud.google.com/* ]] ||
+        [[ $url = http*://localhost* ]] ||
+        [[ $url = http*://127.0.0.1* ]] \
+        ; then
         continue
     fi
 
@@ -55,16 +60,17 @@ while IFS= read -r url; do
     path=$(echo "$clean_url" | cut -d '/' -f 2- | sed 's/[^a-zA-Z0-9\/]/_/g')
 
     # Prepare directory and filename
-    dir_path="$output_dir/$domain/$(dirname "$path" | sed 's/[^a-zA-Z0-9]/_/g')"
+    dir_path="$output_dir/$domain/$(dirname "$path" | sed 's/[^a-zA-Z0-9i\/]/_/g')"
+    dir_path="${dir_path:0:150}"
     mkdir -p "$dir_path"
 
     # Extract filename from the last part of the path, default to "index.html" if empty
     filename=$(basename "$path")
-    [[ -z "$filename" ]] && filename="index"
+    [[ -z "$filename" ]] && filename="index_"
     output_file="$dir_path/${filename:0:50}.html"
 
     # Check if the file already exists, if so, skip to the next URL
-    if [[ -f "$output_file" ]]; then
+    if [[ -f "$output_file" ]] || grep -Fxq "$url" "$output_file/skipped.txt" &>/dev/null; then
         # echo "File $output_file already exists, skipping $url"
         continue
     fi
@@ -78,8 +84,8 @@ while IFS= read -r url; do
         curl -m5 -sL "$url" -o - | sed -E "s#((href|src)=[\"'])(\.?/([^\"']+))([\"'])#\1${domain}/\4\5#g" >"$output_file" || true
         # set +x
         echo "Saved $url as $output_file"
-    # else
-    #     pass
-    #     # echo "Skipping $url (content type: $content_type)"
+    else
+        echo "$url" >>"$output_dir/skipped.txt"
+        echo "Skipping $url (content type: $content_type)"
     fi
 done <"$url_file"
