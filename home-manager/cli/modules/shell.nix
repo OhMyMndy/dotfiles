@@ -1,6 +1,11 @@
-{ pkgs, ... }:
+{ pkgs
+, lib
+, home
+, ...
+}:
 let
-  llm-openrouter = pkgs.callPackage ./llm-openrouter/default.nix { };
+  llm-openrouter = pkgs.callPackage ../../../packages/llm-openrouter/default.nix { };
+  llmWithPlugins = pkgs.llm.withPlugins [ llm-openrouter ];
 in
 {
   home.packages = with pkgs; [
@@ -19,7 +24,7 @@ in
     jless
     jq
     just
-    (llm.withPlugins [ llm-openrouter ])
+    llmWithPlugins
     lm_sensors
     p7zip
     restic
@@ -51,4 +56,11 @@ in
   home.file.".inputrc" = {
     source = ./../../../.inputrc;
   };
+
+  home.activation.setupLlm = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    if ${pkgs.bitwarden-cli}/bin/bw unlock --check &>/dev/null; then
+      ${llmWithPlugins}/bin/llm keys set openrouter \
+        --value "$(${pkgs.bitwarden-cli}/bin/bw get item OpenRouter | ${pkgs.jq}/bin/jq '.fields[] | select(.name =="API KEY") | .value' -r)"
+    fi
+  '';
 }
