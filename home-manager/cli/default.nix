@@ -1,5 +1,5 @@
 # see: https://juliu.is/tidying-your-home-with-nix/
-{pkgs, ...}: {
+{ pkgs, ... }: {
   imports = [
     (import ./modules/asdf.nix)
     (import ./modules/bash.nix)
@@ -12,6 +12,7 @@
     (import ./modules/go.nix)
     (import ./modules/javascript.nix)
     (import ./modules/kubernetes.nix)
+    (import ./modules/llm.nix)
     (import ./modules/neovim.nix)
     (import ./modules/networking.nix)
     (import ./modules/nix.nix)
@@ -36,5 +37,5 @@
   targets.genericLinux.enable = true;
   xdg.mime.enable = true;
 
-  home.packages = with pkgs; [];
+  home.packages = with pkgs; [ ];
 }
