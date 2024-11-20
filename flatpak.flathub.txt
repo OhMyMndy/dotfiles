@@ -1,6 +1,5 @@
 flathub	com.adamcake.Bolt
-flathub	com.cassidyjames.butler
-flathub	com.gitbutler.gitbutler
+flathub	com.cassidyjames.butler # Home assistant dashboard
 flathub	com.github.marhkb.Pods
 flathub	com.github.taiko2k.tauonmb
 flathub	com.github.tchx84.Flatseal
@@ -10,6 +9,14 @@ flathub	dev.aunetx.deezer
 flathub	io.github.dvlv.boxbuddyrs
 flathub	io.github.vikdevelop.SaveDesktop
 flathub	io.gitlab.liferooter.TextPieces
-flathub	io.podman_desktop.PodmanDesktop
 flathub	net.runelite.RuneLite
 flathub	org.gnome.Fractal
+flathub ca.desrt.dconf-editor
+flathub com.rafaelmardojai.Blanket
+flathub com.vixalien.sticky
+flathub dev.geopjr.Tuba
+flathub md.obsidian.Obsidian
+flathub net.pcsx2.PCSX
+flathub org.gimp.GIMP
+flathub org.mozilla.firefox
+flathub org.zealdocs.Zeal

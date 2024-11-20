@@ -1,4 +1,8 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+let
+  llm-openrouter = pkgs.callPackage ./llm-openrouter/default.nix { };
+in
+{
   home.packages = with pkgs; [
     aria2
     atuin
@@ -15,6 +19,7 @@
     jless
     jq
     just
+    (llm.withPlugins [ llm-openrouter ])
     lm_sensors
     p7zip
     restic
