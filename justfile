@@ -38,3 +38,16 @@ update-flathub-list:
 
 install-flathub-flatpaks:
      cat flatpak.flathub.txt | tr '\n' '\0' | xargs -0 -r -I{} bash -c 'flatpak install -y {}'
+
+
+gh-login:
+    gh auth login -s user
+
+bw-config:
+    bw config server https://passwords.home.ohmymndy.com    
+
+bw-login:
+    bw login --raw "$(gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /user/emails | jq -r ".[0].email")"
+
+bw-unlock:
+    bw unlock --raw

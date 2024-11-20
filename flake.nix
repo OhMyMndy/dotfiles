@@ -1,7 +1,7 @@
 {
   description = "OhMyMndy's Dotfiles!";
   nixConfig = {
-    extra-substituters = ["https://nix-community.cachix.org"];
+    extra-substituters = [ "https://nix-community.cachix.org" ];
     extra-trusted-public-keys = [
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
     ];
@@ -19,32 +19,33 @@
     flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = {
-    nixpkgs,
-    nixpkgs-unstable,
-    nixpkgs-master,
-    nixpkgs-staging,
-    home-manager,
-    flake-utils,
-    ...
-  }:
+  outputs =
+    { nixpkgs
+    , nixpkgs-unstable
+    , nixpkgs-master
+    , nixpkgs-staging
+    , home-manager
+    , flake-utils
+    , ...
+    }:
     flake-utils.lib.eachDefaultSystem (
-      system: let
+      system:
+      let
         stable-pkgs = import nixpkgs {
           config.allowUnfree = true;
-          system = system;
+          inherit system;
         };
         unstable-pkgs = import nixpkgs-unstable {
           config.allowUnfree = true;
-          system = system;
+          inherit system;
         };
         master-pkgs = import nixpkgs-master {
           config.allowUnfree = true;
-          system = system;
+          inherit system;
         };
         staging-pkgs = import nixpkgs-staging {
           config.allowUnfree = true;
-          system = system;
+          inherit system;
         };
         pkgs =
           stable-pkgs
@@ -56,11 +57,13 @@
             neovim = unstable-pkgs.neovim;
             neovim-unwrapped = unstable-pkgs.neovim-unwrapped;
           };
-      in {
+        le-just = pkgs.callPackage ./packages/just/default.nix { };
+      in
+      {
         apps = rec {
-          home-manager = flake-utils.lib.mkApp {drv = pkgs.home-manager;};
-          just = flake-utils.lib.mkApp {drv = pkgs.just;};
-          nixpkgs-fmt = flake-utils.lib.mkApp {drv = pkgs.nixpkgs-fmt;};
+          home-manager = flake-utils.lib.mkApp { drv = pkgs.home-manager; };
+          just = flake-utils.lib.mkApp { drv = le-just; };
+          nixpkgs-fmt = flake-utils.lib.mkApp { drv = pkgs.nixpkgs-fmt; };
         };
 
         packages = {
@@ -68,7 +71,7 @@
             "cli" = home-manager.lib.homeManagerConfiguration {
               # TODO: clean up inherit pkgs
               inherit pkgs;
-              modules = [./home-manager/cli];
+              modules = [ ./home-manager/cli ];
               extraSpecialArgs = {
                 inherit pkgs;
                 # username = "mandy";
@@ -77,7 +80,7 @@
             "gui" = home-manager.lib.homeManagerConfiguration {
               # TODO: clean up inherit pkgs
               inherit pkgs;
-              modules = [./home-manager/gui];
+              modules = [ ./home-manager/gui ];
               extraSpecialArgs = {
                 inherit pkgs;
                 # username = "mandy";
