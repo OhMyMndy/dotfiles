@@ -1,4 +1,4 @@
--- if true then return {} end -- WARN: REMOVE THIS LINE TO ACTIVATE THIS FILE
+if true then return {} end -- WARN: REMOVE THIS LINE TO ACTIVATE THIS FILE
 
 -- Customize Mason plugins
 
@@ -8,46 +8,17 @@ return {
   {
     "williamboman/mason-lspconfig.nvim",
     -- overrides `require("mason-lspconfig").setup(...)`
-    opts = {
-      ensure_installed = {
-        -- "ansiblels",
-        -- "bashls",
-        -- "clangd", -- c, c++
-        -- "dockerls",
-        -- "gopls",
-        -- "html",
-        -- "htmx",
-        -- "jsonls",
-        -- "lua_ls",
-        -- "nil_ls",   -- nix
-        -- "ruby_lsp", -- ruby
-        -- "ruff_lsp", -- python
-        -- "rust_analyzer",
-        -- "taplo",    -- toml
-        -- "terraformls",
-        -- "tflint",
-        -- "tsserver", -- javascript, typescript
-        -- "yamlls",
-      },
-    },
+    opts = {},
   },
   -- use mason-null-ls to configure Formatters/Linter installation for null-ls sources
   {
     "jay-babu/mason-null-ls.nvim",
     -- overrides `require("mason-null-ls").setup(...)`
-    opts = {
-      ensure_installed = {
-        -- "stylua",
-      },
-    },
+    opts = {},
   },
   {
     "jay-babu/mason-nvim-dap.nvim",
     -- overrides `require("mason-nvim-dap").setup(...)`
-    opts = {
-      ensure_installed = {
-        -- "python",
-      },
-    },
+    opts = {},
   },
 }

@@ -33,37 +33,14 @@ return {
         -- disable lua_ls formatting capability if you want to use StyLua to format your lua code
         -- "lua_ls",
       },
-      timeout_ms = 1000, -- default format timeout
+      timeout_ms = 2000, -- default format timeout
       -- filter = function(client) -- fully override the default formatting function
       --   return true
       -- end
     },
     -- enable servers that you already have installed without mason
     -- SEE: https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
-    servers = {
-      -- "ansiblels",
-      -- "bashls",
-      -- "clangd",
-      -- "dartls",
-      -- "dockerls",
-      -- "gopls",
-      -- "hadolint",
-      -- "html",
-      -- "htmx",
-      -- "jsonls",
-      -- "lua_ls",
-      -- "nil_ls", -- nix lsp
-      -- "pyright",
-      -- "ruby_lsp",
-      -- "ruff_lsp", -- python
-      -- "rust_analyzer",
-      -- "shellcheck",
-      -- "taplo",
-      -- "terraformls",
-      -- "tflint",
-      -- "tsserver",
-      -- "yamlls",
-    },
+    servers = {},
     -- customize language server configuration options passed to `lspconfig`
     ---@diagnostic disable: missing-fields
     config = {

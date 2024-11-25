@@ -18,19 +18,15 @@ return {
   },
   {
     "williamboman/mason-lspconfig.nvim",
-    opts = { automatic_installation = false },
+    opts = {},
   },
   {
     "jay-babu/mason-null-ls.nvim",
-    opts = {
-      automatic_installation = false,
-    },
+    opts = {},
   },
   {
     "jay-babu/mason-nvim-dap.nvim",
-    opts = {
-      automatic_installation = false,
-    },
+    opts = {},
   },
   {
     "stevearc/conform.nvim",
@@ -40,17 +36,11 @@ return {
     "WhoIsSethDaniel/mason-tool-installer.nvim",
     opts = {
       auto_update = false,
-      run_on_start = false,
+      run_on_start = true,
     },
   },
   {
     "nvimtools/none-ls.nvim",
     opts = {},
-  },
-  {
-    "mfussenegger/nvim-lint",
-    event = { "BufWritePost", "BufReadPost", "InsertLeave" },
-    -- for some reason this is necessary for lazy.nvim not to throw an error in loader.lua:383
-    config = function() end,
   },
 }

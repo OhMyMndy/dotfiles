@@ -4,7 +4,7 @@
 
 ---@type LazySpec
 return {
-  "AstroNvim/astrocommunity",
+  { "AstroNvim/astrocommunity", dev = true },
   -- { import = "astrocommunity.motion.harpoon" },
   { import = "astrocommunity.colorscheme.catppuccin" },
   -- { import = "astrocommunity.completion.codeium-nvim" },
@@ -36,10 +36,13 @@ return {
       mode = "topline",
     },
   },
+  {
+    import = "astrocommunity.lsp.nvim-lint",
+  },
   { import = "astrocommunity.editing-support.telescope-undo-nvim" },
   { import = "astrocommunity.git.blame-nvim" },
   { import = "astrocommunity.neovim-lua-development.lazydev-nvim" },
-  { import = "astrocommunity.pack.bash" },
+  { import = "astrocommunity.pack.ansible" },
   { import = "astrocommunity.pack.bash" },
   { import = "astrocommunity.pack.dart" },
   { import = "astrocommunity.pack.docker" },
@@ -53,7 +56,8 @@ return {
   { import = "astrocommunity.pack.laravel" },
   { import = "astrocommunity.pack.python-ruff" },
   { import = "astrocommunity.pack.rust" },
-  { import = "astrocommunity.pack.terraform" },
+  { import = "astrocommunity.pack.terraform", dev = true },
+
   { import = "astrocommunity.pack.toml" },
   { import = "astrocommunity.pack.yaml" },
 
