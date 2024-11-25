@@ -15,6 +15,8 @@
     devenv # https://devenv.sh
     dialog
     eza # https://github.com/eza-community/eza
+    fastgron # Make JSON greppable super fast!
+    gron
     hadolint
     ijq
     jless
@@ -27,7 +29,7 @@
     shfmt
     sqlite
     tree
-    yq
+    yq-go
     wget
   ];
 
