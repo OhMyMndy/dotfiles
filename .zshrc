@@ -43,8 +43,8 @@ export FZF_DEFAULT_OPTS=" \
 --color=selected-bg:#45475a \
 --multi"
 
-if [[ -d ~/.zshrc.d && ~/.zshrc.d/*(DN) ]]; then
-    for rc in ~/.zshrc.d/*; do
+if [[ -d ~/.zshrc.d ]]; then
+  for rc in ~/.zshrc.d/*(DN); do
         if [[ -f "$rc" ]]; then
             # shellcheck disable=SC1090
             . "$rc"
