@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+{ pkgs, ... }: {
   home.packages = with pkgs.master; [
     gnomeExtensions.appindicator
     gnomeExtensions.caffeine
@@ -22,6 +22,7 @@
         "appindicatorsupport@rgcjonas.gmail.com"
       ];
     };
+
     "org/gnome/shell/extensions/dash-to-dock" = {
       "dock-fixed" = true;
       "dash-max-icon-size" = 24;
@@ -37,6 +38,7 @@
       "speed-factor" = 0.0;
     };
 
+    # "org/gnome/shell/extensions/clipboard-indicator/history-size"
     "org/gnome/shell/extensions/clipboard-indicator" = {
       "history-size" = 200;
     };
