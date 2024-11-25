@@ -5,7 +5,8 @@
 }:
 let
   llm-openrouter = pkgs.callPackage ../../../packages/llm-openrouter/default.nix { };
-  llmWithPlugins = pkgs.llm.withPlugins [ llm-openrouter ];
+  llm-jq = pkgs.callPackage ../../../packages/llm-jq/default.nix { };
+  llmWithPlugins = pkgs.llm.withPlugins [ llm-openrouter llm-jq ];
 in
 {
   home.packages = with pkgs; [
