@@ -98,7 +98,7 @@ in {
     plugins = [treesitterWithGrammars];
     extraLuaConfig = ''
       ${builtins.readFile ./../../../.config/nvim/init.lua}
-      # vim.opt.runtimepath:prepend("${treesitter-parsers}")
+      -- vim.opt.runtimepath:prepend("${treesitter-parsers}")
     '';
   };
 
