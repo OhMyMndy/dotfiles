@@ -12,8 +12,10 @@
     azure-storage-azcopy
     checkov
     google-cloud-sdk
-    # opentofu
-    terraform
+    # TODO: alias terraform to tofu
+    opentofu
+    # TODO: why is Terraform being built all the time?
+    # terraform
     tflint
     tfsec
   ];
