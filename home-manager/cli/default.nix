@@ -1,5 +1,5 @@
 # see: https://juliu.is/tidying-your-home-with-nix/
-{ pkgs, ... }: {
+{pkgs, ...}: {
   imports = [
     (import ./modules/asdf.nix)
     (import ./modules/bash.nix)
@@ -7,7 +7,7 @@
     (import ./modules/containers.nix)
     (import ./modules/dart.nix)
     (import ./modules/file-transfer.nix)
-    (import ./modules/fish.nix)
+    # (import ./modules/fish.nix)
     (import ./modules/git.nix)
     (import ./modules/go.nix)
     (import ./modules/javascript.nix)
@@ -24,7 +24,7 @@
     (import ./modules/shell.nix)
     (import ./modules/tmux.nix)
     (import ./modules/virtualization.nix)
-    (import ./modules/zellij.nix)
+    # (import ./modules/zellij.nix)
     (import ./modules/zsh.nix)
   ];
 
@@ -37,5 +37,5 @@
   targets.genericLinux.enable = true;
   xdg.mime.enable = true;
 
-  home.packages = with pkgs; [ ];
+  home.packages = with pkgs; [];
 }

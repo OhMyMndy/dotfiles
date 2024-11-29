@@ -1,15 +1,16 @@
-{ pkgs
-, lib
-, home
-, ...
-}:
 {
+  pkgs,
+  lib,
+  home,
+  ...
+}: {
   home.packages = with pkgs; [
     aria2
     atuin
     bat # TODO https://github.com/catppuccin/bat
     cpulimit
     curl
+    dapr-cli
     gawk
     bat
     devenv # https://devenv.sh

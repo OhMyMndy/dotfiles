@@ -4,8 +4,8 @@
   ...
 }: {
   home.packages = with pkgs; [
-    cloud-hypervisor
-    quickemu
+    # cloud-hypervisor
+    # quickemu
     virter
   ];
 

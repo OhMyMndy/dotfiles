@@ -12,7 +12,7 @@
     azure-storage-azcopy
     checkov
     google-cloud-sdk
-    opentofu
+    # opentofu
     terraform
     tflint
     tfsec

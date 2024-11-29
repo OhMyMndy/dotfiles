@@ -1,4 +1,8 @@
-{ pkgs, lib, ... }: {
+{
+  pkgs,
+  lib,
+  ...
+}: {
   home.packages = with pkgs; [
     git
     fzf
@@ -26,6 +30,12 @@
     history = {
       append = true;
       expireDuplicatesFirst = true;
+      share = true;
+      ignoreSpace = true;
+      ignorePatterns = [
+        "rm *"
+        "pkill *"
+      ];
     };
 
     oh-my-zsh = {
@@ -56,34 +66,32 @@
       setopt rmstarsilent
     '';
     # SEE https://github.com/redyf/nixdots/blob/492aede6453d4f62fad6929a6281552504efbaa8/home/system/shell/default.nix#L184
-    plugins =
-      let
-        themepkg = pkgs.fetchFromGitHub {
-          owner = "catppuccin";
-          repo = "zsh-syntax-highlighting";
-          rev = "7926c3d3e17d26b3779851a2255b95ee650bd928";
-          hash = "sha256-l6tztApzYpQ2/CiKuLBf8vI2imM6vPJuFdNDSEi7T/o=";
-        };
-        fzf-tab = pkgs.fetchFromGitHub {
-          owner = "Aloxaf";
-          repo = "fzf-tab";
-          rev = "6aced3f35def61c5edf9d790e945e8bb4fe7b305";
-          hash = "sha256-EWMeslDgs/DWVaDdI9oAS46hfZtp4LHTRY8TclKTNK8=";
-        };
-      in
-      [
-        # TODO make this work
-        {
-          name = "fzf-tab";
-          file = "fzf-tab.plugin.zsh";
-          src = fzf-tab;
-        }
-        {
-          name = "ctp-zsh-syntax-highlighting";
-          src = themepkg;
-          file = themepkg + "/themes/catppuccin_mocha-zsh-syntax-highlighting.zsh";
-        }
-      ];
+    plugins = let
+      themepkg = pkgs.fetchFromGitHub {
+        owner = "catppuccin";
+        repo = "zsh-syntax-highlighting";
+        rev = "7926c3d3e17d26b3779851a2255b95ee650bd928";
+        hash = "sha256-l6tztApzYpQ2/CiKuLBf8vI2imM6vPJuFdNDSEi7T/o=";
+      };
+      fzf-tab = pkgs.fetchFromGitHub {
+        owner = "Aloxaf";
+        repo = "fzf-tab";
+        rev = "6aced3f35def61c5edf9d790e945e8bb4fe7b305";
+        hash = "sha256-EWMeslDgs/DWVaDdI9oAS46hfZtp4LHTRY8TclKTNK8=";
+      };
+    in [
+      # TODO make this work
+      {
+        name = "fzf-tab";
+        file = "fzf-tab.plugin.zsh";
+        src = fzf-tab;
+      }
+      {
+        name = "ctp-zsh-syntax-highlighting";
+        src = themepkg;
+        file = themepkg + "/themes/catppuccin_mocha-zsh-syntax-highlighting.zsh";
+      }
+    ];
   };
 
   programs.starship = {
@@ -132,7 +140,7 @@
       };
     };
   };
-  home.activation.setupZsh = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+  home.activation.setupZsh = lib.hm.dag.entryAfter ["writeBoundary"] ''
     mkdir -p ~/.zshrc.d
   '';
 }
