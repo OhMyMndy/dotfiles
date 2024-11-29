@@ -52,16 +52,16 @@ in {
     ripgrep
     # TODO:does not contain annobin which is needed for installing http_parser dependency for Jekyll
     # gcc
-    go
+    # go
     # cargo
     gnumake
-    vala
+    # vala
 
-    shellcheck
-    hadolint
+    # shellcheck
+    # hadolint
 
-    ansible-language-server
-    ansible-lint
+    # ansible-language-server
+    # ansible-lint
     alejandra
     clang-tools_18 # clangd
     # dart
@@ -70,25 +70,25 @@ in {
     gopls
     helm-ls
     htmx-lsp
-    lua-language-server
+    # lua-language-server
     nil # nix language server
     master.nixd
-    nodePackages_latest.bash-language-server
-    nodePackages_latest.typescript-language-server
-    nodePackages_latest.vscode-html-languageserver-bin
-    nodePackages_latest.vscode-json-languageserver
-    pyright
-    rubyPackages_3_3.ruby-lsp
-    ruff-lsp # python lsp
+    # nodePackages_latest.bash-language-server
+    # nodePackages_latest.typescript-language-server
+    # nodePackages_latest.vscode-html-languageserver-bin
+    # nodePackages_latest.vscode-json-languageserver
+    # pyright
+    # rubyPackages_3_3.ruby-lsp
+    # ruff-lsp # python lsp
     rust-analyzer
     statix
-    stylua
-    taplo # TOML LSP
-    terraform-ls
-    tflint
-    tfsec
-    vala-language-server
-    yaml-language-server
+    # stylua
+    # taplo # TOML LSP
+    # terraform-ls
+    # tflint
+    # tfsec
+    # vala-language-server
+    # yaml-language-server
     yamlfmt
   ];
 
@@ -97,19 +97,18 @@ in {
     package = pkgs.neovim-unwrapped;
     plugins = [treesitterWithGrammars];
     extraLuaConfig = ''
-
       ${builtins.readFile ./../../../.config/nvim/init.lua}
-      vim.opt.runtimepath:prepend("${treesitter-parsers}")
+      # vim.opt.runtimepath:prepend("${treesitter-parsers}")
     '';
   };
 
   # Treesitter is configured as a locally developed module in lazy.nvim
   # we hardcode a symlink here so that we can refer to it in our lazy config
   # SEE: https://github.com/Kidsan/nixos-config/blob/main/home/programs/neovim/default.nix
-  home.file."./.local/share/nvim/nix/nvim-treesitter/" = {
-    recursive = true;
-    source = treesitterWithGrammars;
-  };
+  # home.file."./.local/share/nvim/nix/nvim-treesitter/" = {
+  #   recursive = true;
+  #   source = treesitterWithGrammars;
+  # };
 
   # TODO: keyboard shortcut to hide popup messages
   home.file."./.config/nvim/lua" = {

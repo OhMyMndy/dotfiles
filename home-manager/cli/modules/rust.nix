@@ -10,7 +10,6 @@
   };
 
   home.packages = with pkgs; [
-    lldb # High performance debugger
   ];
 
   home.activation.setupRust = lib.hm.dag.entryAfter ["installPackages"] ''
