@@ -16,6 +16,8 @@ if [[ -d /run/systemd/system ]]; then
  sudo systemctl restart nix-daemon
 fi
 
-. /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+if [[ -f /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]]; then
+ . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+fi
 
 time nix run .#just -- switch
