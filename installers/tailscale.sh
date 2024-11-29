@@ -8,7 +8,6 @@ echo 'net.ipv4.ip_forward = 1' | sudo tee -a /etc/sysctl.d/99-tailscale.conf >/d
 echo 'net.ipv6.conf.all.forwarding = 1' | sudo tee -a /etc/sysctl.d/99-tailscale.conf >/dev/null
 sudo sysctl -p /etc/sysctl.d/99-tailscale.conf >/dev/null
 
-
 # TODO remove when https://github.com/tailscale/tailscale/issues/1227 gets fixed
 cat <<EOL | sudo tee /etc/systemd/system/fix-tailscale-lan-access.service >/dev/null
 [Unit]
@@ -32,3 +31,9 @@ sudo systemctl enable fix-tailscale-lan-access.service
 
 # Restart tailscaled.service to trigger the fix service
 sudo systemctl restart tailscaled.service
+
+if command -v apt-get &>/dev/null; then
+  sudo apt-get install networkd-dispatcher -y
+  printf '#!/bin/sh\n\nethtool -K %s rx-udp-gro-forwarding on rx-gro-list off \n' "$(ip -o route get 8.8.8.8 | cut -f 5 -d " ")" | sudo tee /etc/networkd-dispatcher/routable.d/50-tailscale
+  sudo chmod 755 /etc/networkd-dispatcher/routable.d/50-tailscale
+fi
