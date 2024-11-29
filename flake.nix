@@ -1,7 +1,7 @@
 {
   description = "OhMyMndy's Dotfiles!";
   nixConfig = {
-    extra-substituters = [ "https://nix-community.cachix.org" ];
+    extra-substituters = ["https://nix-community.cachix.org"];
     extra-trusted-public-keys = [
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
     ];
@@ -13,24 +13,23 @@
     nixpkgs-staging.url = "github:nixos/nixpkgs/staging";
 
     home-manager = {
-      url = "github:nix-community/home-manager/master"; # /release-24.05";
+      url = "github:nix-community/home-manager/release-24.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs =
-    { nixpkgs
-    , nixpkgs-unstable
-    , nixpkgs-master
-    , nixpkgs-staging
-    , home-manager
-    , flake-utils
-    , ...
-    }:
+  outputs = {
+    nixpkgs,
+    nixpkgs-unstable,
+    nixpkgs-master,
+    nixpkgs-staging,
+    home-manager,
+    flake-utils,
+    ...
+  }:
     flake-utils.lib.eachDefaultSystem (
-      system:
-      let
+      system: let
         stable-pkgs = import nixpkgs {
           config.allowUnfree = true;
           inherit system;
@@ -57,13 +56,12 @@
             neovim = unstable-pkgs.neovim;
             neovim-unwrapped = unstable-pkgs.neovim-unwrapped;
           };
-        le-just = pkgs.callPackage ./packages/just/default.nix { };
-      in
-      {
+        le-just = pkgs.callPackage ./packages/just/default.nix {};
+      in {
         apps = rec {
-          home-manager = flake-utils.lib.mkApp { drv = pkgs.home-manager; };
-          just = flake-utils.lib.mkApp { drv = le-just; };
-          nixpkgs-fmt = flake-utils.lib.mkApp { drv = pkgs.nixpkgs-fmt; };
+          home-manager = flake-utils.lib.mkApp {drv = pkgs.home-manager;};
+          just = flake-utils.lib.mkApp {drv = le-just;};
+          nixpkgs-fmt = flake-utils.lib.mkApp {drv = pkgs.nixpkgs-fmt;};
         };
 
         packages = {
@@ -71,7 +69,7 @@
             "cli" = home-manager.lib.homeManagerConfiguration {
               # TODO: clean up inherit pkgs
               inherit pkgs;
-              modules = [ ./home-manager/cli ];
+              modules = [./home-manager/cli];
               extraSpecialArgs = {
                 inherit pkgs;
                 # username = "mandy";
@@ -80,7 +78,7 @@
             "gui" = home-manager.lib.homeManagerConfiguration {
               # TODO: clean up inherit pkgs
               inherit pkgs;
-              modules = [ ./home-manager/gui ];
+              modules = [./home-manager/gui];
               extraSpecialArgs = {
                 inherit pkgs;
                 # username = "mandy";
