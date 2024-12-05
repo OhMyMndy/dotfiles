@@ -1,7 +1,8 @@
-{ pkgs
-, lib
-, config
-, ...
+{
+  pkgs,
+  lib,
+  config,
+  ...
 }: {
   home.packages = with pkgs; [
     # autoconf
@@ -38,7 +39,7 @@
     };
   };
 
-  home.activation.setupUv = lib.hm.dag.entryAfter [ "installPackages" ] ''
+  home.activation.setupUv = lib.hm.dag.entryAfter ["installPackages"] ''
     PATH="${config.home.path}/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:$PATH"
     . ~/.asdf/asdf.sh
     ${pkgs.asdf-vm}/bin/asdf plugin add uv
@@ -46,10 +47,9 @@
     ${pkgs.asdf-vm}/bin/asdf global uv latest
 
     ${pkgs.asdf-vm}/bin/asdf plugin add python
-    ${pkgs.asdf-vm}/bin/asdf global python system
 
-    # ${pkgs.asdf-vm}/bin/asdf install python $(${pkgs.asdf-vm}/bin/asdf list all python | grep '^3.12' | tail -1)
-    # ${pkgs.asdf-vm}/bin/asdf global python $(${pkgs.asdf-vm}/bin/asdf list all python | grep '^3.12' | tail -1)
-
+    PYTHON_VERSION="$(${pkgs.asdf-vm}/bin/asdf list all python | grep -E '^3.12.[0-9]+' | tail -1)"
+    ${pkgs.asdf-vm}/bin/asdf install python $PYTHON_VERSION
+    ${pkgs.asdf-vm}/bin/asdf global python $PYTHON_VERSION
   '';
 }
