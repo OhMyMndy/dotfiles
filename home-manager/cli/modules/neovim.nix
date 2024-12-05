@@ -26,6 +26,7 @@
       p.markdown
       p.nix
       p.python
+      p.php
       p.ruby
       p.rust
       p.sql
@@ -97,18 +98,18 @@ in {
     package = pkgs.neovim-unwrapped;
     plugins = [treesitterWithGrammars];
     extraLuaConfig = ''
+      vim.opt.runtimepath:prepend("${treesitter-parsers}")
       ${builtins.readFile ./../../../.config/nvim/init.lua}
-      -- vim.opt.runtimepath:prepend("${treesitter-parsers}")
     '';
   };
 
   # Treesitter is configured as a locally developed module in lazy.nvim
   # we hardcode a symlink here so that we can refer to it in our lazy config
   # SEE: https://github.com/Kidsan/nixos-config/blob/main/home/programs/neovim/default.nix
-  # home.file."./.local/share/nvim/nix/nvim-treesitter/" = {
-  #   recursive = true;
-  #   source = treesitterWithGrammars;
-  # };
+  home.file."./.local/share/nvim/nix/nvim-treesitter/" = {
+    recursive = true;
+    source = treesitterWithGrammars;
+  };
 
   # TODO: keyboard shortcut to hide popup messages
   home.file."./.config/nvim/lua" = {
@@ -125,9 +126,4 @@ in {
     cp -f ${./../../../.config/nvim/lazy-lock.json} ~/.config/nvim/lazy-lock.json
     chmod 0644 ~/.config/nvim/lazy-lock.json
   '';
-
-  # TODO: fix this
-  # home.activation.neovim = lib.hm.dag.entryAfter [ "installPackages" ] ''
-  #   sudo chmod 770 ~/.config/nvim/lazy-lock.json
-  # '';
 }
