@@ -6,8 +6,19 @@ DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$DIR" || exit 1
 
 if ! command -v nix &>/dev/null; then
+ # Replace with lix
  curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install --no-confirm --extra-conf "trusted-users = $USER"
+
+ if [[ ! -d /run/systemd/system ]]; then
+  sudo chown -R $USER:$USER /nix
+ fi
+
 fi
+
+# Uninstalling nix
+# sudo rm -rf /nix ~/.nix-*
+# cat /etc/passwd | grep -E '^nix' | cut -d':' -f1 | tr '\r\n' '\0' | sudo xargs -0 -I{} userdel --remove {}
+# cat /etc/group | grep -E '^nix' | cut -d':' -f1 | tr '\r\n' '\0' | sudo xargs -0 -I{} groupdel {}
 
 if [[ -d /run/systemd/system ]]; then
  sudo systemctl set-property nix-daemon.service CPUShares=$((50 * $(nproc --all)))
