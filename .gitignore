@@ -34,3 +34,5 @@ nvim/.local
 .config/nvim/lua/treesitter_config.lua
 *.backup
 */lua.backup/*
+
+retro-gaming.nix

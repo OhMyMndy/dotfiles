@@ -73,7 +73,7 @@ in {
     htmx-lsp
     # lua-language-server
     nil # nix language server
-    master.nixd
+    nixd
     # nodePackages_latest.bash-language-server
     # nodePackages_latest.typescript-language-server
     # nodePackages_latest.vscode-html-languageserver-bin

@@ -1,8 +1,4 @@
-{
-  lib,
-  pkgs,
-  ...
-}: let
+{lib, ...}: let
   profileUUID = "b1dcc9dd-5262-4d8d-a863-c897e6d979b9";
 in {
   imports = [(import ./gnome-extensions.nix)];

@@ -1,16 +1,16 @@
-{ pkgs, ... }:
-let
-  myHelm = pkgs.wrapHelm pkgs.kubernetes-helm {
-    plugins = with pkgs.kubernetes-helmPlugins; [
-      helm-secrets
-      helm-diff
-      helm-s3
-      helm-git
-    ];
-  };
-
-  myHelmfile = pkgs.helmfile-wrapped.override { inherit (myHelm.passthru) pluginsDir; };
-in
+{pkgs, ...}:
+# let
+# myHelm = pkgs.wrapHelm pkgs.kubernetes-helm {
+#   plugins = with pkgs.kubernetes-helmPlugins; [
+#     helm-secrets
+#     helm-diff
+#     helm-s3
+#     helm-git
+#   ];
+# };
+#
+# myHelmfile = pkgs.helmfile-wrapped.override {inherit (myHelm.passthru) pluginsDir;};
+# in
 {
   home.packages = with pkgs; [
     cilium-cli

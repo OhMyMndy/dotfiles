@@ -1,4 +1,4 @@
-{ pkgs, ... }: {
+{pkgs, ...}: {
   home.packages = with pkgs.master; [
     gnomeExtensions.appindicator
     gnomeExtensions.caffeine

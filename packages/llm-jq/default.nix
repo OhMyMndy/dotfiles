@@ -1,7 +1,7 @@
-{ lib
-, python3
-, fetchFromGitHub
-,
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 python3.pkgs.buildPythonPackage rec {
   pname = "llm-jq";
@@ -34,6 +34,6 @@ python3.pkgs.buildPythonPackage rec {
     description = "Write and execute jq programs with the help of LLM";
     homepage = "https://github.com/simonw/llm-jq";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

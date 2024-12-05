@@ -5,7 +5,7 @@
     (import ./../cli)
     (import ./modules/dconf.nix)
     (import ./modules/flatpaks.nix)
-    # (import ./modules/gaming.nix)
+    (import ./modules/gaming)
     (import ./modules/gnome-extensions.nix)
     (import ./modules/gnome.nix)
     (import ./modules/gtk.nix)

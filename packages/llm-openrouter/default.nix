@@ -1,7 +1,7 @@
-{ lib
-, python3
-, fetchFromGitHub
-,
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 python3.pkgs.buildPythonPackage rec {
   pname = "llm-openrouter";
@@ -36,6 +36,6 @@ python3.pkgs.buildPythonPackage rec {
     description = "LLM plugin for models hosted by OpenRouter";
     homepage = "https://github.com/simonw/llm-openrouter";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }

@@ -1,12 +1,13 @@
-{ pkgs
-, lib
-, ...
+{
+  pkgs,
+  lib,
+  ...
 }:
 pkgs.stdenv.mkDerivation rec {
   pname = "just-with-deps";
   version = "1.0";
 
-  nativeBuildInputs = [ pkgs.makeWrapper pkgs.pkg-config ];
+  nativeBuildInputs = [pkgs.makeWrapper pkgs.pkg-config];
 
   unpackPhase = "true";
   buildPhase = "true";
@@ -20,6 +21,6 @@ pkgs.stdenv.mkDerivation rec {
   meta = with pkgs.lib; {
     description = "just with bitwarden-cli and gh as dependencies";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [];
   };
 }
