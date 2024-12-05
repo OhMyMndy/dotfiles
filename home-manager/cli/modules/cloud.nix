@@ -24,7 +24,6 @@
       plugins = [
         "gcloud"
         "terraform"
-        # "opentofu"
       ];
     };
   };
