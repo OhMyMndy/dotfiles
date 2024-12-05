@@ -37,13 +37,13 @@
   # };
 
   # TODO: install dependencies
-  # sudo dnf install -y autoconf gcc rust patch make bzip2 openssl-devel libyaml-devel libffi-devel readline-devel zlib-devel gdbm-devel ncurses-devel perl
-  # home.activation.setupRuby = lib.hm.dag.entryAfter [ "installPackages" ] ''
-  #   PATH="${config.home.path}/bin:$PATH"
-  #   # . "${pkgs.asdf-vm}/share/asdf-vm/asdf.sh"
-  #   ${pkgs.asdf-vm}/bin/asdf plugin add ruby
-  #   ${pkgs.asdf-vm}/bin/asdf install ruby
-  #   ${pkgs.asdf-vm}/bin/asdf install ruby latest
-  #   ${pkgs.asdf-vm}/bin/asdf global ruby latest
-  # '';
+  # sudo dnf install -y ruby ruby-devel autoconf gcc rust patch make bzip2 openssl-devel libyaml-devel libffi-devel readline-devel zlib-devel gdbm-devel ncurses-devel perl
+  home.activation.setupRuby = lib.hm.dag.entryAfter ["installPackages"] ''
+    PATH="${config.home.path}/bin:$PATH"
+    . ~/.asdf/asdf.sh
+    ${pkgs.asdf-vm}/bin/asdf plugin add ruby
+    RUBY_VERSION="$(${pkgs.asdf-vm}/bin/asdf list all ruby | grep -E '^3.3.[0-9]+$' | tail -1)"
+    ${pkgs.asdf-vm}/bin/asdf install ruby $RUBY_VERSION
+    ${pkgs.asdf-vm}/bin/asdf global ruby $RUBY_VERSION
+  '';
 }
