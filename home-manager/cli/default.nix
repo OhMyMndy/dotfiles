@@ -1,11 +1,13 @@
 # see: https://juliu.is/tidying-your-home-with-nix/
-{pkgs, ...}: {
+{...}: {
   imports = [
     (import ./modules/asdf.nix)
+    (import ./modules/audio.nix)
     (import ./modules/bash.nix)
     (import ./modules/cloud.nix)
     (import ./modules/containers.nix)
     (import ./modules/dart.nix)
+    (import ./modules/database.nix)
     (import ./modules/file-transfer.nix)
     # (import ./modules/fish.nix)
     (import ./modules/git.nix)
@@ -28,14 +30,18 @@
     (import ./modules/zsh.nix)
   ];
 
-  home.username = builtins.getEnv "USER";
-  home.homeDirectory = builtins.getEnv "HOME";
-  home.stateVersion = "22.11";
+  home = {
+    username = builtins.getEnv "USER";
+    homeDirectory = builtins.getEnv "HOME";
+    stateVersion = "22.11";
+  };
+
   programs.home-manager.enable = true;
 
-  xdg.enable = true;
   targets.genericLinux.enable = true;
-  xdg.mime.enable = true;
 
-  home.packages = with pkgs; [];
+  xdg = {
+    enable = true;
+    mime.enable = true;
+  };
 }
