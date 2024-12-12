@@ -12,6 +12,7 @@
     mouse = true;
     sensibleOnTop = true;
     baseIndex = 1;
+    historyLimit = 10000;
     plugins = with pkgs.master; [
       tmuxPlugins.continuum
       # Since the version in nixpkgs is old, lets use it directly from GitHub
