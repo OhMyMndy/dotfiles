@@ -1,3 +1,6 @@
 {pkgs, ...}: {
-  home.packages = with pkgs; [nixpkgs-fmt];
+  home.packages = with pkgs; [
+    nixfmt-rfc-style
+    treefmt
+  ];
 }
