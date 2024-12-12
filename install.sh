@@ -10,7 +10,8 @@ if ! command -v nix &>/dev/null; then
  curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install --no-confirm --extra-conf "trusted-users = $USER"
 
  if [[ ! -d /run/systemd/system ]]; then
-  sudo chown -R $USER:$USER /nix
+  echo "Changing ownership of /nix"
+  sudo chown -R "$USER:$USER" /nix
  fi
 
 fi
@@ -21,6 +22,7 @@ fi
 # cat /etc/group | grep -E '^nix' | cut -d':' -f1 | tr '\r\n' '\0' | sudo xargs -0 -I{} groupdel {}
 
 if [[ -d /run/systemd/system ]]; then
+ echo "Tuning nix-daemon"
  sudo systemctl set-property nix-daemon.service CPUShares=$((50 * $(nproc --all)))
  sudo systemctl set-property nix-daemon.service MemoryLimit=$(($(awk '/MemTotal/ {print $2}' /proc/meminfo) / 2 / 1024))M
  sudo systemctl daemon-reload
@@ -31,4 +33,7 @@ if [[ -f /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]]; then
  . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
 fi
 
+# TODO: configure cachix? cachix use nix-community
+
+echo "Running home manager"
 time yes | nix run .#just -- switch
