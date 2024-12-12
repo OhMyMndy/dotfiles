@@ -23,6 +23,7 @@
     kustomize
     kompose
     k3s # k3s, kubectl
+    k3d
     k9s
     talosctl
     kubectx
