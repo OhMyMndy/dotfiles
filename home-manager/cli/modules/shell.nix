@@ -24,6 +24,7 @@
     jq
     just
     lm_sensors
+    openapi-generator-cli
     p7zip
     restic
     shellcheck
