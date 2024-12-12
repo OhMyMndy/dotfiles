@@ -8,6 +8,7 @@
   };
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
+    nixpkgs-previous.url = "github:nixos/nixpkgs/nixos-24.05";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-master.url = "github:nixos/nixpkgs/master";
     nixpkgs-staging.url = "github:nixos/nixpkgs/staging";
@@ -21,6 +22,7 @@
 
   outputs = {
     nixpkgs,
+    nixpkgs-previous,
     nixpkgs-unstable,
     nixpkgs-master,
     nixpkgs-staging,
@@ -38,6 +40,11 @@
           config.allowUnfree = true;
           inherit system;
         };
+        previous-pkgs = import nixpkgs-previous {
+          config.allowUnfree = true;
+          inherit system;
+        };
+
         master-pkgs = import nixpkgs-master {
           config.allowUnfree = true;
           inherit system;
@@ -50,6 +57,7 @@
           stable-pkgs
           // {
             # provides alias for all unstable pkgs SEE: https://rexk.github.io/en/blog/nix-home-manager-flake-setup/
+            previous = previous-pkgs;
             unstable = unstable-pkgs;
             master = master-pkgs;
             staging = staging-pkgs;
@@ -58,7 +66,7 @@
           };
         le-just = pkgs.callPackage ./packages/just/default.nix {};
       in {
-        apps = rec {
+        apps = {
           home-manager = flake-utils.lib.mkApp {drv = pkgs.home-manager;};
           just = flake-utils.lib.mkApp {drv = le-just;};
           nixpkgs-fmt = flake-utils.lib.mkApp {drv = pkgs.nixpkgs-fmt;};
@@ -67,21 +75,17 @@
         packages = {
           homeConfigurations = {
             "cli" = home-manager.lib.homeManagerConfiguration {
-              # TODO: clean up inherit pkgs
               inherit pkgs;
               modules = [./home-manager/cli];
               extraSpecialArgs = {
                 inherit pkgs;
-                # username = "mandy";
               };
             };
             "gui" = home-manager.lib.homeManagerConfiguration {
-              # TODO: clean up inherit pkgs
               inherit pkgs;
               modules = [./home-manager/gui];
               extraSpecialArgs = {
                 inherit pkgs;
-                # username = "mandy";
               };
             };
           };

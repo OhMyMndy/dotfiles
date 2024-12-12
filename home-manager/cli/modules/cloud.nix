@@ -16,6 +16,10 @@
     # (google-cloud-sdk.withExtraComponents [google-cloud-sdk.components.google-cloud-workstations])
     # TODO: alias terraform to tofu
     opentofu
+    pulumictl
+    # SEE: https://github.com/pulumi/pulumi/issues/17003
+    # SEE: https://github.com/NixOS/nixpkgs/issues/351955
+    previous.pulumi
     # TODO: why is Terraform being built all the time?
     # terraform
     tflint
