@@ -25,6 +25,7 @@
     just
     lm_sensors
     openapi-generator-cli
+    osquery
     p7zip
     restic
     shellcheck
