@@ -20,6 +20,7 @@
     (import ./modules/nix.nix)
     (import ./modules/performance.nix)
     (import ./modules/python.nix)
+    (import ./modules/steampipe.nix)
     (import ./modules/ruby.nix)
     (import ./modules/rust.nix)
     (import ./modules/security.nix)
