@@ -37,3 +37,9 @@ fi
 
 echo "Running home manager"
 time yes | nix run .#just -- switch
+
+# Bridge network
+# # TODO check if br0 already exists
+# sudo nmcli connection add type bridge autoconnect yes ifname br0
+# # TODO check if we have an ethernet device
+# sudo nmcli connection add type bridge-slave autoconnect yes ifname "$(nmcli device status | awk '($2 == "ethernet") { print $1 }' | head -1)" master br0
