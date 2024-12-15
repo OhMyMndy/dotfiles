@@ -13,5 +13,6 @@
     plugins+="theapsgroup/keycloak kubernetes ldap linkedin net openapi prometheus steampipe "
     plugins+="tailscale terraform "
     ${pkgs.steampipe}/bin/steampipe plugin install $plugins
+    # ${pkgs.steampipe}/bin/steampipe plugin update --all
   '';
 }
