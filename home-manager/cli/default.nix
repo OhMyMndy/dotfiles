@@ -8,6 +8,7 @@
     (import ./modules/containers.nix)
     (import ./modules/dart.nix)
     (import ./modules/database.nix)
+    (import ./modules/distrobox.nix)
     (import ./modules/file-transfer.nix)
     # (import ./modules/fish.nix)
     (import ./modules/git.nix)

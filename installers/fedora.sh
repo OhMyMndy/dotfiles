@@ -18,6 +18,9 @@ sudo flatpak install flathub org.mozilla.firefox -y
 sudo dnf install -y zlib-devel bzip2 bzip2-devel readline-devel \
   sqlite-devel openssl-devel xz xz-devel libffi-devel tk-devel
 
+# Virtual machines
+# sudo dnf install virt-manager libvirt-nss -y && sudo authselect enable-feature with-libvirt
+
 # build with asdf:
 # asdf install python $(asdf list all python | grep '^3.12' | tail -1)
 
