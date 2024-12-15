@@ -1,0 +1,13 @@
+# virter image pull alma-9
+# virter vm run alma-9 --bootcapacity 22GiB --memory 4GiB --vcpus 2 --provision opennebula.toml --name opennebula --id 10
+version = 1
+
+[[steps]]
+[steps.shell]
+script = '''
+yum install epel-release -y
+exit
+dnf install wget -y
+wget 'https://github.com/OpenNebula/minione/releases/latest/download/minione'
+bash minione 
+'''
