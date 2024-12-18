@@ -6,6 +6,7 @@
   home.packages = with pkgs; [
     act
     hadolint
+    skopeo
   ];
 
   home.activation.setupPodman = lib.hm.dag.entryAfter ["installPackages"] ''
