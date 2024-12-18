@@ -14,7 +14,12 @@
     baseIndex = 1;
     historyLimit = 10000;
     plugins = with pkgs.master; [
-      tmuxPlugins.continuum
+      {
+        plugin = tmuxPlugins.continuum;
+        extraConfig = ''
+          set -g @continuum-restore 'on'
+        '';
+      }
       # Since the version in nixpkgs is old, lets use it directly from GitHub
       {
         plugin = tmuxPlugins.mkTmuxPlugin {
@@ -33,7 +38,12 @@
           set -ogq @catppuccin_window_current_text " #{window_name}"
         '';
       }
-      tmuxPlugins.resurrect
+      {
+        plugin = tmuxPlugins.resurrect;
+        extraConfig = ''
+          set -g @resurrect-strategy-nvim 'session'
+        '';
+      }
       tmuxPlugins.prefix-highlight
       tmuxPlugins.better-mouse-mode
       tmuxPlugins.yank
