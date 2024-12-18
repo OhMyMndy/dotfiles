@@ -46,7 +46,7 @@ in {
     };
     "org/gnome/desktop/wm/preferences" = {
       num-workspaces = "10";
-      button-layout = "appmenu:minimize,maximize,close";
+      button-layout = "close,minimize,maximize:appmenu";
       resize-with-right-button = true;
     };
     "org/gnome/mutter" = {
@@ -57,6 +57,8 @@ in {
       "show-weekdate" = true;
     };
     "org/gnome/desktop/interface" = {
+      "enable-animations" = false;
+      "accent-color" = "pink";
       "enable-hot-corners" = true;
       "monospace-font-name" = "JetBrainsMonoNL Nerd Font Mono 10";
       "font-name" = "IBM Plex Sans 11";
