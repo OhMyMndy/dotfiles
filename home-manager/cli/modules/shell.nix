@@ -31,6 +31,7 @@
     shellcheck
     shfmt
     sqlite
+    texliveMedium
     tree
     yq-go
     wget
