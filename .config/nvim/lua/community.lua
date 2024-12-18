@@ -40,6 +40,7 @@ return {
     import = "astrocommunity.lsp.nvim-lint",
   },
   { import = "astrocommunity.editing-support.telescope-undo-nvim" },
+  { import = "astrocommunity.markdown-and-latex.vimtex" },
   { import = "astrocommunity.git.blame-nvim" },
   { import = "astrocommunity.neovim-lua-development.lazydev-nvim" },
   { import = "astrocommunity.pack.ansible" },
