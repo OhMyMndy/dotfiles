@@ -3,7 +3,7 @@
 {pkgs, ...}: {
   imports = [
     (import ./../cli)
-    (import ./modules/dconf.nix)
+    # (import ./modules/dconf.nix)
     (import ./modules/flatpaks.nix)
     (import ./modules/gaming)
     (import ./modules/gnome-extensions.nix)
