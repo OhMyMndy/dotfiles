@@ -2,16 +2,21 @@
   config,
   lib,
   ...
-}: {
+}:
+{
   # Install zeal flatpak
-  home.activation.setupZeal = lib.hm.dag.entryAfter ["installPackages"] ''
+  home.activation.setupZeal = lib.hm.dag.entryAfter [ "installPackages" ] ''
     # add path here so flatpak can access other binaries
-    PATH="${config.home.path}/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:$PATH"
+    PATH="${config.home.path}/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin"
+    PATH+=":$HOME/.local/bin:$PATH"
+    . "$HOME/.asdf/asdf.sh"
+
     if command -v /usr/bin/flatpak &>/dev/null; then
       /usr/bin/flatpak --user install flathub org.zealdocs.Zeal -y
     fi
     mkdir -p ~/.var/app/org.zealdocs.Zeal/config/Zeal
     mkdir -p ~/.var/app/org.zealdocs.Zeal/data/Zeal
+    rm -rf ~/.config/Zeal ~/.local/share/Zeal
     ln -sf ~/.var/app/org.zealdocs.Zeal/config/Zeal ~/.config/Zeal
     ln -sf ~/.var/app/org.zealdocs.Zeal/data/Zeal ~/.local/share/Zeal
 
@@ -19,7 +24,7 @@
     feeds="Alpinejs Beautiful_Soup Clang Cython glibc HAProxy jq Kubernetes llm LLVM "
     feeds+="mypy json-schema Neovim Terraform Packer pytest QEMU Scrapy"
 
-    zeal-feeds install "$feeds"
+    zeal-feeds install $feeds
 
     python_version="$(asdf list all python | grep '^3.10' | tail -1)"
     asdf install python "$python_version"
