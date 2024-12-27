@@ -1,4 +1,9 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  lib,
+  ...
+}:
+{
   home.packages = with pkgs.master; [
     gnomeExtensions.appindicator
     gnomeExtensions.caffeine
@@ -6,6 +11,7 @@
     gnomeExtensions.dash-to-dock
     gnomeExtensions.gsconnect
     gnomeExtensions.impatience
+    gnomeExtensions.search-light
     gnomeExtensions.sound-output-device-chooser
     gnomeExtensions.tray-icons-reloaded
   ];
@@ -20,6 +26,7 @@
         "trayIconsReloaded@selfmade.pl"
         "impatience@gfxmonk.net"
         "appindicatorsupport@rgcjonas.gmail.com"
+        "search-light@icedman.github.com"
       ];
     };
 
@@ -41,6 +48,26 @@
     # "org/gnome/shell/extensions/clipboard-indicator/history-size"
     "org/gnome/shell/extensions/clipboard-indicator" = {
       "history-size" = 200;
+    };
+
+    "org/gnome/shell/extensions/search-light" = {
+      "popup-at-cursor-monitor" = true;
+      "unit-converter" = true;
+      "currency-converter" = true;
+      # "text-color" = lib.hm.gvariant.mkTuple [
+      #   1.0
+      #   1.0
+      #   1.0
+      #   0.0
+      # ];
+      # "background-color" = lib.mkForce (
+      #   lib.hm.gvariant.mkTuple [
+      #     0.0
+      #     0.0
+      #     0.0
+      #     1.0
+      #   ]
+      # );
     };
   };
 }
