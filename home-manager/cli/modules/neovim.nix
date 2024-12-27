@@ -2,7 +2,8 @@
   pkgs,
   lib,
   ...
-}: let
+}:
+let
   treesitterWithGrammars = (
     pkgs.vimPlugins.nvim-treesitter.withPlugins (p: [
       p.bash
@@ -72,7 +73,8 @@
     name = "treesitter-parsers";
     paths = treesitterWithGrammars.dependencies;
   };
-in {
+in
+{
   # TODO:check which language servers are installed through Mason and friends
   home.packages = with pkgs; [
     fd
@@ -124,7 +126,8 @@ in {
   programs.neovim = {
     enable = true;
     package = pkgs.neovim-unwrapped;
-    plugins = [treesitterWithGrammars];
+    plugins = [ treesitterWithGrammars ];
+    defaultEditor = true;
     extraLuaConfig = ''
       vim.opt.runtimepath:prepend("${treesitter-parsers}")
       ${builtins.readFile ./../../../.config/nvim/init.lua}
@@ -150,7 +153,7 @@ in {
   #   source = config.lib.file.mkOutOfStoreSymlink ./../../../.config/nvim/lazy-lock.json;
   # };
 
-  home.activation.setupNeovim = lib.hm.dag.entryAfter ["writeBoundary"] ''
+  home.activation.setupNeovim = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     cp -f ${./../../../.config/nvim/lazy-lock.json} ~/.config/nvim/lazy-lock.json
     chmod 0644 ~/.config/nvim/lazy-lock.json
   '';
