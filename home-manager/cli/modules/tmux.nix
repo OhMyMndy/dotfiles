@@ -1,5 +1,6 @@
-{pkgs, ...}: {
-  home.packages = with pkgs; [tmux];
+{ pkgs, ... }:
+{
+  home.packages = with pkgs; [ tmux ];
 
   # SEE https://github.com/nix-community/home-manager/blob/master/modules/programs/tmux.nix
   programs.tmux = {
@@ -18,6 +19,7 @@
         plugin = tmuxPlugins.continuum;
         extraConfig = ''
           set -g @continuum-restore 'on'
+          set -g @continuum-save-interval '10'
         '';
       }
       # Since the version in nixpkgs is old, lets use it directly from GitHub
@@ -41,7 +43,10 @@
       {
         plugin = tmuxPlugins.resurrect;
         extraConfig = ''
+          set -g @resurrect-strategy-vim 'session'
           set -g @resurrect-strategy-nvim 'session'
+          # set -g @resurrect-processes '"~nvim"'
+          set -g @resurrect-capture-pane-contents 'on'
         '';
       }
       tmuxPlugins.prefix-highlight
@@ -58,6 +63,8 @@
       set -g automatic-rename off
       set -s escape-time 0
       set -g repeat-time 0
+
+      tmux_commands_with_legacy_scroll="bat nano less man"
     '';
   };
 }
