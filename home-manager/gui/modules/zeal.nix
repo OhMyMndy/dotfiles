@@ -21,7 +21,8 @@
     ln -sf ~/.var/app/org.zealdocs.Zeal/data/Zeal ~/.local/share/Zeal
 
     pipx install zeal-feeds
-    feeds="Alpinejs Beautiful_Soup Clang Cython glibc HAProxy jq Kubernetes llm LLVM "
+    feeds="Alpinejs Beautiful_Soup Clang Cython glibc HAProxy jq Kubernetes "
+    feeds="Linux_Man_Pages llm LLVM "
     feeds+="mypy json-schema Neovim Terraform Packer pytest QEMU Scrapy"
 
     zeal-feeds install $feeds
