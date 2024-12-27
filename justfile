@@ -51,3 +51,7 @@ bw-login:
 
 bw-unlock:
     bw unlock --raw
+
+
+audit:
+  sudo $(which lynis) audit system --profile ~/dotfiles/lynis/profiles/default.prf
