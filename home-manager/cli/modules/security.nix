@@ -1,5 +1,10 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   home.packages = with pkgs; [
     bitwarden-cli
+    grype
+    lynis
+    # sysstat # lynis recommends this
+    # aide # lynis recommends this
   ];
 }
