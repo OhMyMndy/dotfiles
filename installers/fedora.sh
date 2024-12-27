@@ -5,6 +5,10 @@ set -e
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$DIR" || exit 1
 
+# Hardening tools
+sudo dnf install -y aide sysstat
+sudo systemctl enable --now sysstat
+
 # XDG utils is needed for gcloud for example
 sudo dnf install -y vim git curl zsh flatpak @development-tools \
   unzip xdg-utils flatpak-xdg-utils python3-pip python3-virtualenv composer
