@@ -3,20 +3,21 @@
   lib,
   home,
   ...
-}: {
+}:
+{
   home.packages = with pkgs; [
     aria2
     atuin
+    bat
     bat # TODO https://github.com/catppuccin/bat
     cpulimit
     curl
     dapr-cli
-    gawk
-    bat
     devenv # https://devenv.sh
     dialog
     eza # https://github.com/eza-community/eza
     fastgron # Make JSON greppable super fast!
+    gawk
     gron
     hadolint
     ijq
@@ -24,6 +25,7 @@
     jq
     just
     lm_sensors
+    ncdu
     openapi-generator-cli
     osquery
     p7zip
@@ -33,8 +35,8 @@
     sqlite
     texliveMedium
     tree
-    yq-go
     wget
+    yq-go
   ];
 
   programs.fzf = {
