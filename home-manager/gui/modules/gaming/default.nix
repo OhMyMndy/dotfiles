@@ -2,8 +2,9 @@
   lib,
   config,
   ...
-}: {
-  home.activation.installGamingApplications = lib.hm.dag.entryAfter ["installPackages"] ''
+}:
+{
+  home.activation.setupGamingApplications = lib.hm.dag.entryAfter [ "installPackages" ] ''
     PATH="${config.home.path}/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:$PATH"
 
     if command -v /usr/bin/flatpak &>/dev/null; then
