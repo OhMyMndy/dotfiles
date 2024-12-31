@@ -1,7 +1,9 @@
-{lib, ...}: let
+{ lib, ... }:
+let
   profileUUID = "b1dcc9dd-5262-4d8d-a863-c897e6d979b9";
-in {
-  imports = [(import ./gnome-extensions.nix)];
+in
+{
+  imports = [ (import ./gnome-extensions.nix) ];
   # TODO fix xdg-open with flatpak applications
   # xdg.portal = {
   #   enable = true;
@@ -15,19 +17,25 @@ in {
   #  gsettings set org.gnome.mutter experimental-features "['scale-monitor-framebuffer']"
   dconf.settings = {
     "org/gnome/desktop/wm/keybindings" = {
-      "switch-input-source" = [];
-      "switch-input-source-backward" = [];
-      "switch-to-workspace-1" = ["<Super>1"];
-      "switch-to-workspace-2" = ["<Super>2"];
-      "switch-to-workspace-3" = ["<Super>3"];
-      "switch-to-workspace-4" = ["<Super>4"];
-      "switch-to-workspace-5" = ["<Super>5"];
-      "switch-to-workspace-6" = ["<Super>6"];
-      "switch-to-workspace-7" = ["<Super>7"];
-      "switch-to-workspace-8" = ["<Super>8"];
-      "switch-to-workspace-9" = ["<Super>9"];
-      "switch-to-workspace-10" = ["<Super>10"];
+      "switch-input-source" = [ ];
+      "switch-input-source-backward" = [ ];
+      "switch-to-workspace-1" = [ "<Super>1" ];
+      "switch-to-workspace-2" = [ "<Super>2" ];
+      "switch-to-workspace-3" = [ "<Super>3" ];
+      "switch-to-workspace-4" = [ "<Super>4" ];
+      "switch-to-workspace-5" = [ "<Super>5" ];
+      "switch-to-workspace-6" = [ "<Super>6" ];
+      "switch-to-workspace-7" = [ "<Super>7" ];
+      "switch-to-workspace-8" = [ "<Super>8" ];
+      "switch-to-workspace-9" = [ "<Super>9" ];
+      "switch-to-workspace-10" = [ "<Super>10" ];
     };
+    "org/gnome/desktop/peripherals/touchpad" = {
+      "natural-scroll" = false;
+      "two-finger-scrolling-enabled" = true;
+      "disable-while-typing" = true;
+    };
+
     "org/gnome/desktop/search-providers" = {
       disabled = [
         "org.gnome.Nautilus.desktop"
@@ -97,7 +105,7 @@ in {
     };
     "org/gnome/terminal/legacy/profiles:" = {
       default = profileUUID;
-      list = [profileUUID];
+      list = [ profileUUID ];
     };
     "org/gnome/terminal/legacy/profiles:/:${profileUUID}" = {
       visible-name = "OhMyMndy Dark";
