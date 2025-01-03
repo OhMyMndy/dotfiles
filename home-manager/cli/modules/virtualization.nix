@@ -2,14 +2,16 @@
   pkgs,
   lib,
   ...
-}: {
+}:
+{
   home.packages = with pkgs; [
     # cloud-hypervisor
     # quickemu
+    lima
     virter
   ];
 
-  home.activation.setupVirtualization = lib.hm.dag.entryAfter ["installPackages"] ''
+  home.activation.setupVirtualization = lib.hm.dag.entryAfter [ "installPackages" ] ''
     if getent group kvms &>/dev/null; then
       echo "Setting up KVM for user '$USER'"
       # sudo usermod -aG kvm $USER
@@ -17,7 +19,7 @@
 
   '';
 
-  home.activation.setupVirter = lib.hm.dag.entryAfter ["installPackages"] ''
+  home.activation.setupVirter = lib.hm.dag.entryAfter [ "installPackages" ] ''
     mkdir -p ~/.ssh/
     touch ~/.ssh/config
 
