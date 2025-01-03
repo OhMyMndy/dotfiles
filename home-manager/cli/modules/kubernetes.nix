@@ -1,4 +1,4 @@
-{pkgs, ...}:
+{ pkgs, ... }:
 # let
 # myHelm = pkgs.wrapHelm pkgs.kubernetes-helm {
 #   plugins = with pkgs.kubernetes-helmPlugins; [
@@ -14,6 +14,8 @@
 {
   home.packages = with pkgs; [
     cilium-cli
+    fluxctl
+    helmfile
     # myHelm
     # myHelmfile
     kubernetes-helm # TODO: install with plugins, but from Nix cache
