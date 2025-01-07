@@ -9,6 +9,7 @@ cd "$DIR" || exit 1
 sudo dnf install -y aide sysstat
 sudo systemctl enable --now sysstat
 
+sudo dnf install -y qemu-user-static qemu-system-x86
 # XDG utils is needed for gcloud for example
 sudo dnf install -y vim git curl zsh flatpak @development-tools \
   unzip xdg-utils flatpak-xdg-utils python3-pip python3-virtualenv composer
@@ -16,7 +17,9 @@ sudo dnf install -y vim git curl zsh flatpak @development-tools \
 sudo dnf remove firefox -y
 
 sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-sudo flatpak install flathub org.mozilla.firefox -y
+if arch != "aarch64"; then
+  sudo flatpak install flathub org.mozilla.firefox -y
+fi
 
 # dependencies for building Python
 sudo dnf install -y zlib-devel bzip2 bzip2-devel readline-devel \

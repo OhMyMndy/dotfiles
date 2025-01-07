@@ -50,7 +50,12 @@
         '';
       }
       tmuxPlugins.prefix-highlight
-      tmuxPlugins.better-mouse-mode
+      {
+        plugin = tmuxPlugins.better-mouse-mode;
+        extraConfig = ''
+          set -g @emulate-scroll-for-no-mouse-alternate-buffer 'on'
+        '';
+      }
       tmuxPlugins.yank
       tmuxPlugins.pain-control
     ];
@@ -63,8 +68,6 @@
       set -g automatic-rename off
       set -s escape-time 0
       set -g repeat-time 0
-
-      tmux_commands_with_legacy_scroll="bat nano less man"
     '';
   };
 }
