@@ -8,7 +8,6 @@
   home.packages = with pkgs; [
     aria2
     atuin
-    bat
     bat # TODO https://github.com/catppuccin/bat
     cpulimit
     curl
@@ -20,6 +19,7 @@
     gawk
     gron
     hadolint
+    helix # helix editor
     ijq
     jless
     jq
@@ -52,6 +52,7 @@
     enable = true;
   };
 
+  # todo: create ssh keys automatically
   services.ssh-agent = {
     enable = true;
   };
