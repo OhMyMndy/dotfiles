@@ -13,6 +13,7 @@
     gnomeExtensions.impatience
     gnomeExtensions.search-light
     gnomeExtensions.sound-output-device-chooser
+    gnomeExtensions.tiling-shell
     gnomeExtensions.tray-icons-reloaded
   ];
 
