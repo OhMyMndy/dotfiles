@@ -16,6 +16,7 @@
     cilium-cli
     fluxctl
     helmfile
+    kubectl
     # myHelm
     # myHelmfile
     kubernetes-helm # TODO: install with plugins, but from Nix cache
@@ -24,8 +25,8 @@
     kubeconform
     kustomize
     kompose
-    k3s # k3s, kubectl
-    k3d
+    # k3s # k3s, kubectl
+    # k3d
     k9s
     talosctl
     kubectx
