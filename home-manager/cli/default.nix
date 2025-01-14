@@ -1,5 +1,6 @@
 # see: https://juliu.is/tidying-your-home-with-nix/
-{...}: {
+{ ... }:
+{
   imports = [
     (import ./modules/asdf.nix)
     (import ./modules/audio.nix)
@@ -15,6 +16,7 @@
     (import ./modules/go.nix)
     (import ./modules/javascript.nix)
     (import ./modules/kubernetes.nix)
+    (import ./modules/latex.nix)
     (import ./modules/llm.nix)
     (import ./modules/neovim.nix)
     (import ./modules/networking.nix)
