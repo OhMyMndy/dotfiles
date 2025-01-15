@@ -46,6 +46,10 @@ return {
   { import = "astrocommunity.pack.ansible" },
   { import = "astrocommunity.pack.bash" },
   { import = "astrocommunity.pack.dart" },
+  {
+    "nvim-flutter/flutter-tools.nvim",
+    opts = function(_, opts) opts.flutter_lookup_cmd = "asdf where flutter" end,
+  },
   { import = "astrocommunity.pack.docker" },
   { import = "astrocommunity.pack.go" },
   { import = "astrocommunity.pack.json" },

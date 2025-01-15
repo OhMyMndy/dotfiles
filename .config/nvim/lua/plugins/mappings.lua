@@ -1,21 +1,48 @@
--- if true then return {} end -- WARN: REMOVE THIS LINE TO ACTIVATE THIS FILE
-vim.keymap.set("n", "J", "mzJ`z")
-vim.keymap.set("n", "<C-d>", "<C-d>zz")
-vim.keymap.set("n", "<C-u>", "<C-u>zz")
-vim.keymap.set("n", "n", "nzzzv")
-vim.keymap.set("n", "N", "Nzzzv")
-
 return {
   "AstroNvim/astrocore",
   ---@type AstroCoreOpts
   opts = {
     mappings = {
+      i = {
+        ["<Left>"] = { "<Nop>" },
+        ["<Down>"] = { "<Nop>" },
+        ["<Up>"] = { "<Nop>" },
+        ["<Right>"] = { "<Nop>" },
+
+        ["<C-h>"] = { "<Left>" },
+        ["<C-j>"] = { "<Down>" },
+        ["<C-k>"] = { "<Up>" },
+        ["<C-l>"] = { "<Right>" },
+      },
       v = {
+        ["<Left>"] = { "<Nop>" },
+        ["<Down>"] = { "<Nop>" },
+        ["<Up>"] = { "<Nop>" },
+        ["<Right>"] = { "<Nop>" },
+
         ["<leader>y"] = { [["+y]], desc = "Yank" },
+        ["<leader>d"] = { [["_d]], desc = "Delete" },
+        ["<"] = { "<gv" },
+        [">"] = { ">gv" },
       },
       n = {
+        ["<Left>"] = { "<Nop>" },
+        ["<Down>"] = { "<Nop>" },
+        ["<Up>"] = { "<Nop>" },
+        ["<Right>"] = { "<Nop>" },
+
         ["<leader>Y"] = { [["+Y]], desc = "Yank" },
         ["<leader>y"] = { [["+y]], desc = "Yank" },
+        ["<leader>d"] = { [["_d]], desc = "Delete" },
+        ["<C-d>"] = { "<C-d>zz" },
+        ["<C-u>"] = { "<C-u>zz" },
+        ["n"] = { "nzzzv" },
+        ["N"] = { "Nzzzv" },
+        -- ["<leader>a"] = { require("harpoon.mark").add_file },
+        -- ["<C-e>"] = { require("harpoon.ui").toggle_quick_menu },
+        -- ["<C-h>"] = { function() require("harpoon.ui").nav_file(1) end },
+        -- ["<C-t>"] = { function() require("harpoon.ui").nav_file(2) end },
+        -- ["<C-n>"] = { function() require("harpoon.ui").nav_file(3) end },
       },
     },
   },
