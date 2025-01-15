@@ -3,7 +3,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   home.packages = with pkgs; [
     # autoconf
     # patch
@@ -23,7 +24,7 @@
 
   # TODO: install dependencies
   # sudo dnf install -y ruby ruby-devel autoconf gcc rust patch make bzip2 openssl-devel libyaml-devel libffi-devel readline-devel zlib-devel gdbm-devel ncurses-devel perl
-  home.activation.setupRuby = lib.hm.dag.entryAfter ["installPackages"] ''
+  home.activation.setupRuby = lib.hm.dag.entryAfter [ "installPackages" ] ''
     PATH="${config.home.path}/bin:$PATH"
     # . ~/.asdf/asdf.sh
 

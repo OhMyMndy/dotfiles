@@ -21,19 +21,16 @@ python3.pkgs.buildPythonPackage rec {
     python3.pkgs.wheel
   ];
 
-  propagatedBuildInputs = [
-  ];
+  propagatedBuildInputs = [ ];
 
   passthru.optional-dependencies = with python3.pkgs; {
-    test = [
-      pytest
-    ];
+    test = [ pytest ];
   };
 
   meta = with lib; {
     description = "Write and execute jq programs with the help of LLM";
     homepage = "https://github.com/simonw/llm-jq";
     license = licenses.asl20;
-    maintainers = with maintainers; [];
+    maintainers = with maintainers; [ ];
   };
 }

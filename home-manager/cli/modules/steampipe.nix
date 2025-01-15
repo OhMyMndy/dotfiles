@@ -5,9 +5,7 @@
   ...
 }:
 {
-  home.packages = with pkgs; [
-    steampipe
-  ];
+  home.packages = with pkgs; [ steampipe ];
 
   #TODO:check manually for installation of plugins, the steampipe plugins install is slow
   # when the plugins are installed

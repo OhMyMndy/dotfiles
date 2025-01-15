@@ -1,5 +1,4 @@
-{ ... }:
-{
+{...}: {
   imports = [
     # (import ../cli/modules/asdf.nix)
     # (import ../cli/modules/audio.nix)
@@ -12,6 +11,7 @@
     (import ../cli/modules/file-transfer.nix)
     # (import ../cli/modules/fish.nix)
     (import ../cli/modules/git.nix)
+    (import ../cli/modules/helix.nix)
     # (import ../cli/modules/go.nix)
     # (import ../cli/modules/javascript.nix)
     (import ../cli/modules/kubernetes.nix)

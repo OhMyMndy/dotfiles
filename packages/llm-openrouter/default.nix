@@ -21,9 +21,7 @@ python3.pkgs.buildPythonPackage rec {
     python3.pkgs.wheel
   ];
 
-  propagatedBuildInputs = [
-    python3.pkgs.httpx
-  ];
+  propagatedBuildInputs = [ python3.pkgs.httpx ];
 
   passthru.optional-dependencies = with python3.pkgs; {
     test = [
@@ -36,6 +34,6 @@ python3.pkgs.buildPythonPackage rec {
     description = "LLM plugin for models hosted by OpenRouter";
     homepage = "https://github.com/simonw/llm-openrouter";
     license = licenses.asl20;
-    maintainers = with maintainers; [];
+    maintainers = with maintainers; [ ];
   };
 }

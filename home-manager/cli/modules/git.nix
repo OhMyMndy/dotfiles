@@ -1,8 +1,5 @@
+{ pkgs, lib, ... }:
 {
-  pkgs,
-  lib,
-  ...
-}: {
   home.packages = with pkgs; [
     delta
     git
@@ -24,7 +21,7 @@
     source = ./../../../.gitconfig-delta;
   };
 
-  home.activation.setupGit = lib.hm.dag.entryAfter ["installPackages"] ''
+  home.activation.setupGit = lib.hm.dag.entryAfter [ "installPackages" ] ''
     (cd "$HOME"
     touch ".gitconfig"
     ${pkgs.git}/bin/git config --global include.path ".gitconfig-delta")

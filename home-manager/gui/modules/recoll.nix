@@ -1,5 +1,6 @@
-{lib, ...}: {
-  home.activation.recollConfig = lib.hm.dag.entryAfter ["installPackages"] ''
+{ lib, ... }:
+{
+  home.activation.recollConfig = lib.hm.dag.entryAfter [ "installPackages" ] ''
     if [[ ! -f ~/.recoll/recoll.conf ]]; then
       mkdir -p ~/.recoll
       cat <<EOF | tee ~/.recoll/recoll.conf

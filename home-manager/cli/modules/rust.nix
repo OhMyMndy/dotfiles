@@ -1,18 +1,14 @@
+{ pkgs, lib, ... }:
 {
-  pkgs,
-  lib,
-  ...
-}: {
   programs.zsh = {
     oh-my-zsh = {
-      plugins = ["rust"];
+      plugins = [ "rust" ];
     };
   };
 
-  home.packages = with pkgs; [
-  ];
+  home.packages = with pkgs; [ ];
 
-  home.activation.setupRust = lib.hm.dag.entryAfter ["installPackages"] ''
+  home.activation.setupRust = lib.hm.dag.entryAfter [ "installPackages" ] ''
     . ~/.asdf/asdf.sh
     ${pkgs.asdf-vm}/bin/asdf plugin add rust
     ${pkgs.asdf-vm}/bin/asdf install rust latest

@@ -1,5 +1,4 @@
-{pkgs, ...}: {
-  home.packages = with pkgs; [
-    xclip
-  ];
+{ pkgs, ... }:
+{
+  home.packages = with pkgs; [ xclip ];
 }

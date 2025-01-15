@@ -1,4 +1,5 @@
-{...}: {
+{ ... }:
+{
   # see https://hoverbear.org/blog/declarative-gnome-configuration-in-nixos/
   gtk = {
     enable = true;

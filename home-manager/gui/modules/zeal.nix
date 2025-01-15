@@ -1,8 +1,4 @@
-{
-  config,
-  lib,
-  ...
-}:
+{ config, lib, ... }:
 {
   # Install zeal flatpak
   home.activation.setupZeal = lib.hm.dag.entryAfter [ "installPackages" ] ''
@@ -24,7 +20,7 @@
     feeds="Alpinejs Beautiful_Soup Clang Cython glibc HAProxy jq Kubernetes "
     feeds="Linux_Man_Pages llm LLVM "
     feeds+="mypy json-schema Neovim Terraform Packer pytest QEMU Scrapy"
-
+    # TODO: configure docsets.path in Zeal.conf
     zeal-feeds install $feeds
 
     python_version="$(asdf list all python | grep '^3.10' | tail -1)"

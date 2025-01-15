@@ -2,6 +2,7 @@
 {
   home.packages = with pkgs; [
     bitwarden-cli
+    ecapture
     grype
     lynis
     # sysstat # lynis recommends this

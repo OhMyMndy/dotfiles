@@ -1,7 +1,8 @@
-{...}: {
+{ ... }:
+{
   dconf.settings = {
     "org/gnome/desktop/search-providers" = {
-      disabled = ["org.gnome.Nautilus.desktop"];
+      disabled = [ "org.gnome.Nautilus.desktop" ];
     };
     "org/gnome/desktop/wm/preferences" = {
       # num-workspaces = "10";

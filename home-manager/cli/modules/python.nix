@@ -3,7 +3,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   home.packages = with pkgs; [
     # autoconf
     # bzip2
@@ -39,7 +40,7 @@
     };
   };
 
-  home.activation.setupUv = lib.hm.dag.entryAfter ["installPackages"] ''
+  home.activation.setupUv = lib.hm.dag.entryAfter [ "installPackages" ] ''
     PATH="${config.home.path}/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:$PATH"
     . ~/.asdf/asdf.sh
     ${pkgs.asdf-vm}/bin/asdf plugin add uv

@@ -3,7 +3,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   home.packages = with pkgs; [
     # asdf-vm
   ];
@@ -16,7 +17,7 @@
     };
   };
 
-  home.activation.setupAsdf = lib.hm.dag.entryAfter ["installPackages"] ''
+  home.activation.setupAsdf = lib.hm.dag.entryAfter [ "installPackages" ] ''
     PATH="${config.home.path}/bin:$PATH"
     if [[ ! -d ~/.asdf ]]; then
       ${pkgs.git}/bin/git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.14.1

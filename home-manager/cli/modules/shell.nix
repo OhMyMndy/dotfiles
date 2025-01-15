@@ -18,8 +18,6 @@
     fastgron # Make JSON greppable super fast!
     gawk
     gron
-    hadolint
-    helix # helix editor
     ijq
     jless
     jq
