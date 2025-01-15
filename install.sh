@@ -23,6 +23,10 @@ if ! command -v nix &>/dev/null; then
 
 fi
 
+# if [[ "$GOOGLE_CLOUD_SHELL" == "true" ]]; then
+#  mkdir -p "$HOME/nix" && sudo mkdir -p /nix && sudo mount -o bind "$HOME/nix" /nix
+# fi
+
 if command -v vim &>/dev/null && [[ -d /etc/sudoers.d ]]; then
  echo "Defaults editor=$(command -v vim)" | sudo tee /etc/sudoers.d/editor
 fi
