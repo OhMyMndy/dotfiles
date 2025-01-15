@@ -1,0 +1,65 @@
+repositories:
+  - name: stakater
+    url: https://stakater.github.io/stakater-charts
+  - name: jetstack
+    url: https://charts.jetstack.io
+  - name: longhorn
+    url: https://charts.longhorn.io
+  - name: prometheus-community
+    url: https://prometheus-community.github.io/helm-charts
+  - name: cilium
+    url: https://helm.cilium.io/
+
+releases:
+  - name: prometheus-operator-crds
+    chart: prometheus-community/prometheus-operator-crds
+    version: 17.0.2
+    wait: true
+    timeout: 120
+
+  - name: cilium
+    chart: cilium/cilium
+    namespace: kube-system
+    version: 1.16.5
+    wait: true
+    timeout: 120
+    # reuseValues: true
+    values:
+      - kubeProxyReplacement: true
+      - hostServices:
+          enabled: false
+      - externalIPs:
+          enabled: true
+      - nodePort:
+          enabled: true
+      - hostPort:
+          enabled: true
+      - bpf:
+          masquerade: false
+      - image:
+          pullPolicy: IfNotPresent
+      - ipam:
+          mode: kubernetes
+      - ingressController:
+          enabled: true
+          default: true
+          loadbalancerMode: shared
+          hostNetwork:
+            enabled: true
+      - operator:
+          replicas: 1
+  # 17	   --set hubble.listenAddress=":4244" \
+  # 18	   --set hubble.relay.enabled=true \
+  # 19	   --set hubble.ui.enabled=true
+  - name: reloader
+    namespace: reloader
+    chart: stakater/reloader
+    version: v1.2.0
+    wait: true
+    timeout: 120
+    values:
+      - reloader:
+          watchGlobally: true
+          autoReloadAll: true
+          reloadOnCreate: true
+          syncAfterRestart: true
