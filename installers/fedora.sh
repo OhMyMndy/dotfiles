@@ -5,11 +5,16 @@ set -e
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$DIR" || exit 1
 
-# Hardening tools
-sudo dnf install -y aide sysstat
+# LDAP
+sudo dnf install -y sssd sssd-ldap oddjob-mkhomedir
+
+# Hardening and benchmarking tools
+sudo dnf install -y aide sysstat bonnie++ fs_mark
 sudo systemctl enable --now sysstat
 
 sudo dnf install -y qemu-user-static qemu-system-x86
+sudo dnf install pipx -y
+
 # XDG utils is needed for gcloud for example
 sudo dnf install -y vim git curl zsh flatpak @development-tools \
   unzip xdg-utils flatpak-xdg-utils python3-pip python3-virtualenv composer
