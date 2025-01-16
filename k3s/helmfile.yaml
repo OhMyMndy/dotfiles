@@ -9,13 +9,19 @@ repositories:
     url: https://prometheus-community.github.io/helm-charts
   - name: cilium
     url: https://helm.cilium.io/
+  - name: kubernetes-dashboard
+    url: https://kubernetes.github.io/dashboard/
+  - name: incubator
+    url: https://charts.helm.sh/incubator
+  - name: rancher-latest
+    url: https://releases.rancher.com/server-charts/latest
 
 releases:
   - name: prometheus-operator-crds
     chart: prometheus-community/prometheus-operator-crds
     version: 17.0.2
     wait: true
-    timeout: 120
+    timeout: 30
 
   - name: cilium
     chart: cilium/cilium
@@ -25,41 +31,125 @@ releases:
     timeout: 120
     # reuseValues: true
     values:
-      - kubeProxyReplacement: true
-      - hostServices:
-          enabled: false
-      - externalIPs:
-          enabled: true
-      - nodePort:
-          enabled: true
-      - hostPort:
-          enabled: true
-      - bpf:
-          masquerade: false
+      # - kubeProxyReplacement: true
+      - k8sServiceHost: 10.0.40.26
+      - k8sServicePort: 6443
+      # - hostServices:
+      #     enabled: false
+      # - externalIPs:
+      #     enabled: true
+      # - nodePort:
+      #     enabled: true
+      # - hostPort:
+      # enabled: true
+      # - bpf:
+      #     masquerade: false
       - image:
           pullPolicy: IfNotPresent
-      - ipam:
-          mode: kubernetes
-      - ingressController:
-          enabled: true
-          default: true
-          loadbalancerMode: shared
-          hostNetwork:
-            enabled: true
+      # - ipam:
+      #     mode: kubernetes
+      # - ingressController:
+      #     enabled: false
+      #     default: true
+      #     loadbalancerMode: shared
+      # hostNetwork:
+      #   enabled: true
       - operator:
           replicas: 1
+      # - gatewayAPI:
+      #   enabled: false
+      # - l2announcements:
+      #   enabled: false
+      # - hubble:
+      #   ui:
+      #     enabled: true
+      #   relay:
+      #     enabled: true
   # 17	   --set hubble.listenAddress=":4244" \
   # 18	   --set hubble.relay.enabled=true \
   # 19	   --set hubble.ui.enabled=true
   - name: reloader
     namespace: reloader
     chart: stakater/reloader
-    version: v1.2.0
+    version: v1.2.1
     wait: true
-    timeout: 120
+    timeout: 60
     values:
       - reloader:
           watchGlobally: true
           autoReloadAll: true
           reloadOnCreate: true
           syncAfterRestart: true
+          reloadStrategy: annotations
+  - name: cert-manager
+    namespace: cert-manager
+    chart: jetstack/cert-manager
+    version: v1.16.2
+    wait: true
+    timeout: 120
+    values:
+      - crds:
+          enabled: true
+      - prometheus:
+          enabled: false
+  - name: cert-manager-issuers
+    chart: incubator/raw
+    version: 0.1.0
+    wait: true
+    timeout: 30
+    values:
+      - resources:
+          - apiVersion: cert-manager.io/v1
+            kind: ClusterIssuer
+            metadata:
+              name: selfsigned
+            spec:
+              selfSigned: {}
+
+  - name: kubernetes-dashboard
+    namespace: kubernetes-dashboard
+    chart: kubernetes-dashboard/kubernetes-dashboard
+    version: 7.10.1
+    wait: true
+    timeout: 60
+    values:
+      - app:
+          ingress:
+            enabled: true
+            ingressClassName: traefik
+            hosts:
+              - dashboard.{{ requiredEnv "IP_ADDRESS" }}.sslip.io
+            issuer:
+              name: selfsigned
+              scope: cluster
+            tls:
+              enabled: true
+            annotations:
+              acme.cert-manager.io/http01-ingress-class: traefik
+              # traefik.ingress.kubernetes.io/router.tls.domains.0.main: dashboard.{{ requiredEnv "IP_ADDRESS" }}.sslip.io
+              # traefik.ingress.kubernetes.io/router.tls.domains.0.sans: dashboard.{{ requiredEnv "IP_ADDRESS" }}.sslip.io
+
+      - metricsScraper:
+          enabled: false
+  - name: dashboard-user
+    chart: incubator/raw
+    version: 0.1.0
+    values:
+      - resources:
+          - apiVersion: v1
+            kind: ServiceAccount
+            metadata:
+              name: admin-user
+              namespace: kubernetes-dashboard
+          - apiVersion: rbac.authorization.k8s.io/v1
+            kind: ClusterRoleBinding
+            metadata:
+              name: admin-user
+            roleRef:
+              apiGroup: rbac.authorization.k8s.io
+              kind: ClusterRole
+              name: cluster-admin
+            subjects:
+              - kind: ServiceAccount
+                name: admin-user
+                namespace: kubernetes-dashboard

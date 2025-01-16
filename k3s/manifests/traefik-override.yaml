@@ -1,0 +1,11 @@
+# SEE: https://qdnqn.com/how-to-configure-traefik-on-k3s/
+apiVersion: helm.cattle.io/v1
+kind: HelmChartConfig
+metadata:
+  name: traefik
+  namespace: kube-system
+spec:
+  valuesContent: |-
+    additionalArguments:
+      - "--log.level=DEBUG"
+      - "--serverstransport.insecureskipverify=true"
