@@ -14,8 +14,10 @@
 {
   home.packages = with pkgs; [
     cilium-cli
+    cri-tools
     fluxctl
     helmfile
+    hubble
     kubectl
     # myHelm
     # myHelmfile
@@ -28,6 +30,7 @@
     # k3s # k3s, kubectl
     # k3d
     k9s
+    minikube
     talosctl
     kubectx
   ];
