@@ -157,7 +157,7 @@ releases:
           enabled: false
   - name: cert-manager-issuers
     chart: incubator/raw
-    version: 0.1.0
+    version: 0.2.5
     wait: true
     timeout: 30
     needs:
