@@ -1,6 +1,9 @@
 { pkgs, ... }:
 {
-  home.packages = with pkgs; [ tmux ];
+  home.packages = with pkgs; [
+    tmux
+    tmux-mem-cpu-load
+  ];
 
   # SEE https://github.com/nix-community/home-manager/blob/master/modules/programs/tmux.nix
   programs.tmux = {
@@ -15,13 +18,7 @@
     baseIndex = 1;
     historyLimit = 10000;
     plugins = with pkgs.master; [
-      {
-        plugin = tmuxPlugins.continuum;
-        extraConfig = ''
-          set -g @continuum-restore 'on'
-          set -g @continuum-save-interval '10'
-        '';
-      }
+      tmuxPlugins.cpu
       # Since the version in nixpkgs is old, lets use it directly from GitHub
       {
         plugin = tmuxPlugins.mkTmuxPlugin {
@@ -34,19 +31,41 @@
             hash = "sha256-kWixGC3CJiFj+YXqHRMbeShC/Tl+1phhupYAIo9bivE=";
           };
         };
+        # plugin = tmuxPlugins.catppuccin;
         extraConfig = ''
-          set -ogq @catppuccin_pane_status_enabled "yes" # set to "yes" to enable
+          # set -g @catppuccin_flavor "mocha"
+          set -g @catppuccin_window_status_style "basic"
+          set -g status-right "#{E:@catppuccin_status_load}#{E:@catppuccin_status_session}#{E:@catppuccin_status_date_time}"
+          set -ag status-right "#[fg=#{@thm_fg},bg=#{@thm_mantle}] #(tmux-mem-cpu-load  -i 10 -g 0 -a 0 -m 0 -t 0) "
+          # set -ogq @catppuccin_pane_status_enabled "yes" # set to "yes" to enable
           set -ogq @catppuccin_window_text " #{window_name}"
           set -ogq @catppuccin_window_current_text " #{window_name}"
+          # # run-shell ${pkgs.tmuxPlugins.catppuccin}/share/tmux-plugins/catppuccin/catppuccin.tmux
+          # # set -g status-right ""
+          set -g status-right-length 100
+          # # set -g status-right "#{E:@catppuccin_status_application}"
+          # set -g status-right "#{prefix_highlight}"
+          # set -agF status-right "#{E:@catppuccin_status_cpu}"
+          # set -ag status-right "#{E:@catppuccin_status_session}"
+          # set -ag status-right "#{E:@catppuccin_status_uptime}"
+          # run ${pkgs.tmuxPlugins.cpu}/share/tmux-plugins/cpu/cpu.tmux
         '';
       }
       {
         plugin = tmuxPlugins.resurrect;
         extraConfig = ''
-          set -g @resurrect-strategy-vim 'session'
-          set -g @resurrect-strategy-nvim 'session'
-          # set -g @resurrect-processes '"~nvim"'
+          # set -g @resurrect-strategy-vim 'session'
+          # set -g @resurrect-strategy-nvim 'session'
           set -g @resurrect-capture-pane-contents 'on'
+          # set -g @resurrect-processes ':all:'
+          set -g @resurrect-processes 'ssh lazygit less tail watch ssh "~nvim->nvim"'
+        '';
+      }
+      {
+        plugin = tmuxPlugins.continuum;
+        extraConfig = ''
+          set -g @continuum-restore 'on'
+          set -g @continuum-save-interval '3'
         '';
       }
       tmuxPlugins.prefix-highlight
