@@ -51,3 +51,13 @@ if [[ -d ~/.zshrc.d ]]; then
         fi
     done
 fi
+
+# SEE: https://discourse.nixos.org/t/nix-shell-does-not-use-my-users-shell-zsh/5588/12
+nix() {
+  if [[ $1 == "develop" ]]; then
+    shift
+    command nix develop -c $SHELL "$@"
+  else
+    command nix "$@"
+  fi
+}
