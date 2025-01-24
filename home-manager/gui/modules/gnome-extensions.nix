@@ -32,6 +32,8 @@
         "search-light@icedman.github.com"
         "tilingshell@ferrarodomenico.com"
         "gsconnect@andyholmes.github.io"
+        "just-perfection-desktop@just-perfection"
+        # "openbar@neuromorph"
       ];
     };
 
@@ -54,7 +56,30 @@
     "org/gnome/shell/extensions/clipboard-indicator" = {
       "history-size" = 200;
     };
+    "org/gnome/shell/extensions/just-perfection" = {
+      "world-clock" = false;
+      "panel" = true;
+      "switcher-popup-delay" = false;
+    };
 
+    # TODO: just apply gtk-3/4 stylesheets for window buttons
+    "org/gnome/shell/extensions/openbar" = {
+      "wmaxbar" = true;
+      "traffic-light" = true;
+      "apply-flatpak" = true;
+      "apply-gtk" = true;
+      "accent-override" = false;
+      "smbgoverride" = false;
+      "autofg-menu" = false;
+      "auto-bgalpha" = true;
+      "set-fullscreen" = false;
+      "fitts-widgets" = false;
+      "headerbar-hint" = 0;
+      "sidebar-hint" = 0;
+      "card-hint" = 0;
+      "winbwidth" = lib.hm.gvariant.mkUint32 0;
+      "gtk-shadow" = "None";
+    };
     "org/gnome/shell/extensions/search-light" = {
       "popup-at-cursor-monitor" = true;
       "unit-converter" = true;
