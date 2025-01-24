@@ -5,6 +5,10 @@ set -e
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$DIR" || exit 1
 
+# Podman and Docker
+sudo dnf install moby-engine docker-compose podman podman-compose -y
+sudo usermod -aG docker $USER
+
 # LDAP
 sudo dnf install -y sssd sssd-ldap oddjob-mkhomedir
 
@@ -44,4 +48,4 @@ sudo dnf install -y zlib-devel bzip2 bzip2-devel readline-devel \
 # SEE: https://osquery.readthedocs.io/en/stable/introduction/using-osqueryd/
 # sudo rpm --install https://pkg.osquery.io/rpm/osquery-5.14.1-1.linux.x86_64.rpm
 
-./tailscale.sh
+# ./tailscale.sh
