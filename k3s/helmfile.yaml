@@ -26,7 +26,7 @@ releases:
   - name: cilium
     chart: cilium/cilium
     namespace: kube-system
-    version: 1.16.5
+    version: 1.16.6
     wait: true
     timeout: 120
     # reuseValues: true
