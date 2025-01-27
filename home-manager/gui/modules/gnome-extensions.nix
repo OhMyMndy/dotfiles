@@ -4,21 +4,28 @@
   ...
 }:
 {
-  home.packages = with pkgs.master; [
-    gnomeExtensions.appindicator
-    gnomeExtensions.caffeine
-    gnomeExtensions.clipboard-indicator
-    gnomeExtensions.dash-to-dock
-    gnomeExtensions.gsconnect
-    gnomeExtensions.just-perfection
-    gnomeExtensions.impatience
-    gnomeExtensions.open-bar
-    gnomeExtensions.search-light
-    gnomeExtensions.sound-output-device-chooser
-    gnomeExtensions.tiling-shell
-    gnomeExtensions.tray-icons-reloaded
-  ];
-
+  home.packages =
+    (with pkgs.master; [
+      gnomeExtensions.appindicator
+      gnomeExtensions.caffeine
+      gnomeExtensions.clipboard-indicator
+      gnomeExtensions.dash-to-dock
+      # gnomeExtensions.gsconnect
+      gnomeExtensions.just-perfection
+      gnomeExtensions.impatience
+      gnomeExtensions.open-bar
+      gnomeExtensions.search-light
+      gnomeExtensions.sound-output-device-chooser
+      gnomeExtensions.tiling-shell
+      gnomeExtensions.tray-icons-reloaded
+    ])
+    ++ (with pkgs; [
+      gnome-extensions-cli
+    ]);
+  home.activation.setupGnomeExtensions = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    alias gext=${pkgs.gnome-extensions-cli}/bin/gext
+    gext install gsconnect@andyholmes.github.io
+  '';
   dconf.settings = {
     "org/gnome/shell" = {
       "enabled-extensions" = [
