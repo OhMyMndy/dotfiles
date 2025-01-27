@@ -21,11 +21,11 @@
   home.activation.setupNodejs = lib.hm.dag.entryAfter [ "installPackages" ] ''
     PATH="${config.home.path}/bin:$PATH"
     . ~/.asdf/asdf.sh
-    ${pkgs.asdf-vm}/bin/asdf plugin add nodejs
-    # ${pkgs.asdf-vm}/bin/asdf install nodejs latest
-    # ${pkgs.asdf-vm}/bin/asdf global nodejs latest
+    asdf plugin add nodejs
+    # asdf install nodejs latest
+    # asdf global nodejs latest
 
-    ${pkgs.asdf-vm}/bin/asdf install nodejs $(${pkgs.asdf-vm}/bin/asdf list all nodejs | grep '^22.' | tail -1)
-    ${pkgs.asdf-vm}/bin/asdf global nodejs $(${pkgs.asdf-vm}/bin/asdf list all nodejs | grep '^22.' | tail -1)
+    asdf install nodejs $(asdf list all nodejs | grep '^22.' | tail -1)
+    asdf global nodejs $(asdf list all nodejs | grep '^22.' | tail -1)
   '';
 }

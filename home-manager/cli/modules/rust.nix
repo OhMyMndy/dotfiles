@@ -1,4 +1,8 @@
-{ pkgs, lib, ... }:
+{
+  pkgs,
+  lib,
+  ...
+}:
 {
   programs.zsh = {
     oh-my-zsh = {
@@ -10,9 +14,9 @@
 
   home.activation.setupRust = lib.hm.dag.entryAfter [ "installPackages" ] ''
     . ~/.asdf/asdf.sh
-    ${pkgs.asdf-vm}/bin/asdf plugin add rust
-    ${pkgs.asdf-vm}/bin/asdf install rust latest
-    ${pkgs.asdf-vm}/bin/asdf global rust latest
+    asdf plugin add rust
+    asdf install rust latest
+    asdf global rust latest
     rustup component add rust-analyzer
   '';
 }

@@ -29,9 +29,9 @@
     # . ~/.asdf/asdf.sh
 
     # TODO: check if dependencies are installed before attempting to install
-    # ${pkgs.asdf-vm}/bin/asdf plugin add ruby
-    # RUBY_VERSION="$(${pkgs.asdf-vm}/bin/asdf list all ruby | grep -E '^3.3.[0-9]+$' | tail -1)"
-    # ${pkgs.asdf-vm}/bin/asdf install ruby $RUBY_VERSION
-    # ${pkgs.asdf-vm}/bin/asdf global ruby $RUBY_VERSION
+    # asdf plugin add ruby
+    # RUBY_VERSION="$(asdf list all ruby | grep -E '^3.3.[0-9]+$' | tail -1)"
+    # asdf install ruby $RUBY_VERSION
+    # asdf global ruby $RUBY_VERSION
   '';
 }
