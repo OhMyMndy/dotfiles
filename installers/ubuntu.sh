@@ -7,6 +7,12 @@ cd "$DIR" || exit 1
 
 sudo apt-get update
 
+# Python Build
+sudo apt update
+sudo apt install build-essential libssl-dev zlib1g-dev \
+  libbz2-dev libreadline-dev libsqlite3-dev curl git \
+  libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev -y
+
 sudo apt-get install apt-file -y
 
 # XDG utils is needed for gcloud for example
