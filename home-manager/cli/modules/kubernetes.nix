@@ -1,4 +1,8 @@
-{ pkgs, ... }:
+{
+  pkgs,
+  lib,
+  ...
+}:
 # let
 # myHelm = pkgs.wrapHelm pkgs.kubernetes-helm {
 #   plugins = with pkgs.kubernetes-helmPlugins; [
@@ -13,26 +17,28 @@
 # in
 {
   home.packages = with pkgs; [
-    cilium-cli
+    arkade
+    # cilium-cli
     cri-tools
     fluxctl
-    helmfile
-    hubble
-    kubectl
+    # helmfile
+    # hubble
+    # kubectl
+    # kind
     # myHelm
     # myHelmfile
-    kubernetes-helm # TODO: install with plugins, but from Nix cache
+    # kubernetes-helm # TODO: install with plugins, but from Nix cache
     # helmfile # TODO
     karmor
     kubeconform
-    kustomize
+    # kustomize
     kompose
     # k3s # k3s, kubectl
     # k3d
-    k9s
-    minikube
-    talosctl
-    kubectx
+    # k9s
+    # minikube
+    # talosctl
+    # kubectx
   ];
 
   programs.zsh = {
@@ -44,4 +50,19 @@
       ];
     };
   };
+
+  # TODO: install with arkade:
+  # sudo $(command -v) system install cni
+  # sudo $(command -v) system install tc-redirect-tap
+  home.activation.setupKubernetes = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    pkgs="minikube kubectl helm cilium hubble trivy jq yq talosctl kubectx kubens k9s kustomize helmfile"
+    for pkg in $pkgs; do
+      if [[ ! -f ~/.arkade/bin/"$pkg" ]]; then
+        ${pkgs.arkade}/bin/arkade get $pkg --quiet
+      fi
+    done
+    if ! ~/.arkade/bin/helm plugin list | tail -n +2 | cut -f1 | grep -q helm-git; then
+      ~/.arkade/bin/helm plugin install https://github.com/aslafy-z/helm-git --version 1.3.0
+    fi
+  '';
 }
