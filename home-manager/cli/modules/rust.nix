@@ -14,9 +14,9 @@
 
   home.activation.setupRust = lib.hm.dag.entryAfter [ "installPackages" ] ''
     . ~/.asdf/asdf.sh
-    asdf plugin add rust
-    asdf install rust latest
+    asdf plugin add rust >/dev/null
+    asdf install rust latest >/dev/null
     asdf global rust latest
-    rustup component add rust-analyzer
+    rustup component add rust-analyzer >/dev/null
   '';
 }

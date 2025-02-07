@@ -33,6 +33,10 @@ fi
 
 echo net.ipv4.ip_forward=1 | sudo tee /etc/sysctl.d/99-ip-forward.conf
 
+cat <<EOF | sudo tee /etc/sysctl.d/99-kubernetes.conf >/dev/null
+fs.inotify.max_user_watches = 524288
+fs.inotify.max_user_instances = 512
+EOF
 # Uninstalling nix
 # sudo rm -rf /nix ~/.nix-*
 # cat /etc/passwd | grep -E '^nix' | cut -d':' -f1 | tr '\r\n' '\0' | sudo xargs -0 -I{} userdel --remove {}
@@ -52,8 +56,8 @@ elif [[ -f "$HOME/.nix-profile/etc/profile.d/nix.sh" ]]; then
  . "$HOME/.nix-profile/etc/profile.d/nix.sh"
 fi
 
-echo "Running home manager"
-time yes | nix run .#just -- switch
+# echo "Running home manager"
+# time yes | nix run .#just -- switch
 
 # Bridge network
 # # TODO check if br0 already exists

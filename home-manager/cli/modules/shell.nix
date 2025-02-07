@@ -3,8 +3,7 @@
   lib,
   home,
   ...
-}:
-{
+}: {
   home.packages = with pkgs; [
     aria2
     atuin
@@ -34,10 +33,11 @@
     tree
     wget
     yq-go
+    semgrep # TODO: move to development.nix or something generic
   ];
 
   programs.fzf = {
-    enable = true;
+    enable = false;
   };
 
   programs.direnv = {

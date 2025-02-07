@@ -1,5 +1,8 @@
-{ pkgs, lib, ... }:
 {
+  pkgs,
+  lib,
+  ...
+}: {
   home.packages = with pkgs; [
     git
     fzf
@@ -61,36 +64,57 @@
       . "$HOME/.asdf/completions/asdf.bash"
 
       setopt rmstarsilent
+
+
+      # fzf-tab
+      # disable sort when completing `git checkout`
+      zstyle ':completion:*:git-checkout:*' sort false
+      # set descriptions format to enable group support
+      # NOTE: don't use escape sequences (like '%F{red}%d%f') here, fzf-tab will ignore them
+      zstyle ':completion:*:descriptions' format '[%d]'
+      # set list-colors to enable filename colorizing
+      zstyle ':completion:*' list-colors $${(s.:.)LS_COLORS}
+      # force zsh not to show completion menu, which allows fzf-tab to capture the unambiguous prefix
+      zstyle ':completion:*' menu no
+      # preview directory's content with eza when completing cd
+      zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
+      # custom fzf flags
+      # NOTE: fzf-tab does not follow FZF_DEFAULT_OPTS by default
+      zstyle ':fzf-tab:*' fzf-flags --color=fg:1,fg+:2 --bind=tab:accept
+      # To make fzf-tab follow FZF_DEFAULT_OPTS.
+      # NOTE: This may lead to unexpected behavior since some flags break this plugin. See Aloxaf/fzf-tab#455.
+      zstyle ':fzf-tab:*' use-fzf-default-opts yes
+      # switch group using `<` and `>`
+      zstyle ':fzf-tab:*' switch-group '<' '>'
+      zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
     '';
     # SEE https://github.com/redyf/nixdots/blob/492aede6453d4f62fad6929a6281552504efbaa8/home/system/shell/default.nix#L184
-    plugins =
-      let
-        themepkg = pkgs.fetchFromGitHub {
-          owner = "catppuccin";
-          repo = "zsh-syntax-highlighting";
-          rev = "7926c3d3e17d26b3779851a2255b95ee650bd928";
-          hash = "sha256-l6tztApzYpQ2/CiKuLBf8vI2imM6vPJuFdNDSEi7T/o=";
-        };
-        fzf-tab = pkgs.fetchFromGitHub {
-          owner = "Aloxaf";
-          repo = "fzf-tab";
-          rev = "6aced3f35def61c5edf9d790e945e8bb4fe7b305";
-          hash = "sha256-EWMeslDgs/DWVaDdI9oAS46hfZtp4LHTRY8TclKTNK8=";
-        };
-      in
-      [
-        # TODO make this work
-        {
-          name = "fzf-tab";
-          file = "fzf-tab.plugin.zsh";
-          src = fzf-tab;
-        }
-        {
-          name = "ctp-zsh-syntax-highlighting";
-          src = themepkg;
-          file = themepkg + "/themes/catppuccin_mocha-zsh-syntax-highlighting.zsh";
-        }
-      ];
+    plugins = let
+      themepkg = pkgs.fetchFromGitHub {
+        owner = "catppuccin";
+        repo = "zsh-syntax-highlighting";
+        rev = "7926c3d3e17d26b3779851a2255b95ee650bd928";
+        hash = "sha256-l6tztApzYpQ2/CiKuLBf8vI2imM6vPJuFdNDSEi7T/o=";
+      };
+      fzf-tab = pkgs.fetchFromGitHub {
+        owner = "Aloxaf";
+        repo = "fzf-tab";
+        rev = "6aced3f35def61c5edf9d790e945e8bb4fe7b305";
+        hash = "sha256-EWMeslDgs/DWVaDdI9oAS46hfZtp4LHTRY8TclKTNK8=";
+      };
+    in [
+      # TODO make this work
+      {
+        name = "fzf-tab";
+        file = "fzf-tab.plugin.zsh";
+        src = fzf-tab;
+      }
+      # {
+      #   name = "ctp-zsh-syntax-highlighting";
+      #   src = themepkg;
+      #   file = themepkg + "/themes/catppuccin_mocha-zsh-syntax-highlighting.zsh";
+      # }
+    ];
   };
 
   programs.starship = {
@@ -108,7 +132,7 @@
       git_status.disabled = true;
       gcloud.disabled = true;
       # SEE https://github.com/catppuccin/starship/blob/main/starship.toml
-      palette = "catppuccin_macchiato";
+      # palette = "catppuccin_macchiato";
       palettes.catppuccin_macchiato = {
         rosewater = "#f4dbd6";
         flamingo = "#f0c6c6";
@@ -139,7 +163,9 @@
       };
     };
   };
-  home.activation.setupZsh = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    mkdir -p ~/.zshrc.d
-  '';
+
+  home.file.".zshrc.d" = {
+    source = ./../../../.zshrc.d;
+    recursive = true;
+  };
 }

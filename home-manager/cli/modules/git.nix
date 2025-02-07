@@ -1,4 +1,8 @@
-{ pkgs, lib, ... }:
+{
+  pkgs,
+  lib,
+  ...
+}:
 {
   home.packages = with pkgs; [
     delta
@@ -27,15 +31,15 @@
     ${pkgs.git}/bin/git config --global include.path ".gitconfig-delta")
     ${pkgs.git}/bin/git config --global init.defaultBranch main
 
-    if ${pkgs.gh}/bin/gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /user >/dev/null; then
+    if ${pkgs.gh}/bin/gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /user &>/dev/null; then
       user=$(${pkgs.gh}/bin/gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /user | ${pkgs.jq}/bin/jq -r .name)
-      echo "Setting $user as the default Git user..."
+      # echo "Setting $user as the default Git user..."
 
       ${pkgs.git}/bin/git config --global user.name "$user"
     fi
-    if ${pkgs.gh}/bin/gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /user/emails >/dev/null; then
+    if ${pkgs.gh}/bin/gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /user/emails &>/dev/null; then
       email=$(${pkgs.gh}/bin/gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /user/emails | ${pkgs.jq}/bin/jq -r ".[1].email")
-      echo "Setting <$email> as the default Git user..."
+      # echo "Setting <$email> as the default Git user..."
 
       ${pkgs.git}/bin/git config --global user.email "$email"
     else

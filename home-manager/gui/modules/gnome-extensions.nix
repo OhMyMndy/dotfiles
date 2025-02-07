@@ -2,8 +2,7 @@
   pkgs,
   lib,
   ...
-}:
-{
+}: {
   home.packages =
     (with pkgs.master; [
       gnomeExtensions.appindicator
@@ -22,9 +21,11 @@
     ++ (with pkgs; [
       gnome-extensions-cli
     ]);
-  home.activation.setupGnomeExtensions = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+  home.activation.setupGnomeExtensions = lib.hm.dag.entryAfter ["writeBoundary"] ''
     alias gext=${pkgs.gnome-extensions-cli}/bin/gext
-    gext install gsconnect@andyholmes.github.io
+    if ! gext list --only-uuid | grep -q gsconnect@andyholmes.github.io; then
+      gext install gsconnect@andyholmes.github.io
+    fi
   '';
   dconf.settings = {
     "org/gnome/shell" = {
@@ -116,14 +117,14 @@
           id = "1/1 H-Split";
           tiles = [
             {
-              groups = [ 1 ];
+              groups = [1];
               height = 1;
               width = 0.5;
               x = 0;
               y = 0;
             }
             {
-              groups = [ 1 ];
+              groups = [1];
               height = 1;
               width = 0.5;
               x = 0.5;
@@ -135,14 +136,14 @@
           id = "1/1 V-Split";
           tiles = [
             {
-              groups = [ 1 ];
+              groups = [1];
               height = 0.5;
               width = 1;
               x = 0;
               y = 0;
             }
             {
-              groups = [ 1 ];
+              groups = [1];
               height = 0.5;
               width = 1;
               x = 0;
@@ -154,14 +155,14 @@
           id = "1/2 H-Split";
           tiles = [
             {
-              groups = [ 1 ];
+              groups = [1];
               height = 1;
               width = 0.33;
               x = 0;
               y = 0;
             }
             {
-              groups = [ 1 ];
+              groups = [1];
               height = 1;
               width = 0.67;
               x = 0.33;
@@ -173,14 +174,14 @@
           id = "2/1 H-Split";
           tiles = [
             {
-              groups = [ 1 ];
+              groups = [1];
               height = 1;
               width = 0.67;
               x = 0;
               y = 0;
             }
             {
-              groups = [ 1 ];
+              groups = [1];
               height = 1;
               width = 0.33;
               x = 0.67;
@@ -192,21 +193,21 @@
           id = "1/1/1 H-Split";
           tiles = [
             {
-              groups = [ 1 ];
+              groups = [1];
               height = 1;
               width = 0.333333;
               x = 0;
               y = 0;
             }
             {
-              groups = [ 1 ];
+              groups = [1];
               height = 1;
               width = 0.333333;
               x = 0.333333;
               y = 0;
             }
             {
-              groups = [ 1 ];
+              groups = [1];
               height = 1;
               width = 0.333333;
               x = 0.666666;

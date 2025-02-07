@@ -1,10 +1,10 @@
 # SEE https://github.com/redyf/nixdots/blob/492aede6453d4f62fad6929a6281552504efbaa8/home/system/shell/default.nix
 # SEE https://home-manager-options.extranix.com/
-{ pkgs, ... }:
-{
+{pkgs, ...}: {
   imports = [
     (import ./../cli)
     # (import ./modules/dconf.nix)
+    (import ./modules/alacritty.nix)
     (import ./modules/flatpaks.nix)
     (import ./modules/gaming)
     (import ./modules/gnome-extensions.nix)
@@ -19,7 +19,7 @@
   fonts.fontconfig.enable = true;
 
   home.packages = with pkgs; [
-    (pkgs.nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
+    (pkgs.nerdfonts.override {fonts = ["JetBrainsMono"];})
     gitkraken
     ibm-plex
     inter

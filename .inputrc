@@ -1,6 +1,11 @@
-set editing-mode vi
+# set editing-mode vi
 
-set vi-ins-mode-string \1\e[5 q\e]12;green\a\2
-set vi-cmd-mode-string \1\e[1 q\e]12;orange\a\2
+# set vi-ins-mode-string \1\e[5 q\e]12;green\a\2
+# set vi-cmd-mode-string \1\e[1 q\e]12;orange\a\2
 
-set show-mode-in-prompt on
+# set show-mode-in-prompt on
+# Replace the arrow keys with Alt + hjkl 
+"\eh": backward-char
+"\el": forward-char
+"\ek": history-search-backward
+"\ej": history-search-forward
