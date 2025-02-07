@@ -23,7 +23,7 @@ return {
       },
     },
   },
-  -- { import = "astrocommunity.colorscheme.tokyonight-nvim" },
+  { import = "astrocommunity.colorscheme.tokyonight-nvim" },
   { import = "astrocommunity.debugging.telescope-dap-nvim" },
   -- { import = "astrocommunity.diagnostics.lsp_lines-nvim" },
   { import = "astrocommunity.diagnostics.trouble-nvim" },
@@ -57,6 +57,7 @@ return {
   { import = "astrocommunity.pack.markdown" },
 
   { import = "astrocommunity.pack.html-css" },
+  { import = "astrocommunity.pack.sql" },
   { import = "astrocommunity.pack.svelte" },
   { import = "astrocommunity.pack.terraform" },
 
