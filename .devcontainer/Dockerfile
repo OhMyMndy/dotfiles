@@ -16,11 +16,8 @@ RUN apt-get update && \
     podman-docker \
     podman-toolbox \
     && \
-    apt-get autoclean && \
-    rm -rf \
-    /var/lib/apt/lists/* \
-    /var/tmp/* \
-    /tmp/*
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 RUN touch /etc/containers/nodocker
 
