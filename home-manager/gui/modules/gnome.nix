@@ -98,11 +98,11 @@ in
         "org.mozilla.firefox.desktop"
         "microsoft-edge.desktop"
         "org.gnome.Geary.desktop"
-        "org.signal.Signal.desktop"
+        "org.gnome.Terminal.desktop"
+        # "Alacritty.desktop"
+        "beeper.desktop"
         "com.vixalien.sticky.desktop"
         "md.obsidian.Obsidian.desktop"
-        # "org.gnome.Terminal.desktop"
-        "Alacritty.desktop"
       ];
     };
     "org/gnome/terminal/legacy/profiles:" = {
