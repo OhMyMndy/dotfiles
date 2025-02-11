@@ -3,7 +3,7 @@
   home.packages = with pkgs; [
     # cloud-hypervisor
     # quickemu
-    lima
+    # lima
     virter
   ];
 
