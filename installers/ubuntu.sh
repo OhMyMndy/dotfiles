@@ -7,7 +7,7 @@ cd "$DIR" || exit 1
 
 sudo apt-get update
 
-sudo apt-get install apt-file -y
+sudo apt-get install apt-file moreutils -y
 
 # XDG utils is needed for gcloud for example
 sudo apt-get install -y vim git curl zsh flatpak build-essential \
@@ -26,5 +26,3 @@ sudo apt-get install -y build-essential libssl-dev zlib1g-dev \
   libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev -y
 # TODO: only if we have gnome installed
 # sudo apt-get install -y gnome-tweaks
-
-./tailscale.sh
