@@ -3,7 +3,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   # TODO: install flutter dependencies
   # sudo dnf install -y bash curl file git unzip which xz zip mesa-libGLU clang cmake ninja-build pkg-config gtk3-devel
 
@@ -15,16 +16,21 @@
   ];
   programs.zsh = {
     oh-my-zsh = {
-      plugins = ["flutter"];
+      plugins = [ "flutter" ];
     };
   };
 
-  home.activation.setupDart = lib.hm.dag.entryAfter ["installPackages"] ''
-    PATH="${config.home.path}/bin:$PATH"
+  home.activation.setupDart = lib.hm.dag.entryAfter [ "installPackages" ] ''
+    PATH="${config.home.path}/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin"
     . ~/.asdf/asdf.sh
     asdf plugin add flutter >/dev/null
     asdf install flutter latest >/dev/null
     asdf global flutter latest
+
+    # TODO: depends on rev command, need to add everything to path to use that for now
+    asdf plugin add dart >/dev/null
+    asdf install dart latest >/dev/null
+    asdf global dart latest
   '';
 
   home.file.".zshrc.d/dart.sh" = {
