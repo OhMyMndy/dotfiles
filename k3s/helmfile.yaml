@@ -130,7 +130,7 @@ releases:
   - name: reloader
     namespace: reloader
     chart: stakater/reloader
-    version: v1.2.1
+    version: 1.3.0
     wait: true
     timeout: 180
     # needs:
