@@ -5,7 +5,7 @@ set -e
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$DIR" || exit 1
 
-sudo dnf install moreutils -y
+sudo dnf install moreutils sshfs inotify-tools -y
 
 # Podman and Docker
 sudo dnf install moby-engine docker-compose podman podman-compose -y
@@ -23,18 +23,18 @@ sudo dnf install pipx -y
 
 # XDG utils is needed for gcloud for example
 sudo dnf install -y vim git curl zsh flatpak @development-tools \
-  unzip xdg-utils flatpak-xdg-utils python3-pip python3-virtualenv composer
+	unzip xdg-utils flatpak-xdg-utils python3-pip python3-virtualenv composer
 
 sudo dnf remove firefox -y
-
-sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 if arch != "aarch64"; then
-  sudo flatpak install flathub org.mozilla.firefox -y
+	sudo flatpak install flathub org.mozilla.firefox -y
 fi
 
 # dependencies for building Python
 sudo dnf install -y zlib-devel bzip2 bzip2-devel readline-devel \
-  sqlite-devel openssl-devel xz xz-devel libffi-devel tk-devel
+	sqlite-devel openssl-devel xz xz-devel libffi-devel tk-devel
 
 # Virtual machines
 # sudo dnf install virt-manager libvirt-nss -y && sudo authselect enable-feature with-libvirt
@@ -50,4 +50,10 @@ sudo dnf install -y zlib-devel bzip2 bzip2-devel readline-devel \
 # SEE: https://osquery.readthedocs.io/en/stable/introduction/using-osqueryd/
 # sudo rpm --install https://pkg.osquery.io/rpm/osquery-5.14.1-1.linux.x86_64.rpm
 
-# ./tailscale.sh
+# Proton
+if [[ "$DISPLAY" != '' ]]; then
+	sudo dnf install https://proton.me/download/bridge/protonmail-bridge-3.13.0-1.x86_64.rpm
+	sudo dnf install -y https://proton.me/download/mail/linux/1.6.1/ProtonMail-desktop-beta.rpm
+
+	sudo dnf install -y https://github.com/jupyterlab/jupyterlab-desktop/releases/latest/download/JupyterLab-Setup-Fedora-x64.rpm
+fi
