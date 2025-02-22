@@ -22,7 +22,7 @@ fi
 
 if systemctl is-active systemd-resolved.service &>/dev/null; then
   sudo mkdir -p /etc/systemd/resolved.conf.d
-  sudo tee /etc/systemd/resolved.conf.d/minikube.conf <<EOF
+  sudo tee /etc/systemd/resolved.conf.d/minikube.conf <<EOF >/dev/null
 [Resolve]
 DNS=$(minikube ip)
 Domains=~test
