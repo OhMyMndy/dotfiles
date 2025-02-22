@@ -29,6 +29,8 @@ in
       "switch-to-workspace-8" = [ "<Super>8" ];
       "switch-to-workspace-9" = [ "<Super>9" ];
       "switch-to-workspace-10" = [ "<Super>10" ];
+      "switch-to-workspace-left" = [ "<Super>Page_Up" ];
+      "switch-to-workspace-right" = [ "<Super>Page_Down" ];
     };
     "org/gnome/desktop/peripherals/touchpad" = {
       "natural-scroll" = false;
