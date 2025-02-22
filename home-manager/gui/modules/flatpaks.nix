@@ -1,5 +1,7 @@
 { lib, config, ... }:
 {
+
+  # TODO: install flatpak install flathub io.github.jonmagon.kdiskmark
   home.activation.setupFlathub = lib.hm.dag.entryAfter [ "installPackages" ] ''
     # add path here so flatpak can access other binaries
     PATH="${config.home.path}/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:$PATH"
