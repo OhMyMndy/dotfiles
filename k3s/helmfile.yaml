@@ -222,7 +222,7 @@ releases:
   - name: rancher
     namespace: cattle-system
     chart: rancher-latest/rancher
-    version: v2.10.1
+    version: 2.10.3
     wait: true
     timeout: 600
     needs:
