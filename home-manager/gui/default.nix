@@ -4,26 +4,18 @@
 {
   imports = [
     (import ./../cli)
-    # (import ./modules/dconf.nix)
+    (import ./minimal.nix)
     (import ./modules/alacritty.nix)
     (import ./modules/flatpaks.nix)
     (import ./modules/gaming)
-    (import ./modules/gnome-extensions.nix)
-    (import ./modules/gnome.nix)
-    (import ./modules/gtk.nix)
     (import ./modules/i3.nix)
-    (import ./modules/wayland.nix)
-    (import ./modules/x11.nix)
     (import ./modules/zeal.nix)
   ];
-
-  fonts.fontconfig.enable = true;
 
   home.packages = with pkgs; [
     (pkgs.nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
     ibm-plex
     inter
   ];
-  home.enableNixpkgsReleaseCheck = false;
-  news.display = "silent";
+
 }

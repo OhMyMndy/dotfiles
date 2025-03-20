@@ -85,6 +85,11 @@
 
         packages = {
           homeConfigurations = {
+            "custom" = home-manager.lib.homeManagerConfiguration {
+              inherit pkgs;
+              modules = [ ./custom.nix ];
+              extraSpecialArgs = { inherit pkgs; };
+            };
             "minimal" = home-manager.lib.homeManagerConfiguration {
               inherit pkgs;
               modules = [ ./home-manager/minimal ];

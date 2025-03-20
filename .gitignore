@@ -36,3 +36,5 @@ nvim/.local
 */*.backup
 
 retro-gaming.nix
+
+/custom.nix
