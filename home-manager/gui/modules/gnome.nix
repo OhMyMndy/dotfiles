@@ -55,8 +55,8 @@ in
       "idle-delay" = lib.hm.gvariant.mkUint32 300;
     };
     "org/gnome/desktop/wm/preferences" = {
-      num-workspaces = "10";
-      button-layout = "close,minimize,maximize:appmenu";
+      num-workspaces = "4";
+      button-layout = "appmenu:minimize,maximize,close";
       resize-with-right-button = true;
     };
     "org/gnome/mutter" = {
