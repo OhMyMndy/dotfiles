@@ -10,4 +10,11 @@
     (import ./modules/x11.nix)
   ];
 
+
+  home.packages = with pkgs; [
+    (pkgs.nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
+    ibm-plex
+    inter
+  ];
+
 }

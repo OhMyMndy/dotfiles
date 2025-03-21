@@ -12,10 +12,5 @@
     (import ./modules/zeal.nix)
   ];
 
-  home.packages = with pkgs; [
-    (pkgs.nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
-    ibm-plex
-    inter
-  ];
 
 }
