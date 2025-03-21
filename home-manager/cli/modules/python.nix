@@ -4,6 +4,9 @@
   config,
   ...
 }: {
+  imports = [
+    (import ./asdf.nix)
+  ];
   home.packages = with pkgs; [
     # autoconf
     # bzip2

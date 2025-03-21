@@ -62,8 +62,10 @@
       # Make sure we use asdf versions of tools before tools installed on the
       # OS or via Nix
       ASDF_FORCE_PREPEND=yes
-      . "$HOME/.asdf/asdf.sh"
-      . "$HOME/.asdf/completions/asdf.bash"
+      if [[ -f "$HOME/.asdf/asdf.sh" ]]; then
+        . "$HOME/.asdf/asdf.sh"
+        . "$HOME/.asdf/completions/asdf.bash"
+      fi
 
       setopt rmstarsilent
 

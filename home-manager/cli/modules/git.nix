@@ -15,6 +15,8 @@
 
   programs.git = {
     enable = true;
+    userName  = "Mandy Schoep";
+#    userEmail = "2277717+OhMyMndy@users.noreply.github.com";
   };
 
   home.file.".config/lazygit" = {

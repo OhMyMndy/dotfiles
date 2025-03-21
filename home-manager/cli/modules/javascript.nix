@@ -4,6 +4,9 @@
   lib,
   ...
 }: {
+  imports = [
+    (import ./asdf.nix)
+  ];
   home.packages = with pkgs; [
     # nvm
   ];
