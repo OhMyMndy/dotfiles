@@ -63,12 +63,15 @@
         ${pkgs.arkade}/bin/arkade get $pkg --quiet
       fi
     done
+
     if ! ~/.arkade/bin/helm plugin list | tail -n +2 | cut -f1 | grep -q helm-git; then
       ~/.arkade/bin/helm plugin install https://github.com/aslafy-z/helm-git --version 1.3.0
     fi
+
     pkgs="envsubst cert-manager graph kubescape kyverno"
     for pkg in $pkgs; do
-      ~/.arkade/bin/krew install "$pkg" >/dev/null
+      # suppress "add the following to your ~/.zshrc" warning
+      ~/.arkade/bin/krew install "$pkg" &>/dev/null
     done
   '';
 }
