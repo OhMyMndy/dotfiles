@@ -7,7 +7,15 @@ cd "$DIR" || exit 1
 
 sudo apt-get update
 
-sudo apt-get install apt-file moreutils sshfs inotify-tools -y
+# sudo apt-get install flatpak-builder -y
+sudo apt-get install apt-file moreutils sshfs inotify-tools pipx htop vim curl wget tree -y
+
+# hardening
+sudo apt-get install usbguard usbguard-notifier debsums -y
+# sudo debsums -a -s
+#
+# sudo sh -c 'usbguard generate-policy > /etc/usbguard/rules.conf'
+# sudo systemctl enable --now usbguard.service
 
 # XDG utils is needed for gcloud for example
 sudo apt-get install -y vim git curl zsh flatpak build-essential \
@@ -20,6 +28,10 @@ if [[ "$DISPLAY" != '' ]]; then
 
 	sudo flatpak install flathub org.mozilla.firefox -y
 	# flatpak install flathub io.gitlab.librewolf-community
+	#
+	sudo apt-get install gnome-software gnome-software-plugin-flatpak -y # gnome-software-plugin-snap
+	sudo snap remove snap store
+
 fi
 #
 # dependencies for building Python
