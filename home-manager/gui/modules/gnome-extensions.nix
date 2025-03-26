@@ -2,13 +2,15 @@
   pkgs,
   lib,
   ...
-}: {
+}:
+{
   home.packages =
     (with pkgs.master; [
       gnomeExtensions.appindicator
       gnomeExtensions.caffeine
       gnomeExtensions.clipboard-indicator
       gnomeExtensions.dash-to-dock
+      gnomeExtensions.dash-to-panel
       # gnomeExtensions.gsconnect
       gnomeExtensions.just-perfection
       gnomeExtensions.impatience
@@ -21,7 +23,7 @@
     ++ (with pkgs; [
       gnome-extensions-cli
     ]);
-  home.activation.setupGnomeExtensions = lib.hm.dag.entryAfter ["writeBoundary"] ''
+  home.activation.setupGnomeExtensions = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     alias gext=${pkgs.gnome-extensions-cli}/bin/gext
     if ! gext list --only-uuid | grep -q gsconnect@andyholmes.github.io; then
       gext install gsconnect@andyholmes.github.io
@@ -30,17 +32,18 @@
   dconf.settings = {
     "org/gnome/shell" = {
       "enabled-extensions" = [
+        "appindicatorsupport@rgcjonas.gmail.com"
         "caffeine@patapon.info"
         "clipboard-indicator@tudmotu.com"
         "dash-to-dock@micxgx.gmail.com"
-        "sound-output-device-chooser@kgshank.net"
-        "trayIconsReloaded@selfmade.pl"
-        "impatience@gfxmonk.net"
-        "appindicatorsupport@rgcjonas.gmail.com"
-        "search-light@icedman.github.com"
-        "tilingshell@ferrarodomenico.com"
         "gsconnect@andyholmes.github.io"
+        "impatience@gfxmonk.net"
         "just-perfection-desktop@just-perfection"
+        "search-light@icedman.github.com"
+        "sound-output-device-chooser@kgshank.net"
+        "tilingshell@ferrarodomenico.com"
+        "trayIconsReloaded@selfmade.pl"
+        "workspaces-by-open-apps@favo02.github.com"
         # "openbar@neuromorph"
       ];
     };
@@ -54,6 +57,8 @@
       "disable-overview-on-startup" = true;
       "show-mounts" = false;
       "show-trash" = false;
+      "intellihide-mode" = "FOCUS_APPLICATION_WINDOWS";
+      "intellihide" = true;
     };
 
     "org/gnome/shell/extensions/net/gfxmonk/impatience" = {
@@ -92,6 +97,8 @@
       "popup-at-cursor-monitor" = true;
       "unit-converter" = true;
       "currency-converter" = true;
+      "shortcut-search" = [ "<Super>space" ];
+      "use-animations" = false;
       # "text-color" = lib.hm.gvariant.mkTuple [
       #   1.0
       #   1.0
@@ -117,14 +124,14 @@
           id = "1/1 H-Split";
           tiles = [
             {
-              groups = [1];
+              groups = [ 1 ];
               height = 1;
               width = 0.5;
               x = 0;
               y = 0;
             }
             {
-              groups = [1];
+              groups = [ 1 ];
               height = 1;
               width = 0.5;
               x = 0.5;
@@ -132,37 +139,37 @@
             }
           ];
         }
-        {
-          id = "1/1 V-Split";
-          tiles = [
-            {
-              groups = [1];
-              height = 0.5;
-              width = 1;
-              x = 0;
-              y = 0;
-            }
-            {
-              groups = [1];
-              height = 0.5;
-              width = 1;
-              x = 0;
-              y = 0.5;
-            }
-          ];
-        }
+        # {
+        #   id = "1/1 V-Split";
+        #   tiles = [
+        #     {
+        #       groups = [1];
+        #       height = 0.5;
+        #       width = 1;
+        #       x = 0;
+        #       y = 0;
+        #     }
+        #     {
+        #       groups = [1];
+        #       height = 0.5;
+        #       width = 1;
+        #       x = 0;
+        #       y = 0.5;
+        #     }
+        #   ];
+        # }
         {
           id = "1/2 H-Split";
           tiles = [
             {
-              groups = [1];
+              groups = [ 1 ];
               height = 1;
               width = 0.33;
               x = 0;
               y = 0;
             }
             {
-              groups = [1];
+              groups = [ 1 ];
               height = 1;
               width = 0.67;
               x = 0.33;
@@ -174,14 +181,14 @@
           id = "2/1 H-Split";
           tiles = [
             {
-              groups = [1];
+              groups = [ 1 ];
               height = 1;
               width = 0.67;
               x = 0;
               y = 0;
             }
             {
-              groups = [1];
+              groups = [ 1 ];
               height = 1;
               width = 0.33;
               x = 0.67;
@@ -193,24 +200,57 @@
           id = "1/1/1 H-Split";
           tiles = [
             {
-              groups = [1];
+              groups = [ 1 ];
               height = 1;
               width = 0.333333;
               x = 0;
               y = 0;
             }
             {
-              groups = [1];
+              groups = [ 1 ];
               height = 1;
               width = 0.333333;
               x = 0.333333;
               y = 0;
             }
             {
-              groups = [1];
+              groups = [ 1 ];
               height = 1;
               width = 0.333333;
               x = 0.666666;
+              y = 0;
+            }
+          ];
+        }
+        {
+          id = "1/1/1/1 H-Split";
+          tiles = [
+            {
+              groups = [ 1 ];
+              height = 1;
+              width = 0.25;
+              x = 0;
+              y = 0;
+            }
+            {
+              groups = [ 1 ];
+              height = 1;
+              width = 0.25;
+              x = 0.25;
+              y = 0;
+            }
+            {
+              groups = [ 1 ];
+              height = 1;
+              width = 0.25;
+              x = 0.50;
+              y = 0;
+            }
+            {
+              groups = [ 1 ];
+              height = 1;
+              width = 0.25;
+              x = 0.75;
               y = 0;
             }
           ];
