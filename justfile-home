@@ -1,0 +1,13 @@
+
+distrobox:
+  distrobox create --image docker.io/ohmymndy/distrobox-fedora:0.6 --name fedora --init --yes
+  distrobox create --image docker.io/ohmymndy/distrobox-opensuse-tumbleweed:0.6 --name ost --init --yes
+  distrobox create --image docker.io/ohmymndy/distrobox-opensuse-leap:0.6 --name osl --init --yes
+  distrobox create --image docker.io/ohmymndy/distrobox-ubuntu:0.6 --name ubuntu --init --yes
+
+
+
+minikube:
+  minikube start --addons=csi-hostpath-driver,gvisor,headlamp,ingress,metrics-server,storage-provisioner,volumesnapshots \
+    --driver=docker --cni=cilium --memory 6000  --kubernetes-version=v1.31.6 \
+    --container-runtime=containerd --docker-opt containerd=/var/run/containerd/containerd.sock
