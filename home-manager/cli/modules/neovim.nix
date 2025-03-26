@@ -117,6 +117,8 @@ in
     # yaml-language-server
     tree-sitter
     yamlfmt
+
+    regal # rego lsp
   ];
 
   programs.neovim = {

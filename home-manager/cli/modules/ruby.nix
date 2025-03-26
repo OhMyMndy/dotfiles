@@ -29,12 +29,12 @@
   # sudo dnf install -y ruby ruby-devel autoconf gcc rust patch make bzip2 openssl-devel libyaml-devel libffi-devel readline-devel zlib-devel gdbm-devel ncurses-devel perl
   home.activation.setupRuby = lib.hm.dag.entryAfter [ "installPackages" ] ''
     PATH="${config.home.path}/bin:$PATH"
-    # . ~/.asdf/asdf.sh
+    # PATH+=":$HOME/.local/bin:$HOME/.asdf/shims:$PATH"
 
     # TODO: check if dependencies are installed before attempting to install
     # asdf plugin add ruby
     # RUBY_VERSION="$(asdf list all ruby | grep -E '^3.3.[0-9]+$' | tail -1)"
     # asdf install ruby $RUBY_VERSION
-    # asdf global ruby $RUBY_VERSION
+    # asdf set -u ruby $RUBY_VERSION
   '';
 }

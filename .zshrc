@@ -15,8 +15,19 @@ fi
     #   bindkey  "^[[4~"   end-of-line
 
 
+
+# shellcheck disable=SC2076
+if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:" ]]
+then
+    PATH="$HOME/.local/bin:$HOME/bin:$PATH"
+fi
+export PATH
+
+setopt rmstarsilent
+
 # prevent bell
 bindkey -e
+
 
 # fix Alt + Left/Right on Linux
 bindkey '^[[1;3C' forward-word
@@ -48,13 +59,22 @@ bindkey '^[[1;3D' backward-word
 # --color=selected-bg:#45475a \
 # --multi"
 
+if [[ -d ~/.shellrc.d ]]; then
+  for rc in ~/.shellrc.d/*(DN); do
+    if [[ -f "$rc" ]]; then
+        # shellcheck disable=SC1090
+        . "$rc"
+    fi
+    done
+fi
+
 if [[ -d ~/.zshrc.d ]]; then
   for rc in ~/.zshrc.d/*(DN); do
-        if [[ -f "$rc" ]]; then
-            # shellcheck disable=SC1090
-            . "$rc"
-        fi
-    done
+    if [[ -f "$rc" ]]; then
+        # shellcheck disable=SC1090
+        . "$rc"
+    fi
+  done
 fi
 
 # SEE: https://discourse.nixos.org/t/nix-shell-does-not-use-my-users-shell-zsh/5588/12

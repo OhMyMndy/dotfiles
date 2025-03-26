@@ -22,12 +22,12 @@
 
   home.activation.setupNodejs = lib.hm.dag.entryAfter ["installPackages"] ''
     PATH="${config.home.path}/bin:$PATH"
-    . ~/.asdf/asdf.sh
+    PATH+=":$HOME/.local/bin:$HOME/.asdf/shims:$PATH"
     asdf plugin add nodejs >/dev/null
     # asdf install nodejs latest
-    # asdf global nodejs latest
+    # asdf set -u nodejs latest
 
     asdf install nodejs $(asdf list all nodejs | grep '^22.' | tail -1) >/dev/null
-    asdf global nodejs $(asdf list all nodejs | grep '^22.' | tail -1)
+    asdf set -u nodejs $(asdf list all nodejs | grep '^22.' | tail -1)
   '';
 }

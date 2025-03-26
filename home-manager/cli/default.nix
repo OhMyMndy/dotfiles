@@ -5,6 +5,8 @@
 
     (import ./modules/asdf.nix)
     (import ./modules/audio.nix)
+    (import ./modules/bash.nix)
+    (import ./modules/sh.nix)
     (import ./modules/cloud.nix)
     (import ./modules/containers.nix)
     (import ./modules/dart.nix)

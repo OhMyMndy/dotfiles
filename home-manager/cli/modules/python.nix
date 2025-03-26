@@ -44,15 +44,15 @@
 
   home.activation.setupUv = lib.hm.dag.entryAfter ["installPackages"] ''
     PATH="${config.home.path}/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:$PATH"
-    . ~/.asdf/asdf.sh
+    PATH+=":$HOME/.local/bin:$HOME/.asdf/shims:$PATH"
     asdf plugin add uv >/dev/null
     asdf install uv latest >/dev/null
-    asdf global uv latest
+    asdf set -u uv latest
 
     asdf plugin add python
 
     PYTHON_VERSION="$(asdf list all python | grep -E '^3.12.[0-9]+' | tail -1)"
     asdf install python $PYTHON_VERSION >/dev/null
-    asdf global python $PYTHON_VERSION
+    asdf set -u python $PYTHON_VERSION
   '';
 }

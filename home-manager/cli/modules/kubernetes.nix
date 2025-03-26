@@ -19,7 +19,9 @@
   home.packages = with pkgs; [
     arkade
     # cilium-cli
+    crane
     cri-tools
+    dive
     fluxctl
     # graphviz
     # helmfile
@@ -57,7 +59,9 @@
   # sudo $(command -v) system install cni
   # sudo $(command -v) system install tc-redirect-tap
   home.activation.setupKubernetes = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    pkgs="minikube kubectl krew helm cilium hubble trivy jq yq talosctl kubectx kubens k9s kustomize helmfile"
+    export PATH="$${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+
+    pkgs="argocd argocd-autopilot copa minikube kubectl krew opa helm cilium hubble trivy jq yq talosctl kubectx kubens k9s kustomize helmfile"
     for pkg in $pkgs; do
       if [[ ! -f ~/.arkade/bin/"$pkg" ]]; then
         ${pkgs.arkade}/bin/arkade get $pkg --quiet

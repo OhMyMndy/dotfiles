@@ -19,9 +19,9 @@
   ];
   home.activation.setupGolang = lib.hm.dag.entryAfter ["installPackages"] ''
     PATH="${config.home.path}/bin:$PATH"
-    . ~/.asdf/asdf.sh
+    PATH+=":$HOME/.local/bin:$HOME/.asdf/shims:$PATH"
     asdf plugin add golang >/dev/null
     asdf install golang latest >/dev/null
-    asdf global golang latest
+    asdf set -u golang latest
   '';
 }
