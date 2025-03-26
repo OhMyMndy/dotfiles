@@ -14,7 +14,7 @@ in
   #   xdgOpenUsePortal = true;
   # };
   # Set fractional scaling for Wayland:
-  #  gsettings set org.gnome.mutter experimental-features "['scale-monitor-framebuffer']"
+  #  gsettings set org.gnome.mutter experimental-features "["scale-monitor-framebuffer"]"
   dconf.settings = {
     "org/gnome/desktop/wm/keybindings" = {
       "switch-input-source" = [ ];
@@ -31,6 +31,16 @@ in
       "switch-to-workspace-10" = [ "<Super>10" ];
       "switch-to-workspace-left" = [ "<Super>Page_Up" ];
       "switch-to-workspace-right" = [ "<Super>Page_Down" ];
+      "move-to-workspace-1" = [ "<Super><Shift>1" ];
+      "move-to-workspace-2" = [ "<Super><Shift>2" ];
+      "move-to-workspace-3" = [ "<Super><Shift>3" ];
+      "move-to-workspace-4" = [ "<Super><Shift>4" ];
+      "move-to-workspace-5" = [ "<Super><Shift>5" ];
+      "move-to-workspace-6" = [ "<Super><Shift>6" ];
+      "move-to-workspace-7" = [ "<Super><Shift>7" ];
+      "move-to-workspace-8" = [ "<Super><Shift>8" ];
+      "move-to-workspace-9" = [ "<Super><Shift>9" ];
+      "move-to-workspace-10" = [ "<Super><Shift>0" ];
     };
     "org/gnome/desktop/peripherals/touchpad" = {
       "natural-scroll" = false;
@@ -55,7 +65,8 @@ in
       "idle-delay" = lib.hm.gvariant.mkUint32 300;
     };
     "org/gnome/desktop/wm/preferences" = {
-      num-workspaces = "4";
+      num-workspaces = 4;
+      # button-layout = "close,minimize,maximize:appmenu";
       button-layout = "appmenu:minimize,maximize,close";
       resize-with-right-button = true;
     };
@@ -70,7 +81,7 @@ in
       "enable-animations" = false;
       "accent-color" = "pink";
       "enable-hot-corners" = true;
-      "monospace-font-name" = "JetBrainsMonoNL Nerd Font Mono 10";
+      "monospace-font-name" = "Iosevka Nerd Font Mono 11"; #"JetBrainsMonoNL Nerd Font Mono 10";
       "font-name" = "IBM Plex Sans 11";
       "document-font-name" = "IBM Plex Sans 11";
       "titlebar-font" = "IBM Plex Sans Bold 11";
@@ -92,20 +103,32 @@ in
       "night-light-temperature" = lib.hm.gvariant.mkUint32 4300;
     };
     "org/gnome/settings-daemon/plugins/power" = {
-      "sleep-inactive-ac-timeout" = 660; # 6 minutes
+      "sleep-inactive-ac-timeout" = 600;
+      "sleep-inactive-ac-type" = "suspend";
     };
-    "org/gnome/shell" = {
-      "favorite-apps" = [
-        "org.gnome.Nautilus.desktop"
-        "org.mozilla.firefox.desktop"
-        "microsoft-edge.desktop"
-        "org.gnome.Geary.desktop"
-        "org.gnome.Terminal.desktop"
-        # "Alacritty.desktop"
-        "beeper.desktop"
-        "com.vixalien.sticky.desktop"
-        "md.obsidian.Obsidian.desktop"
-      ];
+    "org/gnome/shell"."favorite-apps" = [
+      "org.gnome.Nautilus.desktop"
+      "org.mozilla.firefox.desktop"
+      "proton-mail.desktop"
+      "com.automattic.beeper.desktop"
+      "org.gnome.Terminal.desktop"
+      "jetbrains-idea-a0ba9843-b237-4000-9db0-5d85a0d89b2a.desktop"
+      "dev.aunetx.deezer.desktop"
+      "com.protonvpn.www.desktop"
+      "org.prismlauncher.PrismLauncher.desktop"
+      "net.agalwood.Motrix.desktop"
+    ];
+
+    "org/gnome/shell/keybindings" = {
+      "switch-to-application-1" = [ ];
+      "switch-to-application-2" = [ ];
+      "switch-to-application-3" = [ ];
+      "switch-to-application-4" = [ ];
+      "switch-to-application-5" = [ ];
+      "switch-to-application-6" = [ ];
+      "switch-to-application-7" = [ ];
+      "switch-to-application-8" = [ ];
+      "switch-to-application-9" = [ ];
     };
     "org/gnome/terminal/legacy/profiles:" = {
       default = profileUUID;

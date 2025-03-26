@@ -13,4 +13,20 @@
   ];
 
 
+  home.packages = with pkgs; [
+    (pkgs.nerdfonts.override {
+      fonts = [
+        "3270"
+        "0xProto"
+        "Agave"
+        "Iosevka"
+        "JetBrainsMono"
+        "SourceCodePro"
+      ];
+    })
+    ibm-plex
+    inter
+  ];
+  home.enableNixpkgsReleaseCheck = false;
+  news.display = "silent";
 }
