@@ -174,7 +174,7 @@ bindsym KP_Prior workspace $workspace9
 bindsym KP_Insert workspace $workspace10
 
 
-new_float normal
+# new_float normal
 
 # FOCUS
 focus_on_window_activation urgent
@@ -349,4 +349,4 @@ bindsym XF86AudioNext exec playerctl -a next
 bindsym XF86AudioPrev exec playerctl -a previous
 
 
-exec_always --no-startup-id feh --bg-center "$(xfconf-query -c xfce4-desktop -p /backdrop/screen0/monitor0/workspace0/last-image | tail -1)"
+#exec_always --no-startup-id feh --bg-center "$(xfconf-query -c xfce4-desktop -p /backdrop/screen0/monitor0/workspace0/last-image | tail -1)"
