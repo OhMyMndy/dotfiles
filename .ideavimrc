@@ -1,0 +1,125 @@
+" .ideavimrc is a configuration file for IdeaVim plugin. It uses
+"   the same commands as the original .vimrc configuration.
+" You can find a list of commands here: https://jb.gg/h38q75
+" Find more examples here: https://jb.gg/share-ideavimrc
+
+
+" Idea settings
+
+" Font: Iosevka Nerd Font Mono
+" Theme: dracula colorful
+
+
+" Idea plugins
+"
+" .env files support
+" Android
+" Dart
+" Dracula Theme
+" Flutter
+" Go
+" GraphQL
+" IdeaVim
+" IdeaVim-Quickscope
+" Just
+" Key Promoter X
+" LSP4IJ
+" Makefile Language
+" NixIDEA
+" Nyan Progress Bar
+" Open Policy Agent
+" PHP
+" PHP Annotations
+" Php Inspections (EA Extended)
+" PHPStans Support
+" PHPUnit Enhancement
+" Proxy AI
+" Python
+" Ruby
+" Terraform and HCL
+
+
+let mapleader = " "
+
+Plug 'easymotion/vim-easymotion'	" Requires IdeaVim-EasyMotion. Lots of mappings
+Plug 'kana/vim-textobj-entire'		" entire buffer text object: ae
+Plug 'machakann/vim-highlightedyank'
+Plug 'terryma/vim-multiple-cursors'	" See below for remapped keys. <A-n> doesn't work on Mac
+Plug 'tommcdo/vim-exchange'		    " cx{motion} to select, again to exchange
+Plug 'tpope/vim-commentary'		    " [count]gc{motion}, o_gc, v_gc, gcc
+Plug 'tpope/vim-surround'		    " ys, cs, ds, S
+Plug 'vim-scripts/argtextobj.vim'	    " argument text objects: aa, ia
+Plug 'vim-scripts/ReplaceWithRegister'  " [count][{reg}]gr{motion}, [count][{reg}]grr, {Visual}[{reg}]gr
+
+
+nmap <C-d> <C-d>zz
+nmap <C-u> <C-u>zz
+
+vmap <C-d> <C-d>zz
+vmap <C-u> <C-u>zz
+"" -- Suggested options --
+" Show a few lines of context around the cursor. Note that this makes the
+" text scroll if you mouse-click near the start or end of the window.
+set scrolloff=5
+
+" Do incremental searching.
+set incsearch
+
+set number relativenumber
+
+" Don't use Ex mode, use Q for formatting.
+map Q gq
+
+" --- Enable IdeaVim plugins https://jb.gg/ideavim-plugins
+
+" Highlight copied text
+Plug 'machakann/vim-highlightedyank'
+" Commentary plugin
+Plug 'tpope/vim-commentary'
+
+" system clipboard
+vmap <leader>yiw "+yiw
+nmap <leader>yiw "+yiw
+vmap <leader>y "+y
+vmap <leader>d "_d
+nmap <leader>y "+yy
+nmap <leader>p "+p
+nmap <leader>P "+P
+vmap <leader>p "+p
+vmap <leader>P "+P
+
+nmap <leader>t <Action>(ActivateTerminalToolWindow)
+"" -- Map IDE actions to IdeaVim -- https://jb.gg/abva4t
+"" Map \r to the Reformat Code action
+"map \r <Action>(ReformatCode)
+
+"" Map <leader>d to start debug
+"map <leader>d <Action>(Debug)
+
+"" Map \b to toggle the breakpoint on the current line
+"map \b <Action>(ToggleLineBreakpoint)
+
+
+
+" find
+
+" navigation splits
+
+" navigation tabs
+
+" terminal
+
+
+" yanking
+
+
+" file tree
+Plug 'preservim/nerdtree'
+map <Leader>e :NERDTree<CR>
+map <Leader>o :NERDTree<CR>
+":NERDTreeFocus
+":NERDTreeToggle
+
+
+" lsp mappings
+nmap <Leader>lf :ReformatCode<CR>
