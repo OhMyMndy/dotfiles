@@ -83,11 +83,8 @@ in
     gnumake
     # vala
 
-    # shellcheck
     # hadolint
 
-    # ansible-language-server
-    # ansible-lint
     alejandra
     clang-tools_18 # clangd
     # dart

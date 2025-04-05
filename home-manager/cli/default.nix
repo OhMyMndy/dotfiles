@@ -4,6 +4,7 @@
     (import ./minimal.nix)
 
     (import ./modules/asdf.nix)
+    (import ./modules/ansible.nix)
     (import ./modules/audio.nix)
     (import ./modules/bash.nix)
     (import ./modules/sh.nix)
