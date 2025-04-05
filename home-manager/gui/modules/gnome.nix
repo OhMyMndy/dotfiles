@@ -1,9 +1,25 @@
-{ lib, ... }:
+{ pkgs, lib, ... }:
 let
   profileUUID = "b1dcc9dd-5262-4d8d-a863-c897e6d979b9";
 in
 {
   imports = [ (import ./gnome-extensions.nix) ];
+  home.packages = with pkgs; [
+    (pkgs.nerdfonts.override {
+      fonts = [
+        "Iosevka"
+        "IosevkaTerm"
+        "IosevkaTermSlab"
+        "JetBrainsMono"
+        "Meslo"
+        "Ubuntu"
+        "UbuntuMono"
+        "UbuntuSans"
+      ];
+    })
+    ibm-plex
+    inter
+  ];
   # TODO fix xdg-open with flatpak applications
   # xdg.portal = {
   #   enable = true;
@@ -81,10 +97,10 @@ in
       "enable-animations" = false;
       "accent-color" = "pink";
       "enable-hot-corners" = true;
-      "monospace-font-name" = "Iosevka Nerd Font Mono 11"; #"JetBrainsMonoNL Nerd Font Mono 10";
-      "font-name" = "IBM Plex Sans 11";
-      "document-font-name" = "IBM Plex Sans 11";
-      "titlebar-font" = "IBM Plex Sans Bold 11";
+      "monospace-font-name" = "Iosevka Nerd Font Mono 11"; # "JetBrainsMonoNL Nerd Font Mono 10";
+      "font-name" = "Ubuntu Sans 11";
+      "document-font-name" = "Ubuntu Sans 11";
+      "titlebar-font" = "Ubuntu Sans Bold 11";
       "clock-format" = "24h";
     };
     "org/gnome/desktop/wm/preferences" = {
@@ -188,4 +204,6 @@ in
 
     # TODO: add nightlight config
   };
+
+  # TODO: add hook to run fc-cache -f
 }

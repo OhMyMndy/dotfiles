@@ -73,6 +73,7 @@
       "world-clock" = false;
       "panel" = true;
       "switcher-popup-delay" = false;
+      "window-demands-attention-focus" = false;
     };
 
     # TODO: just apply gtk-3/4 stylesheets for window buttons
