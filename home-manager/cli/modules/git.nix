@@ -48,5 +48,7 @@
       echo "No email found for the default Git user."
       echo "run: 'gh auth refresh -h github.com -s user' to refresh the token"
     fi
+
+    ${pkgs.gh}/bin/gh extension install nektos/gh-act
   '';
 }
