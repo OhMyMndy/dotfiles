@@ -1,2 +1,4 @@
 # shellcheck shell=bash
-export PATH=$PATH:$HOME/.arkade/bin/
+if ! grep -q "arkade" <<< "$PATH"; then
+  export PATH=$PATH:$HOME/.arkade/bin/
+fi
