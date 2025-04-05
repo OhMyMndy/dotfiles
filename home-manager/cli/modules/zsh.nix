@@ -20,6 +20,9 @@
     autosuggestion = {
       enable = true;
     };
+    envExtra = ''
+      emulate sh -c 'source /etc/profile'
+    '';
     syntaxHighlighting = {
       enable = true;
       highlighters = [
