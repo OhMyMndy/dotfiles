@@ -23,7 +23,7 @@ repositories:
 releases:
   - name: prometheus-operator-crds
     chart: prometheus-community/prometheus-operator-crds
-    version: 18.0.1
+    version: 19.1.0
     wait: true
     timeout: 30
   # - name: istio-base
