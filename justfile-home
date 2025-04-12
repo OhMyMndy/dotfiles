@@ -11,3 +11,7 @@ minikube:
   minikube start --addons=csi-hostpath-driver,gvisor,headlamp,ingress,metrics-server,storage-provisioner,volumesnapshots \
     --driver=docker --cni=cilium --memory 6000  --kubernetes-version=v1.31.6 \
     --container-runtime=containerd --docker-opt containerd=/var/run/containerd/containerd.sock
+
+
+scrcpy:
+  scrcpy -S
