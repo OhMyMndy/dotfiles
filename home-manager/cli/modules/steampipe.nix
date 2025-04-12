@@ -10,9 +10,9 @@
   #TODO:check manually for installation of plugins, the steampipe plugins install is slow
   # when the plugins are installed
   home.activation.setupSteampipe = lib.hm.dag.entryAfter [ "installPackages" ] ''
-    if [[ -d /run/systemd/system ]]; then
-      systemctl --user enable --now steampipe
-    fi
+    # if [[ -d /run/systemd/system ]]; then
+    #  systemctl --user enable --now steampipe
+    # fi
 
     plugins="ansible cloudflare config csv docker exec gcp github theapsgroup/gitlab grafana jira "
     plugins+="theapsgroup/keycloak kubernetes ldap linkedin net openapi prometheus steampipe "
