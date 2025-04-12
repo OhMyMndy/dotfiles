@@ -49,7 +49,7 @@
     };
 
     "org/gnome/shell/extensions/dash-to-dock" = {
-      "dock-fixed" = true;
+      "dock-fixed" = false;
       "dash-max-icon-size" = 24;
       "hot-keys" = false;
       "apply-custom-theme" = true;
