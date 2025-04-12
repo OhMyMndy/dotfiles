@@ -1,6 +1,7 @@
 {
   pkgs,
   lib,
+  config,
   ...
 }:
 {
@@ -16,7 +17,9 @@
   home.packages = with pkgs; [ ];
 
   home.activation.setupRust = lib.hm.dag.entryAfter [ "installPackages" ] ''
-    PATH+=":$HOME/.local/bin:$HOME/.asdf/shims:$PATH"
+    PATH="$PATH:${config.home.path}/bin:$HOME/.local/bin:$HOME/.asdf/shims"
+    PATH+="${pkgs.gcc}/bin"
+
     asdf plugin add rust >/dev/null
     asdf install rust latest >/dev/null
     asdf set -u rust latest

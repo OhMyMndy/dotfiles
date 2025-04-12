@@ -43,8 +43,7 @@
   };
 
   home.activation.setupUv = lib.hm.dag.entryAfter ["installPackages"] ''
-    PATH="${config.home.path}/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:$PATH"
-    PATH+=":$HOME/.local/bin:$HOME/.asdf/shims:$PATH"
+    PATH="$PATH:${config.home.path}/bin:$HOME/.local/bin:$HOME/.asdf/shims"
     asdf plugin add uv >/dev/null
     asdf install uv latest >/dev/null
     asdf set -u uv latest

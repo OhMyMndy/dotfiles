@@ -21,8 +21,8 @@
   };
 
   home.activation.setupNodejs = lib.hm.dag.entryAfter ["installPackages"] ''
-    PATH="${config.home.path}/bin:$PATH"
-    PATH+=":$HOME/.local/bin:$HOME/.asdf/shims:$PATH"
+    PATH="$PATH:${config.home.path}/bin:$HOME/.local/bin:$HOME/.asdf/shims"
+
     asdf plugin add nodejs >/dev/null
     # asdf install nodejs latest
     # asdf set -u nodejs latest

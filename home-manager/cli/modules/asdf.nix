@@ -5,6 +5,10 @@
   ...
 }:
 {
+  imports = [
+      (import ./sh.nix)
+  ];
+
   home.packages = with pkgs; [
     # asdf-vm
   ];
@@ -18,10 +22,15 @@
   };
 
   home.activation.setupAsdf = lib.hm.dag.entryAfter [ "installPackages" ] ''
-    PATH="${config.home.path}/bin:$PATH"
-    if [[ ! -d ~/.local/bin/ ]]; then
-      ${pkgs.curl}/bin/curl -SsL https://github.com/asdf-vm/asdf/releases/download/v0.16.6/asdf-v0.16.6-linux-arm64.tar.gz | ${pkgs.gnutar}/bin/tar xz -C ~/.local/bin/
+
+    PATH="$PATH:${config.home.path}/bin:${pkgs.curl}/bin:${pkgs.gnutar}/bin:${pkgs.gzip}/bin"
+
+    if [[ ! -f ~/.local/bin/asdf ]]; then
+      mkdir -p ~/.local/bin/
+      curl -SsL https://github.com/asdf-vm/asdf/releases/download/v0.16.7/asdf-v0.16.7-linux-arm64.tar.gz | tar xz -C ~/.local/bin/
+      rm -rf ~/.asdf
     fi
+
     #~/.local/bin/asdf plugin add dprint https://github.com/asdf-community/asdf-dprint
     #~/.local/bin/asdf set -u dprint latest
   '';

@@ -24,13 +24,12 @@
   };
 
   home.activation.setupDart = lib.hm.dag.entryAfter [ "installPackages" ] ''
-    PATH="${config.home.path}/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin"
-    PATH+=":$HOME/.local/bin:$HOME/.asdf/shims:$PATH"
+    # util-linux contains rev
+    PATH="$PATH:${config.home.path}/bin:$HOME/.local/bin:$HOME/.asdf/shims:${pkgs.util-linux}/bin"
     asdf plugin add flutter >/dev/null
     asdf install flutter latest >/dev/null
     asdf set -u flutter latest
 
-    # TODO: depends on rev command, need to add everything to path to use that for now
     asdf plugin add dart >/dev/null
     asdf install dart latest >/dev/null
     asdf set -u dart latest

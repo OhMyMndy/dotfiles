@@ -28,8 +28,7 @@
   # TODO: install dependencies
   # sudo dnf install -y ruby ruby-devel autoconf gcc rust patch make bzip2 openssl-devel libyaml-devel libffi-devel readline-devel zlib-devel gdbm-devel ncurses-devel perl
   home.activation.setupRuby = lib.hm.dag.entryAfter [ "installPackages" ] ''
-    PATH="${config.home.path}/bin:$PATH"
-    # PATH+=":$HOME/.local/bin:$HOME/.asdf/shims:$PATH"
+    PATH="$PATH:${config.home.path}/bin:$HOME/.local/bin:$HOME/.asdf/shims"
 
     # TODO: check if dependencies are installed before attempting to install
     # asdf plugin add ruby

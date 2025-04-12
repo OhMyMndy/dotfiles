@@ -2,6 +2,7 @@
   imports = [
     (import ../base.nix)
     (import ./modules/bash.nix)
+    (import ./modules/sh.nix)
     (import ./modules/ansible.nix)
     (import ./modules/file-transfer.nix)
     (import ./modules/git.nix)
