@@ -235,7 +235,7 @@ releases:
   - name: kubevirt-dashboard-extension
     namespace: cattle-ui-plugin-system
     chart: suse-edge/kubevirt-dashboard-extension
-    version: 1.2.1
+    version: 1.3.1
     wait: true
     timeout: 180
     needs:
