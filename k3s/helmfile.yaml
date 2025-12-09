@@ -145,7 +145,7 @@ releases:
   - name: cert-manager
     namespace: cert-manager
     chart: jetstack/cert-manager
-    version: v1.17.2
+    version: v1.19.2
     wait: true
     timeout: 300
     # needs:
