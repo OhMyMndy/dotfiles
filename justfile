@@ -1,16 +1,11 @@
 set shell := ["bash", "-c"]
 
 switch:
-    if [[ "$GOOGLE_CLOUD_SHELL" == "true" ]]; then target=minimal; fi; \
-    if [[ -n "$DISPLAY" ]]; then target=gui; fi; \
-    if [[ -z "$DISPLAY" ]]; then target=cli; fi; \
+    if [[ "$GOOGLE_CLOUD_SHELL" == "true" ]]; then target=minimal-cli; fi; \
+    if [[ -n "$DISPLAY" ]]; then target=minimal-gui; fi; \
+    if [[ -z "$DISPLAY" ]]; then target=minimal-cli; fi; \
     if [[ -f custom.nix ]]; then target=custom; fi; \
     if [[ -n "$target" ]]; then time nix run .#home-manager -- switch --flake .#"$target" --impure -b backup; fi;
-switch-gui:
-    time nix run .#home-manager -- switch --flake .#gui --impure -b backup
-
-switch-cli:
-    time nix run .#home-manager -- switch --flake .#cli --impure -b backup
 
 format:
     time nix run nixpkgs#nixfmt-rfc-style -- --strict .

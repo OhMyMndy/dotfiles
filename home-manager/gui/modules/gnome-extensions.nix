@@ -54,7 +54,7 @@
       "custom-theme-shrink" = true;
       "dash-max-icon-size" = 24;
       "disable-overview-on-startup" = true;
-      "dock-fixed" = false;
+      "dock-fixed" = true;
       "hot-keys" = false;
       "intellihide" = true;
       "intellihide-mode" = "FOCUS_APPLICATION_WINDOWS";

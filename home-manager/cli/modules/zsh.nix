@@ -59,7 +59,7 @@
     };
 
 
-    initExtra = ''
+    initContent = ''
       ZSH_DISABLE_COMPFIX=true
       ${builtins.readFile "${./../../../.zshrc}"}
     '';

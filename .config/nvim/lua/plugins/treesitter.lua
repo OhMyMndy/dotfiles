@@ -5,7 +5,7 @@
 ---@type LazySpec
 return {
   "nvim-treesitter/nvim-treesitter",
-  dev = true,
+  -- dev = true,
   opts = {
     auto_install = true,
   },

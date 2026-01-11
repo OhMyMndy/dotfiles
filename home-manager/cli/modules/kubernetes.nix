@@ -22,7 +22,7 @@
     crane
     cri-tools
     dive
-    fluxctl
+    # fluxctl
     # graphviz
     # helmfile
     # hubble

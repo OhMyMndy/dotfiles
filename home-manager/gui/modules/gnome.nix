@@ -5,18 +5,26 @@ in
 {
   imports = [ (import ./gnome-extensions.nix) ];
   home.packages = with pkgs; [
-    (pkgs.nerdfonts.override {
-      fonts = [
-        "Iosevka"
-        "IosevkaTerm"
-        "IosevkaTermSlab"
-        "JetBrainsMono"
-        "Meslo"
-        "Ubuntu"
-        "UbuntuMono"
-        "UbuntuSans"
-      ];
-    })
+    # (pkgs.nerd-fonts.override {
+    #   fonts = [
+    #     "Iosevka"
+    #     "IosevkaTerm"
+    #     "IosevkaTermSlab"
+    #     "JetBrainsMono"
+    #     "Meslo"
+    #     "Ubuntu"
+    #     "UbuntuMono"
+    #     "UbuntuSans"
+    #   ];
+    # })
+    nerd-fonts.iosevka
+    nerd-fonts.iosevka-term
+    nerd-fonts.iosevka-term-slab
+    nerd-fonts.jetbrains-mono
+    nerd-fonts.meslo-lg
+    nerd-fonts.ubuntu
+    nerd-fonts.ubuntu-mono
+    nerd-fonts.ubuntu-sans
     ibm-plex
     inter
   ];
@@ -81,7 +89,7 @@ in
       "idle-delay" = lib.hm.gvariant.mkUint32 300;
     };
     "org/gnome/desktop/wm/preferences" = {
-      num-workspaces = 4;
+      num-workspaces = 6;
       # button-layout = "close,minimize,maximize:appmenu";
       button-layout = "appmenu:minimize,maximize,close";
       resize-with-right-button = true;

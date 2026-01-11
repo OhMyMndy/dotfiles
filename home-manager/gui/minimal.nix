@@ -9,7 +9,4 @@
     (import ./modules/wayland.nix)
     (import ./modules/x11.nix)
   ];
-
-
-
 }

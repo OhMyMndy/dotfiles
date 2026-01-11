@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ pkgs, lib, config, ... }:
 let
   treesitterWithGrammars = (
     pkgs.vimPlugins.nvim-treesitter.withPlugins (p: [
@@ -73,58 +73,61 @@ in
 {
   # TODO:check which language servers are installed through Mason and friends
   home.packages = with pkgs; [
-    fd
-    fzf
-    ripgrep
-    # TODO:does not contain annobin which is needed for installing http_parser dependency for Jekyll
-    # gcc
-    # go
-    # cargo
-    gnumake
-    # vala
-
-    # hadolint
-
-    alejandra
-    clang-tools_18 # clangd
-    # dart
-    deadnix
-    docker-ls
-    gopls
-    helm-ls
-    htmx-lsp
-    # lua-language-server
-    nil # nix language server
-    nixd
-    # nodePackages_latest.bash-language-server
-    # nodePackages_latest.typescript-language-server
-    # nodePackages_latest.vscode-html-languageserver-bin
-    # nodePackages_latest.vscode-json-languageserver
-    # pyright
-    # rubyPackages_3_3.ruby-lsp
-    # ruff-lsp # python lsp
-    rust-analyzer
-    statix
-    # stylua
-    # taplo # TOML LSP
-    # terraform-ls
-    # tflint
-    # tfsec
-    # vala-language-server
-    # yaml-language-server
-    tree-sitter
-    yamlfmt
-
-    regal # rego lsp
   ];
 
   programs.neovim = {
     enable = true;
     package = pkgs.neovim-unwrapped;
-    plugins = [ treesitterWithGrammars ];
+    # plugins = with pkgs.vimPlugins; [ { plugin  = nvim-treesitter.withAllGrammars; type= "lua";} ];
     defaultEditor = true;
+    extraPackages = with pkgs; [
+      fd
+      fzf
+      ripgrep
+      # TODO:does not contain annobin which is needed for installing http_parser dependency for Jekyll
+      # gcc
+      # go
+      # cargo
+      gnumake
+      # vala
+
+      # hadolint
+
+      alejandra
+      # clang-tools_18 # clangd
+      llvmPackages_18.clang-tools
+      # dart
+      deadnix
+      docker-ls
+      gopls
+      helm-ls
+      htmx-lsp
+      # lua-language-server
+      nil # nix language server
+      nixd
+      # nodePackages_latest.bash-language-server
+      # nodePackages_latest.typescript-language-server
+      # nodePackages_latest.vscode-html-languageserver-bin
+      # nodePackages_latest.vscode-json-languageserver
+      # pyright
+      # rubyPackages_3_3.ruby-lsp
+      # ruff-lsp # python lsp
+      rust-analyzer
+      statix
+      # stylua
+      # taplo # TOML LSP
+      # terraform-ls
+      # tflint
+      # tfsec
+      # vala-language-server
+      # yaml-language-server
+      tree-sitter
+      yamlfmt
+
+      # regal # rego lsp
+    ];
     extraLuaConfig = ''
-      vim.opt.runtimepath:prepend("${treesitter-parsers}")
+      # vim.opt.runtimepath:prepend("${treesitter-parsers}")
       ${builtins.readFile ./../../../.config/nvim/init.lua}
     '';
   };
@@ -132,14 +135,15 @@ in
   # Treesitter is configured as a locally developed module in lazy.nvim
   # we hardcode a symlink here so that we can refer to it in our lazy config
   # SEE: https://github.com/Kidsan/nixos-config/blob/main/home/programs/neovim/default.nix
-  home.file."./.local/share/nvim/nix/nvim-treesitter/" = {
-    recursive = true;
-    source = treesitterWithGrammars;
-  };
+  # home.file."./.local/share/nvim/nix/nvim-treesitter/" = {
+  #   recursive = true;
+  #   source = treesitterWithGrammars;
+  # };
 
   # TODO: keyboard shortcut to hide popup messages
   home.file."./.config/nvim/lua" = {
-    source = ./../../../.config/nvim/lua;
+    # source = ./../../../.config/nvim/lua;
+    source = config.lib.file.mkOutOfStoreSymlink ./../../../.config/nvim/lua;
     recursive = true;
   };
 

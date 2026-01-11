@@ -9,9 +9,8 @@
     (import ./modules/flatpaks.nix)
     (import ./modules/gaming)
     (import ./modules/i3.nix)
-    (import ./modules/zeal.nix)
+    # (import ./modules/zeal.nix)
   ];
-
 
   home.packages = with pkgs; [
     (pkgs.nerdfonts.override {

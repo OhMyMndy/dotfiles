@@ -16,7 +16,11 @@
 
   programs.git = {
     enable = true;
-    userName  = "Mandy Schoep";
+    settings = {
+      user = {
+        name  = "Mandy Schoep";
+      };
+    };
 #    userEmail = "2277717+OhMyMndy@users.noreply.github.com";
   };
 

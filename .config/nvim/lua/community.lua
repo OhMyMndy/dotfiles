@@ -8,21 +8,21 @@ return {
   -- { import = "astrocommunity.motion.harpoon" },
   { import = "astrocommunity.colorscheme.catppuccin" },
   -- { import = "astrocommunity.completion.codeium-nvim" },
-  { import = "astrocommunity.completion.avante-nvim" },
-  {
-    "yetone/avante.nvim",
-    opts = {
-      provider = "openai",
-      openai = {
-        endpoint = "https://openrouter.ai/api/v1",
-        -- model = "anthropic/claude-3.5-sonnet",
-        model = "meta-llama/llama-3.1-70b-instruct",
-        timeout = 30000, -- Timeout in milliseconds
-        temperature = 0,
-        max_tokens = 4096,
-      },
-    },
-  },
+  -- { import = "astrocommunity.completion.avante-nvim" },
+  -- {
+  --   "yetone/avante.nvim",
+  --   opts = {
+  --     provider = "openai",
+  --     openai = {
+  --       endpoint = "https://openrouter.ai/api/v1",
+  --       -- model = "anthropic/claude-3.5-sonnet",
+  --       model = "meta-llama/llama-3.1-70b-instruct",
+  --       timeout = 30000, -- Timeout in milliseconds
+  --       temperature = 0,
+  --       max_tokens = 4096,
+  --     },
+  --   },
+  -- },
   { import = "astrocommunity.colorscheme.tokyonight-nvim" },
   { import = "astrocommunity.debugging.telescope-dap-nvim" },
   -- { import = "astrocommunity.diagnostics.lsp_lines-nvim" },
