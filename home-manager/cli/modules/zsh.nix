@@ -1,12 +1,6 @@
+{ pkgs, lib, ... }:
 {
-  pkgs,
-  lib,
-  ...
-}:
-{
-  imports = [
-    (import ./starship.nix)
-  ];
+  imports = [ (import ./starship.nix) ];
 
   home.packages = with pkgs; [
     git
@@ -57,7 +51,6 @@
       ];
       theme = "fishy";
     };
-
 
     initContent = ''
       ZSH_DISABLE_COMPFIX=true

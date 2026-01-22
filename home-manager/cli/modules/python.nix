@@ -3,10 +3,9 @@
   lib,
   config,
   ...
-}: {
-  imports = [
-    (import ./asdf.nix)
-  ];
+}:
+{
+  imports = [ (import ./asdf.nix) ];
   home.packages = with pkgs; [
     # autoconf
     # bzip2
@@ -42,7 +41,7 @@
     };
   };
 
-  home.activation.setupUv = lib.hm.dag.entryAfter ["installPackages"] ''
+  home.activation.setupUv = lib.hm.dag.entryAfter [ "installPackages" ] ''
     PATH="$PATH:${config.home.path}/bin:$HOME/.local/bin:$HOME/.asdf/shims"
     PATH="$PATH:${pkgs.gcc}/bin"
     asdf plugin add uv >/dev/null

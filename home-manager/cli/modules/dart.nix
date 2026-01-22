@@ -5,9 +5,7 @@
   ...
 }:
 {
-  imports = [
-    (import ./asdf.nix)
-  ];
+  imports = [ (import ./asdf.nix) ];
   # TODO: install flutter dependencies
   # sudo dnf install -y bash curl file git unzip which xz zip mesa-libGLU clang cmake ninja-build pkg-config gtk3-devel
 

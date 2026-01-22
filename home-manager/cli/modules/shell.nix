@@ -3,7 +3,8 @@
   lib,
   home,
   ...
-}: {
+}:
+{
   home.packages = with pkgs; [
     aria2
     atuin

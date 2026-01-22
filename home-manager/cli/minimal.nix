@@ -1,4 +1,5 @@
-{...}: {
+{ ... }:
+{
   imports = [
     (import ../base.nix)
     (import ./modules/bash.nix)

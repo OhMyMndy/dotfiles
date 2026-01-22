@@ -91,7 +91,6 @@
               extraSpecialArgs = { inherit pkgs; };
             };
 
-
             "minimal-cli" = home-manager.lib.homeManagerConfiguration {
               inherit pkgs;
               modules = [ ./home-manager/cli ];

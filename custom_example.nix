@@ -1,4 +1,5 @@
-{...}: {
+{ ... }:
+{
   imports = [
     (import ./home-manager/cli/minimal.nix)
     (import ./home-manager/gui/minimal.nix)
@@ -17,4 +18,3 @@
   ];
 
 }
-

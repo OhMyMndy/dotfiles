@@ -1,8 +1,4 @@
-{
-  pkgs,
-  lib,
-  ...
-}:
+{ pkgs, lib, ... }:
 # let
 # myHelm = pkgs.wrapHelm pkgs.kubernetes-helm {
 #   plugins = with pkgs.kubernetes-helmPlugins; [
@@ -20,6 +16,7 @@
     arkade
     # cilium-cli
     crane
+    crc # openshift, development purposes
     cri-tools
     dive
     # fluxctl
@@ -39,6 +36,7 @@
     # k3s # k3s, kubectl
     # k3d
     # k9s
+    openshift
     # minikube
     # talosctl
     # kubectx
@@ -68,9 +66,10 @@
       fi
     done
 
-    if ! ~/.arkade/bin/helm plugin list | tail -n +2 | cut -f1 | grep -q helm-git; then
-      ~/.arkade/bin/helm plugin install https://github.com/aslafy-z/helm-git --version 1.3.0
-    fi
+    ${pkgs.arkade}/bin/arkade get helm@v3.20.0
+    #if ! ~/.arkade/bin/helm plugin list | tail -n +2 | cut -f1 | grep -q helm-git; then
+    #  ~/.arkade/bin/helm plugin install https://github.com/aslafy-z/helm-git --version 1.3.0
+    #fi
 
     pkgs="envsubst cert-manager graph kubescape kyverno"
     for pkg in $pkgs; do

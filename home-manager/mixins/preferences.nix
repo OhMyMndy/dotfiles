@@ -1,4 +1,5 @@
-{...}: {
+{ ... }:
+{
   colors = {
     foreground = "white";
     background = "black";

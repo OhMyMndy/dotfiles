@@ -1,8 +1,6 @@
 { pkgs, lib, ... }:
 {
-  imports = [
-    (import ./starship.nix)
-  ];
+  imports = [ (import ./starship.nix) ];
 
   home.packages = with pkgs; [
     nodePackages_latest.bash-language-server
@@ -17,7 +15,6 @@
       ${builtins.readFile "${./../../../.bashrc}"}
     '';
   };
-
 
   home.file.".bashrc.d" = {
     source = ./../../../.bashrc.d;

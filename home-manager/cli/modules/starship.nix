@@ -1,19 +1,11 @@
+{ pkgs, lib, ... }:
 {
-  pkgs,
-  lib,
-  ...
-}:
-{
-  home.packages = with pkgs; [
-    starship
-  ];
+  home.packages = with pkgs; [ starship ];
 
   programs.zsh = {
     oh-my-zsh = {
       enable = true;
-      plugins = [
-        "starship"
-      ];
+      plugins = [ "starship" ];
     };
   };
   programs.starship = {

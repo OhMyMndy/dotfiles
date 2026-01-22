@@ -1,4 +1,5 @@
-{...}: {
+{ ... }:
+{
 
   home = {
     username = builtins.getEnv "USER";

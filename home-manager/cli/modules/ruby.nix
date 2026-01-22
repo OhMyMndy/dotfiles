@@ -5,9 +5,7 @@
   ...
 }:
 {
-  imports = [
-    (import ./asdf.nix)
-  ];
+  imports = [ (import ./asdf.nix) ];
   home.packages = with pkgs; [
     # autoconf
     # patch
