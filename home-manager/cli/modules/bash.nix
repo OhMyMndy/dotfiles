@@ -10,7 +10,7 @@
 
   programs.bash = {
     enable = true;
-
+    package = null;
     bashrcExtra = ''
       ${builtins.readFile "${./../../../.bashrc}"}
     '';
