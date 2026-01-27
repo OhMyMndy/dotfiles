@@ -22,7 +22,14 @@
       };
       git_status.disabled = true;
       gcloud.disabled = true;
-
+      kubernetes = {
+        disabled = false;
+#        detect_files = [
+#          "kustomization.yaml"
+#          "kustomization.yml"
+#        ];
+        detect_env_vars = [ "KUBECONFIG" ];
+      };
     };
   };
 

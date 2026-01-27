@@ -29,8 +29,10 @@
     # myHelmfile
     # kubernetes-helm # TODO: install with plugins, but from Nix cache
     # helmfile # TODO
+    istioctl
     karmor
     kubeconform
+    kubeswitch # switcher command
     # kustomize
     kompose
     # k3s # k3s, kubectl
