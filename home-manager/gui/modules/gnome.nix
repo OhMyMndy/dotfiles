@@ -105,7 +105,7 @@ in
       "enable-animations" = false;
       "accent-color" = "pink";
       "enable-hot-corners" = true;
-      "monospace-font-name" = "Iosevka Nerd Font Mono 11"; # "JetBrainsMonoNL Nerd Font Mono 10";
+      "monospace-font-name" = "JetBrainsMonoNL Nerd Font Mono 10"; # "Iosevka Nerd Font Mono 11";
       "font-name" = "Ubuntu Sans 11";
       "document-font-name" = "Ubuntu Sans 11";
       "titlebar-font" = "Ubuntu Sans Bold 11";
@@ -133,10 +133,12 @@ in
     "org/gnome/shell"."favorite-apps" = [
       "org.gnome.Nautilus.desktop"
       "org.mozilla.firefox.desktop"
-      "proton-mail.desktop"
-      "com.automattic.beeper.desktop"
       "org.gnome.Terminal.desktop"
-      "jetbrains-idea-a0ba9843-b237-4000-9db0-5d85a0d89b2a.desktop"
+      "org.gnome.Ptyxis.desktop"
+      "proton-mail.desktop"
+      "net.thunderbird.Thunderbird.desktop"
+      "com.mattermost.Desktop.desktop"
+      "com.automattic.beeper.desktop"
       "dev.aunetx.deezer.desktop"
       "com.protonvpn.www.desktop"
       "org.prismlauncher.PrismLauncher.desktop"
