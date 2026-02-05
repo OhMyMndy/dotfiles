@@ -1,7 +1,10 @@
 {
   description = "OhMyMndy's Dotfiles!";
   nixConfig = {
-    extra-substituters = [ "https://nix-community.cachix.org" "https://cache.flox.dev"];
+    extra-substituters = [
+      "https://nix-community.cachix.org"
+      "https://cache.flox.dev"
+    ];
     extra-trusted-public-keys = [
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       "flox-cache-public-1:7F4OyH7ZCnFhcze3fJdfyXYLQw/aV7GEed86nQ7IsOs="
@@ -39,7 +42,7 @@
       flox,
       #      nix-rice,
       ...
-    }@inputs:
+    }:
     flake-utils.lib.eachDefaultSystem (
       system:
       let
@@ -71,7 +74,7 @@
           inherit overlays;
         };
         pkgs = stable-pkgs // {
-          flox = inputs.flox.packages.${system};
+          flox = flox.packages.${system};
           # provides alias for all unstable pkgs SEE: https://rexk.github.io/en/blog/nix-home-manager-flake-setup/
           previous = previous-pkgs;
           unstable = unstable-pkgs;
@@ -94,18 +97,18 @@
             "custom" = home-manager.lib.homeManagerConfiguration {
               inherit pkgs;
               modules = [ ./custom.nix ];
-              extraSpecialArgs = { inherit pkgs; inherit inputs; };
+              extraSpecialArgs = { inherit pkgs; };
             };
 
             "minimal-cli" = home-manager.lib.homeManagerConfiguration {
               inherit pkgs;
               modules = [ ./home-manager/cli ];
-              extraSpecialArgs = { inherit pkgs; inherit inputs;};
+              extraSpecialArgs = { inherit pkgs; };
             };
             "minimal-gui" = home-manager.lib.homeManagerConfiguration {
               inherit pkgs;
               modules = [ ./home-manager/gui ];
-              extraSpecialArgs = { inherit pkgs; inherit inputs;};
+              extraSpecialArgs = { inherit pkgs; };
             };
           };
         };
