@@ -36,6 +36,7 @@
       nixpkgs-staging,
       home-manager,
       flake-utils,
+      flox,
       #      nix-rice,
       ...
     }@inputs:
@@ -70,6 +71,7 @@
           inherit overlays;
         };
         pkgs = stable-pkgs // {
+          flox = inputs.flox.packages.${system};
           # provides alias for all unstable pkgs SEE: https://rexk.github.io/en/blog/nix-home-manager-flake-setup/
           previous = previous-pkgs;
           unstable = unstable-pkgs;

@@ -1,9 +1,9 @@
-{ pkgs, lib, inputs,... }:
+{ pkgs, lib, ... }:
 {
   imports = [ (import ./starship.nix) ];
 
   home.packages = with pkgs; [
-    inputs.flox.packages.${pkgs.system}.default
+    flox.flox
     nodePackages_latest.bash-language-server
     shfmt
     shellcheck
