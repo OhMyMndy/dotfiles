@@ -133,14 +133,12 @@ in
     "org/gnome/shell"."favorite-apps" = [
       "org.gnome.Nautilus.desktop"
       "org.mozilla.firefox.desktop"
+      "com.fastmail.Fastmail.desktop"
       "proton-mail.desktop"
       "com.automattic.beeper.desktop"
+      "im.riot.Riot.desktop" # Element
       "org.gnome.Terminal.desktop"
-      "jetbrains-idea-a0ba9843-b237-4000-9db0-5d85a0d89b2a.desktop"
       "dev.aunetx.deezer.desktop"
-      "com.protonvpn.www.desktop"
-      "org.prismlauncher.PrismLauncher.desktop"
-      "net.agalwood.Motrix.desktop"
     ];
 
     "org/gnome/shell/keybindings" = {
