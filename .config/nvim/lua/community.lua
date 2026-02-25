@@ -61,9 +61,9 @@ return {
   { import = "astrocommunity.pack.terraform" },
 
   { import = "astrocommunity.pack.nix" },
-  { import = "astrocommunity.pack.php" },
-  { import = "astrocommunity.pack.laravel" },
-  { import = "astrocommunity.pack.python-ruff" },
+  -- { import = "astrocommunity.pack.php" },
+  -- { import = "astrocommunity.pack.laravel" },
+  -- { import = "astrocommunity.pack.python-ruff" },
   { import = "astrocommunity.pack.rust" },
   { import = "astrocommunity.pack.terraform", dev = true },
 
