@@ -1,8 +1,4 @@
-{
-  config,
-  lib,
-  ...
-}:
+{ config, lib, ... }:
 {
   # Install zeal flatpak
   home.activation.setupZeal = lib.hm.dag.entryAfter [ "installPackages" ] ''

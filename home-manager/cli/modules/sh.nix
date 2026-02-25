@@ -6,8 +6,5 @@
     recursive = true;
   };
 
-
-  home.file.".profile" = lib.mkForce {
-    source = ./../../../.profile;
-  };
+  home.file.".profile" = lib.mkForce { source = ./../../../.profile; };
 }

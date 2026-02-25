@@ -1,8 +1,4 @@
-{
-  pkgs,
-  lib,
-  ...
-}:
+{ pkgs, lib, ... }:
 {
   home.packages =
     (with pkgs.master; [
@@ -20,9 +16,7 @@
       gnomeExtensions.tiling-shell
       gnomeExtensions.tray-icons-reloaded
     ])
-    ++ (with pkgs; [
-      gnome-extensions-cli
-    ]);
+    ++ (with pkgs; [ gnome-extensions-cli ]);
   home.activation.setupGnomeExtensions = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     alias gext=${pkgs.gnome-extensions-cli}/bin/gext
     if ! gext list --only-uuid | grep -q gsconnect@andyholmes.github.io; then

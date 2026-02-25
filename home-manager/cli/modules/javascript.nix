@@ -3,10 +3,9 @@
   config,
   lib,
   ...
-}: {
-  imports = [
-    (import ./asdf.nix)
-  ];
+}:
+{
+  imports = [ (import ./asdf.nix) ];
   home.packages = with pkgs; [
     # nvm
   ];
@@ -20,7 +19,7 @@
     };
   };
 
-  home.activation.setupNodejs = lib.hm.dag.entryAfter ["installPackages"] ''
+  home.activation.setupNodejs = lib.hm.dag.entryAfter [ "installPackages" ] ''
     PATH="$PATH:${config.home.path}/bin:$HOME/.local/bin:$HOME/.asdf/shims"
 
     asdf plugin add nodejs >/dev/null

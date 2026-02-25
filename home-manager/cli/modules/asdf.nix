@@ -5,9 +5,7 @@
   ...
 }:
 {
-  imports = [
-      (import ./sh.nix)
-  ];
+  imports = [ (import ./sh.nix) ];
 
   home.packages = with pkgs; [
     # asdf-vm
@@ -27,7 +25,7 @@
 
     if [[ ! -f ~/.local/bin/asdf ]]; then
       mkdir -p ~/.local/bin/
-      curl -SsL https://github.com/asdf-vm/asdf/releases/download/v0.16.7/asdf-v0.16.7-linux-arm64.tar.gz | tar xz -C ~/.local/bin/
+      curl -SsL https://github.com/asdf-vm/asdf/releases/download/v0.18.0/asdf-v0.18.0-linux-amd64.tar.gz | tar xz -C ~/.local/bin/
       rm -rf ~/.asdf
     fi
 

@@ -105,7 +105,7 @@ in
       "enable-animations" = false;
       "accent-color" = "pink";
       "enable-hot-corners" = true;
-      "monospace-font-name" = "Iosevka Nerd Font Mono 11"; # "JetBrainsMonoNL Nerd Font Mono 10";
+      "monospace-font-name" = "JetBrainsMonoNL Nerd Font Mono 10"; # "Iosevka Nerd Font Mono 11";
       "font-name" = "Ubuntu Sans 11";
       "document-font-name" = "Ubuntu Sans 11";
       "titlebar-font" = "Ubuntu Sans Bold 11";
@@ -134,10 +134,13 @@ in
       "org.gnome.Nautilus.desktop"
       "org.mozilla.firefox.desktop"
       "com.fastmail.Fastmail.desktop"
+      "net.thunderbird.Thunderbird.desktop"
       "proton-mail.desktop"
       "com.automattic.beeper.desktop"
       "im.riot.Riot.desktop" # Element
+      "com.mattermost.Desktop.desktop"
       "org.gnome.Terminal.desktop"
+      "org.gnome.Ptyxis.desktop"
       "dev.aunetx.deezer.desktop"
     ];
 

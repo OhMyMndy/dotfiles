@@ -8,7 +8,7 @@ switch:
     if [[ -n "$target" ]]; then time nix run .#home-manager -- switch --flake .#"$target" --impure -b backup; fi;
 
 format:
-    time nix run nixpkgs#nixfmt-rfc-style -- --strict .
+    time nix run nixpkgs#nixfmt-tree -- .
 
 update:
     time nix flake update

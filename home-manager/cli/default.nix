@@ -1,5 +1,6 @@
 # see: https://juliu.is/tidying-your-home-with-nix/
-{...}: {
+{ ... }:
+{
   imports = [
     (import ./minimal.nix)
 

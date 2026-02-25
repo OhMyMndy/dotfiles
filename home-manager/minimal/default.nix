@@ -1,4 +1,5 @@
-{...}: {
+{ ... }:
+{
   imports = [
     (import ../cli/minimal.nix)
     (import ../gui/minimal.nix)

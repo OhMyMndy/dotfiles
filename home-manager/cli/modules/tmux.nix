@@ -2,6 +2,8 @@
 {
   home.packages = with pkgs; [
     tmux
+    tmuxinator
+    tmuxp
   ];
 
   # SEE https://github.com/nix-community/home-manager/blob/master/modules/programs/tmux.nix

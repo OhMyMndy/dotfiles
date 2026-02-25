@@ -1,9 +1,13 @@
 {
   description = "OhMyMndy's Dotfiles!";
   nixConfig = {
-    extra-substituters = [ "https://nix-community.cachix.org" ];
+    extra-substituters = [
+      "https://nix-community.cachix.org"
+      "https://cache.flox.dev"
+    ];
     extra-trusted-public-keys = [
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      "flox-cache-public-1:7F4OyH7ZCnFhcze3fJdfyXYLQw/aV7GEed86nQ7IsOs="
     ];
   };
   inputs = {
@@ -12,15 +16,18 @@
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-master.url = "github:nixos/nixpkgs/master";
     nixpkgs-staging.url = "github:nixos/nixpkgs/staging";
-    nix-rice = {
-      url = "github:bertof/nix-rice";
-    };
+    #    nix-rice = {
+    #      url = "github:bertof/nix-rice";
+    #    };
 
     home-manager = {
       url = "github:nix-community/home-manager/release-25.11"; # release-24.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     flake-utils.url = "github:numtide/flake-utils";
+    flox = {
+      url = "github:flox/flox/latest";
+    };
   };
 
   outputs =
@@ -32,13 +39,14 @@
       nixpkgs-staging,
       home-manager,
       flake-utils,
-      nix-rice,
+      flox,
+      #      nix-rice,
       ...
     }:
     flake-utils.lib.eachDefaultSystem (
       system:
       let
-        overlays = [ nix-rice.overlays.default ];
+        overlays = [ ]; # [ nix-rice.overlays.default ];
         stable-pkgs = import nixpkgs {
           config.allowUnfree = true;
           inherit system;
@@ -66,6 +74,7 @@
           inherit overlays;
         };
         pkgs = stable-pkgs // {
+          flox = flox.packages.${system};
           # provides alias for all unstable pkgs SEE: https://rexk.github.io/en/blog/nix-home-manager-flake-setup/
           previous = previous-pkgs;
           unstable = unstable-pkgs;
@@ -90,7 +99,6 @@
               modules = [ ./custom.nix ];
               extraSpecialArgs = { inherit pkgs; };
             };
-
 
             "minimal-cli" = home-manager.lib.homeManagerConfiguration {
               inherit pkgs;

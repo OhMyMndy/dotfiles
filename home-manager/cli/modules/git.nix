@@ -18,10 +18,10 @@
     enable = true;
     settings = {
       user = {
-        name  = "Mandy Schoep";
+        name = "Mandy Schoep";
       };
     };
-#    userEmail = "2277717+OhMyMndy@users.noreply.github.com";
+    #    userEmail = "2277717+OhMyMndy@users.noreply.github.com";
   };
 
   home.file.".config/lazygit" = {
