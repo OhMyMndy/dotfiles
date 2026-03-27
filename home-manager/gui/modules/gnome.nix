@@ -141,8 +141,8 @@ in
       "com.automattic.beeper.desktop"
       "dev.aunetx.deezer.desktop"
       "com.protonvpn.www.desktop"
-      "org.prismlauncher.PrismLauncher.desktop"
       "net.agalwood.Motrix.desktop"
+      "md.obsidian.Obsidian.desktop"
     ];
 
     "org/gnome/shell/keybindings" = {
