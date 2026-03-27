@@ -8,6 +8,7 @@
   home.packages = with pkgs; [
     delta
     git
+    glab
     gh
     lazygit
     tea
