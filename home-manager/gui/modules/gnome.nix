@@ -133,15 +133,15 @@ in
     "org/gnome/shell"."favorite-apps" = [
       "org.gnome.Nautilus.desktop"
       "org.mozilla.firefox.desktop"
+      "com.fastmail.Fastmail.desktop"
+      "net.thunderbird.Thunderbird.desktop"
+      "proton-mail.desktop"
+      "com.automattic.beeper.desktop"
+      "im.riot.Riot.desktop" # Element
+      "com.mattermost.Desktop.desktop"
       "org.gnome.Terminal.desktop"
       "org.gnome.Ptyxis.desktop"
-      "proton-mail.desktop"
-      "net.thunderbird.Thunderbird.desktop"
-      "com.mattermost.Desktop.desktop"
-      "com.automattic.beeper.desktop"
       "dev.aunetx.deezer.desktop"
-      "com.protonvpn.www.desktop"
-      "net.agalwood.Motrix.desktop"
       "md.obsidian.Obsidian.desktop"
     ];
 
