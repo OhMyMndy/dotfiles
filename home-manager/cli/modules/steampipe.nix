@@ -18,7 +18,7 @@
     plugins+="theapsgroup/keycloak kubernetes ldap linkedin net openapi prometheus steampipe "
     plugins+="tailscale terraform "
 
-    installed=$(steampipe plugin list | tail -n +4 | sed 's#hub.steampipe.io/plugins/turbot/##' |  sed 's#hub.steampipe.io/plugins/##' |  sed 's/@latest//' | awk '{print $2}')
+    installed=$(steampipe plugin list --output json | jq '.installed[].connections[]' -r | sort | uniq)
     new="$(echo "$plugins" | tr ' ' '\n' | tr '_' ' ')"
     to_install=$(comm -13 <(echo "$installed" | sort) <(echo "$new" | sort))
 
