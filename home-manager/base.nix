@@ -9,11 +9,11 @@
 
   programs.home-manager.enable = true;
 
-  targets.genericLinux.enable = true;
+  # targets.genericLinux.enable = true;
   home.enableNixpkgsReleaseCheck = false;
   news.display = "silent";
-  xdg = {
-    enable = true;
-    mime.enable = true;
-  };
+  # xdg = {
+  #   enable = true;
+  #   mime.enable = true;
+  # };
 }
