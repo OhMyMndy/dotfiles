@@ -1,11 +1,13 @@
 set shell := ["bash", "-c"]
 
 switch:
+    git add -f custom.nix; \
     if [[ "$GOOGLE_CLOUD_SHELL" == "true" ]]; then target=minimal-cli; fi; \
     if [[ -n "$DISPLAY" ]]; then target=minimal-gui; fi; \
     if [[ -z "$DISPLAY" ]]; then target=minimal-cli; fi; \
     if [[ -f custom.nix ]]; then target=custom; fi; \
-    if [[ -n "$target" ]]; then time nix run .#home-manager -- switch --flake .#"$target" --impure -b backup; fi;
+    if [[ -n "$target" ]]; then time nix run .#home-manager -- switch --flake .#"$target" --impure -b backup; fi; \
+    git rm --cached custom.nix
 
 format:
     time nix run nixpkgs#nixfmt-tree -- .

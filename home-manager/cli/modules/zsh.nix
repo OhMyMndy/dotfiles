@@ -5,7 +5,7 @@
   home.packages = with pkgs; [
     git
     fzf
-    direnv
+    # direnv
   ];
 
   programs.zsh = {
