@@ -1,11 +1,8 @@
 { pkgs, lib, ... }:
 {
-  imports = [ (import ./starship.nix) ];
-
   home.packages = with pkgs; [
     git
     fzf
-    # direnv
   ];
 
   programs.zsh = {

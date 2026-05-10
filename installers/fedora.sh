@@ -5,10 +5,10 @@ set -e
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$DIR" || exit 1
 
-sudo dnf install moreutils sshfs inotify-tools -y
+sudo dnf install moreutils sshfs inotify-tools just -y
 
 # Podman and Docker
-sudo dnf install moby-engine docker-compose podman podman-compose -y
+sudo dnf install docker-compose podman podman-compose distrobox -y
 sudo usermod -aG docker $USER
 
 # LDAP

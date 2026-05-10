@@ -8,7 +8,7 @@
 {
   home.packages = with pkgs; [
     #    awscli2
-    #    azure-cli
+       azure-cli
     #    azure-storage-azcopy
     checkov
     google-cloud-sdk

@@ -5,5 +5,6 @@
     nmap
     iputils
     traceroute
+    vpn-slice
   ];
 }

@@ -4,10 +4,10 @@ return {
   opts = {
     mappings = {
       i = {
-        ["<Left>"] = { "<Nop>" },
-        ["<Down>"] = { "<Nop>" },
-        ["<Up>"] = { "<Nop>" },
-        ["<Right>"] = { "<Nop>" },
+        -- ["<Left>"] = { "<Nop>" },
+        -- ["<Down>"] = { "<Nop>" },
+        -- ["<Up>"] = { "<Nop>" },
+        -- ["<Right>"] = { "<Nop>" },
 
         ["<C-h>"] = { "<Left>" },
         ["<C-j>"] = { "<Down>" },
@@ -15,21 +15,21 @@ return {
         ["<C-l>"] = { "<Right>" },
       },
       v = {
-        ["<Left>"] = { "<Nop>" },
-        ["<Down>"] = { "<Nop>" },
-        ["<Up>"] = { "<Nop>" },
-        ["<Right>"] = { "<Nop>" },
+        -- ["<Left>"] = { "<Nop>" },
+        -- ["<Down>"] = { "<Nop>" },
+        -- ["<Up>"] = { "<Nop>" },
+        -- ["<Right>"] = { "<Nop>" },
 
         ["<leader>y"] = { [["+y]], desc = "Yank" },
         ["<leader>d"] = { [["_d]], desc = "Delete" },
-        ["<"] = { "<gv" },
-        [">"] = { ">gv" },
+        -- ["<"] = { "<gv" },
+        -- [">"] = { ">gv" },
       },
       n = {
-        ["<Left>"] = { "<Nop>" },
-        ["<Down>"] = { "<Nop>" },
-        ["<Up>"] = { "<Nop>" },
-        ["<Right>"] = { "<Nop>" },
+        -- ["<Left>"] = { "<Nop>" },
+        -- ["<Down>"] = { "<Nop>" },
+        -- ["<Up>"] = { "<Nop>" },
+        -- ["<Right>"] = { "<Nop>" },
 
         ["<leader>Y"] = { [["+Y]], desc = "Yank" },
         ["<leader>y"] = { [["+y]], desc = "Yank" },

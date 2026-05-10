@@ -66,6 +66,12 @@ in
       "move-to-workspace-9" = [ "<Super><Shift>9" ];
       "move-to-workspace-10" = [ "<Super><Shift>0" ];
     };
+    "org/gnome/desktop/input-sources" = {
+      "xkb-options" = [
+        "shift:both_capslock_cancel"
+        "shift:both_capslock"
+      ];
+    };
     "org/gnome/desktop/peripherals/touchpad" = {
       "natural-scroll" = false;
       "two-finger-scrolling-enabled" = true;
@@ -133,12 +139,13 @@ in
     "org/gnome/shell"."favorite-apps" = [
       "org.gnome.Nautilus.desktop"
       "org.mozilla.firefox.desktop"
+      "org.mozilla.Thunderbird.desktop"
       "com.fastmail.Fastmail.desktop"
-      "net.thunderbird.Thunderbird.desktop"
       "proton-mail.desktop"
       "com.automattic.beeper.desktop"
       "im.riot.Riot.desktop" # Element
       "com.mattermost.Desktop.desktop"
+      "kitty.desktop"
       "org.gnome.Terminal.desktop"
       "org.gnome.Ptyxis.desktop"
       "dev.aunetx.deezer.desktop"

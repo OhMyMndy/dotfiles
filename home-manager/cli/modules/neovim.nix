@@ -7,66 +7,66 @@
 let
   treesitterWithGrammars = (
     pkgs.vimPlugins.nvim-treesitter.withPlugins (p: [
-#      p.bash
-#      p.bibtex
-#      p.c
-#      p.c_sharp
-#      p.cmake
-#      p.comment
-#      p.css
-#      p.dart
-#      p.desktop
-#      p.dockerfile
-#      p.earthfile
-#      p.editorconfig
-#      p.fish
-#      p.git_config
-#      p.gitattributes
-#      p.gitcommit
-#      p.gitignore
-#      p.go
-#      p.gomod
-#      p.gosum
-#      p.gotmpl
-#      p.gowork
-#      p.hcl
-#      p.helm
-#      p.html
-#      p.java
-#      p.javascript
-#      p.jq
-#      p.json
-#      p.json5
-#      p.just
-#      p.latex
-#      p.lua
-#      p.luadoc
-#      p.make
-#      p.markdown
-#      p.mermaid
-#      p.nginx
-#      p.nix
-#      p.php
-#      p.python
-#      p.rego
-#      p.rst
-#      p.ruby
-#      p.rust
-#      p.sql
-#      p.ssh_config
-#      p.terraform
-#      p.tmux
-#      p.toml
-#      p.toml
-#      p.tsx
-#      p.typescript
-#      p.udev
-#      p.vala
-#      p.vim
-#      p.vimdoc
-#      p.vue
-#      p.xml
-#      p.yaml
+      #      p.bash
+      #      p.bibtex
+      #      p.c
+      #      p.c_sharp
+      #      p.cmake
+      #      p.comment
+      #      p.css
+      #      p.dart
+      #      p.desktop
+      #      p.dockerfile
+      #      p.earthfile
+      #      p.editorconfig
+      #      p.fish
+      #      p.git_config
+      #      p.gitattributes
+      #      p.gitcommit
+      #      p.gitignore
+      #      p.go
+      #      p.gomod
+      #      p.gosum
+      #      p.gotmpl
+      #      p.gowork
+      #      p.hcl
+      #      p.helm
+      #      p.html
+      #      p.java
+      #      p.javascript
+      #      p.jq
+      #      p.json
+      #      p.json5
+      #      p.just
+      #      p.latex
+      #      p.lua
+      #      p.luadoc
+      #      p.make
+      #      p.markdown
+      #      p.mermaid
+      #      p.nginx
+      #      p.nix
+      #      p.php
+      #      p.python
+      #      p.rego
+      #      p.rst
+      #      p.ruby
+      #      p.rust
+      #      p.sql
+      #      p.ssh_config
+      #      p.terraform
+      #      p.tmux
+      #      p.toml
+      #      p.toml
+      #      p.tsx
+      #      p.typescript
+      #      p.udev
+      #      p.vala
+      #      p.vim
+      #      p.vimdoc
+      #      p.vue
+      #      p.xml
+      #      p.yaml
     ])
   );
 
@@ -151,7 +151,6 @@ in
     source = config.lib.file.mkOutOfStoreSymlink ./../../../.config/nvim/lua;
     recursive = true;
   };
-
 
   home.activation.setupNeovim = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     cp -f ${./../../../.config/nvim/lazy-lock.json} ~/.config/nvim/lazy-lock.json

@@ -14,7 +14,9 @@
 {
   home.packages = with pkgs; [
     arkade
+    bom # kubernetes bom generate SBOM
     # cilium-cli
+    cloud-provider-kind
     crane
     crc # openshift, development purposes
     cri-tools
@@ -29,12 +31,14 @@
     # myHelmfile
     # kubernetes-helm # TODO: install with plugins, but from Nix cache
     # helmfile # TODO
+    ingress2gateway
     istioctl
     karmor
     kubeconform
     kubeswitch # switcher command
     # kustomize
     kompose
+    kyverno
     # k3s # k3s, kubectl
     # k3d
     # k9s
@@ -42,7 +46,12 @@
     # minikube
     # talosctl
     # kubectx
+    rancher
     skaffold
+    step-cli
+    syft
+    vcluster
+    trivy
   ];
 
   programs.zsh = {

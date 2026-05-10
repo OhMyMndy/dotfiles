@@ -8,10 +8,15 @@
       plugins = [ "starship" ];
     };
   };
+
   programs.starship = {
     enable = true;
     # SEE https://starship.rs/config/#default-prompt-format
     settings = {
+      directory = {
+        truncate_to_repo = false;
+        truncation_length = 5;
+      };
       direnv.disabled = false;
       format = "\${custom.wsl_distro}$all";
       custom.wsl_distro = {
@@ -24,10 +29,10 @@
       gcloud.disabled = true;
       kubernetes = {
         disabled = false;
-#        detect_files = [
-#          "kustomization.yaml"
-#          "kustomization.yml"
-#        ];
+        #        detect_files = [
+        #          "kustomization.yaml"
+        #          "kustomization.yml"
+        #        ];
         detect_env_vars = [ "KUBECONFIG" ];
       };
     };

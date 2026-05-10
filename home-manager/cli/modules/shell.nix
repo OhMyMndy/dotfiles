@@ -2,9 +2,11 @@
   pkgs,
   lib,
   home,
+  config,
   ...
 }:
 {
+  imports = [ (import ./starship.nix) ];
   home.packages = with pkgs; [
     aria2
     atuin
@@ -13,9 +15,11 @@
     curl
     dapr-cli
     devenv # https://devenv.sh
+    direnv
     dialog
     eza # https://github.com/eza-community/eza
     fastgron # Make JSON greppable super fast!
+    fd
     gawk
     gron
     ijq
@@ -26,15 +30,19 @@
     openapi-generator-cli
     p7zip
     restic
+    ripgrep
     shellcheck
     shfmt
     sqlite
     tree
     wget
     yq-go
+    (yazi.override {
+		_7zz = _7zz-rar;  # Support for RAR extraction
+	  })
     semgrep # TODO: move to development.nix or something generic
   ] ++ pkgs.lib.optionals pkgs.stdenv.isLinux [
-      sensors
+      lm_sensors
     osquery
   ];
 
@@ -56,7 +64,32 @@
     enable = true;
   };
 
+  programs.mise = {
+    enable = true;
+    package = pkgs.unstable.mise;
+  };
+
+
   home.file.".inputrc" = {
     source = ./../../../.inputrc;
   };
+
+  home.file."./.config/yazi/init.lua" = {
+    source = config.lib.file.mkOutOfStoreSymlink ./../../../.config/yazi/init.lua;
+    recursive = false;
+  };
+
+  home.file."./.config/yazi/yazi.toml" = {
+    source = config.lib.file.mkOutOfStoreSymlink ./../../../.config/yazi/yazi.toml;
+    recursive = false;
+  };
+  home.file."./.config/yazi/keymap.toml" = {
+    source = config.lib.file.mkOutOfStoreSymlink ./../../../.config/yazi/keymap.toml;
+    recursive = false;
+  };
+  home.activation.setupYazi = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    # TODO: install yazi git plugin: ya pkg add yazi-rs/plugins:git
+    # todo: ya pkg add yazi-rs/plugins:vcs-files
+  '';
+
 }

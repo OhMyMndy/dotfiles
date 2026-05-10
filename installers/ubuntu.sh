@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+set -ex
 
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$DIR" || exit 1
@@ -30,7 +30,7 @@ if [[ "$DISPLAY" != '' ]]; then
 	# flatpak install flathub io.gitlab.librewolf-community
 	#
 	sudo apt-get install gnome-software gnome-software-plugin-flatpak -y # gnome-software-plugin-snap
-	sudo snap remove snap store
+	sudo snap remove snap-store
 
 fi
 #
@@ -40,3 +40,16 @@ sudo apt-get install -y build-essential libssl-dev zlib1g-dev \
 	libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev -y
 # TODO: only if we have gnome installed
 # sudo apt-get install -y gnome-tweaks
+#
+#
+
+sudo apt-get update
+sudo apt-get install ca-certificates curl gnupg -y
+curl -sSL https://pkgs.netbird.io/debian/public.key | sudo gpg --dearmor --output /usr/share/keyrings/netbird-archive-keyring.gpg
+echo 'deb [signed-by=/usr/share/keyrings/netbird-archive-keyring.gpg] https://pkgs.netbird.io/debian stable main' | sudo tee /etc/apt/sources.list.d/netbird.list
+sudo apt-get update
+
+# for CLI only
+sudo apt-get install netbird -y
+# for GUI package
+sudo apt-get install netbird-ui -y

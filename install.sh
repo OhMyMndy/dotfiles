@@ -19,6 +19,7 @@ if ! command -v nix &>/dev/null; then
 		# Replace with lix
 		curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install linux \
 			--no-confirm --extra-conf "trusted-users = $USER"
+			. /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
 		nix-channel --add https://nixos.org/channels/nixpkgs-unstable nixpkgs
 	fi
 
@@ -66,7 +67,7 @@ groups_to_add=(docker libvirt libvirt-qemu kvm)
 
 for group in "${groups_to_add[@]}"; do
   if ! user_in_group "$group"; then
-    sudo usermod -aG "$group" "$USER"
+    sudo usermod -aG "$group" "$USER" || true
   fi
 done
 
