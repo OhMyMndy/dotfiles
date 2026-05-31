@@ -2,6 +2,7 @@
 {
   home.packages = with pkgs; [
     bitwarden-cli
+    rbw
     ] ++ pkgs.lib.optionals pkgs.stdenv.isLinux [
     ecapture
     grype
