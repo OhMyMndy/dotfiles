@@ -1,14 +1,19 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
 
+# kubectl config get-contexts
 
-#function kubectl() {
-# TODO: make sh compatible
-#    # Check if KUBECONTEXT is set and not empty
-#    if [[ -n "$KUBECONTEXT" ]]; then
-#        # Call the actual kubectl binary with the --context flag
-#        command kubectl --context="$KUBECONTEXT" "$@"
-#    else
-#        # Fallback to standard kubectl if variable is not set
-#        command kubectl "$@"
-#    fi
-#}
+# kubectl config get-clusters
+
+function kubectl() {
+  local args=()
+  [[ -n "$KUBECONTEXT" ]] && args+=(--context="$KUBECONTEXT")
+  [[ -n "$KUBECLUSTER" ]] && args+=(--cluster="$KUBECLUSTER")
+  command kubectl "${args[@]}" "$@"
+}
+
+function oc() {
+  local args=()
+  [[ -n "$KUBECONTEXT" ]] && args+=(--context="$KUBECONTEXT")
+  [[ -n "$KUBECLUSTER" ]] && args+=(--cluster="$KUBECLUSTER")
+  command oc "${args[@]}" "$@"
+}
