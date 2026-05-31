@@ -70,7 +70,7 @@
   home.activation.setupKubernetes = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     export PATH="$${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 
-    pkgs="argocd argocd-autopilot copa minikube kubectl krew opa helm cilium hubble trivy jq yq talosctl kubectx kubens k9s kustomize helmfile"
+    pkgs="argocd argocd-autopilot copa minikube kubectl krew opa helm cilium hubble trivy jq yq talosctl kubectx kubens k9s kustomize helmfile vault"
     for pkg in $pkgs; do
       if [[ ! -f ~/.arkade/bin/"$pkg" ]]; then
         ${pkgs.arkade}/bin/arkade get $pkg --quiet
