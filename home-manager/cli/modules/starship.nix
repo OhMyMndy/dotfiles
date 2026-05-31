@@ -33,7 +33,7 @@
         #          "kustomization.yaml"
         #          "kustomization.yml"
         #        ];
-        detect_env_vars = [ "KUBECONFIG" ];
+        detect_env_vars = [ "KUBECONFIG" "KUBECLUSTER" "KUBECONTEXT"];
       };
     };
   };
