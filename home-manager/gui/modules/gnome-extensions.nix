@@ -5,6 +5,7 @@
       gnomeExtensions.appindicator
       gnomeExtensions.caffeine
       gnomeExtensions.clipboard-indicator
+      gnomeExtensions.custom-command-toggle
       gnomeExtensions.dash-to-dock
       gnomeExtensions.dash-to-panel
       # gnomeExtensions.gsconnect
