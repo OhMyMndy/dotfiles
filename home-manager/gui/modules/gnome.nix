@@ -139,7 +139,7 @@ in
     "org/gnome/shell"."favorite-apps" = [
       "org.gnome.Nautilus.desktop"
       "org.mozilla.firefox.desktop"
-      "org.mozilla.Thunderbird.desktop"
+      "org.mozilla.thunderbird_esr.desktop"
       "com.fastmail.Fastmail.desktop"
       "proton-mail.desktop"
       "com.automattic.beeper.desktop"
