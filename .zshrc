@@ -2,24 +2,20 @@ if [[ -f /etc/zshrc ]]; then
   source /etc/zshrc
 fi
 
-
 # bindkey "^[[H" beginning-of-line
 # bindkey "^[[F" end-of-line
 # Make ctrl+backpace and ctrl+delete work in zsh
 # bindkey '^H' backward-kill-word
 # bindkey '5~' kill-word
-    #   bindkey  "^[OH"   beginning-of-line
-    #   bindkey  "^[OF"   end-of-line
+#   bindkey  "^[OH"   beginning-of-line
+#   bindkey  "^[OF"   end-of-line
 
-    #   bindkey  "^[[1~"   beginning-of-line
-    #   bindkey  "^[[4~"   end-of-line
-
-
+#   bindkey  "^[[1~"   beginning-of-line
+#   bindkey  "^[[4~"   end-of-line
 
 # shellcheck disable=SC2076
-if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:" ]]
-then
-    PATH="$HOME/.local/bin:$HOME/bin:$PATH"
+if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:" ]]; then
+  PATH="$HOME/.local/bin:$HOME/bin:$PATH"
 fi
 export PATH
 
@@ -28,10 +24,9 @@ setopt rmstarsilent
 # prevent bell
 bindkey -e
 
-
 # fix Alt + Left/Right on Linux
-bindkey '^[[1;3C' forward-word
-bindkey '^[[1;3D' backward-word   
+# bindkey '^[[1;3C' forward-word
+# bindkey '^[[1;3D' backward-word
 
 #   # see: https://stackoverflow.com/questions/18600188/home-end-keys-do-not-work-in-tmux
 #   bindkey  "^[OH"   beginning-of-line
@@ -39,7 +34,6 @@ bindkey '^[[1;3D' backward-word
 
 #   bindkey  "^[[1~"   beginning-of-line
 #   bindkey  "^[[4~"   end-of-line
-
 
 #shellcheck disable=SC2190
 # To have commands starting with `rm -rf` in red:
@@ -49,7 +43,6 @@ bindkey '^[[1;3D' backward-word
 # if [[ -t 0 ]]; then
 #     stty -ixon -ixoff
 # fi
-
 
 # SEE https://github.com/catppuccin/fzf
 # export FZF_DEFAULT_OPTS=" \
@@ -62,17 +55,17 @@ bindkey '^[[1;3D' backward-word
 if [[ -d ~/.shellrc.d ]]; then
   for rc in ~/.shellrc.d/*(DN); do
     if [[ -f "$rc" ]]; then
-        # shellcheck disable=SC1090
-        . "$rc"
+      # shellcheck disable=SC1090
+      . "$rc"
     fi
-    done
+  done
 fi
 
 if [[ -d ~/.zshrc.d ]]; then
   for rc in ~/.zshrc.d/*(DN); do
     if [[ -f "$rc" ]]; then
-        # shellcheck disable=SC1090
-        . "$rc"
+      # shellcheck disable=SC1090
+      . "$rc"
     fi
   done
 fi
