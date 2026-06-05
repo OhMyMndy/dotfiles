@@ -47,7 +47,7 @@
       git config --global user.name "$user"
 
       # extensions can only be installed when we are logged in with gh
-      gh extension install nektos/gh-act
+      gh extension list | grep nektos/gh-act >/dev/null || gh extension install nektos/gh-act
     fi
 
     if gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /user/emails &>/dev/null; then

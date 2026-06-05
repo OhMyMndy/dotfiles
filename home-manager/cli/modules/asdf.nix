@@ -25,7 +25,7 @@
 
     if [[ ! -f ~/.local/bin/asdf ]]; then
       mkdir -p ~/.local/bin/
-      curl -SsL https://github.com/asdf-vm/asdf/releases/download/v0.18.0/asdf-v0.18.0-linux-amd64.tar.gz | tar xz -C ~/.local/bin/
+      curl -SsL https://github.com/asdf-vm/asdf/releases/download/v0.19.0/asdf-v0.19.0-linux-amd64.tar.gz | tar xz -C ~/.local/bin/
       rm -rf ~/.asdf
     fi
 

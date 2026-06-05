@@ -4,7 +4,7 @@
   home = {
     username = builtins.getEnv "USER";
     homeDirectory = builtins.getEnv "HOME";
-    stateVersion = "22.11";
+    stateVersion = "26.05";
   };
 
   programs.home-manager.enable = true;

@@ -26,6 +26,7 @@
     jless
     jq
     just
+    lf
     ncdu
     # openapi-generator-cli
     p7zip

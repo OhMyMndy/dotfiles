@@ -81,7 +81,7 @@ in
 
   programs.neovim = {
     enable = true;
-    package = pkgs.neovim-unwrapped;
+    package = pkgs.previous.neovim-unwrapped;
     # plugins = with pkgs.vimPlugins; [ { plugin  = nvim-treesitter.withAllGrammars; type= "lua";} ];
     defaultEditor = true;
     extraPackages = with pkgs; [
@@ -131,8 +131,8 @@ in
 
       # regal # rego lsp
     ];
-    extraLuaConfig = ''
-      # vim.opt.runtimepath:prepend("${treesitter-parsers}")
+    initLua = ''
+      -- vim.opt.runtimepath:prepend("${treesitter-parsers}")
       ${builtins.readFile ./../../../.config/nvim/init.lua}
     '';
   };

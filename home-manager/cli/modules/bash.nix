@@ -4,7 +4,7 @@
 
   home.packages = with pkgs; [
     flox.flox
-    nodePackages_latest.bash-language-server
+    bash-language-server
     shfmt
     shellcheck
   ];

@@ -14,11 +14,11 @@
     #  systemctl --user enable --now steampipe
     # fi
 
-    plugins="ansible cloudflare config csv docker exec gcp github theapsgroup/gitlab grafana jira "
-    plugins+="theapsgroup/keycloak kubernetes ldap linkedin net openapi prometheus steampipe "
-    plugins+="tailscale terraform "
+    plugins="turbot/ansible turbot/cloudflare turbot/config turbot/csv turbot/docker turbot/exec turbot/gcp turbot/github theapsgroup/gitlab turbot/grafana turbot/jira "
+    plugins+="theapsgroup/keycloak turbot/kubernetes turbot/ldap turbot/linkedin turbot/net turbot/openapi turbot/prometheus turbot/steampipe "
+    plugins+="turbot/terraform "
 
-    installed=$(steampipe plugin list --output json | jq '.installed[].connections[]' -r | sort | uniq)
+    installed=$(steampipe plugin list --output json | jq '.installed[].name, .failed[].name' -r | sort | uniq | sed -E 's#(.*)/(.*)/(.*)@(.*)#\2/\3#g')
     new="$(echo "$plugins" | tr ' ' '\n' | tr '_' ' ')"
     to_install=$(comm -13 <(echo "$installed" | sort) <(echo "$new" | sort))
 
