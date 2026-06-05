@@ -22,10 +22,10 @@
     new="$(echo "$plugins" | tr ' ' '\n' | tr '_' ' ')"
     to_install=$(comm -13 <(echo "$installed" | sort) <(echo "$new" | sort))
 
-    if [[ "$to_install" != "" ]]; then
-      # TODO: make sure that it waits for the service to be running
-      ${pkgs.steampipe}/bin/steampipe plugin install $to_install || true
-    fi
+    # if [[ "$to_install" != "" ]]; then
+    #   # TODO: make sure that it waits for the service to be running
+    #   ${pkgs.steampipe}/bin/steampipe plugin install $to_install || true
+    # fi
     # ${pkgs.steampipe}/bin/steampipe plugin update --all
   '';
 
