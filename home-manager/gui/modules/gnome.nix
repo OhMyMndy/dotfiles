@@ -80,15 +80,16 @@ in
 
     "org/gnome/desktop/search-providers" = {
       disabled = [
-        "org.gnome.Nautilus.desktop"
-        "org.mozilla.firefox.desktop"
-        "org.gnome.Nautilus.desktop"
-        "org.gnome.Contacts.desktop"
-        "org.gnome.Calendar.desktop"
-        "org.gnome.Terminal.desktop"
-        "org.gnome.Characters.desktop"
-        "org.gnome.clocks.desktop"
         "org.gnome.Boxes.desktop"
+        "org.gnome.Calendar.desktop"
+        "org.gnome.Characters.desktop"
+        "org.gnome.Contacts.desktop"
+        "org.gnome.Nautilus.desktop"
+        "org.gnome.Terminal.desktop"
+        "org.gnome.clocks.desktop"
+        "org.gnome.seahorse.Application.desktop"
+        "org.mozilla.firefox.desktop"
+        "org.recoll.Recoll.SearchProvider.desktop"
       ];
     };
     "org/gnome/desktop/session" = {
