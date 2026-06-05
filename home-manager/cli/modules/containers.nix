@@ -3,6 +3,7 @@
   home.packages = with pkgs; [
     act
     ctop
+    act
     hadolint
     lazydocker
     skopeo
