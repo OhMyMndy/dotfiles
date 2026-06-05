@@ -13,16 +13,7 @@
   ];
 
   home.packages = with pkgs; [
-    (pkgs.nerdfonts.override {
-      fonts = [
-        "3270"
-        "0xProto"
-        "Agave"
-        "Iosevka"
-        "JetBrainsMono"
-        "SourceCodePro"
-      ];
-    })
+    nerd-fonts.jetbrains-mono
     ibm-plex
     inter
   ];
