@@ -27,7 +27,7 @@
     jq
     just
     ncdu
-    openapi-generator-cli
+    # openapi-generator-cli
     p7zip
     restic
     ripgrep
@@ -35,6 +35,7 @@
     shfmt
     sqlite
     tree
+    unstable.witr
     wget
     yq-go
     (yazi.override {
