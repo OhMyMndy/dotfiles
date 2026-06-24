@@ -52,7 +52,7 @@ in
       "switch-to-workspace-7" = [ "<Super>7" ];
       "switch-to-workspace-8" = [ "<Super>8" ];
       "switch-to-workspace-9" = [ "<Super>9" ];
-      "switch-to-workspace-10" = [ "<Super>10" ];
+      "switch-to-workspace-10" = [ "<Super>0" ];
       "switch-to-workspace-left" = [ "<Super>Page_Up" ];
       "switch-to-workspace-right" = [ "<Super>Page_Down" ];
       "move-to-workspace-1" = [ "<Super><Shift>1" ];
@@ -96,7 +96,7 @@ in
       "idle-delay" = lib.hm.gvariant.mkUint32 300;
     };
     "org/gnome/desktop/wm/preferences" = {
-      num-workspaces = 6;
+      num-workspaces = 10;
       # button-layout = "close,minimize,maximize:appmenu";
       button-layout = "appmenu:minimize,maximize,close";
       resize-with-right-button = true;
@@ -144,8 +144,7 @@ in
       "com.fastmail.Fastmail.desktop"
       "proton-mail.desktop"
       "com.automattic.beeper.desktop"
-      "im.riot.Riot.desktop" # Element
-      "com.mattermost.Desktop.desktop"
+      "org.ferdium.Ferdium.desktop"
       "kitty.desktop"
       "org.gnome.Terminal.desktop"
       "org.gnome.Ptyxis.desktop"
