@@ -27,6 +27,7 @@
     jq
     just
     lf
+    lnav
     ncdu
     # openapi-generator-cli
     p7zip
@@ -35,6 +36,7 @@
     shellcheck
     shfmt
     sqlite
+    tmux # tmux 3.6a in Ubuntu has some weird quirks
     tree
     unstable.witr
     wget
