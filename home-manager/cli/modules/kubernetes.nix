@@ -31,6 +31,7 @@
     # myHelmfile
     # kubernetes-helm # TODO: install with plugins, but from Nix cache
     # helmfile # TODO
+    fluxcd
     ingress2gateway
     istioctl
     karmor
