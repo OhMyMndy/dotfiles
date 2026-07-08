@@ -37,6 +37,7 @@
     karmor
     kubeconform
     kubeswitch # switcher command
+    kubectl-view-allocations
     # kustomize
     kompose
     krew
