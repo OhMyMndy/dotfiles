@@ -1,1 +1,6 @@
 sync_address = "https://atuin.home.ohmymndy.com"
+workspaces = true
+filter_mode = "session-preload"
+
+[sync]
+records = true
