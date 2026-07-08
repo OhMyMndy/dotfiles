@@ -17,3 +17,10 @@ function oc() {
   [[ -n "$KUBECLUSTER" ]] && args+=(--cluster="$KUBECLUSTER")
   command oc "${args[@]}" "$@"
 }
+function helm() {
+  if [[ -n "$KUBECONTEXT" ]]; then
+    HELM_KUBECONTEXT="$KUBECONTEXT" command helm "$@"
+  else
+    command helm "$@"
+  fi
+}
