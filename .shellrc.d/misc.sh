@@ -5,6 +5,6 @@ if command -v rbw &>/dev/null; then
 fi
 if command -v atuin &>/dev/null; then
   if [ "$shell" = "zsh" ] || [ "$shell" = "bash" ]; then
-    eval "$(atuin init "$shell")"
+    eval "$(atuin init --disable-up-arrow "$shell")"
   fi
 fi
