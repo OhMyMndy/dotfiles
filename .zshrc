@@ -52,6 +52,8 @@ bindkey -e
 # --color=selected-bg:#45475a \
 # --multi"
 
+shell=$([ -n "${BASH_VERSION:-}" ] && echo bash || { [ -n "${ZSH_VERSION:-}" ] && echo zsh; } || basename "$(readlink /proc/$$/exe 2>/dev/null)")
+export shell
 if [[ -d ~/.shellrc.d ]]; then
   for rc in ~/.shellrc.d/*(DN); do
     if [[ -f "$rc" ]]; then

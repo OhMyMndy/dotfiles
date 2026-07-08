@@ -1,6 +1,6 @@
 # shellcheck shell=bash
-if [ -n "$BASH" ] && command -v fzf &>/dev/null; then
-	eval "$(fzf --bash)"
-elif command -v fzf &>/dev/null; then
-	eval "$(fzf --zsh)"
+if command -v fzf &>/dev/null; then
+	if [ "$shell" = "zsh" ] || [ "$shell" = "bash" ]; then
+		eval "$(fzf --"$shell")"
+	fi
 fi

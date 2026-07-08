@@ -77,7 +77,9 @@
   home.file.".inputrc" = {
     source = ./../../../.inputrc;
   };
-
+  home.file.".config/atuin/config.toml" = {
+    source = config.lib.file.mkOutOfStoreSymlink ./../../../.config/atuin/config.toml;
+  };
   home.file."./.config/yazi/init.lua" = {
     source = config.lib.file.mkOutOfStoreSymlink ./../../../.config/yazi/init.lua;
     recursive = false;

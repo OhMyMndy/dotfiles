@@ -1,7 +1,6 @@
 # shellcheck shell=bash
-
-if [ -n "$BASH" ] && command -v docker &>/dev/null; then
-  . <(docker completion bash)
-elif command -v docker &>/dev/null; then
-  . <(docker completion zsh)
+if command -v docker &>/dev/null; then
+  if [ "$shell" = "zsh" ] || [ "$shell" = "bash" ]; then
+    . <(docker completion "$shell")
+  fi
 fi

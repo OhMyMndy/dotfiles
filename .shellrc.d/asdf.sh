@@ -3,6 +3,8 @@
 if [[ -d ~/.asdf/shims ]]; then
   export PATH="$HOME/.asdf/shims:$PATH"
 fi
-if [ -n "$BASH" ] && command -v asdf &>/dev/null; then
-	. <(asdf completion bash)
+if command -v asdf &>/dev/null; then
+  if [ "$shell" = "zsh" ] || [ "$shell" = "bash" ]; then
+    . <(asdf completion "$shell")
+  fi
 fi

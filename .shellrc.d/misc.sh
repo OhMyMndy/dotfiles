@@ -1,3 +1,10 @@
 if command -v rbw &>/dev/null; then
-  source <(rbw gen-completions zsh)
+  if [ "$shell" = "zsh" ] || [ "$shell" = "bash" ]; then
+    source <(rbw gen-completions "$shell")
+  fi
+fi
+if command -v atuin &>/dev/null; then
+  if [ "$shell" = "zsh" ] || [ "$shell" = "bash" ]; then
+    eval "$(atuin init "$shell")"
+  fi
 fi
