@@ -18,17 +18,34 @@
         truncation_length = 5;
       };
       direnv.disabled = false;
-      format = "\${custom.wsl_distro}$all";
+      format = "\${custom.wsl_distro}\${custom.kube_env}$all";
       custom.wsl_distro = {
         command = "echo $WSL_DISTRO_NAME";
         when = ''test -n "$WSL_DISTRO_NAME"'';
         os = "linux";
         style = "bold white";
       };
+      custom.kube_env = {
+        command = ''
+            if [ -n "$KUBECONTEXT" ] && [ -n "$KUBECLUSTER" ]; then
+              echo "$KUBECONTEXT/$KUBECLUSTER"
+            elif [ -n "$KUBECONTEXT" ]; then
+              echo "$KUBECONTEXT"
+            elif [ -n "$KUBECLUSTER" ]; then
+              echo "$KUBECLUSTER"
+            else
+              timeout 0.2 kubectl config current-context 2>/dev/null
+            fi
+          '';
+        when = ''command -v kubectl >/dev/null 2>&1'';
+        symbol = "☸ ";
+        style = "bold cyan";
+        format = "[$symbol($output\n)]($style)";
+      };
       git_status.disabled = true;
       gcloud.disabled = true;
       kubernetes = {
-        disabled = false;
+        disabled = true;
         #        detect_files = [
         #          "kustomization.yaml"
         #          "kustomization.yml"
