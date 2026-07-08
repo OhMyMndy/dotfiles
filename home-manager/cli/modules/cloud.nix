@@ -8,7 +8,10 @@
 {
   home.packages = with pkgs; [
     #    awscli2
-       azure-cli
+    (azure-cli.withExtensions [
+      azure-cli.extensions.resource-graph 
+      azure-cli.extensions.account 
+    ])
     #    azure-storage-azcopy
     checkov
     google-cloud-sdk
