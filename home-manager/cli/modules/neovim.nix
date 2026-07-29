@@ -2,6 +2,7 @@
   pkgs,
   lib,
   config,
+  dotfiles,
   ...
 }:
 let
@@ -151,14 +152,10 @@ in
   #  source = config.lib.file.mkOutOfStoreSymlink ./../../../.config/nvim/lua;
   #  recursive = true;
   #};
-  home.file.".config/nvim/lua" = {
-    source = config.lib.file.mkOutOfStoreSymlink
-      "${config.home.homeDirectory}/dotfiles/.config/nvim/lua";
-  };
-  home.file.".config/nvim/lazy-lock.json" = {
-    source = config.lib.file.mkOutOfStoreSymlink
-      "${config.home.homeDirectory}/dotfiles/.config/nvim/lazy-lock.json";
-  };
+  home.file.".config/nvim/lua".source =
+    config.lib.file.mkOutOfStoreSymlink "${dotfiles}/.config/nvim/lua";
+  home.file.".config/nvim/lazy-lock.json".source =
+    config.lib.file.mkOutOfStoreSymlink "${dotfiles}/.config/nvim/lazy-lock.json";
   # home.activation.setupNeovim = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
   #   cp -f ${./../../../.config/nvim/lazy-lock.json} ~/.config/nvim/lazy-lock.json
   #   chmod 0644 ~/.config/nvim/lazy-lock.json

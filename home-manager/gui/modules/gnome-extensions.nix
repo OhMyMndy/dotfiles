@@ -8,14 +8,15 @@
       gnomeExtensions.custom-command-toggle
       gnomeExtensions.dash-to-dock
       gnomeExtensions.dash-to-panel
+      gnomeExtensions.focused-window-d-bus # used with ActivityWatch
       # gnomeExtensions.gsconnect
       gnomeExtensions.just-perfection
       gnomeExtensions.impatience
       gnomeExtensions.open-bar
-      gnomeExtensions.search-light
-      gnomeExtensions.sound-output-device-chooser
+      # gnomeExtensions.search-light
       gnomeExtensions.tiling-shell
       gnomeExtensions.tray-icons-reloaded
+      gnomeExtensions.weather-or-not
     ])
     ++ (with pkgs; [ gnome-extensions-cli ]);
   home.activation.setupGnomeExtensions = lib.hm.dag.entryAfter [ "writeBoundary" ] ''

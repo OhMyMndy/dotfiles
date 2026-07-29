@@ -54,3 +54,29 @@ bw-unlock:
 
 audit:
   sudo $(which lynis) audit system --profile ~/dotfiles/lynis/profiles/default.prf
+
+
+sandbox:
+  openshell sandbox create --name "$(basename "$PWD")" --upload "$PWD" -- claude
+
+sandbox-download:
+  rm -rf /tmp/"$(basename "$PWD")"
+  openshell sandbox download "$(basename "$PWD")" "/sandbox/$(basename "$PWD")" "/tmp/$(basename "$PWD")"
+
+
+sandbox-upload:
+  openshell sandbox exec --name "$(basename $PWD)" rm -rf "/sandbox/$(basename "$PWD")"
+  openshell sandbox upload "$(basename "$PWD")" . /sandbox/"$(basename "$PWD")"
+
+sandbox-diff: sandbox-download
+  diff -urN --exclude=.git --exclude-from=.gitignore "$PWD" /tmp/"$(basename "$PWD")" | delta
+
+
+sandbox-shell:
+  openshell sandbox connect "$(basename "$PWD")"
+
+
+sandbox-merge: 
+  openshell sandbox download "$(basename "$PWD")" "/sandbox/$(basename "$PWD")" .
+
+

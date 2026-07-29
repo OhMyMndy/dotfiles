@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ pkgs, lib, config, dotfiles, ... }:
 {
   imports = [ (import ./starship.nix) ];
 
@@ -18,7 +18,7 @@
   };
 
   home.file.".bashrc.d" = {
-    source = ./../../../.bashrc.d;
+    source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/.bashrc.d";
     recursive = true;
   };
 }

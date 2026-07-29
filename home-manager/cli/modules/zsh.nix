@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ pkgs, lib, config, dotfiles, ... }:
 {
   home.packages = with pkgs; [
     git
@@ -57,7 +57,7 @@
   };
 
   home.file.".zshrc.d" = {
-    source = ./../../../.zshrc.d;
+    source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/.zshrc.d";
     recursive = true;
   };
 }

@@ -24,3 +24,8 @@ function helm() {
     command helm "$@"
   fi
 }
+function stern() {
+  local args=()
+  [[ -n "$KUBECONTEXT" ]] && args+=(--context="$KUBECONTEXT")
+  command stern "${args[@]}" "$@"
+}

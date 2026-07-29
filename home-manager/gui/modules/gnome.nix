@@ -140,7 +140,7 @@ in
     "org/gnome/shell"."favorite-apps" = [
       "org.gnome.Nautilus.desktop"
       "org.mozilla.firefox.desktop"
-      "org.mozilla.thunderbird_esr.desktop"
+      "org.gnome.Evolution.desktop"
       "com.fastmail.Fastmail.desktop"
       "proton-mail.desktop"
       "com.automattic.beeper.desktop"
@@ -218,8 +218,17 @@ in
     "org/gtk/settings/file-chooser" = {
       "clock-format" = "24h";
     };
-
-    # TODO: add nightlight config
+    "org/gnome/evolution/calendar" = {
+      "use-24hour-format" = true;
+      "working-days" = 62;
+      "composer-mode" = "html";
+    };
+    "org/gnome/evolution/shell" = {
+      "prefer-symbolic-icons" = "yes";
+      "user-header-bar" = true;
+      "menubar-visible" = true;
+      "toolbar-visible" = true;
+    };
   };
 
   # TODO: add hook to run fc-cache -f

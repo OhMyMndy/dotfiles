@@ -97,18 +97,27 @@
             "custom" = home-manager.lib.homeManagerConfiguration {
               inherit pkgs;
               modules = [ ./custom.nix ];
-              extraSpecialArgs = { inherit pkgs; };
+              extraSpecialArgs = {
+                inherit pkgs;
+                dotfiles = "${builtins.getEnv "HOME"}/dotfiles";
+              };
             };
 
             "minimal-cli" = home-manager.lib.homeManagerConfiguration {
               inherit pkgs;
               modules = [ ./home-manager/cli ];
-              extraSpecialArgs = { inherit pkgs; };
+              extraSpecialArgs = {
+                inherit pkgs;
+                dotfiles = "${builtins.getEnv "HOME"}/dotfiles";
+              };
             };
             "minimal-gui" = home-manager.lib.homeManagerConfiguration {
               inherit pkgs;
               modules = [ ./home-manager/gui ];
-              extraSpecialArgs = { inherit pkgs; };
+              extraSpecialArgs = {
+                inherit pkgs;
+                dotfiles = "${builtins.getEnv "HOME"}/dotfiles";
+              };
             };
           };
         };

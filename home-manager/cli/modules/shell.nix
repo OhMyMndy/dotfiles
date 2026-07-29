@@ -3,6 +3,7 @@
   lib,
   home,
   config,
+  dotfiles,
   ...
 }:
 {
@@ -74,25 +75,16 @@
   };
 
 
-  home.file.".inputrc" = {
-    source = ./../../../.inputrc;
-  };
-  home.file.".config/atuin/config.toml" = {
-    source = config.lib.file.mkOutOfStoreSymlink ./../../../.config/atuin/config.toml;
-  };
-  home.file."./.config/yazi/init.lua" = {
-    source = config.lib.file.mkOutOfStoreSymlink ./../../../.config/yazi/init.lua;
-    recursive = false;
-  };
-
-  home.file."./.config/yazi/yazi.toml" = {
-    source = config.lib.file.mkOutOfStoreSymlink ./../../../.config/yazi/yazi.toml;
-    recursive = false;
-  };
-  home.file."./.config/yazi/keymap.toml" = {
-    source = config.lib.file.mkOutOfStoreSymlink ./../../../.config/yazi/keymap.toml;
-    recursive = false;
-  };
+  home.file.".inputrc".source =
+    config.lib.file.mkOutOfStoreSymlink "${dotfiles}/.inputrc";
+  home.file.".config/atuin/config.toml".source =
+    config.lib.file.mkOutOfStoreSymlink "${dotfiles}/.config/atuin/config.toml";
+  home.file.".config/yazi/init.lua".source =
+    config.lib.file.mkOutOfStoreSymlink "${dotfiles}/.config/yazi/init.lua";
+  home.file.".config/yazi/yazi.toml".source =
+    config.lib.file.mkOutOfStoreSymlink "${dotfiles}/.config/yazi/yazi.toml";
+  home.file.".config/yazi/keymap.toml".source =
+    config.lib.file.mkOutOfStoreSymlink "${dotfiles}/.config/yazi/keymap.toml";
   home.activation.setupYazi = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     # TODO: install yazi git plugin: ya pkg add yazi-rs/plugins:git
     # todo: ya pkg add yazi-rs/plugins:vcs-files

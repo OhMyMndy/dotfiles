@@ -2,6 +2,7 @@
   pkgs,
   lib,
   config,
+  dotfiles,
   ...
 }:
 {
@@ -10,6 +11,7 @@
     git
     glab
     gh
+    ghq
     lazygit
     tea
     tig
@@ -25,17 +27,15 @@
     #    userEmail = "2277717+OhMyMndy@users.noreply.github.com";
   };
 
-  home.file.".config/lazygit" = {
-    source = ./../../../.config/lazygit;
-  };
+  home.file.".config/lazygit".source =
+    config.lib.file.mkOutOfStoreSymlink "${dotfiles}/.config/lazygit";
 
-  home.file.".gitconfig-delta" = {
-    source = ./../../../.gitconfig-delta;
-  };
+  home.file.".gitconfig-delta".source =
+    config.lib.file.mkOutOfStoreSymlink "${dotfiles}/.gitconfig-delta";
 
   home.activation.setupGit = lib.hm.dag.entryAfter [ "installPackages" ] ''
     PATH="$PATH:${config.home.path}/bin" #${pkgs.git}/bin:${pkgs.gh}/bin:${pkgs.jq}/bin"
-
+    git config ghq.root ~/src
     touch "$HOME/.gitconfig"
     git config --global include.path ".gitconfig-delta"
     git config --global init.defaultBranch main
