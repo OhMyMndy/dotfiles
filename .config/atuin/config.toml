@@ -2,5 +2,16 @@ sync_address = "https://atuin.home.ohmymndy.com"
 workspaces = true
 filter_mode = "session-preload"
 
+search_mode = "daemon-fuzzy"
+
+[daemon]
+enabled = true
+autostart = true
+
+[search]
+recency_score_multiplier = 10.0
+frequency_score_multiplier = 0.0
+frecency_score_multiplier = 5.0
+
 [sync]
 records = true
