@@ -28,6 +28,7 @@
     (import ./modules/steampipe.nix)
     (import ./modules/ruby.nix)
     (import ./modules/rust.nix)
+    (import ./modules/ssh.nix)
     (import ./modules/virtualization.nix)
     # (import ./modules/zellij.nix)
   ];
