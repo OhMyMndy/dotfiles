@@ -5,6 +5,7 @@
   imports = [
     (import ./../cli)
     (import ./minimal.nix)
+    (import ./modules/codium.nix)
     (import ./modules/alacritty.nix)
     (import ./modules/flatpaks.nix)
     (import ./modules/gaming)
