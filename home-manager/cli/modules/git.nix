@@ -13,6 +13,7 @@
     gh
     ghq
     lazygit
+    mergiraf
     tea
     tig
   ];
@@ -30,15 +31,23 @@
   home.file.".config/lazygit".source =
     config.lib.file.mkOutOfStoreSymlink "${dotfiles}/.config/lazygit";
 
-  home.file.".gitconfig-delta".source =
-    config.lib.file.mkOutOfStoreSymlink "${dotfiles}/.gitconfig-delta";
+  home.file.".config/git/gitconfig-delta".source =
+    config.lib.file.mkOutOfStoreSymlink "${dotfiles}/.config/git/gitconfig-delta";
+
+  home.file.".config/git/gitattributes".source =
+    config.lib.file.mkOutOfStoreSymlink "${dotfiles}/.config/git/gitattributes";
+
+  home.file.".config/git/gitignore".source =
+    config.lib.file.mkOutOfStoreSymlink "${dotfiles}/.config/git/gitignore";
 
   home.activation.setupGit = lib.hm.dag.entryAfter [ "installPackages" ] ''
     PATH="$PATH:${config.home.path}/bin" #${pkgs.git}/bin:${pkgs.gh}/bin:${pkgs.jq}/bin"
-    git config ghq.root ~/src
     touch "$HOME/.gitconfig"
-    git config --global include.path ".gitconfig-delta"
+    git config --global ghq.root ~/src
+    git config --global include.path "~/.git/gitconfig-delta"
     git config --global init.defaultBranch main
+    git config --global core.excludesFile ~/.git/gitignore
+    git config --global core.attributesfile ~/.git/gitattributes 
 
     if gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /user &>/dev/null; then
       user=$(gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /user | jq -r .name)

@@ -1,0 +1,5 @@
+*.code-workspace
+.DS_Store
+.history
+.idea/
+.vscode/
