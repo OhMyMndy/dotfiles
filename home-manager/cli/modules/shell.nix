@@ -8,48 +8,51 @@
 }:
 {
   imports = [ (import ./starship.nix) ];
-  home.packages = with pkgs; [
-    aria2
-    atuin
-    bat # TODO https://github.com/catppuccin/bat
-    cpulimit
-    curl
-    dapr-cli
-    devenv # https://devenv.sh
-    direnv
-    dialog
-    eza # https://github.com/eza-community/eza
-    fastgron # Make JSON greppable super fast!
-    fd
-    gawk
-    gron
-    ijq
-    jless
-    jq
-    just
-    lf
-    lnav
-    ncdu
-    # openapi-generator-cli
-    p7zip
-    restic
-    ripgrep
-    shellcheck
-    shfmt
-    sqlite
-    tmux # tmux 3.6a in Ubuntu has some weird quirks
-    tree
-    unstable.witr
-    wget
-    yq-go
-    (yazi.override {
-		_7zz = _7zz-rar;  # Support for RAR extraction
-	  })
-    semgrep # TODO: move to development.nix or something generic
-  ] ++ pkgs.lib.optionals pkgs.stdenv.isLinux [
+  home.packages =
+    with pkgs;
+    [
+      aria2
+      atuin
+      bat # TODO https://github.com/catppuccin/bat
+      cpulimit
+      curl
+      dapr-cli
+      devenv # https://devenv.sh
+      direnv
+      dialog
+      eza # https://github.com/eza-community/eza
+      fastgron # Make JSON greppable super fast!
+      fd
+      gawk
+      gron
+      ijq
+      jless
+      jq
+      just
+      lf
+      lnav
+      ncdu
+      # openapi-generator-cli
+      p7zip
+      restic
+      ripgrep
+      shellcheck
+      shfmt
+      sqlite
+      tmux # tmux 3.6a in Ubuntu has some weird quirks
+      tree
+      unstable.witr
+      wget
+      yq-go
+      (yazi.override {
+        _7zz = _7zz-rar; # Support for RAR extraction
+      })
+      semgrep # TODO: move to development.nix or something generic
+    ]
+    ++ pkgs.lib.optionals pkgs.stdenv.isLinux [
       lm_sensors
-    osquery
-  ];
+      osquery
+    ];
 
   programs.fzf = {
     enable = false;
@@ -74,9 +77,7 @@
     package = pkgs.unstable.mise;
   };
 
-
-  home.file.".inputrc".source =
-    config.lib.file.mkOutOfStoreSymlink "${dotfiles}/.inputrc";
+  home.file.".inputrc".source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/.inputrc";
   home.file.".config/atuin/config.toml".source =
     config.lib.file.mkOutOfStoreSymlink "${dotfiles}/.config/atuin/config.toml";
   home.file.".config/yazi/init.lua".source =

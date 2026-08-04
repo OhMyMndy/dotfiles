@@ -1,4 +1,10 @@
-{ pkgs, lib, config, dotfiles, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  dotfiles,
+  ...
+}:
 {
   home.packages = with pkgs; [ starship ];
 
@@ -27,17 +33,17 @@
       };
       custom.kube_env = {
         command = ''
-            if [ -n "$KUBECONTEXT" ] && [ -n "$KUBECLUSTER" ]; then
-              echo "$KUBECONTEXT/$KUBECLUSTER"
-            elif [ -n "$KUBECONTEXT" ]; then
-              echo "$KUBECONTEXT"
-            elif [ -n "$KUBECLUSTER" ]; then
-              echo "$KUBECLUSTER"
-            else
-              timeout 0.2 kubectl config current-context 2>/dev/null
-            fi
-          '';
-        when = ''command -v kubectl >/dev/null 2>&1'';
+          if [ -n "$KUBECONTEXT" ] && [ -n "$KUBECLUSTER" ]; then
+            echo "$KUBECONTEXT/$KUBECLUSTER"
+          elif [ -n "$KUBECONTEXT" ]; then
+            echo "$KUBECONTEXT"
+          elif [ -n "$KUBECLUSTER" ]; then
+            echo "$KUBECLUSTER"
+          else
+            timeout 0.2 kubectl config current-context 2>/dev/null
+          fi
+        '';
+        when = "command -v kubectl >/dev/null 2>&1";
         symbol = "☸ ";
         style = "bold cyan";
         format = "[$symbol($output\n)]($style)";
@@ -50,7 +56,11 @@
         #          "kustomization.yaml"
         #          "kustomization.yml"
         #        ];
-        detect_env_vars = [ "KUBECONFIG" "KUBECLUSTER" "KUBECONTEXT"];
+        detect_env_vars = [
+          "KUBECONFIG"
+          "KUBECLUSTER"
+          "KUBECONTEXT"
+        ];
       };
     };
   };

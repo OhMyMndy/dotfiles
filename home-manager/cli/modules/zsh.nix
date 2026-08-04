@@ -1,4 +1,10 @@
-{ pkgs, lib, config, dotfiles, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  dotfiles,
+  ...
+}:
 {
   home.packages = with pkgs; [
     git

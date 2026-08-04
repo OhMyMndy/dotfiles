@@ -1,4 +1,10 @@
-{ pkgs, lib, config, dotfiles, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  dotfiles,
+  ...
+}:
 {
   imports = [ (import ./starship.nix) ];
 
