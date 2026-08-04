@@ -9,11 +9,11 @@
   home.packages = with pkgs; [
     #    awscli2
     (azure-cli.withExtensions [
-      azure-cli.extensions.account 
+      azure-cli.extensions.account
       # azure-cli.extensions.alias
       azure-cli.extensions.fzf
       azure-cli.extensions.rdbms-connect
-      azure-cli.extensions.resource-graph 
+      azure-cli.extensions.resource-graph
       azure-cli.extensions.ssh
     ])
     #    azure-storage-azcopy
