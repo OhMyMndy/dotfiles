@@ -17,6 +17,7 @@ in
     #     "UbuntuSans"
     #   ];
     # })
+    chafa # terminal image viewer
     nerd-fonts.iosevka
     nerd-fonts.iosevka-term
     nerd-fonts.iosevka-term-slab
