@@ -145,7 +145,6 @@ in
       "com.fastmail.Fastmail.desktop"
       "proton-mail.desktop"
       "com.automattic.beeper.desktop"
-      "org.ferdium.Ferdium.desktop"
       "kitty.desktop"
       "org.gnome.Terminal.desktop"
       "org.gnome.Ptyxis.desktop"
