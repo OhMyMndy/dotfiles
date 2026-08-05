@@ -132,7 +132,7 @@ in
       "night-light-schedule-automatic" = true;
       "night-light-schedule-from" = 5.0;
       "night-light-schedule-to" = 4.0;
-      "night-light-temperature" = lib.hm.gvariant.mkUint32 4300;
+      "night-light-temperature" = lib.hm.gvariant.mkUint32 4700;
     };
     "org/gnome/settings-daemon/plugins/power" = {
       "sleep-inactive-ac-timeout" = 600;
