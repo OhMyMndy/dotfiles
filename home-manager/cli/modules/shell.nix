@@ -91,4 +91,13 @@
     # todo: ya pkg add yazi-rs/plugins:vcs-files
   '';
 
+  home.activation.setupSafeChain = lib.hm.dag.entryAfter [ "installPackages" ] ''
+    if [[ ! -d ~/.safe-chain ]]; then
+      ${pkgs.curl}/bin/burl -fsSL https://github.com/AikidoSec/safe-chain/releases/download/1.5.14/install-safe-chain.sh -o /tmp/install-safe-chain.sh \
+        && echo "d41816ab564e9b9238946786433eec15e2d0e699698fa81c1fd1bdd3a78adf5c  /tmp/install-safe-chain.sh" | sha256sum -c - \
+        && sh /tmp/install-safe-chain.sh \
+        && rm /tmp/install-safe-chain.sh
+    fi
+  '';
+
 }
