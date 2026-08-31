@@ -34,6 +34,7 @@
       ncdu
       # openapi-generator-cli
       p7zip
+      pv
       restic
       ripgrep
       shellcheck
