@@ -22,7 +22,8 @@ sudo apt-get install -y vim git curl zsh flatpak build-essential \
 	xdg-utils flatpak-xdg-utils unzip python3-pip python3-venv
 
 if [[ "$DISPLAY" != '' ]]; then
-	sudo snap remove firefox
+	sudo snap remove firefox || true
+	sudo snap remove chromium || true
 	flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 	sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
