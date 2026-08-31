@@ -128,11 +128,11 @@ in
       ];
     };
     "org/gnome/settings-daemon/plugins/color" = {
-      "night-light-enabled" = true;
-      "night-light-schedule-automatic" = true;
+      # "night-light-enabled" = true;
+      # "night-light-schedule-automatic" = true;
       "night-light-schedule-from" = 5.0;
       "night-light-schedule-to" = 4.0;
-      "night-light-temperature" = lib.hm.gvariant.mkUint32 4700;
+      "night-light-temperature" = lib.hm.gvariant.mkUint32 4200;
     };
     "org/gnome/settings-daemon/plugins/power" = {
       "sleep-inactive-ac-timeout" = 600;
