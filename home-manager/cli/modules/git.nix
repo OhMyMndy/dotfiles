@@ -44,10 +44,10 @@
     PATH="$PATH:${config.home.path}/bin" #${pkgs.git}/bin:${pkgs.gh}/bin:${pkgs.jq}/bin"
     touch "$HOME/.gitconfig"
     git config --global ghq.root ~/src
-    git config --global include.path "~/.git/gitconfig-delta"
+    git config --global include.path "~/.config/git/gitconfig-delta"
     git config --global init.defaultBranch main
-    git config --global core.excludesFile ~/.git/gitignore
-    git config --global core.attributesfile ~/.git/gitattributes 
+    git config --global core.excludesFile "~/.config/git/gitignore"
+    git config --global core.attributesfile "~/.config/git/gitattributes"
 
     if gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /user &>/dev/null; then
       user=$(gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /user | jq -r .name)
