@@ -24,12 +24,19 @@
         truncation_length = 5;
       };
       direnv.disabled = false;
-      format = "\${custom.wsl_distro}\${custom.kube_env}$all";
+      format = "\${custom.wsl_distro}\${custom.proxy}\${custom.kube_env}$all";
       custom.wsl_distro = {
         command = "echo $WSL_DISTRO_NAME";
         when = ''test -n "$WSL_DISTRO_NAME"'';
         os = "linux";
         style = "bold white";
+      };
+      custom.proxy = {
+        command = "echo $PROXY";
+        when = ''test -n "$PROXY"'';
+        symbol = "🌐 ";
+        style = "bold yellow";
+        format = "[$symbol$output]($style) ";
       };
       custom.kube_env = {
         command = ''
