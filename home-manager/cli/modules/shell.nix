@@ -29,7 +29,6 @@
       jless
       jq
       just
-      lf
       lnav
       ncdu
       # openapi-generator-cli
@@ -101,4 +100,11 @@
     fi
   '';
 
+  programs.lf = {
+    enable = true;
+    settings= {
+      icons = true;
+      preview = true;
+    };
+  };
 }
