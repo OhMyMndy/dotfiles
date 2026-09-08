@@ -59,6 +59,7 @@
       }
       tmuxPlugins.yank
       tmuxPlugins.pain-control
+      tmuxPlugins.fingers
     ];
     extraConfig = ''
       set -as terminal-features ",gnome*:RGB"
