@@ -8,7 +8,9 @@
 {
   home.packages = with pkgs; [
     delta
+    difftastic
     git
+    gitui
     glab
     gh
     ghq
