@@ -32,7 +32,6 @@
     #    unstable.terraform
     #    terragrunt
     tflint
-    tfsec
   ];
   programs.zsh = {
     oh-my-zsh = {
