@@ -85,8 +85,11 @@
       zstyle ':fzf-tab:*' use-fzf-default-opts yes
       # switch group using `<` and `>`
       zstyle ':fzf-tab:*' switch-group '<' '>'
+      enable-fzf-tab
       '')
     ];
+
+
   };
 
   home.file.".zshrc.d" = {
