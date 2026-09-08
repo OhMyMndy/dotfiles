@@ -58,14 +58,15 @@ return {
   { import = "astrocommunity.pack.html-css" },
   { import = "astrocommunity.pack.sql" },
   { import = "astrocommunity.pack.svelte" },
-  { import = "astrocommunity.pack.terraform" },
+  -- TODO use this pack again when https://github.com/AstroNvim/astrocommunity/blob/main/lua/astrocommunity/pack/terraform/init.lua
+  -- has been updated to use trivy instead of tfsec
+  -- { import = "astrocommunity.pack.terraform" },
 
   { import = "astrocommunity.pack.nix" },
   -- { import = "astrocommunity.pack.php" },
   -- { import = "astrocommunity.pack.laravel" },
   -- { import = "astrocommunity.pack.python-ruff" },
   { import = "astrocommunity.pack.rust" },
-  { import = "astrocommunity.pack.terraform", dev = true },
 
   { import = "astrocommunity.pack.toml" },
   { import = "astrocommunity.pack.yaml" },
