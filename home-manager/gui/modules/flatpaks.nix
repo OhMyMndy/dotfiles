@@ -7,7 +7,13 @@
     PATH="${config.home.path}/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:$PATH"
     if command -v /usr/bin/flatpak &>/dev/null; then
       mkdir -p ~/.local/share/flatpak/repo/refs/remotes/ ~/.local/share/flatpak/repo/refs/heads/
-      /usr/bin/flatpak --user remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+      flatpak --user remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+      flatpak override --user \
+        --filesystem=/nix/store:ro \
+        --filesystem=xdg-data/fonts:ro \
+        --filesystem=~/.nix-profile:ro
     fi
+
+
   '';
 }
