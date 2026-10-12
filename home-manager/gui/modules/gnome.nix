@@ -5,39 +5,12 @@ in
 {
   imports = [ (import ./gnome-extensions.nix) ];
   home.packages = with pkgs; [
-    # (pkgs.nerd-fonts.override {
-    #   fonts = [
-    #     "Iosevka"
-    #     "IosevkaTerm"
-    #     "IosevkaTermSlab"
-    #     "JetBrainsMono"
-    #     "Meslo"
-    #     "Ubuntu"
-    #     "UbuntuMono"
-    #     "UbuntuSans"
-    #   ];
-    # })
-    chafa # terminal image viewer
-    nerd-fonts.iosevka
-    nerd-fonts.iosevka-term
-    nerd-fonts.iosevka-term-slab
+    #     chafa # terminal image viewer
     nerd-fonts.jetbrains-mono
-    nerd-fonts.meslo-lg
-    nerd-fonts.ubuntu
-    nerd-fonts.ubuntu-mono
-    nerd-fonts.ubuntu-sans
-    ibm-plex
-    inter
+    atkinson-hyperlegible-next
+    unstable.openlogi # TODO move to somewhere else?
   ];
-  # TODO fix xdg-open with flatpak applications
-  # xdg.portal = {
-  #   enable = true;
-  #   extraPortals = [
-  #     pkgs.xdg-desktop-portal-gtk
-  #     pkgs.xdg-desktop-portal-gnome
-  #   ];
-  #   xdgOpenUsePortal = true;
-  # };
+
   # Set fractional scaling for Wayland:
   #  gsettings set org.gnome.mutter experimental-features "["scale-monitor-framebuffer"]"
   dconf.settings = {
@@ -114,9 +87,9 @@ in
       "accent-color" = "pink";
       "enable-hot-corners" = true;
       "monospace-font-name" = "JetBrainsMonoNL Nerd Font Mono 10"; # "Iosevka Nerd Font Mono 11";
-      "font-name" = "Ubuntu Sans 11";
-      "document-font-name" = "Ubuntu Sans 11";
-      "titlebar-font" = "Ubuntu Sans Bold 11";
+      "font-name" = "Atkinson Hyperlegible Next 11";
+      "document-font-name" = "Atkinson Hyperlegible Next 11";
+      "titlebar-font" = "Atkinson Hyperlegible Next 11";
       "clock-format" = "24h";
     };
     "org/gnome/desktop/wm/preferences" = {
@@ -231,5 +204,22 @@ in
     };
   };
 
-  # TODO: add hook to run fc-cache -f
+  home.activation.setupFonts = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+
+
+    src="$HOME/.nix-profile/share/fonts"
+    dest_dir="$HOME/.local/share/fonts"
+    link="$dest_dir/nix"
+
+    if [[ -d "$src" ]]; then
+      mkdir -p "$dest_dir"
+
+      # Replace an existing link idempotently; refuse to clobber a real directory
+      if [[ -e "$link" && -L "$link" ]]; then
+        ln -sfn "$src" "$link"
+      fi
+
+      /usr/sbin/fc-cache -f "$dest_dir"
+    fi
+  '';
 }
