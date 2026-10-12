@@ -102,9 +102,20 @@
 
   programs.lf = {
     enable = true;
-    settings= {
+    settings = {
       icons = true;
       preview = true;
+    };
+    commands = {
+      copy_to_clipboard = ''
+        ''${{
+            printf '%s' "$f" | ${pkgs.wl-clipboard}/bin/wl-copy
+        }}
+      '';
+    };
+
+    keybindings = {
+      "<c-c>" = "copy_to_clipboard";
     };
   };
 }
