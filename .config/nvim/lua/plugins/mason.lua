@@ -1,4 +1,4 @@
-if true then return {} end -- WARN: REMOVE THIS LINE TO ACTIVATE THIS FILE
+-- if true then return {} end -- WARN: REMOVE THIS LINE TO ACTIVATE THIS FILE
 
 -- Customize Mason plugins
 
@@ -20,5 +20,15 @@ return {
     "jay-babu/mason-nvim-dap.nvim",
     -- overrides `require("mason-nvim-dap").setup(...)`
     opts = {},
+  },
+  {
+    "WhoIsSethDaniel/mason-tool-installer.nvim",
+    opts = {
+      ensure_installed = {
+        "lua-language-server",
+        "intelephense",
+        -- your other tools...
+      },
+    },
   },
 }

@@ -89,7 +89,9 @@ in
       fd
       fzf
       ripgrep
+      php84
       php84Packages.composer
+      unstable.phpantom-lsp
       # TODO:does not contain annobin which is needed for installing http_parser dependency for Jekyll
       gcc
       go

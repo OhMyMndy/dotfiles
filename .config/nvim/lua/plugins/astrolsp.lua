@@ -10,6 +10,7 @@ return {
   "AstroNvim/astrolsp",
   ---@type AstroLSPOpts
   opts = {
+    native_lsp_config = true, -- use vim.lsp.config / vim.lsp.enable
     -- Configuration table of features provided by AstroLSP
     features = {
       autoformat = true, -- enable or disable auto formatting on start
@@ -40,10 +41,16 @@ return {
     },
     -- enable servers that you already have installed without mason
     -- SEE: https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
-    servers = {},
+    -- servers = { "phpantom_lsp" },
     -- customize language server configuration options passed to `lspconfig`
     ---@diagnostic disable: missing-fields
     config = {
+      -- optional: lspconfig already provides these defaults
+      -- phpantom_lsp = {
+      --   cmd = { "phpantom_lsp" },
+      --   filetypes = { "php" },
+      --   root_markers = { ".phpantom.toml", "composer.json" },
+      -- },
       -- bashls = {
       --   settings = {
       --     filetypes = { "sh", "zsh" },
@@ -65,6 +72,7 @@ return {
     },
     -- customize how language servers are attached
     handlers = {
+      phpactor = false,
       -- a function without a key is simply the default handler, functions take two parameters, the server name and the configured options table for that server
       -- function(server, opts) require("lspconfig")[server].setup(opts) end
 
