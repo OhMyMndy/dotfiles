@@ -21,7 +21,8 @@ function helm() {
   if [[ -n "$KUBECONTEXT" ]]; then
     HELM_KUBECONTEXT="$KUBECONTEXT" command helm "$@"
   else
-    command helm "$@"
+    [[ -n "$KUBECONFIG" ]] && args+=(--kubeconfig="$KUBECONFIG")
+    command helm "${args[@]}" "$@"
   fi
 }
 function stern() {
