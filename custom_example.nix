@@ -2,6 +2,7 @@
 {
   imports = [
     (import ./home-manager/cli/minimal.nix)
+    (import ./home-manager/cli/modules/nix.nix)
     (import ./home-manager/gui/minimal.nix)
 
     (import ./home-manager/cli/modules/cloud.nix)
