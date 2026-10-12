@@ -2,7 +2,7 @@ sync_address = "https://atuin.home.ohmymndy.com"
 workspaces = true
 filter_mode = "session-preload"
 
-search_mode = "daemon-fuzzy"
+# search_mode = "daemon-fuzzy"
 
 [daemon]
 enabled = true
