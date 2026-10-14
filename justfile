@@ -63,6 +63,9 @@ sandbox-download:
   rm -rf /tmp/"$(basename "$PWD")"
   openshell sandbox download "$(basename "$PWD")" "/sandbox/$(basename "$PWD")" "/tmp/$(basename "$PWD")"
 
+sandbox-download-file file:
+  openshell sandbox download "$(basename "$PWD")" "/sandbox/$(basename "$PWD")/{{file}}" "$PWD/{{file}}"
+
 
 sandbox-upload:
   openshell sandbox exec --name "$(basename $PWD)" rm -rf "/sandbox/$(basename "$PWD")"
