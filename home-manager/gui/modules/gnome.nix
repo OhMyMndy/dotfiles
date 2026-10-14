@@ -202,6 +202,12 @@ in
       "menubar-visible" = true;
       "toolbar-visible" = true;
     };
+    "org/gnome/evolution/mail" = {
+      "send-recv-all-on-start" = true;
+      "send-recv-on-start" = true;
+      "mark-seen" = true;
+      "mark-seen-timeout" = 0;
+    };
   };
 
   home.activation.setupFonts = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
